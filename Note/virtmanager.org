@@ -1,0 +1,66 @@
+#+TITLE: Virt-Manager Configuration
+
+* Installation
+#+begin_src shell
+
+#+end_src
+
+* Config
+** =/etc/libvirt/libvirtd.conf=
+sudo vim /etc/libvirt/libvirtd.conf
+
+find each of these in the file, or add them if they are not there:
+
+#unix_sock_group = "libvirt"
+#unix_sock_rw_perms = "0770"
+
+
+#log_filters="1:qemu"
+#log_outputs="1:file:/var/log/libvirt/libvirtd.log"
+
+change to:
+
+unix_sock_group = "libvirt"
+unix_sock_rw_perms = "0770"
+
+log_filters="1:qemu"
+log_outputs="1:file:/var/log/libvirt/libvirtd.log"
+
+if it is not in the file, simply add it. If it is not commented out with #, then just leave it as it is and exit the file.
+
+Now run the following commands:
+
+sudo usermod -a -G libvirt $(whoami)
+sudo systemctl start libvirtd
+sudo systemctl enable libvirtd
+
+
+** QEMU configuration
+edit:
+
+sudo nano /etc/libvirt/qemu.conf
+
+find:
+
+#user = "root"
+#group = "root"
+
+change to:
+
+user = "YOUR USERNAME"
+group = "YOUR USERNAME"
+
+Restart Libvirt:
+
+sudo systemctl restart libvirtd
+
+sudo usermod -a -G kvm "YOUR USERNAME" 
+sudo usermod -a -G libvirt "YOUR USERNAME"
+
+** Network Default Switch
+sudo virsh net-autostart default
+sudo virsh net-start default
+
+** 성능향상팁
+drive는 raw, virtio, cache  모드는 writeback
+network => virtio

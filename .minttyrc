@@ -1,0 +1,36 @@
+# Challenger Deep
+ForegroundColour=161,176,184
+BackgroundColour=41,45,62
+Black=37,37,37
+BoldBlack=37,37,37
+Red=255,83,112
+BoldRed=255,83,112
+Green=195,232,141
+BoldGreen=195,232,141
+Yellow=255,203,107
+BoldYellow=255,203,107
+Blue=130,170,255
+BoldBlue=130,170,255
+Magenta=199,146,234
+BoldMagenta=199,146,234g
+Cyan=137,221,255
+BoldCyan=137,221,255
+White=245,245,245
+BoldWhite=245,245,245
+
+Font=Fira Code Retina
+FontHeight=12
+Term=xterm-256color
+Locale=ko_KR
+Charset=UTF-8
+FontSmoothing=default
+AllowBlinking=no
+BoldAsFont=no
+CursorType=block
+CursorBlinks=yes
+BellTaskbar=no
+BellType=0
+BellFlash=no
+FontWeight=400
+FontIsBold=no
+Transparency=medium
