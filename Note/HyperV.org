@@ -1,0 +1,89 @@
+#+TITLE: Hyper V
+
+ArcoLinux B Xmonad 기반으로 작성되었음.
+https://wiki.archlinux.org/index.php/Hyper-V : Arch Wiki 참고
+Window Manager(Xmonad)와 Emacs구동이 목적임.
+
+* Hyper V enable
+
+Windows Home에서 기능 추가
+#+begin_src shell
+pushd "%~dp0"
+dir /b %SystemRoot%\servicing\Packages\*Hyper-V*.mum >hyper-v.txt
+for /f %%i in ('findstr /i . hyper-v.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
+del hyper-v.txt
+#+end_src
+
+Appwiz.cpl에서 enable 또는 다음 커멘드 입력.
+#+begin_src shell
+Dism /online /enable-feature /featurename:Microsoft-Hyper-V -All /LimitAccess /ALL
+#+end_src
+
+* 가상머신 생성
+1. Hyper-V 2세대
+2. 보안부팅 해제
+3. Arcolinux 설치 및 업데이트
+* 모니터 해상도
+/etc/default/grub에서
+GRUB_CMDLINE_LINUX_DEFAULT에 "splash video=hyperv_fb:1920x1080"
+
+update-grub
+
+* AUR Manager의 설치(Paru)
+#+begin_src shell
+sudo pacman -S --needed base-devel
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+#+end_src
+
+* Hyper-V Extension
+#+begin_src shell
+paru -S hyperv
+sudo systemctl enable hv_fcopy_daemon.service
+sudo systemctl enable hv_kvp_daemon.service
+sudo systemctl enable hv_vss_daemon.service
+#+end_src
+
+* 공유폴더 기능
+윈도우에서 로컬계정을 추가하여 공유폴더 설정, 폴더권한을 추가한다.
+CIFS 네트워크 공유방법이다.
+#+begin_src shell
+mkdir -p /mnt/HV
+sudo mount -t cifs //192.168.0.10/d /mnt/HV -o username=HV-User
+#+end_src
+자동 마운트를 위해
+/etc/fstab에 다음 내용 추가
+#+begin_src unix-conf
+//SERVER/sharename /mnt/mountpoint cifs _netdev,nofail,username=myuser,password=mypass 0 0
+#+end_src
+
+* 고급 세션기능
+#+begin_src shell
+git clone https://github.com/Microsoft/linux-vm-tools
+cd linux-vm-tools/arch
+./makepkg.sh
+sudo ./install-config.sh
+#+end_src
+
+이러면 RDP가 활성화 되는데, RDP를 이용하여 접속을 해야만 고급세션기능이 활성화 된다.
+마우스 반응 속도 및 클립보드 공유기능이 사용가능하다.
+
+일단 접속방식을 소켓으로 변경한다.
+powershell에서 다음을 입력한다.
+#+begin_src shell
+Set-VM -VMName Arch-HV -EnhancedSessionTransportType HvSocket
+#+end_src
+
+그리고 xrdp 로그인시, xinitrc로 초기화 되므로 윈도우 메니저 진입점을 설정한다.
+** XMONAD
+TODO: 내용 추가 바람. 기존에 EXWM으로 해봣었음.
+
+** EXWM 사용시
+#+begin_src unix-conf
+exec dbus-launch --exit-with-session emacs -mm -debug-init
+#+end_src
+
+
+* Emacs 설치
+Emacs.org의 내용을 참고

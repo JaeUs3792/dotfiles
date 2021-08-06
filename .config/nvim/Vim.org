@@ -1,0 +1,324 @@
+#+TITLE: Vim
+
+* Vim Configuration
+** Config file location
+- on Windows : ~/AppData/Local/nvim/init.vim
+- on Linux : ~/.config/nvim/init.vim
+
+** Basic Settings
+*** General
+
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+" Vim Configuration
+set nocompatible   "move using arrow key
+"filtype plugin on
+set number
+set ai 	"auto indent
+set si  "smart indent
+set cindent " c style indent
+
+set shiftwidth=4 "shift order 4step
+set tabstop=4    "tab order 4step
+set hlsearch	   "highlight empathize the word.
+
+set history=1000   "history store depth
+set nobackup   "no generate swp file
+set noswapfile
+set nowritebackup
+set backupdir=~/.backup/
+set directory=~/.backup/
+
+set ruler	   "display the cursor position
+set title	   "display the title
+set showmatch	   "display the matched bracket
+"set nowrap	   "no auto linefeed
+set wmnu	   "auto word finder
+
+set autochdir	" auto change working directory
+
+set hidden "buffer hidden
+set updatetime=300 " 300ms
+set cmdheight=2  " Better display for messages
+set shortmess+=c  " don't give [ins-completion-menu] messages.
+set signcolumn=yes " always show signcolumns
+
+
+set backspace=indent,eol,start
+set fencs=ucs-bom,utf-8,cp949
+set clipboard^=unnamed,unnamedplus
+
+set mouse=a
+#+end_src
+
+여기서 clipboard 문제가 발생할 수 있다. Windows계열에서는 쉽게 ="+y= ="+p"= 로 clipboard를 통한 복사 붙여넣기가 가능하며,
+리눅스의 경우는 xclip을 이용하여 사용하는것이 편했다.
+리눅스는 Ctrl+C/V로 관리 되는 =+= 레지스터와 Selection으로 관리되는 마우스 중간버튼의 =*= 레지스터가 따로 관리되는 듯하니 VIM레지스터 =+= 와 =*= 을 잘 확인해 봐야한다.
+
+
+** Plugin List
+
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+" PluginManager in vimrc
+runtime plugList.vim
+#+end_src
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+call plug#begin('~/.vim/plugged')
+#+end_src
+
+*** Suda
+기존의 VIM에는 읽기 권한으로 파일을 열고 다음과 같은 커맨드로 sudo write가 가능했는데
+Neovim에서는 불가능한 상황이다. (아마 비밀번호를 입력못했던걸로.)
+#+begin_src shell
+:w !sudo tee %
+#+end_src
+
+Neovim에서는 플러그인으로 문제를 해결한다.
+=SudaRead= 와 =SudaWrite= 를 활용한다.
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+Plug 'lambdalisue/suda.vim'
+#+end_src
+
+*** Clolor Scheme
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" Colorscheme
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""" One Dark
+"colorscheme onedark
+"""""""""""""" Grub_box
+"let g:gruvbox_contrast_dark='soft'
+"set background=dark
+"colorscheme gruvbox
+"let g:airline_theme='gruvbox'
+"""""""""""""" Paper Color
+"set background=light
+"colorscheme PaperColor
+"let g:airline_theme='hybrid'
+"let g:PaperColor_Theme_Options = {
+"  \   'theme': {
+"  \     'default.light': {
+"  \       'transparent_background': 1
+"  \     }
+"  \   }
+"  \ }
+"""""""""""""" Molokai
+"let g:molokai_original = 1
+"colorscheme molokai
+"""""""""""""" Solarized 8
+"set background=light
+"colorscheme solarized8_high
+"let g:airline_theme='solarized8'
+"""""""""""""" Challenger Deep
+"colorscheme challenger_deep
+colorscheme palenight
+#+end_src
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+" color scheme
+"Plug 'morhetz/gruvbox'
+"Plug 'lifepillar/vim-solarized8'
+"Plug 'NLKNguyen/papercolor-theme'
+"Plug 'tomasr/molokai'
+"Plug 'joshdick/onedark.vim'
+"Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'drewtempelmeyer/palenight.vim'
+#+end_src
+*** Airline
+VIM의 위아래에 Tab바와 같은것을 만들어 준다.
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" Air-line
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:airline#extensions#tabline#enabled = 1 " turn on buffer list
+set laststatus=2 " turn on bottom bar
+#+end_src
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+#+end_src
+
+*** NerdTree
+예전에는 Nerdtree를 =F3= Keybinding하여 Explorer와 같이 띄워 사용하였다.
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTREE
+""""""""""""""""""""""""""""""""""""""""""""""""""
+"map <F3> :NERDTreeToggle<cr>
+#+end_src
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+"Plug 'scrooloose/nerdtree'
+#+end_src
+
+현재는 순정으로 netrw 플러그인이 있기때문에 =:Ex= 커맨드와 =:R= 를 이용하여 사용한다.
+VIM은 =:Rx= 였던걸로?
+
+*** Unimpaired
+그냥 버퍼이동 쉽게하려고 =:bnext= =:bprev= 대신에 이 플러그인에 바인딩된 =[b= =]b= 를 사용한다.
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+Plug 'tpope/vim-unimpaired'
+#+end_src
+
+*** Commentary
+Comment 쉽게 toggle, 키는 =gcc= 나 Visual로 라인선택 후 =gc= 사용한다.
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+Plug 'tpope/vim-commentary'
+#+end_src
+
+*** Git-fugitive
+=:Git commit= 과 같은 명령어 사용 가능해짐.
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+Plug 'tpope/vim-fugitive'		" git wrapper
+#+end_src
+
+*** Git-Gutter
+변경점들을 하이라이트 해서 보여줌. =<F4>= 키로 하이라이트 토글 가능.
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Git Gutter
+""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:gitgutter_highlight_lines = 1
+map <F4> :GitGutterLineHighlightsToggle<cr>
+#+end_src
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+Plug 'airblade/vim-gitgutter'		" git modified view;
+#+end_src
+*** Surround
+Visual로 선택하고 =S}= =S]= =S)= =S"= 와 같은 커맨드로 괄호 치기 가능.
+사실 Verilog 쓰는입장에서는 잘 안쓰게됨.
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+Plug 'tpope/vim-surround'
+#+end_src
+
+*** Easy Motion
+커서를 빠르게 이동함. =\w= 커맨드를 치면 워드단위로 하이라이트 되어 손쉽게 이동가능
+
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" easymotion
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" <Leader>f{char} to move to {char}
+"map  <Leader>f <Plug>(easymotion-bd-f)
+"nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap <Leader>s <Plug>(easymotion-overwin-f2)
+
+" Move to line
+"map <Leader>L <Plug>(easymotion-bd-jk)
+"nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+#+end_src
+
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+Plug 'easymotion/vim-easymotion'
+#+end_src
+
+*** COC(HDL-Checker가 시원찮음. 제거)
+Language Server Protocol 연동가능해짐.
+
+Configuration은 :CocConfig를 쳐서 수정하거나 아래와 같은 경로에 파일을 위치시키면됨.
+- Windows는 ~/AppData/local/nvim/coc-settings.json
+- Linux는 ~/.config/nvim/coc-settings.json
+
+Configuration (hdlChecker는 윈도우에서 잘 동작안하는것 같음.)
+Config 수정후 =:CocInstall= 을 통해 설치해야 적용됨.
+#+begin_src json
+{
+	"languageserver": {
+        "hdlChecker": {
+            "command": "hdl_checker",
+            "args": [
+                "--lsp"
+            ],
+			"rootPatterns": [".git/"],
+            "filetypes": [
+                "vhdl",
+                "verilog",
+                "systemverilog"
+            ],
+			"trace.server": "verbose"
+        },
+		"clangd": {
+			"command": "clangd",
+			"args": ["--background-index"],
+			"rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+			"filetypes": ["c", "cpp", "objc", "objcpp"]
+		},
+		"rust": {
+			"command": "ra_lsp_server",
+			"filetypes": ["rust"],
+			"rootPatterns": ["Cargo.toml"]
+		}
+	}
+}
+#+end_src
+
+
+PluginManager
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+#+end_src
+
+
+** Others
+#+begin_src shell :tangle ~/.config/nvim/plugList.vim :mkdirp yes
+call plug#end()
+#+end_src
+
+*** Keybinding
+Vim의 Yank가 아닌 클립보드 복사를 위해 =Ctrl+C= =Ctrl+N= 으로 설정하였다. VIM의 Visual Mode 단축키와 Tmux의 Prefix를 피하고자 N을 사용하였다.
+또한 Neovim에서 제공하는 터미을 사용하기 위한 단축키 =<F12>= 와 레지스터 a를 매크로로 자주 활용하기 때문에 바인딩하여 활용성올 높였다.
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+map <C-c> "+ygv"*y
+map <C-n> "+p
+map <F12> :cd %:p:h<cr>:term bash<cr>
+map <F7> @a
+#+end_src
+
+*** Others
+#+begin_src shell :tangle ~/.config/nvim/init.vim :mkdirp yes
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Visual-star (Search using * / in visual modde)
+""""""""""""""""""""""""""""""""""""""""""""""""""
+xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+
+function! s:VSetSearch(cmdtype)
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
+#+end_src
+* PluginManager
+** 설치
+*** Unix
+#+begin_src shell
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+#+end_src
+*** Windows
+#+begin_src shell
+iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim |`
+    ni "$(@($env:XDG_DATA_HOME, $env:LOCALAPPDATA)[$null -eq $env:XDG_DATA_HOME])/nvim-data/site/autoload/plug.vim" -Force
+#+end_src
