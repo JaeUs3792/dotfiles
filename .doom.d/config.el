@@ -42,6 +42,8 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Org/")
 ;;(setq org-roam-directory "~/Roam/")
+(setq org-agenda-files
+      '("~/Roam/Agenda/Agenda-2021-6th.org"))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -117,10 +119,6 @@
 (use-package! vlf-setup
   :defer-incrementally vlf-tune vlf-base vlf-write vlf-search vlf-occur vlf-follow vlf-ediff vlf)
 
-;; Key binding
-(global-unset-key (kbd "C-j"))
-(global-unset-key (kbd "C-k"))
-
 ;; Time
 (setq display-time-world-list
       '(("Etc/UTC" "UTC")
@@ -129,6 +127,11 @@
 (setq display-time-world-time-format "%a, %d %b %I:%M %p %Z")
 
 
+;; Key binding
+(global-unset-key (kbd "C-j"))
+(global-unset-key (kbd "C-k"))
+(global-unset-key (kbd "C-s"))
+(global-set-key (kbd "C-s") 'swiper)
 
 
 ;; Here are some additional functions/macros that could help you configure Doom:
