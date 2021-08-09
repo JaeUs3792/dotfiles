@@ -132,6 +132,9 @@
 (global-unset-key (kbd "C-k"))
 (global-unset-key (kbd "C-s"))
 (global-set-key (kbd "C-s") 'swiper)
+(map! :leader
+      (:prefix-map ("e" . "eshell")
+       :desc "open e-shell" "s" #'eshell))
 
 
 ;; Here are some additional functions/macros that could help you configure Doom:
