@@ -55,3 +55,4 @@
 (package! openwith)
 (package! nov)
 (package! vlf)
+(package! swiper)
