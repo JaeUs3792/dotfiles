@@ -56,3 +56,5 @@
 (package! nov)
 (package! vlf)
 (package! swiper)
+(package! exec-path-from-shell)
+(package! dap-mode)
