@@ -10,10 +10,11 @@
 (setq user-full-name "JaeYoo,Im"
       user-mail-address "cpu3792@gmail.com")
 (set-default-coding-systems 'utf-8)
+(setq default-input-method "korean-hangul")
 
 ;; UI
-(set-frame-parameter (selected-frame) 'alpha '(80 . 80))
-(add-to-list 'default-frame-alist '(alpha . (80 . 80)))
+;(set-frame-parameter (selected-frame) 'alpha '(80 . 80))
+;(add-to-list 'default-frame-alist '(alpha . (80 . 80)))
 ;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 (scroll-bar-mode 1)
@@ -141,13 +142,14 @@
          :gdbpath "rust-lldb"
          :target nil
          :cwd nil))
-  (dap-register-debug-template "Rust::GDB Run Configuration"
-                               (list :type "gdb"
-                                     :request "launch"
-                                     :name "GDB::Run"
-                                     :gdbpath "rust-gdb"
-                                     :target nil
-                                     :cwd nil)))
+  (dap-register-debug-template
+   "Rust::GDB Run Configuration"
+   (list :type "gdb"
+         :request "launch"
+         :name "GDB::Run"
+         :gdbpath "rust-gdb"
+         :target nil
+         :cwd nil)))
 
 ;; Time
 (setq display-time-world-list
