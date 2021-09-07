@@ -55,6 +55,8 @@
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("cc" . "src c"))
+  (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
   (add-to-list 'org-structure-template-alist '("hk" . "src haskell")))
 
 
