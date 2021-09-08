@@ -4,8 +4,8 @@
 
 * Global Settings
 #+begin_src emacs-lisp
-  (defvar gvar/default-font-size 100)
-  (defvar gvar/default-variable-font-size 100)
+  (defvar gvar/default-font-size 120)
+  (defvar gvar/default-variable-font-size 120)
   (defvar gvar/frame-transparency '(95 . 95))
   (setq gc-cons-threshold (* 2 1000 1000))
   (setq user-emacs-directory "~/.cache/emacs")
@@ -80,25 +80,49 @@ https://github.com/raxod502/straight.el
 
 * Performance Optimization
 ** Garbage Collection
++ Doom Emacs
 #+begin_src emacs-lisp
-  (setq gc-cons-threshold most-positive-fixnum)
-  (defconst 1mb 1048576)
-  (defconst 20mb 20971520)
-  (defconst 30mb 31457280)
-  (defconst 50mb 52428800)
-
-  (defun fk/defer-garbage-collection ()
-    (setq gc-cons-threshold most-positive-fixnum))
-
-  (defun fk/restore-garbage-collection ()
-    (run-at-time 1 nil (lambda () (setq gc-cons-threshold 30mb))))
-
-  (add-hook 'emacs-startup-hook 'fk/restore-garbage-collection 100)
-  (add-hook 'minibuffer-setup-hook 'fk/defer-garbage-collection)
-  (add-hook 'minibuffer-exit-hook 'fk/restore-garbage-collection)
-
-  (setq read-process-output-max 1mb)  ;; lsp-mode's performance suggest
+;  (setq gc-cons-threshold most-positive-fixnum)
+;  (defconst 1mb 1048576)
+;  (defconst 20mb 20971520)
+;  (defconst 30mb 31457280)
+;  (defconst 50mb 52428800)
+;
+;  (defun fk/defer-garbage-collection ()
+;    (setq gc-cons-threshold most-positive-fixnum))
+;
+;  (defun fk/restore-garbage-collection ()
+;    (run-at-time 1 nil (lambda () (setq gc-cons-threshold 30mb))))
+;
+;  (add-hook 'emacs-startup-hook 'fk/restore-garbage-collection 100)
+;  (add-hook 'minibuffer-setup-hook 'fk/defer-garbage-collection)
+;  (add-hook 'minibuffer-exit-hook 'fk/restore-garbage-collection)
+;
+;  (setq read-process-output-max 1mb)  ;; lsp-mode's performance suggest
 #+end_src
++ Derek's
+  #+begin_src emacs-lisp
+    ;; Using garbage magic hack.
+    (use-package gcmh
+      :config
+      (gcmh-mode 1))
+    ;; Setting garbage collection threshold
+    (setq gc-cons-threshold 402653184
+          gc-cons-percentage 0.6)
+
+    ;; Profile emacs startup
+    (add-hook 'emacs-startup-hook
+              (lambda ()
+                (message "*** Emacs loaded in %s with %d garbage collections."
+                         (format "%.2f seconds"
+                                 (float-time
+                                  (time-subtract after-init-time before-init-time)))
+                         gcs-done)))
+
+    ;; Silence compiler warnings as they can be pretty disruptive (setq comp-async-report-warnings-errors nil)
+
+
+  #+end_src
 
 
 * EVIL Mode
@@ -184,7 +208,8 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     :ensure t)
   (setq doom_themes-enable-bold t
         doom-themes-enablbe-italic t)
-  (load-theme 'doom-palenight t)
+  ;(load-theme 'doom-palenight t)
+  (load-theme 'doom-gruvbox t)
 
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
@@ -193,8 +218,8 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   ;; Set frame transparency
   (set-frame-parameter (selected-frame) 'alpha gvar/frame-transparency)
   (add-to-list 'default-frame-alist `(alpha . ,gvar/frame-transparency))
-  ;;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-  ;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+end_src
 * Dashboard
 #+begin_src emacs-lisp
@@ -205,7 +230,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (setq dashboard-set-file-icons t)
     ;;(setq dashboard-banner-logo-title "Emacs is more than a text editor!")
     ;;(dashboard-startup-banner 'logo)
-    (setq dashboard-startup-banner "/home/jaeus/.emacs.d/logos/emacs-e.png")
+    (setq dashboard-startup-banner "/home/jaeus/.emacs.d/logos/black-hole.png")
     (setq dashboard-center-content t)
     (setq dashboard-week-agenda t)
     (setq dashboard-agenda-time-string-format "%d/%m/%Y %A %H:%M")
@@ -222,12 +247,6 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
               "Github"
               "Browse github"
               (lambda (&rest _) (browse-url "https://github.com/JaeYoo-Im/")))
-             ;; Codebase
-             ;;(,(all-the-icons-faicon "briefcase" :height 1.1 :v-adjust -0.1)
-             ;; "Codebase"
-             ;; "My assigned tickets"
-             ;; (lambda (&rest _) (browse-url "https://hipo.codebasehq.com/tickets")))
-             ;; Perspective
              (,(all-the-icons-octicon "history" :height 1.1 :v-adjust 0.0)
               "Reload last session"
               "Reload last session"
@@ -239,17 +258,18 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 #+end_src
 * Fonts
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil :font "Fira Code Retina" :height gvar/default-font-size)
-  (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height gvar/default-font-size)
-  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height gvar/default-variable-font-size :weight 'regular)
-  (set-fontset-font t 'hangul (font-spec :family "NanumGothic" :size 15))
+  (set-face-attribute 'default nil :font "Monaco" :height gvar/default-font-size)
+  (set-face-attribute 'fixed-pitch nil :font "Monaco" :height gvar/default-font-size)
+  (set-face-attribute 'variable-pitch nil :font "Monaco" :height gvar/default-variable-font-size :weight 'regular)
+  ;;(set-fontset-font t 'hangul (font-spec :family "NanumGothicCoding" :size 15))
+  ;;(setq face-font-rescale-alist
+  ;;      '((".*NanumGothicCoding*" . 1.5)))
+  (set-fontset-font t 'hangul (font-spec :family "Noto Sans CJK KR" :size 15))
+  (setq face-font-rescale-alist
+        '((".*Noto Sans CJK KR*" . 1.5)))
 #+end_src
 ** Text Scale Key bindings
 #+begin_src emacs-lisp
-                                          ;(global-set-key (kbd "C-=") 'text-scale-increase)
-                                          ;(global-set-key (kbd "C--") 'text-scale-decrease)
-                                          ;(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-                                          ;(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
   (use-package default-text-scale
     :defer 1
     :config
@@ -367,6 +387,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     :init (global-flycheck-mode t))
 #+end_src
 * Snippet
+** TODO : Check Doom Emacs
 #+begin_src emacs-lisp
   ;;(use-package yasnippet
   ;; Expand snippets with `C-j', not with `TAB'. Use `TAB' to always
@@ -442,15 +463,20 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (ivy-rich-project-root-cache-mode 1))
 
   (use-package ivy-posframe
-    :disabled
+    ;;:disabled
     :after ivy
     :diminish
+    :init
+    (setq ivy-posframe-display-functions-alist
+          '((swiper                     . ivy-posframe-display-at-point)
+		      (emojify-insert-emoji  . ivy-display-function-fallback)
+            (t                        . ivy-posframe-display)))
     :custom-face
     (ivy-posframe-border ((t (:background "#ffffff"))))
     :config
     (setq ivy-posframe-height-minibuffer nil)
     (setq ivy-posframe-parameters '((internal-border-width . 1)))
-    (ivy-posframe-mode +1))
+    (ivy-posframe-mode 1))
 
   (use-package ivy-prescient
     :after counsel
@@ -577,40 +603,9 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
             ("BUG" error bold)
             ;; For warning about a problematic or misguiding code
             ("XXX" font-lock-constant-face bold))))
-
 #+end_src
 * Org mode
 #+begin_src emacs-lisp
-  (defun efs/org-font-setup ()
-    ;; Replace list hyphen with dot
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-    ;; Set faces for heading levels
-    (dolist (face '((org-level-1 . 1.5)
-                    (org-level-2 . 1.4)
-                    (org-level-3 . 1.3)
-                    (org-level-4 . 1.2)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.0)
-                    (org-level-7 . 1.0)
-                    (org-level-8 . 1.0)))
-      (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
-
-    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-    (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
-
   (defun efs/org-mode-setup ()
     (org-indent-mode)
     (variable-pitch-mode 1)
@@ -628,115 +623,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (setq org-log-into-drawer t)
 
     (setq org-agenda-files
-          '("/home/jaeus/Roam/Agenda/Agenda-2021-6th.org"))
-
-                                          ;(require 'org-habit)
-                                          ;(add-to-list 'org-modules 'org-habit)
-                                          ;(setq org-habit-graph-column 60)
-
-                                          ;(setq org-todo-keywords
-                                          ;      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-                                          ;        (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-
-                                          ;(setq org-refile-targets
-                                          ;      '(("Archive.org" :maxlevel . 1)
-                                          ;        ("Tasks.org" :maxlevel . 1)))
-
-        ;;; Save Org buffers after refiling!
-                                          ;(advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-                                          ;(setq org-tag-alist
-                                          ;      '((:startgroup)
-                                          ;                                      ; Put mutually exclusive tags here
-                                          ;        (:endgroup)
-                                          ;        ("@errand" . ?E)
-                                          ;        ("@home" . ?H)
-                                          ;        ("@work" . ?W)
-                                          ;        ("agenda" . ?a)
-                                          ;        ("planning" . ?p)
-                                          ;        ("publish" . ?P)
-                                          ;        ("batch" . ?b)
-                                          ;        ("note" . ?n)
-                                          ;        ("idea" . ?i)))
-
-    ;; Configure custom agenda views
-                                          ;(setq org-agenda-custom-commands
-                                          ;      '(("d" "Dashboard"
-                                          ;         ((agenda "" ((org-deadline-warning-days 7)))
-                                          ;          (todo "NEXT"
-                                          ;                ((org-agenda-overriding-header "Next Tasks")))
-                                          ;          (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
-
-                                          ;        ("n" "Next Tasks"
-                                          ;         ((todo "NEXT"
-                                          ;                ((org-agenda-overriding-header "Next Tasks")))))
-
-                                          ;        ("W" "Work Tasks" tags-todo "+work-email")
-
-                                          ;        ;; Low-effort next actions
-                                          ;        ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-                                          ;         ((org-agenda-overriding-header "Low Effort Tasks")
-                                          ;          (org-agenda-max-todos 20)
-                                          ;          (org-agenda-files org-agenda-files)))
-
-                                          ;        ("w" "Workflow Status"
-                                          ;         ((todo "WAIT"
-                                          ;                ((org-agenda-overriding-header "Waiting on External")
-                                          ;                 (org-agenda-files org-agenda-files)))
-                                          ;          (todo "REVIEW"
-                                          ;                ((org-agenda-overriding-header "In Review")
-                                          ;                 (org-agenda-files org-agenda-files)))
-                                          ;          (todo "PLAN"
-                                          ;                ((org-agenda-overriding-header "In Planning")
-                                          ;                 (org-agenda-todo-list-sublevels nil)
-                                          ;                 (org-agenda-files org-agenda-files)))
-                                          ;          (todo "BACKLOG"
-                                          ;                ((org-agenda-overriding-header "Project Backlog")
-                                          ;                 (org-agenda-todo-list-sublevels nil)
-                                          ;                 (org-agenda-files org-agenda-files)))
-                                          ;          (todo "READY"
-                                          ;                ((org-agenda-overriding-header "Ready for Work")
-                                          ;                 (org-agenda-files org-agenda-files)))
-                                          ;          (todo "ACTIVE"
-                                          ;                ((org-agenda-overriding-header "Active Projects")
-                                          ;                 (org-agenda-files org-agenda-files)))
-                                          ;          (todo "COMPLETED"
-                                          ;                ((org-agenda-overriding-header "Completed Projects")
-                                          ;                 (org-agenda-files org-agenda-files)))
-                                          ;          (todo "CANC"
-                                          ;                ((org-agenda-overriding-header "Cancelled Projects")
-                                          ;                 (org-agenda-files org-agenda-files)))))))
-
-                                          ;(setq org-capture-templates
-                                          ;      `(("t" "Tasks / Projects")
-                                          ;        ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
-                                          ;         "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-
-                                          ;        ("j" "Journal Entries")
-                                          ;        ("jj" "Journal" entry
-                                          ;         (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-                                          ;         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-                                          ;         ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-                                          ;         :clock-in :clock-resume
-                                          ;         :empty-lines 1)
-                                          ;        ("jm" "Meeting" entry
-                                          ;         (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-                                          ;         "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-                                          ;         :clock-in :clock-resume
-                                          ;         :empty-lines 1)
-
-                                          ;        ("w" "Workflows")
-                                          ;        ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-                                          ;         "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
-
-                                          ;        ("m" "Metrics Capture")
-                                          ;        ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
-                                          ;         "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
-
-                                          ;(define-key global-map (kbd "C-c j")
-                                          ;  (lambda () (interactive) (org-capture nil "jj")))
-
-    (efs/org-font-setup))
+          '("/home/jaeus/Roam/Agenda/Agenda-2021-6th.org")))
   (use-package org-superstar :after org :hook (org-mode . org-superstar-mode))
   (use-package org-attach-screenshot)
   (use-package org-download)
@@ -883,51 +770,36 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (require 'git-gutter-fringe)
     (set-face-foreground 'git-gutter-fr:added "LightGreen")
     (fringe-helper-define 'git-gutter-fr:added nil
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      ".........."
-      ".........."
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      ".........."
-      ".........."
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX")
+      ".XXXXXX."
+      "XX....XX"
+      "X......X"
+      "X......X"
+      "XXXXXXXX"
+      "XXXXXXXX"
+      "X......X"
+      "X......X")
 
     (set-face-foreground 'git-gutter-fr:modified "LightGoldenrod")
     (fringe-helper-define 'git-gutter-fr:modified nil
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      ".........."
-      ".........."
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      ".........."
-      ".........."
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX")
+      "XXXXXXXX"
+      "X..XX..X"
+      "X..XX..X"
+      "X..XX..X"
+      "X..XX..X"
+      "X..XX..X"
+      "X..XX..X"
+      "X..XX..X")
 
     (set-face-foreground 'git-gutter-fr:deleted "LightCoral")
     (fringe-helper-define 'git-gutter-fr:deleted nil
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      ".........."
-      ".........."
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      ".........."
-      ".........."
-      "XXXXXXXXXX"
-      "XXXXXXXXXX"
-      "XXXXXXXXXX")
+      "XXXXXX.."
+      "XX....X."
+      "XX.....X"
+      "XX.....X"
+      "XX.....X"
+      "XX.....X"
+      "XX....X."
+      "XXXXXX..")
 
     ;; These characters are used in terminal mode
     (setq git-gutter:modified-sign "≡")
@@ -1032,7 +904,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
    '(app-launcher :type git :host github :repo "SebastienWae/app-launcher"))
 #+end_src
 
-* Dired
+* Dired (from Doom Emacs)
 #+begin_src emacs-lisp
   (use-package dired
     :ensure nil
@@ -1158,6 +1030,46 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 
 #+end_src
 
+* ELFEED
+#+begin_src emacs-lisp
+(use-package elfeed
+  :config
+  (setq elfeed-search-feed-face ":foreground #fff :weight bold"
+        elfeed-feeds (quote
+                       (("https://www.reddit.com/r/linux.rss" reddit linux)
+                        ("https://www.reddit.com/r/commandline.rss" reddit commandline)
+                        ("https://www.reddit.com/r/distrotube.rss" reddit distrotube)
+                        ("https://www.reddit.com/r/emacs.rss" reddit emacs)
+                        ("https://www.gamingonlinux.com/article_rss.php" gaming linux)
+                        ("https://hackaday.com/blog/feed/" hackaday linux)
+                        ("https://opensource.com/feed" opensource linux)
+                        ("https://linux.softpedia.com/backend.xml" softpedia linux)
+                        ("https://itsfoss.com/feed/" itsfoss linux)
+                        ("https://www.zdnet.com/topic/linux/rss.xml" zdnet linux)
+                        ("https://www.phoronix.com/rss.php" phoronix linux)
+                        ("http://feeds.feedburner.com/d0od" omgubuntu linux)
+                        ("https://www.computerworld.com/index.rss" computerworld linux)
+                        ("https://www.networkworld.com/category/linux/index.rss" networkworld linux)
+                        ("https://www.techrepublic.com/rssfeeds/topic/open-source/" techrepublic linux)
+                        ("https://betanews.com/feed" betanews linux)
+                        ("http://lxer.com/module/newswire/headlines.rss" lxer linux)
+                        ("https://distrowatch.com/news/dwd.xml" distrowatch linux)))))
+
+(use-package elfeed-goodies
+  :init
+  (elfeed-goodies/setup)
+  :config
+  (setq elfeed-goodies/entry-pane-size 0.5))
+
+(add-hook 'elfeed-show-mode-hook 'visual-line-mode)
+(evil-define-key 'normal elfeed-show-mode-map
+  (kbd "J") 'elfeed-goodies/split-show-next
+  (kbd "K") 'elfeed-goodies/split-show-prev)
+(evil-define-key 'normal elfeed-search-mode-map
+  (kbd "J") 'elfeed-goodies/split-show-next
+  (kbd "K") 'elfeed-goodies/split-show-prev)
+
+#+end_src
 * Language Support
 ** Haskell
 #+begin_src emacs-lisp
@@ -1168,4 +1080,9 @@ using =svlangserver=
 #+begin_src shell
   sudo npm install -g @imc-trading/svlangserver
   paru -S verilator
+#+end_src
+
+**  Rust
+#+begin_src emacs-lisp
+  (use-package rust-mode)
 #+end_src
