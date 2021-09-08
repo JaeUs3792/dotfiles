@@ -47,10 +47,10 @@ runtime plugList.vim
 """""""""""""" One Dark
 "colorscheme onedark
 """""""""""""" Grub_box
-"let g:gruvbox_contrast_dark='soft'
-"set background=dark
-"colorscheme gruvbox
-"let g:airline_theme='gruvbox'
+let g:gruvbox_contrast_dark='soft'
+set background=dark
+colorscheme gruvbox
+let g:airline_theme='gruvbox'
 """""""""""""" Paper Color
 "set background=light
 "colorscheme PaperColor
