@@ -6,7 +6,7 @@
 #+begin_src emacs-lisp
   (defvar gvar/default-font-size 100)
   (defvar gvar/default-variable-font-size 100)
-  (defvar gvar/frame-transparency '(80 . 80))
+  (defvar gvar/frame-transparency '(95 . 95))
   (setq gc-cons-threshold (* 2 1000 1000))
   (setq user-emacs-directory "~/.cache/emacs")
   (set-default-coding-systems 'utf-8)
@@ -777,23 +777,43 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (org-roam-directory "~/Roam/")
     (org-roam-completion-everywhere t)
     (org-roam-completion-system 'ivy))
+  (setq org-roam-v2-ack t)
 #+end_src
 ** Org Roam Server
++ DEPRECATED ( ORG-ROAM V2 )
 #+begin_src emacs-lisp
-  (use-package org-roam-server
-    :ensure t
-    :config
-    (setq org-roam-server-host "127.0.0.1"
-          org-roam-server-port 23799
-          org-roam-server-authenticate nil
-          org-roam-server-export-inline-images t
-          org-roam-server-serve-files t
-          org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-          org-roam-server-network-poll t
-          org-roam-server-network-arrows nil
-          org-roam-server-network-label-truncate t
-          org-roam-server-network-label-truncate-length 60
-          org-roam-server-network-label-wrap-length 20))
+  ;(use-package org-roam-server
+  ;  :ensure t
+  ;  :config
+  ;  (setq org-roam-server-host "127.0.0.1"
+  ;        org-roam-server-port 23799
+  ;        org-roam-server-authenticate nil
+  ;        org-roam-server-export-inline-images t
+  ;        org-roam-server-serve-files t
+  ;        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+  ;        org-roam-server-network-poll t
+  ;        org-roam-server-network-arrows nil
+  ;        org-roam-server-network-label-truncate t
+  ;        org-roam-server-network-label-truncate-length 60
+  ;        org-roam-server-network-label-wrap-length 20))
+#+end_src
+** Org Roam UI
+#+begin_src emacs-lisp
+  (use-package websocket
+    :after org-roam)
+  (use-package org-roam-ui
+    :straight
+      (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+      :after org-roam
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+      :config
+      (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start t))
 #+end_src
 ** Org present
 #+begin_src emacs-lisp
