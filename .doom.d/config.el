@@ -13,15 +13,16 @@
 (setq default-input-method "korean-hangul")
 
 ;; UI
-;(set-frame-parameter (selected-frame) 'alpha '(80 . 80))
-;(add-to-list 'default-frame-alist '(alpha . (80 . 80)))
-;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-;(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 (scroll-bar-mode 1)
 (setq doom-modeline-major-mode-icon t)
 (setq doom-modeline-major-mode-color-icon t)
-(set-face-attribute 'default nil :font "Fira Code Retina" :height 120)
-(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height 120)
+
+
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -35,11 +36,18 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+(setq doom-font (font-spec :family "Fira Code Retina" :size 14))
+(set-fontset-font "fontset-default" '(#x1100 . #xffdc)
+                  '("Noto Sans CJK KR" . "unicode-bmp"))
+(setq face-font-rescale-alist '(("Noto Sans CJK KR" . 2)))
+(setq fancy-splash-image "~/.doom.d/black-hole.png")
+;;(setq fancy-splash-image "~/.doom.d/emacs-e.png")
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-palenight)
+;;(setq doom-theme 'doom-palenight)
+(setq doom-theme 'doom-gruvbox)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!

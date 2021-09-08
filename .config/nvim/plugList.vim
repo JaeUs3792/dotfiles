@@ -1,7 +1,7 @@
 call plug#begin('~/.vim/plugged')
 Plug 'lambdalisue/suda.vim'
 " color scheme
-"Plug 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
 "Plug 'lifepillar/vim-solarized8'
 "Plug 'NLKNguyen/papercolor-theme'
 "Plug 'tomasr/molokai'
