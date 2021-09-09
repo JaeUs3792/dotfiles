@@ -427,6 +427,24 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   ;;:hook (company-mode . company-box-mode))
 #+end_src
 
++ ORG mode =#+= Candidates
+https://emacs.stackexchange.com/a/30691
+  #+begin_src emacs-lisps
+  ;;  (defun org-keyword-backend (command &optional arg &rest ignored)
+  ;;    (interactive (list 'interactive))
+  ;;    (cl-case command
+  ;;      (interactive (company-begin-backend 'org-keyword-backend))
+  ;;      (prefix (and (eq major-mode 'org-mode)
+  ;;                   (cons (company-grab-line "^#\\+\\(\\w*\\)" 1)
+  ;;                         t)))
+  ;;      (candidates (mapcar #'upcase
+  ;;                          (cl-remove-if-not
+  ;;                           (lambda (c) (string-prefix-p arg c))
+  ;;                           (pcomplete-completions))))
+  ;;      (ignore-case t)
+  ;;      (duplicates t)))
+  ;;  (add-to-list 'company-backends 'org-keyword-backend)
+  #+end_src
 ** Prescient
 #+begin_src emacs-lisp
   (use-package prescient
@@ -665,6 +683,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
             ("XXX" font-lock-constant-face bold))))
 #+end_src
 * Org mode
++ Initial Setup
 #+begin_src emacs-lisp
   (defun efs/org-mode-setup ()
     (org-indent-mode)
