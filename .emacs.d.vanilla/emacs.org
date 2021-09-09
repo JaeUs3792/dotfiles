@@ -314,6 +314,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   (setq face-font-rescale-alist
         '((".*Noto Sans CJK KR*" . 1.5)))
   (setq-default line-spacing 2)
+  ;;(global-prettify-symbols-mode +1)
 #+end_src
 ** Text Scale Key bindings
 #+begin_src emacs-lisp
@@ -431,6 +432,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   ;;:hook (company-mode . company-box-mode))
 #+end_src
 
+
 + ORG mode =#+= Candidates
 https://emacs.stackexchange.com/a/30691
   #+begin_src emacs-lisp
@@ -448,6 +450,24 @@ https://emacs.stackexchange.com/a/30691
         (ignore-case t)
         (duplicates t)))
   #+end_src
+** Consult
+#+begin_src emacs-lisp
+(defun dw/get-project-root ()
+  (when (fboundp 'projectile-project-root)
+    (projectile-project-root)))
+
+(use-package consult
+  :demand t
+  :bind (("C-s" . consult-line)
+         ("C-M-l" . consult-imenu)
+         ("C-M-j" . persp-switch-to-buffer*)
+         :map minibuffer-local-map
+         ("C-r" . consult-history))
+  :custom
+  (consult-project-root-function #'dw/get-project-root)
+  (completion-in-region-function #'consult-completion-in-region))
+#+end_src
+
 ** Prescient
 #+begin_src emacs-lisp
   (use-package prescient
@@ -742,14 +762,22 @@ https://emacs.stackexchange.com/a/30691
 ** Org Roam
 #+begin_src emacs-lisp
   (use-package org-roam
-    :straight t
-    :hook
-    (after-init . org-roam-mode)
+    :ensure t
+    :init
+    (setq org-roam-v2-ack t)
     :custom
-    (org-roam-directory "~/Roam/")
+    (org-roam-directory "~/Roam/NewStart")
     (org-roam-completion-everywhere t)
-    (org-roam-completion-system 'ivy))
-  (setq org-roam-v2-ack t)
+    (org-roam-completion-system 'ivy)
+    :bind
+    (:map org-mode-map
+          ("C-M-i" . completion-at-point))
+    :config
+    (org-roam-setup))
+  (ju/leader-key-def
+    "rl" 'org-roam-buffer-toggle
+    "rf" 'org-roam-node-find
+    "ri" 'org-roam-node-insert)
 #+end_src
 ** Org Roam Server
 + DEPRECATED ( ORG-ROAM V2 )
