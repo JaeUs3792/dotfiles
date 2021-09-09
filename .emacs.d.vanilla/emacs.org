@@ -3,8 +3,12 @@
 
 
 * Global Settings
+| 12345678 |   |
+|----------+---|
+| 일이삼사 |   |
 #+begin_src emacs-lisp
   ;; os
+  (setq custom-file (make-temp-file "emacs-custom"))
   (setq windows? (eq system-type 'windows-nt))
   (setq mac? (eq system-type 'darwin))
   (setq large-file-warning-threshold nil)
@@ -293,16 +297,20 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
                                       (bookmarks . "book"))))
 #+end_src
 * Fonts
+| 12345678 |   |
+|----------+---|
+| 일이삼사 |   |
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil :font "Monaco" :height gvar/default-font-size)
-  (set-face-attribute 'fixed-pitch nil :font "Monaco" :height gvar/default-font-size)
-  (set-face-attribute 'variable-pitch nil :font "Monaco" :height gvar/default-variable-font-size :weight 'regular)
+  (set-face-attribute 'default nil :font "Fira Code Retina" :height gvar/default-font-size)
+  (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height gvar/default-font-size)
+  (set-face-attribute 'variable-pitch nil :font "Fira Code Retina" :height gvar/default-variable-font-size :weight 'regular)
   ;;(set-fontset-font t 'hangul (font-spec :family "NanumGothicCoding" :size 15))
   ;;(setq face-font-rescale-alist
   ;;      '((".*NanumGothicCoding*" . 1.5)))
   (set-fontset-font t 'hangul (font-spec :family "Noto Sans CJK KR" :size 15))
   (setq face-font-rescale-alist
         '((".*Noto Sans CJK KR*" . 1.5)))
+  (setq-default line-spacing 2)
 #+end_src
 ** Text Scale Key bindings
 #+begin_src emacs-lisp
@@ -389,21 +397,34 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 #+end_src
 * Company
 #+begin_src emacs-lisp
-
+  (use-package company
+    :init
+    (add-hook 'after-init-hook 'global-company-mode)
+    :bind
+    (:map company-active-map
+          ("<tab>" . company-complete-selection))
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common))
+    :config
+    (setq company-idle-delay 0
+          company-show-numbers "on"
+          company-dabbrev-downcase nil
+          )
+    )
   ;;(use-package company
-  ;;  :after lsp-mode
-  ;;  :hook (lsp-mode . company-mode)
-  ;;  :bind (:map company-active-map
-  ;;              ("<tab>" . company-complete-selection))
-  ;;  (:map lsp-mode-map
-  ;;        ("<tab>" . company-indent-or-complete-common))
-  ;;  :custom
-  ;;  (company-minimum-prefix-length 1)
-  ;;  (company-idle-delay 0.0))
+  ;;:after lsp-mode
+  ;;:hook (lsp-mode . company-mode)
+  ;;:bind (:map company-active-map
+  ;;("<tab>" . company-complete-selection))
+  ;;(:map lsp-mode-map
+  ;;("<tab>" . company-indent-or-complete-common))
+  ;;:custom
+  ;;(company-minimum-prefix-length 1)
+  ;;(setq company-show-numbers "on")
+  ;;(company-idle-delay 0.0))
 
   ;;(use-package company-box
-  ;;  :hook (company-mode . company-box-mode))
-
+  ;;:hook (company-mode . company-box-mode))
 #+end_src
 
 ** Prescient
@@ -540,7 +561,10 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 #+begin_src emacs-lisp
   (use-package projectile
     :diminish projectile-mode
-    :config (projectile-mode)
+    :config
+    (projectile-mode)
+    (setq projectile-enable-caching t)
+    (setq projectile-indexing-method 'hybrid)
     :custom ((projectile-completion-system 'ivy))
     :bind-keymap
     ("C-c p" . projectile-command-map)
@@ -866,11 +890,9 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 
 * Eshell
 ** EXEC-PATH-FROM-SHELL
-#+begin_src shell
-  (when (not (package-installed-p 'exec-path-from-shell))
-     (package-refresh-contents)
-     (package-install 'exec-path-from-shell))
-   (exec-path-from-shell-initialize)
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell)
+  (exec-path-from-shell-initialize)
 #+end_src
 ** Config
 #+begin_src emacs-lisp
@@ -1006,7 +1028,13 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (evil-collection-define-key 'normal 'dired-mode-map
       "H" 'dired-hide-dotfiles-mode))
 
+  ;;(use-package ranger
+  ;;  :config
+  ;;  (setq ranger-preview-file t)
+  ;;  (setq ranger-show-preview t)
+  ;;  (ranger-override-dired-mode t))
 #+end_src
+
 
 * Openwith
 #+begin_src emacs-lisp
