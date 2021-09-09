@@ -7,6 +7,9 @@
 |----------+---|
 | 일이삼사 |   |
 #+begin_src emacs-lisp
+  ;;User
+  (setq user-full-name "JaeYoo,Im"
+        user-mail-address "cpu3792@gmail.com")
   ;; os
   (setq custom-file (make-temp-file "emacs-custom"))
   (setq windows? (eq system-type 'windows-nt))
@@ -410,6 +413,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
           company-show-numbers "on"
           company-dabbrev-downcase nil
           )
+    (add-to-list 'company-backends 'org-keyword-backend)
     )
   ;;(use-package company
   ;;:after lsp-mode
@@ -429,21 +433,20 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 
 + ORG mode =#+= Candidates
 https://emacs.stackexchange.com/a/30691
-  #+begin_src emacs-lisps
-  ;;  (defun org-keyword-backend (command &optional arg &rest ignored)
-  ;;    (interactive (list 'interactive))
-  ;;    (cl-case command
-  ;;      (interactive (company-begin-backend 'org-keyword-backend))
-  ;;      (prefix (and (eq major-mode 'org-mode)
-  ;;                   (cons (company-grab-line "^#\\+\\(\\w*\\)" 1)
-  ;;                         t)))
-  ;;      (candidates (mapcar #'upcase
-  ;;                          (cl-remove-if-not
-  ;;                           (lambda (c) (string-prefix-p arg c))
-  ;;                           (pcomplete-completions))))
-  ;;      (ignore-case t)
-  ;;      (duplicates t)))
-  ;;  (add-to-list 'company-backends 'org-keyword-backend)
+  #+begin_src emacs-lisp
+    (defun org-keyword-backend (command &optional arg &rest ignored)
+      (interactive (list 'interactive))
+      (cl-case command
+        (interactive (company-begin-backend 'org-keyword-backend))
+        (prefix (and (eq major-mode 'org-mode)
+                     (cons (company-grab-line "^#\\+\\(\\w*\\)" 1)
+                           t)))
+        (candidates (mapcar #'upcase
+                            (cl-remove-if-not
+                             (lambda (c) (string-prefix-p arg c))
+                             (pcomplete-completions))))
+        (ignore-case t)
+        (duplicates t)))
   #+end_src
 ** Prescient
 #+begin_src emacs-lisp
@@ -730,6 +733,9 @@ https://emacs.stackexchange.com/a/30691
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
+    (add-to-list 'org-structure-template-alist '("cc" . "src c"))
+    (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
+    (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
     (add-to-list 'org-structure-template-alist '("py" . "src python")))
 #+end_src
   
@@ -1165,9 +1171,9 @@ using =svlangserver=
   paru -S verilator
 #+end_src
 
-**  Rust
+** Rust
 #+begin_src emacs-lisp
-  (use-package rust-mode)
+  ;;(use-package rust-mode)
 #+end_src
 ** Markdown
 #+begin_src emacs-lisp
@@ -1178,4 +1184,9 @@ using =svlangserver=
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "multimarkdown"))
+#+end_src
+
+** CMAKE
+#+begin_src emacs-lisp
+(use-package cmake-mode)
 #+end_src
