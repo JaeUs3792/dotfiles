@@ -4,15 +4,29 @@
 
 * Global Settings
 #+begin_src emacs-lisp
+  ;; os
+  (setq windows? (eq system-type 'windows-nt))
+  (setq mac? (eq system-type 'darwin))
+  (setq large-file-warning-threshold nil)
+
+  (setq system-time-locale "C")
+  (setenv "LANG" "en_US.UTF-8")
+  (setenv "LC_ALL" "en_US.UTF-8")
+  ;; theme var
   (defvar gvar/default-font-size 120)
   (defvar gvar/default-variable-font-size 120)
   (defvar gvar/frame-transparency '(95 . 95))
-  (setq gc-cons-threshold (* 2 1000 1000))
+  ;;dir
   (setq user-emacs-directory "~/.cache/emacs")
+  ;; encoding
+  (set-language-environment "Korean")
   (set-default-coding-systems 'utf-8)
+  (prefer-coding-system 'utf-8)
+  ;; tab
   (setq-default tab-width 4)
   (setq-default evil-shift-width tab-width)
-  (setq large-file-warning-threshold nil)
+  ;; font
+  (defun available-font? (font) (member font (font-family-list)))
 #+end_src
 * Package Related
 ** Package Repo
@@ -33,6 +47,9 @@
 
   (require 'use-package)
   (setq use-package-always-ensure t)
+  (when (not (package-installed-p 'use-package))
+    (package-refresh-contents)
+    (package-install 'use-package))
 
   ;;(use-package auto-package-update
   ;;  :custom
@@ -82,23 +99,23 @@ https://github.com/raxod502/straight.el
 ** Garbage Collection
 + Doom Emacs
 #+begin_src emacs-lisp
-;  (setq gc-cons-threshold most-positive-fixnum)
-;  (defconst 1mb 1048576)
-;  (defconst 20mb 20971520)
-;  (defconst 30mb 31457280)
-;  (defconst 50mb 52428800)
-;
-;  (defun fk/defer-garbage-collection ()
-;    (setq gc-cons-threshold most-positive-fixnum))
-;
-;  (defun fk/restore-garbage-collection ()
-;    (run-at-time 1 nil (lambda () (setq gc-cons-threshold 30mb))))
-;
-;  (add-hook 'emacs-startup-hook 'fk/restore-garbage-collection 100)
-;  (add-hook 'minibuffer-setup-hook 'fk/defer-garbage-collection)
-;  (add-hook 'minibuffer-exit-hook 'fk/restore-garbage-collection)
-;
-;  (setq read-process-output-max 1mb)  ;; lsp-mode's performance suggest
+  ;;  (setq gc-cons-threshold most-positive-fixnum)
+  ;;  (defconst 1mb 1048576)
+  ;;  (defconst 20mb 20971520)
+  ;;  (defconst 30mb 31457280)
+  ;;  (defconst 50mb 52428800)
+  ;;
+  ;;  (defun fk/defer-garbage-collection ()
+  ;;    (setq gc-cons-threshold most-positive-fixnum))
+  ;;
+  ;;  (defun fk/restore-garbage-collection ()
+  ;;    (run-at-time 1 nil (lambda () (setq gc-cons-threshold 30mb))))
+  ;;
+  ;;  (add-hook 'emacs-startup-hook 'fk/restore-garbage-collection 100)
+  ;;  (add-hook 'minibuffer-setup-hook 'fk/defer-garbage-collection)
+  ;;  (add-hook 'minibuffer-exit-hook 'fk/restore-garbage-collection)
+  ;;
+  ;;  (setq read-process-output-max 1mb)  ;; lsp-mode's performance suggest
 #+end_src
 + Derek's
   #+begin_src emacs-lisp
@@ -146,17 +163,26 @@ https://github.com/raxod502/straight.el
     (add-hook 'evil-mode-hook 'ju/evil-hook)
     (evil-mode 1)
     (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+    (setq-default evil-symbol-word-search t) ;; evil can identify the word with underscore.
+    ;; Http://blog.binchen.org/posts/auto-complete-word-in-emacs-mini-buffer-when-using-evil.html
+    ;;(defun minibuffer-inactive-mode-hook-setup ()
+    ;;;; make `try-expand-dabbrev' from `hippie-expand' work in mini-buffer
+    ;;;; @see `he-dabbrev-beg', so we need re-define syntax for '/'
+    ;;(set-syntax-table (let* ((table (make-syntax-table)))
+    ;;(modify-syntax-entry ?/ "." table)
+    ;;table)))
+    ;;(add-hook 'minibuffer-inactive-mode-hook 'minibuffer-inactive-mode-hook-setup)
 
     ;; Use visual line motions even outside of visual-line-mode buffers
     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
     (evil-set-initial-state 'messages-buffer-mode 'normal)
     (evil-set-initial-state 'dashboard-mode 'normal))
-
   (use-package evil-numbers
     :after evil
-    :config ;; unfortunately C-x is emacs common key binding. 
-    (define-key evil-normal-state-map (kbd "g =") 'evil-numbers/inc-at-pt)    
+    :config
+    ;; unfortunately C-x is emacs common key binding.
+    (define-key evil-normal-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
     (define-key evil-normal-state-map (kbd "g -") 'evil-numbers/dec-at-pt)
     (define-key evil-visual-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
     (define-key evil-visual-state-map (kbd "g -") 'evil-numbers/dec-at-pt))
@@ -171,6 +197,8 @@ https://github.com/raxod502/straight.el
     :ensure t
     :config
     (evil-collection-init))
+
+  (defalias 'forward-evil-word 'forward-evil-symbol) ;; include underscore to word
 #+end_src
 
 ** TODO Check Tips
@@ -186,7 +214,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   (set-fringe-mode 10)        ; Give some breathing room
 
   (menu-bar-mode -1)            ; Disable the menu bar
-  (setq visible-bell t)
+  ;;(setq visible-bell t)
 #+end_src
 
 ** Line number
@@ -205,11 +233,19 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 * Theme
 #+begin_src emacs-lisp
   (use-package doom-themes
-    :ensure t)
-  (setq doom_themes-enable-bold t
-        doom-themes-enablbe-italic t)
-  ;(load-theme 'doom-palenight t)
-  (load-theme 'doom-gruvbox t)
+    :init
+    (setq doom_themes-enable-bold t
+          doom-themes-enablbe-italic t)
+    :config
+    ;;(load-theme 'doom-palenight t)
+    (load-theme 'doom-gruvbox t)
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
+
+  ;; hilight line at the cursor.
+  (global-hl-line-mode t)
 
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
@@ -354,19 +390,19 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 * Company
 #+begin_src emacs-lisp
 
-  ;(use-package company
-  ;  :after lsp-mode
-  ;  :hook (lsp-mode . company-mode)
-  ;  :bind (:map company-active-map
-  ;              ("<tab>" . company-complete-selection))
-  ;  (:map lsp-mode-map
-  ;        ("<tab>" . company-indent-or-complete-common))
-  ;  :custom
-  ;  (company-minimum-prefix-length 1)
-  ;  (company-idle-delay 0.0))
+  ;;(use-package company
+  ;;  :after lsp-mode
+  ;;  :hook (lsp-mode . company-mode)
+  ;;  :bind (:map company-active-map
+  ;;              ("<tab>" . company-complete-selection))
+  ;;  (:map lsp-mode-map
+  ;;        ("<tab>" . company-indent-or-complete-common))
+  ;;  :custom
+  ;;  (company-minimum-prefix-length 1)
+  ;;  (company-idle-delay 0.0))
 
-  ;(use-package company-box
-  ;  :hook (company-mode . company-box-mode))
+  ;;(use-package company-box
+  ;;  :hook (company-mode . company-box-mode))
 
 #+end_src
 
@@ -469,7 +505,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     :init
     (setq ivy-posframe-display-functions-alist
           '((swiper                     . ivy-posframe-display-at-point)
-		      (emojify-insert-emoji  . ivy-display-function-fallback)
+            (emojify-insert-emoji  . ivy-display-function-fallback)
             (t                        . ivy-posframe-display)))
     :custom-face
     (ivy-posframe-border ((t (:background "#ffffff"))))
@@ -669,20 +705,20 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 ** Org Roam Server
 + DEPRECATED ( ORG-ROAM V2 )
 #+begin_src emacs-lisp
-  ;(use-package org-roam-server
-  ;  :ensure t
-  ;  :config
-  ;  (setq org-roam-server-host "127.0.0.1"
-  ;        org-roam-server-port 23799
-  ;        org-roam-server-authenticate nil
-  ;        org-roam-server-export-inline-images t
-  ;        org-roam-server-serve-files t
-  ;        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-  ;        org-roam-server-network-poll t
-  ;        org-roam-server-network-arrows nil
-  ;        org-roam-server-network-label-truncate t
-  ;        org-roam-server-network-label-truncate-length 60
-  ;        org-roam-server-network-label-wrap-length 20))
+  ;;(use-package org-roam-server
+  ;;  :ensure t
+  ;;  :config
+  ;;  (setq org-roam-server-host "127.0.0.1"
+  ;;        org-roam-server-port 23799
+  ;;        org-roam-server-authenticate nil
+  ;;        org-roam-server-export-inline-images t
+  ;;        org-roam-server-serve-files t
+  ;;        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+  ;;        org-roam-server-network-poll t
+  ;;        org-roam-server-network-arrows nil
+  ;;        org-roam-server-network-label-truncate t
+  ;;        org-roam-server-network-label-truncate-length 60
+  ;;        org-roam-server-network-label-wrap-length 20))
 #+end_src
 ** Org Roam UI
 #+begin_src emacs-lisp
@@ -690,17 +726,17 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     :after org-roam)
   (use-package org-roam-ui
     :straight
-      (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
-      :after org-roam
-  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-  ;;         a hookable mode anymore, you're advised to pick something yourself
-  ;;         if you don't care about startup time, use
-  ;;  :hook (after-init . org-roam-ui-mode)
-      :config
-      (setq org-roam-ui-sync-theme t
-            org-roam-ui-follow t
-            org-roam-ui-update-on-save t
-            org-roam-ui-open-on-start t))
+    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    :after org-roam
+    ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+    ;;         a hookable mode anymore, you're advised to pick something yourself
+    ;;         if you don't care about startup time, use
+    ;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 #+end_src
 ** Org present
 #+begin_src emacs-lisp
@@ -1032,42 +1068,42 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 
 * ELFEED
 #+begin_src emacs-lisp
-(use-package elfeed
-  :config
-  (setq elfeed-search-feed-face ":foreground #fff :weight bold"
-        elfeed-feeds (quote
-                       (("https://www.reddit.com/r/linux.rss" reddit linux)
-                        ("https://www.reddit.com/r/commandline.rss" reddit commandline)
-                        ("https://www.reddit.com/r/distrotube.rss" reddit distrotube)
-                        ("https://www.reddit.com/r/emacs.rss" reddit emacs)
-                        ("https://www.gamingonlinux.com/article_rss.php" gaming linux)
-                        ("https://hackaday.com/blog/feed/" hackaday linux)
-                        ("https://opensource.com/feed" opensource linux)
-                        ("https://linux.softpedia.com/backend.xml" softpedia linux)
-                        ("https://itsfoss.com/feed/" itsfoss linux)
-                        ("https://www.zdnet.com/topic/linux/rss.xml" zdnet linux)
-                        ("https://www.phoronix.com/rss.php" phoronix linux)
-                        ("http://feeds.feedburner.com/d0od" omgubuntu linux)
-                        ("https://www.computerworld.com/index.rss" computerworld linux)
-                        ("https://www.networkworld.com/category/linux/index.rss" networkworld linux)
-                        ("https://www.techrepublic.com/rssfeeds/topic/open-source/" techrepublic linux)
-                        ("https://betanews.com/feed" betanews linux)
-                        ("http://lxer.com/module/newswire/headlines.rss" lxer linux)
-                        ("https://distrowatch.com/news/dwd.xml" distrowatch linux)))))
+  (use-package elfeed
+    :config
+    (setq elfeed-search-feed-face ":foreground #fff :weight bold"
+          elfeed-feeds (quote
+                        (("https://www.reddit.com/r/linux.rss" reddit linux)
+                         ("https://www.reddit.com/r/commandline.rss" reddit commandline)
+                         ("https://www.reddit.com/r/distrotube.rss" reddit distrotube)
+                         ("https://www.reddit.com/r/emacs.rss" reddit emacs)
+                         ("https://www.gamingonlinux.com/article_rss.php" gaming linux)
+                         ("https://hackaday.com/blog/feed/" hackaday linux)
+                         ("https://opensource.com/feed" opensource linux)
+                         ("https://linux.softpedia.com/backend.xml" softpedia linux)
+                         ("https://itsfoss.com/feed/" itsfoss linux)
+                         ("https://www.zdnet.com/topic/linux/rss.xml" zdnet linux)
+                         ("https://www.phoronix.com/rss.php" phoronix linux)
+                         ("http://feeds.feedburner.com/d0od" omgubuntu linux)
+                         ("https://www.computerworld.com/index.rss" computerworld linux)
+                         ("https://www.networkworld.com/category/linux/index.rss" networkworld linux)
+                         ("https://www.techrepublic.com/rssfeeds/topic/open-source/" techrepublic linux)
+                         ("https://betanews.com/feed" betanews linux)
+                         ("http://lxer.com/module/newswire/headlines.rss" lxer linux)
+                         ("https://distrowatch.com/news/dwd.xml" distrowatch linux)))))
 
-(use-package elfeed-goodies
-  :init
-  (elfeed-goodies/setup)
-  :config
-  (setq elfeed-goodies/entry-pane-size 0.5))
+  (use-package elfeed-goodies
+    :init
+    (elfeed-goodies/setup)
+    :config
+    (setq elfeed-goodies/entry-pane-size 0.5))
 
-(add-hook 'elfeed-show-mode-hook 'visual-line-mode)
-(evil-define-key 'normal elfeed-show-mode-map
-  (kbd "J") 'elfeed-goodies/split-show-next
-  (kbd "K") 'elfeed-goodies/split-show-prev)
-(evil-define-key 'normal elfeed-search-mode-map
-  (kbd "J") 'elfeed-goodies/split-show-next
-  (kbd "K") 'elfeed-goodies/split-show-prev)
+  (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
+  (evil-define-key 'normal elfeed-show-mode-map
+    (kbd "J") 'elfeed-goodies/split-show-next
+    (kbd "K") 'elfeed-goodies/split-show-prev)
+  (evil-define-key 'normal elfeed-search-mode-map
+    (kbd "J") 'elfeed-goodies/split-show-next
+    (kbd "K") 'elfeed-goodies/split-show-prev)
 
 #+end_src
 * Language Support
@@ -1085,4 +1121,14 @@ using =svlangserver=
 **  Rust
 #+begin_src emacs-lisp
   (use-package rust-mode)
+#+end_src
+** Markdown
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :disabled
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
 #+end_src
