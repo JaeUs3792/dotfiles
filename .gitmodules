@@ -1,0 +1,3 @@
+[submodule ".emacs.d.vanilla/doom-snippets"]
+	path = .emacs.d.vanilla/doom-snippets
+	url = https://github.com/hlissner/doom-snippets
