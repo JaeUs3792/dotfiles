@@ -35,13 +35,6 @@
   (setq-default indent-tabs-mode nil)
   ;; font
   (defun available-font? (font) (member font (font-family-list)))
-
-  ;; backup
-  (add-to-list 'backup-directory-alist '("." . "~/.emacs-saves"))
-  (setq delete-old-versions t
-        kept-old-versions 2
-        kept-new-versions 2
-        version-control t)
 #+end_src
 * Package Related
 ** Package Repo
@@ -502,26 +495,22 @@ https://emacs.stackexchange.com/a/30691
     :defer t
     :init (global-flycheck-mode t))
 #+end_src
-* Snippet
-** TODO : Check Doom Emacs
+* Yasnippet
 #+begin_src emacs-lisp
-  (use-package yasnippet
-   ;;Expand snippets with `C-j', not with `TAB'. Use `TAB' to always
-   ;;jump to next field, even when company window is active. If there
-   ;;is need to complete company's selection, use `C-s'
-   ;;(`company-complete-selection').
-  :custom
-  (yas-indent-line nil)
-  (yas-inhibit-overlay-modification-protection t)
-  :custom-face
-  (yas-field-highlight-face ((t (:inherit region))))
-  :hook
-  (dashboard-after-initialize . yas-global-mode)
-  (snippet-mode . (lambda () (setq-local require-final-newline nil))))
-
-  ;; snippet collections
   (use-package yasnippet-snippets)
+  (use-package yasnippet
+    :init
+    (defvar yas-snippet-dirs nil)
+    :hook (prog-mode . yas-minor-mode)
+    :config
+    (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
+    (yas-global-mode 1))
+  (ju/leader-key-def
+    "i" '(:ignore t :which-key "insert something.")
+    "is" '(yas-insert-snippet :which-key "snippet")
+    "ie" '(emojify-insert-emoji :which-key "emoji"))
 #+end_src
+
 * Counsel
 #+begin_src emacs-lisp
   (use-package counsel
@@ -1214,7 +1203,7 @@ using =svlangserver=
 
 ** Rust
 #+begin_src emacs-lisp
-  ;;(use-package rust-mode)
+  (use-package rust-mode)
 #+end_src
 ** Markdown
 #+begin_src emacs-lisp
