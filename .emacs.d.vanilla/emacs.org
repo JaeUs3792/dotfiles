@@ -53,11 +53,11 @@
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
 
-  (require 'use-package)
-  (setq use-package-always-ensure t)
   (when (not (package-installed-p 'use-package))
     (package-refresh-contents)
     (package-install 'use-package))
+  (require 'use-package)
+  (setq use-package-always-ensure t)
 
   ;;(use-package auto-package-update
   ;;  :custom
@@ -245,8 +245,8 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (setq doom_themes-enable-bold t
           doom-themes-enablbe-italic t)
     :config
-    ;;(load-theme 'doom-palenight t)
-    (load-theme 'doom-gruvbox t)
+    (load-theme 'doom-palenight t)
+    ;;(load-theme 'doom-gruvbox t)
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
     ;; Corrects (and improves) org-mode's native fontification.
@@ -857,6 +857,12 @@ https://emacs.stackexchange.com/a/30691
                 ("C-c C-k" . dw/org-present-prev))
     :hook ((org-present-mode . dw/org-present-hook)
            (org-present-mode-quit . dw/org-present-quit-hook)))
+#+end_src
+** Translate in org
+#+begin_src emacs-lisp
+  (use-package ob-translate
+    :config
+    (setq ob-translate:default-dest "ko"))
 #+end_src
 * Magit
 #+begin_src emacs-lisp
