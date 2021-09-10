@@ -32,8 +32,16 @@
   ;; tab
   (setq-default tab-width 4)
   (setq-default evil-shift-width tab-width)
+  (setq-default indent-tabs-mode nil)
   ;; font
   (defun available-font? (font) (member font (font-family-list)))
+
+  ;; backup
+  (add-to-list 'backup-directory-alist '("." . "~/.emacs-saves"))
+  (setq delete-old-versions t
+        kept-old-versions 2
+        kept-new-versions 2
+        version-control t)
 #+end_src
 * Package Related
 ** Package Repo
@@ -307,22 +315,32 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   (set-face-attribute 'default nil :font "Fira Code Retina" :height gvar/default-font-size)
   (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height gvar/default-font-size)
   (set-face-attribute 'variable-pitch nil :font "Fira Code Retina" :height gvar/default-variable-font-size :weight 'regular)
-  ;;(set-fontset-font t 'hangul (font-spec :family "NanumGothicCoding" :size 15))
-  ;;(setq face-font-rescale-alist
-  ;;      '((".*NanumGothicCoding*" . 1.5)))
-  (set-fontset-font t 'hangul (font-spec :family "Noto Sans CJK KR" :size 15))
+  (set-fontset-font t 'hangul (font-spec :family "D2Coding" :height gvar/default-font-size))
   (setq face-font-rescale-alist
-        '((".*Noto Sans CJK KR*" . 1.5)))
+        '(("D2Coding" . 1.3)))
   (setq-default line-spacing 2)
   ;;(global-prettify-symbols-mode +1)
 #+end_src
-** Text Scale Key bindings
+* Whitespace
 #+begin_src emacs-lisp
-  (use-package default-text-scale
-    :defer 1
-    :config
-    (default-text-scale-mode))
+  ;; somtimes need to check white space. this configuration will be helpful
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(whitespace-line ((nil (:bold t :background "yellow"))))
+   '(whitespace-tab ((nil (:bold t :background "linen"))))
+   '(whitespace-trailing ((nil (:bold t :background "red1")))))
+  (global-whitespace-mode t)
+  (add-hook
+   'after-change-major-mode-hook
+   '(lambda ()
+      (setq whitespace-line-column nil
+            whitespace-style '(face trailing))))
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+end_src
+
 * Emojify
 #+begin_src emacs-lisp
   (use-package emojify
@@ -487,27 +505,22 @@ https://emacs.stackexchange.com/a/30691
 * Snippet
 ** TODO : Check Doom Emacs
 #+begin_src emacs-lisp
-  ;;(use-package yasnippet
-  ;; Expand snippets with `C-j', not with `TAB'. Use `TAB' to always
-  ;; jump to next field, even when company window is active. If there
-  ;; is need to complete company's selection, use `C-s'
-  ;; (`company-complete-selection').
-  ;;:custom
-  ;;(yas-indent-line nil)
-  ;;(yas-inhibit-overlay-modification-protection t)
-  ;;:custom-face
-  ;;(yas-field-highlight-face ((t (:inherit region))))
-  ;;:bind*
-  ;;(("C-j" . yas-expand)
-  ;; :map yas-minor-mode-map
-  ;; ("TAB" . nil)
-  ;; ("<tab>" . nil)
-  ;; :map yas-keymap
-  ;; ("TAB" . (lambda () (interactive) (company-abort) (yas-next-field)))
-  ;; ("<tab>" . (lambda () (interactive) (company-abort) (yas-next-field))))
-  ;;:hook
-  ;;(dashboard-after-initialize . yas-global-mode)
-  ;;(snippet-mode . (lambda () (setq-local require-final-newline nil))))
+  (use-package yasnippet
+   ;;Expand snippets with `C-j', not with `TAB'. Use `TAB' to always
+   ;;jump to next field, even when company window is active. If there
+   ;;is need to complete company's selection, use `C-s'
+   ;;(`company-complete-selection').
+  :custom
+  (yas-indent-line nil)
+  (yas-inhibit-overlay-modification-protection t)
+  :custom-face
+  (yas-field-highlight-face ((t (:inherit region))))
+  :hook
+  (dashboard-after-initialize . yas-global-mode)
+  (snippet-mode . (lambda () (setq-local require-final-newline nil))))
+
+  ;; snippet collections
+  (use-package yasnippet-snippets)
 #+end_src
 * Counsel
 #+begin_src emacs-lisp
@@ -534,7 +547,7 @@ https://emacs.stackexchange.com/a/30691
   (setq display-time-world-time-format "%a, %d %b %I:%M %p %Z")
 #+end_src
 
-* IVY 
+* IVY
 #+begin_src emacs-lisp
   (use-package ivy
     :diminish
@@ -611,9 +624,9 @@ https://emacs.stackexchange.com/a/30691
     ("C-c p" . projectile-command-map)
     :init
     ;; NOTE: Set this to the folder where you keep your Git repos!
-    (when (file-directory-p "~/Projects/Code")
-      (setq projectile-project-search-path '("~/Projects/Code")))
-    (setq projectile-switch-project-action #'dw/switch-project-action))
+    (when (file-directory-p "~/Projects")
+      (setq projectile-project-search-path '("~/Projects"))))
+    ;(setq projectile-switch-project-action #'dw/switch-project-action))
   (use-package counsel-projectile
     :after projectile
     :config (counsel-projectile-mode))
@@ -624,11 +637,11 @@ https://emacs.stackexchange.com/a/30691
     "pp" 'counsel-projectile
     "pc" 'projectile-compile-project
     "pd" 'projectile-dired)
-  (defun dw/switch-project-action ()
-    "Switch to a workspace with the project name and start `magit-status'."
-    ;; TODO: Switch to EXWM workspace 1?
-    (persp-switch (projectile-project-name))
-    (magit-status))
+  ;;(defun dw/switch-project-action ()
+  ;;  "Switch to a workspace with the project name and start `magit-status'."
+  ;;  ;; TODO: Switch to EXWM workspace 1?
+  ;;  (persp-switch (projectile-project-name))
+  ;;  (magit-status))
 
 #+end_src
 
@@ -650,16 +663,16 @@ https://emacs.stackexchange.com/a/30691
 
 * Helpful
 #+begin_src emacs-lisp
-  ;;  (use-package helpful
-  ;;    :commands (helpful-callable helpful-variable helpful-command helpful-key)
-  ;;    :custom
-  ;;    (counsel-describe-function-function #'helpful-callable)
-  ;;    (counsel-describe-variable-function #'helpful-variable)
-  ;;    :bind
-  ;;    ([remap describe-function] . counsel-describe-function)
-  ;;    ([remap describe-command] . helpful-command)
-  ;;    ([remap describe-variable] . counsel-describe-variable)
-  ;;    ([remap describe-key] . helpful-key))
+  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key)
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
 #+end_src
 * Hydra
 #+begin_src emacs-lisp
@@ -758,7 +771,7 @@ https://emacs.stackexchange.com/a/30691
     (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
     (add-to-list 'org-structure-template-alist '("py" . "src python")))
 #+end_src
-  
+
 ** Org Roam
 #+begin_src emacs-lisp
   (use-package org-roam
