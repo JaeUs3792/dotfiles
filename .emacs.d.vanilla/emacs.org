@@ -245,7 +245,8 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (setq doom_themes-enable-bold t
           doom-themes-enablbe-italic t)
     :config
-    (load-theme 'doom-palenight t)
+    (load-theme 'doom-material t)
+    ;;(load-theme 'doom-palenight t)
     ;;(load-theme 'doom-gruvbox t)
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
@@ -254,6 +255,10 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 
   ;; hilight line at the cursor.
   (global-hl-line-mode t)
+  (use-package beacon
+    :straight t
+    :config
+    (beacon-mode))
 
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
@@ -725,6 +730,7 @@ https://emacs.stackexchange.com/a/30691
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
 
     (setq org-agenda-files
           '("/home/jaeus/Roam/Agenda/Agenda-2021-6th.org")))
@@ -1225,4 +1231,24 @@ using =svlangserver=
 ** CMAKE
 #+begin_src emacs-lisp
 (use-package cmake-mode)
+#+end_src
+
+* ETC
+** Youtube
+#+begin_src emacs-lisp
+  ;;(use-package ytel
+    ;;:straight t
+    ;;:config
+    ;;(setq ytel-invidious-api-url "https://invidious.snopyta.org")
+    ;;)
+  ;;(defun ytel-watch ()
+    ;;"Stream video at point in mpv."
+    ;;(interactive)
+    ;;(let* ((video (ytel-get-current-video))
+           ;;(id    (ytel-video-id video)))
+      ;;(start-process "ytel mpv" nil
+                     ;;"mpv"
+                     ;;(concat "https://www.youtube.com/watch?v=" id))
+      ;;"--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
+    ;;(message "Starting streaming..."))
 #+end_src
