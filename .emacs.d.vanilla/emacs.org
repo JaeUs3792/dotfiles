@@ -1252,3 +1252,24 @@ using =svlangserver=
       ;;"--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
     ;;(message "Starting streaming..."))
 #+end_src
+** Python
+
+- prequisite
+#+begin_src shell
+  paru -S jupyter python-pip
+  pip install matplotlib numpy pandas tabulate
+#+end_src
+
+- configuration for emacs table
+#+begin_src emacs-lisp
+  (use-package jupyter
+    :straight t)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t) ;; Other languages
+     (shell . t)
+     ;; Python & Jupyter
+     (python . t)
+     (jupyter . t)))
+  (org-babel-jupyter-override-src-block "python")
+#+end_src
