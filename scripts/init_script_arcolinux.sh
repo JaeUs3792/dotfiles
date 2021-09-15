@@ -1,12 +1,10 @@
 #!/bin/sh
 
-sudo pacman -S betterlockscreen
 sudo pacman -Syu --noconfirm
-
-git clone https://github.com/JaeYoo-Im/myDots ~/.dotfiles
 paru -S stow zsh-autosuggestions-git alacritty trayer --noconfirm
 /usr/share/oh-my-zsh/tools/install.sh
 rm ~/.zshrc ~/.bashrc ~/.xmonad/xmonad.hs
+rm -rf ~/.config/alacritty ~/.xmonad/scripts
 cd ~/.dotfiles
 stow .
 
@@ -29,10 +27,10 @@ TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
 
 # Dynamic wallpaper
-paru -S cronie --noconfirm
-git clone https://github.com/adi1090x/dynamic-wallpaper.git ~/dynamic-wallpaper
-cd dynamic-wallpaper
-./install.sh
+#paru -S cronie --noconfirm
+#git clone https://github.com/adi1090x/dynamic-wallpaper.git ~/dynamic-wallpaper
+#cd dynamic-wallpaper
+#./install.sh
 
 # font
 paru -S ttf-fira-code ttf-nanum nerd-fonts-mononoki --noconfirm
@@ -43,7 +41,7 @@ paru -S fcitx-hangul fcitx-configtool --noconfirm
 # enpass
 paru -S enpass --noconfirm
 
-paru -S green-tunnel --noconfirm
+#paru -S green-tunnel --noconfirm
 
 #emacs
 paru -S ripgrep emacs --noconfirm

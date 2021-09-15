@@ -114,19 +114,20 @@
   myStartupHook :: X ()
   myStartupHook = do
     --spawnOnce "xrandr --output DP-4 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output HDMI-0 --mode 1920x1080 --pos 2560x0 --rotate normal"
-    spawnOnce "nm-applet &"
-    spawnOnce "picom -b --config ~/.xmonad/picom.conf &"
+    spawn "$HOME/.xmonad/scripts/autostart.sh"
+    --spawnOnce "nm-applet &"
+    --spawnOnce "picom -b --config ~/.xmonad/picom.conf &"
     --spawnOnce "picom --experimental-backends -b --config ~/.xmonad/picom.conf &"
-    spawnOnce "dwall -s firewatch &"
-    spawnOnce "fcitx &"
+    --spawnOnce "dwall -s firewatch &"
+    --spawnOnce "fcitx &"
     --spawnOnce "seafile-applet &"
-    spawnOnce "seadrive-gui &"
-    spawnOnce "blueberry-tray &"
-    spawnOnce "volumeicon &"
+    --spawnOnce "seadrive-gui &"
+    --spawnOnce "blueberry-tray &"
+    --spawnOnce "volumeicon &"
     --spawnOnce "enpass"
-    spawnOnce "green-tunnel -s &"
-    spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
-    spawnOnce "/usr/bin/emacs --daemon &"
+    --spawnOnce "green-tunnel -s &"
+    --spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
+    --spawnOnce "/usr/bin/emacs --daemon &"
     -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
       -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
       -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
@@ -136,7 +137,7 @@
       -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
       -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
       -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
-      --setWMName "LG3D"
+      setWMName "LG3D"
 
 #+end_src
 ** Layout
@@ -208,7 +209,7 @@
                    h = 0.9
                    w = 0.9
                    t = 0.95 -h
-                   l = 0.95 -w 
+                   l = 0.95 -w
       spawnCalc  = "qalculate-gtk"
       findCalc   = className =? "Qalculate-gtk"
       manageCalc = customFloating $ W.RationalRect l t w h
@@ -548,10 +549,10 @@
           , focusedBorderColor = myFocusColor
           , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
                 -- the following variables beginning with 'pp' are settings for xmobar.
-                { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
+                { --ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
                                 -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 2
                                 -- >> hPutStrLn xmproc2 x                          -- xmobar on monitor 3
-                , ppCurrent = xmobarColor "#FFFFFF" "" . wrap "●" ""           -- Current workspace
+                ppCurrent = xmobarColor "#FFFFFF" "" . wrap "●" ""           -- Current workspace
                 , ppVisible = xmobarColor "#c0a79a" "" . wrap "♼" "" . clickable              -- Visible but not current workspace
                 , ppHidden = xmobarColor "#c0a79a" "" . wrap "○" "" . clickable -- Hidden workspaces
                 , ppHiddenNoWindows = xmobarColor "#c792ea" ""  . \s -> ""     -- Hidden workspaces (no windows)
