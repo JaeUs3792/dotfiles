@@ -1,11 +1,6 @@
 .ssh/*
 !.ssh/config
 
-.xmonad/*
-!.xmonad/xmonad.org
-!.xmonad/picom.conf
-!.xmonad/haskell_20.xpm
-
 .emacs.d/*
 !.emacs.d/desktop.org
 !.emacs.d/emacs.org
