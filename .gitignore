@@ -1,9 +1,2 @@
 .ssh/*
 !.ssh/config
-
-.emacs.d/*
-!.emacs.d/desktop.org
-!.emacs.d/emacs.org
-!.emacs.d/init.el
-!.emacs.d/exwm/
-

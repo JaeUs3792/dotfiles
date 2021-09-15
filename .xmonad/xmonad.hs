@@ -128,7 +128,7 @@ myStartupHook = do
     -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
     -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
     -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
-    setWMName "LG3D"
+  setWMName "LG3D"
 
 myColorizer :: Window -> Bool -> X (String, String)
 myColorizer = colorRangeFromClassName
@@ -503,7 +503,7 @@ main = do
     -- xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmobar/xmobarrc_desktop_qhd"
     -- xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmobar/xmobarrc_desktop_fhd"
     xmproc0 <- spawnPipe "xmobar -x 2 $HOME/.config/xmobar/xmobarrc_labtop_fhd"
-    xmproc0 <- spawnPipe "polyb
+    -- xmproc0 <- spawnPipe "polyb
     -- the xmonad, ya know...what the WM is named after!
     xmonad $ ewmh def
         { manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
@@ -527,10 +527,10 @@ main = do
         , focusedBorderColor = myFocusColor
         , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
-              { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
+              { -- ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
                               -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 2
                               -- >> hPutStrLn xmproc2 x                          -- xmobar on monitor 3
-              , ppCurrent = xmobarColor "#FFFFFF" "" . wrap "●" ""           -- Current workspace
+              ppCurrent = xmobarColor "#FFFFFF" "" . wrap "●" ""           -- Current workspace
               , ppVisible = xmobarColor "#c0a79a" "" . wrap "♼" "" . clickable              -- Visible but not current workspace
               , ppHidden = xmobarColor "#c0a79a" "" . wrap "○" "" . clickable -- Hidden workspaces
               , ppHiddenNoWindows = xmobarColor "#c792ea" ""  . \s -> ""     -- Hidden workspaces (no windows)

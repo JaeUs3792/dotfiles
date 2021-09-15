@@ -33,7 +33,7 @@ TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/upda
 #./install.sh
 
 # font
-paru -S ttf-fira-code ttf-nanum nerd-fonts-mononoki --noconfirm
+paru -S ttf-fira-code ttf-nanum nerd-fonts-mononoki ttf-monaco ttf-d2coding --noconfirm
 
 # hangul
 paru -S fcitx-hangul fcitx-configtool --noconfirm

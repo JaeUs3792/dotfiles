@@ -129,15 +129,15 @@
     --spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
     --spawnOnce "/usr/bin/emacs --daemon &"
     -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
-      -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
-      -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
+    -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
+    -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
 
-      --spawnOnce "xargs xwallpaper --stretch < ~/.xwallpaper"  -- set last saved with xwallpaper
-      -- spawnOnce "/bin/ls ~/wallpapers | shuf -n 1 | xargs xwallpaper --stretch"  -- set random xwallpaper
-      -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
-      -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
-      -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
-      setWMName "LG3D"
+    --spawnOnce "xargs xwallpaper --stretch < ~/.xwallpaper"  -- set last saved with xwallpaper
+    -- spawnOnce "/bin/ls ~/wallpapers | shuf -n 1 | xargs xwallpaper --stretch"  -- set random xwallpaper
+    -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
+    -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
+    -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
+    setWMName "LG3D"
 
 #+end_src
 ** Layout
@@ -525,16 +525,16 @@
       -- Launching three instances of xmobar on their monitors.
       -- xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmobar/xmobarrc_desktop_qhd"
       -- xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmobar/xmobarrc_desktop_fhd"
-      xmproc0 <- spawnPipe "xmobar -x 2 $HOME/.config/xmobar/xmobarrc_labtop_fhd"
+      -- xmproc0 <- spawnPipe "xmobar -x 2 $HOME/.config/xmobar/xmobarrc_labtop_fhd"
       -- the xmonad, ya know...what the WM is named after!
       xmonad $ ewmh def
-          { manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
+          { -- manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
           -- Run xmonad commands from command line with "xmonadctl command". Commands include:
           -- shrink, expand, next-layout, default-layout, restart-wm, xterm, kill, refresh, run,
           -- focus-up, focus-down, swap-up, swap-down, swap-master, sink, quit-wm. You can run
           -- "xmonadctl 0" to generate full list of commands written to ~/.xsession-errors.
           -- To compile xmonadctl: ghc -dynamic xmonadctl.hs
-          , handleEventHook    = serverModeEventHookCmd
+          handleEventHook    = serverModeEventHookCmd
                                  <+> serverModeEventHook
                                  <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn)
                                  <+> docksEventHook
