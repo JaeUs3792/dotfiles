@@ -120,14 +120,14 @@ myStartupHook = do
   --spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
   --spawnOnce "/usr/bin/emacs --daemon &"
   -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
-    -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
-    -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
+  -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
+  -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
 
-    --spawnOnce "xargs xwallpaper --stretch < ~/.xwallpaper"  -- set last saved with xwallpaper
-    -- spawnOnce "/bin/ls ~/wallpapers | shuf -n 1 | xargs xwallpaper --stretch"  -- set random xwallpaper
-    -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
-    -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
-    -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
+  --spawnOnce "xargs xwallpaper --stretch < ~/.xwallpaper"  -- set last saved with xwallpaper
+  -- spawnOnce "/bin/ls ~/wallpapers | shuf -n 1 | xargs xwallpaper --stretch"  -- set random xwallpaper
+  -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
+  -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
+  -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
   setWMName "LG3D"
 
 myColorizer :: Window -> Bool -> X (String, String)
@@ -502,8 +502,7 @@ main = do
     -- Launching three instances of xmobar on their monitors.
     -- xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmobar/xmobarrc_desktop_qhd"
     -- xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmobar/xmobarrc_desktop_fhd"
-    xmproc0 <- spawnPipe "xmobar -x 2 $HOME/.config/xmobar/xmobarrc_labtop_fhd"
-    -- xmproc0 <- spawnPipe "polyb
+    xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmobar/xmobarrc_labtop_fhd"
     -- the xmonad, ya know...what the WM is named after!
     xmonad $ ewmh def
         { manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
@@ -527,10 +526,10 @@ main = do
         , focusedBorderColor = myFocusColor
         , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
-              { -- ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
+              { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
                               -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 2
                               -- >> hPutStrLn xmproc2 x                          -- xmobar on monitor 3
-              ppCurrent = xmobarColor "#FFFFFF" "" . wrap "●" ""           -- Current workspace
+              , ppCurrent = xmobarColor "#FFFFFF" "" . wrap "●" ""           -- Current workspace
               , ppVisible = xmobarColor "#c0a79a" "" . wrap "♼" "" . clickable              -- Visible but not current workspace
               , ppHidden = xmobarColor "#c0a79a" "" . wrap "○" "" . clickable -- Hidden workspaces
               , ppHiddenNoWindows = xmobarColor "#c792ea" ""  . \s -> ""     -- Hidden workspaces (no windows)
