@@ -1,12 +1,28 @@
 #!/bin/sh
+paru -S stow alacritty trayer --noconfirm
 
-sudo pacman -Syu --noconfirm
-paru -S stow zsh-autosuggestions-git alacritty trayer --noconfirm
-/usr/share/oh-my-zsh/tools/install.sh
+# config file handling
+rm ~/.config/nu/config.toml
 rm ~/.zshrc ~/.bashrc ~/.xmonad/xmonad.hs
 rm -rf ~/.config/alacritty ~/.xmonad/scripts
 cd ~/.dotfiles
 stow .
+
+sudo pacman -Syu --noconfirm
+
+#ZSH
+#paru -S zsh-autosuggestions-git --noconfirm
+#/usr/share/oh-my-zsh/tools/install.sh
+
+# NUSHELL
+#paru -S nushell
+#nu ~/scripts/init_script_nushell.nu
+#echo "Changing Shell to nushell"
+#chsh -s /bin/nu   # change shell
+
+# FISH
+paru -S fish starship
+chsh -s /bin/fish
 
 # neovim
 paru -S neovim --noconfirm
