@@ -25,6 +25,15 @@ if [ "${val}" == "y" ];then
 	echo export rsync_proxy=$proxy_addr >> ~/.zshrc
 	echo export RSYNC_PROXY=$proxy_addr >> ~/.zshrc
 
+	#fish
+	echo export http_proxy=$proxy_addr >> ~/.config/fish/config.fish
+	echo export HTTP_PROXY=$proxy_addr >> ~/.config/fish/config.fish
+	echo export https_proxy=$proxy_addr >> ~/.config/fish/config.fish
+	echo export HTTPS_PROXY=$proxy_addr >> ~/.config/fish/config.fish
+	echo export ftp_proxy=$proxy_addr >> ~/.config/fish/config.fish
+	echo export FTP_PROXY=$proxy_addr >> ~/.config/fish/config.fish
+	echo export rsync_proxy=$proxy_addr >> ~/.config/fish/config.fish
+	echo export RSYNC_PROXY=$proxy_addr >> ~/.config/fish/config.fish
 	#sudo
 	echo "Defaults env_keep += \"*_proxy *_PROXY\"" > ./05_proxy
 	sudo mv 05_proxy /etc/sudoers.d
