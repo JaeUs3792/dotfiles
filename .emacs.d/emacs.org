@@ -743,7 +743,7 @@ https://emacs.stackexchange.com/a/30691
 #+begin_src emacs-lisp
   (defun efs/org-mode-setup ()
     (org-indent-mode)
-    ;(variable-pitch-mode 1)
+    ;;(variable-pitch-mode 1)
     (visual-line-mode 1))
 
   (use-package org
@@ -791,6 +791,12 @@ https://emacs.stackexchange.com/a/30691
     (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
     (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
     (add-to-list 'org-structure-template-alist '("py" . "src python")))
+#+end_src
+
+** Org mode Addons
+#+begin_src emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/org-contrib/lisp")
+  (use-package org-screenshot)
 #+end_src
 
 ** Org Roam
