@@ -430,6 +430,8 @@ myKeys =
         --, ("M-M1-j", sendMessage MirrorShrink)          -- Shrink vert window width
         --, ("M-M1-k", sendMessage MirrorExpand)          -- Expand vert window width
 
+    -- Systemwise
+       , ("C-S-<Esc>", spawn $ "xfce4-taskmanager")
     -- Sublayouts
     -- This is used to push windows to tabbed sublayouts, or pull them out of it.
         --, ("M-C-h", sendMessage $ pullGroup L)
@@ -456,36 +458,13 @@ myKeys =
         --, ("M-<F2>", spawn "/bin/ls ~/wallpapers | shuf -n 1 | xargs xwallpaper --stretch")
         --, ("M-<F2>", spawn "feh --randomize --bg-fill ~/wallpapers/*")
 
-    -- Controls for mocp music player (SUPER-u followed by a key)
-        --, ("M-u p", spawn "mocp --play")
-        --, ("M-u l", spawn "mocp --next")
-        --, ("M-u h", spawn "mocp --previous")
-        --, ("M-u <Space>", spawn "mocp --toggle-pause")
-
-    -- Emacs (CTRL-e followed by a key)
-        -- , ("C-e e", spawn myEmacs)                 -- start emacs
-        --, ("C-e e", spawn (myEmacs ++ ("--eval '(dashboard-refresh-buffer)'")))   -- emacs dashboard
-        --, ("C-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
-        --, ("C-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
-        --, ("C-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
-        --, ("C-e m", spawn (myEmacs ++ ("--eval '(mu4e)'")))      -- mu4e email
-        --, ("C-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
-        --, ("C-e s", spawn (myEmacs ++ ("--eval '(eshell)'")))    -- eshell
-        --, ("C-e t", spawn (myEmacs ++ ("--eval '(mastodon)'")))  -- mastodon.el
-        ---- , ("C-e v", spawn (myEmacs ++ ("--eval '(vterm nil)'"))) -- vterm if on GNU Emacs
-        --, ("C-e v", spawn (myEmacs ++ ("--eval '(+vterm/here nil)'"))) -- vterm if on Doom Emacs
-        ---- , ("C-e w", spawn (myEmacs ++ ("--eval '(eww \"distrotube.com\")'"))) -- eww browser if on GNU Emacs
-        --, ("C-e w", spawn (myEmacs ++ ("--eval '(doom/window-maximize-buffer(eww \"distrotube.com\"))'"))) -- eww browser if on Doom Emacs
-        ---- emms is an emacs audio player. I set it to auto start playing in a specific directory.
-        --, ("C-e a", spawn (myEmacs ++ ("--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'")))
-
     -- Multimedia Keys
         --, ("<XF86AudioPlay>", spawn (myTerminal ++ "mocp --play"))
         --, ("<XF86AudioPrev>", spawn (myTerminal ++ "mocp --previous"))
         --, ("<XF86AudioNext>", spawn (myTerminal ++ "mocp --next"))
         --, ("<XF86AudioMute>",   spawn "amixer set Master toggle")
-        , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
-        , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
+        --, ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
+        --, ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
         --, ("<XF86HomePage>", spawn "firefox")
         --, ("<XF86Search>", safeSpawn "firefox" ["https://www.duckduckgo.com/"])
         --, ("<XF86Mail>", runOrRaise "thunderbird" (resource =? "thunderbird"))
