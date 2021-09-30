@@ -267,8 +267,8 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   ;; Set frame transparency
   (set-frame-parameter (selected-frame) 'alpha gvar/frame-transparency)
   (add-to-list 'default-frame-alist `(alpha . ,gvar/frame-transparency))
-  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  ;;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  ;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+end_src
 * Dashboard
 #+begin_src emacs-lisp
@@ -492,23 +492,6 @@ https://emacs.stackexchange.com/a/30691
       (ignore-case t)
       (duplicates t)))
 #+end_src
-** Consult
-#+begin_src emacs-lisp
-(defun dw/get-project-root ()
-  (when (fboundp 'projectile-project-root)
-    (projectile-project-root)))
-
-(use-package consult
-  :demand t
-  :bind (("C-s" . consult-line)
-         ("C-M-l" . consult-imenu)
-         ("C-M-j" . persp-switch-to-buffer*)
-         :map minibuffer-local-map
-         ("C-r" . consult-history))
-  :custom
-  (consult-project-root-function #'dw/get-project-root)
-  (completion-in-region-function #'consult-completion-in-region))
-#+end_src
 
 ** Prescient
 #+begin_src emacs-lisp
@@ -542,21 +525,6 @@ https://emacs.stackexchange.com/a/30691
     "ie" '(emojify-insert-emoji :which-key "emoji"))
 #+end_src
 
-* Counsel
-#+begin_src emacs-lisp
-  (use-package counsel
-    :bind (("M-x" . counsel-M-x)
-           ;;("C-M-j" . counsel-switch-buffer)
-           :map minibuffer-local-map
-           ("C-r" . 'counsel-minibuffer-history))
-    :custom
-    (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-    :config
-    ;; Don't use ^ as initial input. Set this here because `counsel' defines more
-    ;; of its own, on top of the defaults.
-    (setq ivy-initial-inputs-alist nil)
-    (counsel-mode 1))
-#+end_src
 
 * World Time
 #+begin_src emacs-lisp
@@ -567,60 +535,155 @@ https://emacs.stackexchange.com/a/30691
   (setq display-time-world-time-format "%a, %d %b %I:%M %p %Z")
 #+end_src
 
-* IVY
+* IVY Related
+** IVY
 #+begin_src emacs-lisp
-  (use-package ivy
-    :diminish
-    :bind (("C-s" . swiper)
-           :map ivy-minibuffer-map
-           ("TAB" . ivy-alt-done)
-           ("C-l" . ivy-alt-done)
-           ("C-j" . ivy-next-line)
-           ("C-k" . ivy-previous-line)
-           :map ivy-switch-buffer-map
-           ("C-k" . ivy-previous-line)
-           ("C-l" . ivy-done)
-           ("C-d" . ivy-switch-buffer-kill)
-           :map ivy-reverse-i-search-map
-           ("C-k" . ivy-previous-line)
-           ("C-d" . ivy-reverse-i-search-kill))
-    :config
-    (ivy-mode 1))
-
-  (use-package ivy-rich
-    :after ivy
-    :init
-    (ivy-rich-mode 1)
-    (ivy-rich-project-root-cache-mode 1))
-
-  (use-package ivy-posframe
-    ;;:disabled
-    :after ivy
-    :diminish
-    :init
-    (setq ivy-posframe-display-functions-alist
-          '((swiper                     . ivy-posframe-display-at-point)
-            (emojify-insert-emoji  . ivy-display-function-fallback)
-            (t                        . ivy-posframe-display)))
-    :custom-face
-    (ivy-posframe-border ((t (:background "#ffffff"))))
-    :config
-    (setq ivy-posframe-height-minibuffer nil)
-    (setq ivy-posframe-parameters '((internal-border-width . 1)))
-    (ivy-posframe-mode 1))
-
-  (use-package ivy-prescient
-    :after counsel
-    :custom
-    (ivy-prescient-enable-filtering nil)
-    :config
-    ;; Uncomment the following line to have sorting remembered across sessions!
-                                          ;(prescient-persist-mode 1)
-    (ivy-prescient-mode 1))
-  (use-package all-the-icons-ivy
-    :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
+;;  (use-package ivy
+;;    :diminish
+;;    :bind (("C-s" . swiper)
+;;           :map ivy-minibuffer-map
+;;           ("TAB" . ivy-alt-done)
+;;           ("C-l" . ivy-alt-done)
+;;           ("C-j" . ivy-next-line)
+;;           ("C-k" . ivy-previous-line)
+;;           :map ivy-switch-buffer-map
+;;           ("C-k" . ivy-previous-line)
+;;           ("C-l" . ivy-done)
+;;           ("C-d" . ivy-switch-buffer-kill)
+;;           :map ivy-reverse-i-search-map
+;;           ("C-k" . ivy-previous-line)
+;;           ("C-d" . ivy-reverse-i-search-kill))
+;;    :config
+;;    (ivy-mode 1))
+;;
+;;  (use-package ivy-rich
+;;    :after ivy
+;;    :init
+;;    (ivy-rich-mode 1)
+;;    (ivy-rich-project-root-cache-mode 1))
+;;
+;;  (use-package ivy-posframe
+;;    ;;:disabled
+;;    :after ivy
+;;    :diminish
+;;    :init
+;;    (setq ivy-posframe-display-functions-alist
+;;          '((swiper                     . ivy-posframe-display-at-point)
+;;            (emojify-insert-emoji  . ivy-display-function-fallback)
+;;            (t                        . ivy-posframe-display)))
+;;    :custom-face
+;;    (ivy-posframe-border ((t (:background "#ffffff"))))
+;;    :config
+;;    (setq ivy-posframe-height-minibuffer nil)
+;;    (setq ivy-posframe-parameters '((internal-border-width . 1)))
+;;    (ivy-posframe-mode 1))
+;;
+;;  (use-package ivy-prescient
+;;    :after counsel
+;;    :custom
+;;    (ivy-prescient-enable-filtering nil)
+;;    :config
+;;    ;; Uncomment the following line to have sorting remembered across sessions!
+;;                                          ;(prescient-persist-mode 1)
+;;    (ivy-prescient-mode 1))
+;;  (use-package all-the-icons-ivy
+;;    :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
 
 #+end_src
+
+** Counsel
+#+begin_src emacs-lisp
+;;  (use-package counsel
+;;    :bind (("M-x" . counsel-M-x)
+;;           ;;("C-M-j" . counsel-switch-buffer)
+;;           :map minibuffer-local-map
+;;           ("C-r" . 'counsel-minibuffer-history))
+;;    :custom
+;;    (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+;;    :config
+;;    ;; Don't use ^ as initial input. Set this here because `counsel' defines more
+;;    ;; of its own, on top of the defaults.
+;;    (setq ivy-initial-inputs-alist nil)
+;;    (counsel-mode 1))
+#+end_src
+
+* Vertico Related
+** Vertico
+#+begin_src emacs-lisp
+  (use-package vertico
+    :ensure t
+    :bind (:map vertico-map
+                ("C-j" . vertico-next)
+                ("C-k" . vertico-previous))
+    :custom
+    (vertico-cycle t)
+    :init
+    (vertico-mode))
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  (use-package marginalia
+    :after vertico
+    :ensure t
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+#+end_src
+** Orderless
+#+begin_src emacs-lisp
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles . (partial-completion))))))
+#+end_src
+** Embark
+#+begin_src emacs-lisp
+(use-package embark
+  :bind (("C-S-a" . embark-act)
+         :map minibuffer-local-map
+         ("C-d" . embark-act))
+  :config
+
+  ;; Show Embark actions via which-key
+  (setq embark-action-indicator
+        (lambda (map)
+          (which-key--show-keymap "Embark" map nil nil 'no-paging)
+          #'which-key--hide-popup-ignore-command)
+        embark-become-indicator embark-action-indicator))
+
+(use-package embark-consult
+  :after embark)
+#+end_src
+** Consult
+#+begin_src emacs-lisp
+  (defun dw/get-project-root ()
+    (when (fboundp 'projectile-project-root)
+      (projectile-project-root)))
+
+  (use-package consult
+    :demand t
+    :bind (("C-s" . consult-line)
+           ("C-M-l" . consult-imenu)
+           ("C-M-j" . persp-switch-to-buffer*)
+           :map minibuffer-local-map
+           ("C-r" . consult-history))
+    :custom
+    (consult-project-root-function #'dw/get-project-root)
+    (completion-in-region-function #'consult-completion-in-region))
+  (use-package consult-dir
+    :straight t
+    :bind (("C-x C-d" . consult-dir)
+           :map vertico-map
+           ("C-x C-d" . consult-dir)
+           ("C-x C-j" . consult-dir-jump-file))
+    :custom
+    (consult-dir-project-list-function nil))
+#+end_src
+
+
 * Avy (like easymotion)
 #+begin_src emacs-lisp
   (use-package avy
@@ -633,6 +696,10 @@ https://emacs.stackexchange.com/a/30691
 #+end_src
 * Projectile
 #+begin_src emacs-lisp
+  (defun dw/switch-project-action ()
+    "Switch to a workspace with the project name and start `magit-status'."
+    (persp-switch (projectile-project-name))
+    (magit-status))
   (use-package projectile
     :diminish projectile-mode
     :config
@@ -645,16 +712,17 @@ https://emacs.stackexchange.com/a/30691
     :init
     ;; NOTE: Set this to the folder where you keep your Git repos!
     (when (file-directory-p "~/Projects")
-      (setq projectile-project-search-path '("~/Projects"))))
-    ;(setq projectile-switch-project-action #'dw/switch-project-action))
+      (setq projectile-project-search-path '("~/Projects")))
+    (setq projectile-switch-project-action #'dw/switch-project-action))
+
   (use-package counsel-projectile
+    :disabled
     :after projectile
     :config (counsel-projectile-mode))
   (ju/leader-key-def
-    "p." 'counsel-projectile-find-file
-    "ps" 'counsel-projectile-switch-project
-    "pg" 'counsel-projectile-rg
-    "pp" 'counsel-projectile
+    "p." 'projectile-find-file
+    "ps" 'projectile-switch-project
+    "pg" 'consult-ripgrep
     "pc" 'projectile-compile-project
     "pd" 'projectile-dired)
   ;;(defun dw/switch-project-action ()
@@ -669,7 +737,7 @@ https://emacs.stackexchange.com/a/30691
 #+begin_src emacs-lisp
   (use-package perspective
     :demand t
-    :bind (("C-M-j" . persp-counsel-switch-buffer)
+    :bind (("C-M-j" . consult-buffer)
            ("C-M-k" . persp-switch)
            ("C-M-n" . persp-next)
            ("C-x k" . persp-kill-buffer*))
@@ -689,9 +757,9 @@ https://emacs.stackexchange.com/a/30691
     (counsel-describe-function-function #'helpful-callable)
     (counsel-describe-variable-function #'helpful-variable)
     :bind
-    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-function] . describe-function)
     ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-variable] . describe-variable)
     ([remap describe-key] . helpful-key))
 #+end_src
 * Hydra
@@ -752,6 +820,9 @@ https://emacs.stackexchange.com/a/30691
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-ellipsis " ▾")
+    (setq org-hide-emphasis-markers t)
+    (setq org-src-fontify-natively t)
+    (setq org-fontify-quote-and-verse-blocks t)
 
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
@@ -919,6 +990,11 @@ https://emacs.stackexchange.com/a/30691
   (use-package ob-translate
     :config
     (setq ob-translate:default-dest "ko"))
+#+end_src
+
+** Org Noter
+#+begin_src emacs-lisp
+  (use-package org-noter)
 #+end_src
 * Magit
 #+begin_src emacs-lisp
