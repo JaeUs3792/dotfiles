@@ -40,11 +40,16 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/install_plugins.sh
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
 
-
-# EMACS
+##################################################
+# EMACS Related
+##################################################
+# base
 paru -S ripgrep emacs ttf-fira-code ttf-d2coding auctex texlive-most texlive-lang --noconfirm
 
 # Python
 paru -S python python-pip jupyter openssh inetutils --noconfirm
-
 pip install matplotlib numpy pandas tabulate
+
+# verilog lsp
+paru -S verilator --noconfirm
+npm install -g @imc-trading/svlangserver
