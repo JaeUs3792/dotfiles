@@ -42,7 +42,8 @@
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")))
+                           ("elpa" . "https://elpa.gnu.org/packages/")
+                           ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   ;;(unless package-archive-contents
   ;;  (package-refresh-contents))
   (package-initialize)
@@ -407,7 +408,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     ;; Workspace
     ;; Counsel
     "f" '(:ignore t :which-key "file op.")
-    "f r" '(counsel-recentf :which-key "Recent files")
+    "f r" '(consult-recent-file :which-key "Recent files")
     "f R" '(revert-buffer :which-key "Revert Buffer")
     "t t" '(toggle-truncate-lines :which-key "Toggle truncate lines")
     ;; Shortcut
@@ -866,8 +867,7 @@ https://emacs.stackexchange.com/a/30691
 
 ** Org mode Addons
 #+begin_src emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/org-contrib/lisp")
-  (use-package org-screenshot)
+  (use-package org-contrib)
 #+end_src
 
 ** Org Roam
