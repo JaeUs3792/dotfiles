@@ -1194,7 +1194,6 @@ https://emacs.stackexchange.com/a/30691
   (use-package dired-rsync
     :config
     (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
-  ;;(use-package ranger)
   (use-package all-the-icons-dired
     :hook (dired-mode . all-the-icons-dired-mode)
     :config
@@ -1220,12 +1219,12 @@ https://emacs.stackexchange.com/a/30691
     :config
     (evil-collection-define-key 'normal 'dired-mode-map
       "H" 'dired-hide-dotfiles-mode))
-
-  ;;(use-package ranger
-  ;;  :config
-  ;;  (setq ranger-preview-file t)
-  ;;  (setq ranger-show-preview t)
-  ;;  (ranger-override-dired-mode t))
+  (use-package ranger
+    :config
+    (setq ranger-preview-file t)
+    (setq ranger-show-preview t)
+    (setq ranger-show-literal nil)
+    (ranger-override-dired-mode t))
 #+end_src
 
 
