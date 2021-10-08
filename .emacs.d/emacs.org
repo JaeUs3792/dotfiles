@@ -1219,12 +1219,12 @@ https://emacs.stackexchange.com/a/30691
     :config
     (evil-collection-define-key 'normal 'dired-mode-map
       "H" 'dired-hide-dotfiles-mode))
-  (use-package ranger
-    :config
-    (setq ranger-preview-file t)
-    (setq ranger-show-preview t)
-    (setq ranger-show-literal nil)
-    (ranger-override-dired-mode t))
+  ;;(use-package ranger
+  ;;  :config
+  ;;  (setq ranger-preview-file t)
+  ;;  (setq ranger-show-preview t)
+  ;;  (setq ranger-show-literal nil)
+  ;;  (ranger-override-dired-mode t))
 #+end_src
 
 
