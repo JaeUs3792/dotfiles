@@ -1,22 +1,24 @@
-# Challenger Deep
-ForegroundColour=161,176,184
-BackgroundColour=41,45,62
-Black=37,37,37
-BoldBlack=37,37,37
-Red=255,83,112
-BoldRed=255,83,112
-Green=195,232,141
-BoldGreen=195,232,141
-Yellow=255,203,107
-BoldYellow=255,203,107
-Blue=130,170,255
-BoldBlue=130,170,255
-Magenta=199,146,234
-BoldMagenta=199,146,234g
-Cyan=137,221,255
-BoldCyan=137,221,255
-White=245,245,245
-BoldWhite=245,245,245
+# Dracula
+
+ForegroundColour=248,248,242
+BackgroundColour=40,42,54
+Black=0,0,0
+BoldBlack=104,104,104
+Red=255,85,85
+BoldRed=255,110,103
+Green=80,250,123
+BoldGreen=90,247,142
+Yellow=241,250,140
+BoldYellow=244,249,157
+Blue=202,169,250
+BoldBlue=202,169,250
+Magenta=255,121,198
+BoldMagenta=255,146,208
+Cyan=139,233,253
+BoldCyan=154,237,254
+White=191,191,191
+BoldWhite=230,230,230
+
 
 Font=Fira Code Retina
 FontHeight=12

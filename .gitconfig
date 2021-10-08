@@ -1,3 +1,7 @@
 [user]
 	name = JaeYoo-Im
 	email = cpu3792@gmail.com
+[init]
+	defaultBranch = master
+[core]
+	editor = "emacs -nw"
