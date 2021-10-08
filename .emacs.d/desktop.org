@@ -1,7 +1,7 @@
 #+TITLE: Desktop
 
 * Exwm Desktop
-#+begin_src config :tangle ~/.emacs.d/exwm/EXWM.desktop :mkdirp yes
+#+begin_src config
 [Desktop Entry]
 Name=EXWM
 Comment=Emacs Window Manager
@@ -12,7 +12,7 @@ X-LightDM-DesktopName=exwm
 DesktopNames=exwm
 #+end_src
 
-#+begin_src shell :tangle ~/.emacs.d/exwm/start-exwm.sh :mkdirp yes
+#+begin_src shell
 #!/bin/sh
 # Set the screen DPI (uncomment this if needed!)
 # xrdb ~/.emacs.d/exwm/Xresources
@@ -21,9 +21,11 @@ DesktopNames=exwm
 #picom &
 #picom -b --config /home/jaeus/.config/i3/picom.conf &
 # Enable screen locking on suspend
-xss-lock -- slock &
+#xss-lock -- slock &
 
-# Fire it up
+# Fire it up for WSL
+VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
+export DISPLAY=$VETHER_IP:10.0
 exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/desktop.el
 
 #+end_src
@@ -31,253 +33,132 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
 
 * Configuration
 #+begin_src emacs-lisp :tangle ~/.emacs.d/desktop.el
-    (defun efs/run-in-background (command)
-      (let ((command-parts (split-string command "[ ]+")))
-        (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+  (defun efs/run-in-background (command)
+    (let ((command-parts (split-string command "[ ]+")))
+      (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
 
-    (defun efs/set-wallpaper ()
-      (interactive)
-      ;; NOTE: You will need to update this to a valid background path!
-      (start-process-shell-command
-          "dwall" nil  "dwall -s colony"))
+  (defun efs/exwm-init-hook ()
+    ;; Make workspace 1 be the one where we land at startup
+    (exwm-workspace-switch-create 1)
 
-    (defun efs/exwm-init-hook ()
-      ;; Make workspace 1 be the one where we land at startup
-      (exwm-workspace-switch-create 1)
+    ;; Launch apps that will run in the background
+    (efs/run-in-background "dwall -s firewatch")
+    (efs/run-in-background "picom -b --config $HOME/.xmonad/scripts/picom.conf &")
+    )
 
-      ;; Open eshell by default
-      ;;(eshell)
+  (defun efs/exwm-update-class ()
+    (exwm-workspace-rename-buffer exwm-class-name))
 
-      ;; NOTE: The next two are disabled because we now use Polybar!
+  (defun efs/exwm-update-title ()
+    (pcase exwm-class-name
+      ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
 
-      ;; Show battery status in the mode line
-      ;;(display-battery-mode 1)
+  ;; This function isn't currently used, only serves as an example how to
+  ;; position a window
+  (defun efs/position-window ()
+    (let* ((pos (frame-position))
+           (pos-x (car pos))
+           (pos-y (cdr pos)))
 
-      ;; Show the time and date in modeline
-      ;;(setq display-time-day-and-date t)
-      ;;(display-time-mode 1)
-      ;; Also take a look at display-time-format and format-time-string
+      (exwm-floating-move (- pos-x) (- pos-y))))
 
-      ;; Start the Polybar panel
-      (efs/start-panel)
+  ;;(defun efs/configure-window-by-class ()
+  ;;  (interactive)
+  ;;  (pcase exwm-class-name
+  ;;    ("vivaldi-stable" (exwm-workspace-move-window 2))
+  ;;    ("Sol" (exwm-workspace-move-window 3))
+  ;;    ("mpv" (exwm-floating-toggle-floating)
+  ;;           (exwm-layout-toggle-mode-line))))
 
-      ;; Launch apps that will run in the background
-      ;;(efs/run-in-background "dunst")
-      (efs/run-in-background "nm-applet")
-      ;(efs/run-in-background "xmobar -x 0 /home/jaeus/.config/xmobar/xmobarrc0")
-      ;(efs/run-in-background "xmobar -x 1 /home/jaeus/.config/xmobar/xmobarrc1")
-      (efs/run-in-background "picom -b --config /home/jaeus/.config/i3/picom.conf")
-      (efs/run-in-background "dwall -s firewatch")
-      (efs/run-in-background "volumeicon")
-      (efs/run-in-background "blueberry-tray")
-      (efs/run-in-background "seafile-applet")
-      (efs/run-in-background "green-tunnel -s")
-      (efs/run-in-background "/home/jaeus/.emacs.d/exwm/run_xmodmap.sh")
-      (efs/run-in-background "/home/jaeus/.emacs.d/exwm/run_fcitx.sh"))
+  ;; This function should be used only after configuring autorandr!
+  ;;(defun efs/update-displays ()
+  ;;  (efs/run-in-background "autorandr --change --force")
+  ;;  (efs/set-wallpaper)
+  ;;  (message "Display config: %s"
+  ;;           (string-trim (shell-command-to-string "autorandr --current"))))
 
-    (defun efs/exwm-update-class ()
-      (exwm-workspace-rename-buffer exwm-class-name))
+  (use-package exwm
+    :config
+    ;; Set the default number of workspaces
+    (setq exwm-workspace-number 10)
 
-    (defun efs/exwm-update-title ()
-      (pcase exwm-class-name
-        ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
+    ;; When window "class" updates, use it to set the buffer name
+    (add-hook 'exwm-(use-package package-name
+                      :ensure t)date-class-hook #'efs/exwm-update-class)
 
-    ;; This function isn't currently used, only serves as an example how to
-    ;; position a window
-    (defun efs/position-window ()
-      (let* ((pos (frame-position))
-             (pos-x (car pos))
-              (pos-y (cdr pos)))
+    ;; When window title updates, use it to set the buffer name
+    (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
 
-        (exwm-floating-move (- pos-x) (- pos-y))))
+    ;; Configure windows as they're created
+    ;;(add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
 
-    (defun efs/configure-window-by-class ()
-      (interactive)
-      (pcase exwm-class-name
-        ("vivaldi-stable" (exwm-workspace-move-window 2))
-        ("Sol" (exwm-workspace-move-window 3))
-        ("mpv" (exwm-floating-toggle-floating)
-               (exwm-layout-toggle-mode-line))))
+    ;; When EXWM starts up, do some extra confifuration
+    (add-hook 'exwm-init-hook #'efs/exwm-init-hook)
 
-    ;; This function should be used only after configuring autorandr!
-    (defun efs/update-displays ()
-      (efs/run-in-background "autorandr --change --force")
-      (efs/set-wallpaper)
-      (message "Display config: %s"
-               (string-trim (shell-command-to-string "autorandr --current"))))
+    ;; Automatically send the mouse cursor to the selected workspace's display
+    (setq exwm-workspace-warp-cursor t)
 
-    (use-package exwm
-      :config
-      ;; Set the default number of workspaces
-      (setq exwm-workspace-number 10)
+    ;; Window focus should follow the mouse pointer
+    (setq mouse-autoselect-window t
+          focus-follows-mouse t)
 
-      ;; When window "class" updates, use it to set the buffer name
-      (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
+    ;; These keys should always pass through to Emacs
+    (setq exwm-input-prefix-keys
+          '(?\C-x
+            ?\C-u
+            ?\C-h
+            ?\M-x
+            ?\M-`
+            ?\M-&
+            ?\M-:
+            ?\C-\M-j  ;; Buffer list
+            ?\C-\ ))  ;; Ctrl+Space
 
-      ;; When window title updates, use it to set the buffer name
-      (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
+    ;; Ctrl+Q will enable the next key to be sent directly
+    (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
 
-      ;; Configure windows as they're created
-      (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
+    ;; Set up global key bindings.  These always work, no matter the input state!
+    ;; Keep in mind that changing this list after EXWM initializes has no effect.
+    (setq exwm-input-global-keys
+          `(
+            ;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
+            ([?\s-r] . exwm-reset)
 
-      ;; When EXWM starts up, do some extra confifuration
-      (add-hook 'exwm-init-hook #'efs/exwm-init-hook)
+            ;; Move between windows
+            ([?\s-h] . windmove-left)
+            ([?\s-l] . windmove-right)
+            ([?\s-k] . windmove-up)
+            ([?\s-j] . windmove-down)
 
-      ;; Rebind CapsLock to Ctrl
-      ;;(start-process-shell-command "xmodmap" nil "xmodmap /home/jaeus/.emacs.d/exwm/Xmodmap")
+            ;; Launch applications via shell command
+            ([?\s-&] . (lambda (command)
+                         (interactive (list (read-shell-command "$ ")))
+                         (start-process-shell-command command nil command)))
 
-      ;; NOTE: Uncomment the following two options if you want window buffers
-      ;;       to be available on all workspaces!
+            ;; Switch workspace
+            ([?\s-w] . exwm-workspace-switch)
+            ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
 
-      ;; Automatically move EXWM buffer to current workspace when selected
-      ;; (setq exwm-layout-show-all-buffers t)
+            ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
+            ,@(mapcar (lambda (i)
+                        `(,(kbd (format "s-%d" i)) .
+                          (lambda ()
+                            (interactive)
+                            (exwm-workspace-switch-create ,i))))
+                      (number-sequence 0 9))))
 
-      ;; Display all EXWM buffers in every workspace buffer list
-      ;; (setq exwm-workspace-show-all-buffers t)
+    (exwm-enable))
 
-      ;; NOTE: Uncomment this option if you want to detach the minibuffer!
-      ;; Detach the minibuffer (show it with exwm-workspace-toggle-minibuffer)
-      ;;(setq exwm-workspace-minibuffer-position 'top)
+  (use-package desktop-environment
+    :after exwm
+    :config (desktop-environment-mode)
+    :custom
+    (desktop-environment-brightness-small-increment "2%+")
+    (desktop-environment-brightness-small-decrement "2%-")
+    (desktop-environment-brightness-normal-increment "5%+")
+    (desktop-environment-brightness-normal-decrement "5%-"))
 
-      ;; Set the screen resolution (update this to be the correct resolution for your screen!)
-     (require 'exwm-randr)
-     (exwm-randr-enable)
-     (start-process-shell-command "xrandr" nil "xrandr --output DP-4 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output HDMI-0 --mode 1920x1080 --pos 2560x0 --rotate normal")
+  ;; Make sure the server is started (better to do this in your main Emacs config!)
+  (server-start)
 
-      ;; This will need to be updated to the name of a display!  You can find
-      ;; the names of your displays by looking at arandr or the output of xrandr
-     (setq exwm-randr-workspace-monitor-plist '(2 "HDMI-0" 3 "HDMI-0"))
-
-      ;; NOTE: Uncomment these lines after setting up autorandr!
-      ;; React to display connectivity changes, do initial display update
-      ;; (add-hook 'exwm-randr-screen-change-hook #'efs/update-displays)
-      ;; (efs/update-displays)
-
-      ;; Set the wallpaper after changing the resolution
-      (efs/set-wallpaper)
-
-      ;; NOTE: This is disabled because we now use Polybar!
-      ;; Load the system tray before exwm-init
-      ;(require 'exwm-systemtray)
-      ;(setq exwm-systemtray-height 32)
-      ;(exwm-systemtray-enable)
-
-      ;; Automatically send the mouse cursor to the selected workspace's display
-      (setq exwm-workspace-warp-cursor t)
-
-      ;; Window focus should follow the mouse pointer
-      (setq mouse-autoselect-window t
-            focus-follows-mouse t)
-
-      ;; These keys should always pass through to Emacs
-      (setq exwm-input-prefix-keys
-        '(?\C-x
-          ?\C-u
-          ?\C-h
-          ?\M-x
-          ?\M-`
-          ?\M-&
-          ?\M-:
-          ?\C-\M-j  ;; Buffer list
-          ?\C-\ ))  ;; Ctrl+Space
-
-      ;; Ctrl+Q will enable the next key to be sent directly
-      (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
-
-      ;; Set up global key bindings.  These always work, no matter the input state!
-      ;; Keep in mind that changing this list after EXWM initializes has no effect.
-      (setq exwm-input-global-keys
-            `(
-              ;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
-              ([?\s-r] . exwm-reset)
-
-              ;; Move between windows
-              ([?\s-h] . windmove-left)
-              ([?\s-l] . windmove-right)
-              ([?\s-k] . windmove-up)
-              ([?\s-j] . windmove-down)
-
-              ;; Launch applications via shell command
-              ([?\s-&] . (lambda (command)
-                           (interactive (list (read-shell-command "$ ")))
-                           (start-process-shell-command command nil command)))
-
-              ;; Switch workspace
-              ([?\s-w] . exwm-workspace-switch)
-              ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
-
-              ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
-              ,@(mapcar (lambda (i)
-                          `(,(kbd (format "s-%d" i)) .
-                            (lambda ()
-                              (interactive)
-                              (exwm-workspace-switch-create ,i))))
-                        (number-sequence 0 9))))
-
-      (exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
-
-      (exwm-enable))
-
-    (use-package desktop-environment
-      :after exwm
-      :config (desktop-environment-mode)
-      :custom
-      (desktop-environment-brightness-small-increment "2%+")
-      (desktop-environment-brightness-small-decrement "2%-")
-      (desktop-environment-brightness-normal-increment "5%+")
-      (desktop-environment-brightness-normal-decrement "5%-"))
-
-    ;; Make sure the server is started (better to do this in your main Emacs config!)
-    (server-start)
-
-    (defvar efs/polybar-process nil
-      "Holds the process of the running Polybar instance, if any")
-
-
-  (defun dw/polybar-exwm-workspace ()
-    (pcase exwm-workspace-current-index
-      (0 "👿")
-      (1 "💻")
-      (2 "🏻")
-      (3 "🎈")
-      (4 "👀")))
-
-  (defun dw/polybar-exwm-workspace-path ()
-    (let ((workspace-path (frame-parameter nil 'bufler-workspace-path-formatted)))
-      (if workspace-path
-          (substring-no-properties workspace-path)
-        "")))
-
-    (defun efs/kill-panel ()
-      (interactive)
-      (when efs/polybar-process
-        (ignore-errors
-          (kill-process efs/polybar-process)))
-      (setq efs/polybar-process nil))
-
-    (defun efs/start-panel ()
-      (interactive)
-      (efs/kill-panel)
-      (setq efs/polybar-process (start-process-shell-command "polybar" nil "polybar panel")))
-
-    (defun efs/send-polybar-hook (module-name hook-index)
-      (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" module-name hook-index)))
-
-    (defun efs/send-polybar-exwm-workspace ()
-      (efs/send-polybar-hook "exwm-workspace" 1))
-
-    ;; Update panel indicator when workspace changes
-    (add-hook 'exwm-workspace-switch-hook #'efs/send-polybar-exwm-workspace)
-
-    (defun efs/disable-desktop-notifications ()
-      (interactive)
-      (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_PAUSE\""))
-
-    (defun efs/enable-desktop-notifications ()
-      (interactive)
-      (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_RESUME\""))
-
-    (defun efs/toggle-desktop-notifications ()
-      (interactive)
-      (start-process-shell-command "notify-send" nil "notify-send \"DUNST_COMMAND_TOGGLE\""))
 #+end_src
