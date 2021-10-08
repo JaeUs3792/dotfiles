@@ -172,7 +172,7 @@ https://github.com/raxod502/straight.el
     (add-hook 'evil-mode-hook 'ju/evil-hook)
     (evil-mode 1)
     (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-    (setq-default evil-symbol-word-search t) ;; evil can identify the word with underscore.
+    ;;(setq-default evil-symbol-word-search t) ;; evil can identify the word with underscore.
     ;; Http://blog.binchen.org/posts/auto-complete-word-in-emacs-mini-buffer-when-using-evil.html
     ;;(defun minibuffer-inactive-mode-hook-setup ()
     ;;;; make `try-expand-dabbrev' from `hippie-expand' work in mini-buffer
@@ -207,7 +207,8 @@ https://github.com/raxod502/straight.el
     :config
     (evil-collection-init))
 
-  (defalias 'forward-evil-word 'forward-evil-symbol) ;; include underscore to word
+  (modify-syntax-entry ?_ "w")
+  ;;(defalias 'forward-evil-word 'forward-evil-symbol) ;; include underscore to word
 #+end_src
 
 ** TODO Check Tips
@@ -247,8 +248,9 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
           doom-themes-enablbe-italic t)
     :config
     ;;(load-theme 'doom-material t)
-    (load-theme 'doom-palenight t)
+    ;;(load-theme 'doom-palenight t)
     ;;(load-theme 'doom-gruvbox t)
+    (load-theme 'doom-one t)
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
     ;; Corrects (and improves) org-mode's native fontification.
