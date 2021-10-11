@@ -14,18 +14,10 @@ DesktopNames=exwm
 
 #+begin_src shell
 #!/bin/sh
-# Set the screen DPI (uncomment this if needed!)
-# xrdb ~/.emacs.d/exwm/Xresources
-
-# Run the screen compositor
-#picom &
-#picom -b --config /home/jaeus/.config/i3/picom.conf &
-# Enable screen locking on suspend
-#xss-lock -- slock &
-
 # Fire it up for WSL
 VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
 export DISPLAY=$VETHER_IP:10.0
+picom -b --config $HOME/.xmonad/scripts/picom.conf &
 exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/desktop.el
 
 #+end_src
@@ -40,6 +32,15 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
   (defun efs/exwm-init-hook ()
     ;; Make workspace 1 be the one where we land at startup
     (exwm-workspace-switch-create 1)
+    ;; if not wsl
+    (efs/run-in-background "xsetroot -cursor_name left_ptr &")
+    (efs/run-in-background "nm-applet &")
+    (efs/run-in-background "pamac-tray &")
+    ;;(efs/run-in-background "xfce4-power-manager &")
+    (efs/run-in-background "volumeicon &")
+    (efs/run-in-background "numlockx on &")
+    (efs/run-in-background "blueberry-tray &")
+    (efs/run-in-background "fcitx &")
 
     ;; Launch apps that will run in the background
     (efs/run-in-background "dwall -s firewatch")
@@ -83,8 +84,7 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
     (setq exwm-workspace-number 10)
 
     ;; When window "class" updates, use it to set the buffer name
-    (add-hook 'exwm-(use-package package-name
-                      :ensure t)date-class-hook #'efs/exwm-update-class)
+    (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
 
     ;; When window title updates, use it to set the buffer name
     (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
@@ -125,10 +125,13 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
             ([?\s-r] . exwm-reset)
 
             ;; Move between windows
-            ([?\s-h] . windmove-left)
-            ([?\s-l] . windmove-right)
-            ([?\s-k] . windmove-up)
-            ([?\s-j] . windmove-down)
+            ([s-left] . windmove-left)
+            ([s-right] . windmove-right)
+            ([s-up] . windmove-up)
+            ([s-down] . windmove-down)
+
+              ;;([s-space] . toggle-frame-fullscreen)
+		      ([?\s-f] . exwm-floating-toggle-floating)
 
             ;; Launch applications via shell command
             ([?\s-&] . (lambda (command)

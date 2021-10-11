@@ -5,6 +5,15 @@
 (defun efs/exwm-init-hook ()
   ;; Make workspace 1 be the one where we land at startup
   (exwm-workspace-switch-create 1)
+  ;; if not wsl
+  (efs/run-in-background "xsetroot -cursor_name left_ptr &")
+  (efs/run-in-background "nm-applet &")
+  (efs/run-in-background "pamac-tray &")
+  ;;(efs/run-in-background "xfce4-power-manager &")
+  (efs/run-in-background "volumeicon &")
+  (efs/run-in-background "numlockx on &")
+  (efs/run-in-background "blueberry-tray &")
+  (efs/run-in-background "fcitx &")
 
   ;; Launch apps that will run in the background
   (efs/run-in-background "dwall -s firewatch")
@@ -89,10 +98,13 @@
           ([?\s-r] . exwm-reset)
 
           ;; Move between windows
-          ([?\s-h] . windmove-left)
-          ([?\s-l] . windmove-right)
-          ([?\s-k] . windmove-up)
-          ([?\s-j] . windmove-down)
+          ([s-left] . windmove-left)
+          ([s-right] . windmove-right)
+          ([s-up] . windmove-up)
+          ([s-down] . windmove-down)
+
+            ;;([s-space] . toggle-frame-fullscreen)
+		    ([?\s-f] . exwm-floating-toggle-floating)
 
           ;; Launch applications via shell command
           ([?\s-&] . (lambda (command)

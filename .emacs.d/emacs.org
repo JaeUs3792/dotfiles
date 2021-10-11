@@ -415,6 +415,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     "t t" '(toggle-truncate-lines :which-key "Toggle truncate lines")
     ;; Shortcut
     "f d a" '(lambda () (interactive) (find-file (expand-file-name "~/Roam/Agenda")))
+    "f d d" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/desktop.org")) :which-key "open exwm config")
     "f d e" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/emacs.org")) :which-key "open emacs config"))
 #+end_src
 

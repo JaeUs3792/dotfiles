@@ -8,7 +8,7 @@
 # Enable screen locking on suspend
 #xss-lock -- slock &
 # Fire it up for WSL
-VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
-export DISPLAY=$VETHER_IP:10.0
+#VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
+#export DISPLAY=$VETHER_IP:10.0
 picom -b --config $HOME/.xmonad/scripts/picom.conf &
 exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/desktop.el
