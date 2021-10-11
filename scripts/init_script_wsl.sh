@@ -53,3 +53,13 @@ pip install matplotlib numpy pandas tabulate
 # verilog lsp
 paru -S verilator --noconfirm
 npm install -g @imc-trading/svlangserver
+
+##################################################
+# EXWM
+##################################################
+paru -S picom --noconfirm
+
+paru -S xorg-xrandr feh cronie --noconfirm
+git clone https://github.com/adi1090x/dynamic-wallpaper.git
+cd dynamic-wallpaper
+./install.sh
