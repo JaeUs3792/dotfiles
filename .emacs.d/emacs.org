@@ -997,6 +997,16 @@ https://emacs.stackexchange.com/a/30691
 
 ** Org Noter
 #+begin_src emacs-lisp
+  (use-package pdf-tools
+    :straight t
+    :config
+    (pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-width)
+    (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+    :custom
+    (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
+  (use-package org-pdfview
+    :straight t)
   (use-package org-noter)
 #+end_src
 * Magit
@@ -1245,10 +1255,10 @@ https://emacs.stackexchange.com/a/30691
                          "ogm" "ogg" "mkv"))
                       "mpv"
                       '(file)))))
-  ;;(list (openwith-make-extension-regexp
-  ;;       '("pdf"))
-  ;;      "evince"
-  ;;      '(file)))))
+                ;;(list (openwith-make-extension-regexp
+                ;;       '("pdf"))
+                ;;      "evince"
+                ;;      '(file)))))
 #+end_src
 * VLF (very large file)
 #+begin_src emacs-lisp
@@ -1368,21 +1378,21 @@ using =svlangserver=
 * ETC
 ** Youtube
 #+begin_src emacs-lisp
-  ;;(use-package ytel
-    ;;:straight t
-    ;;:config
-    ;;(setq ytel-invidious-api-url "https://invidious.snopyta.org")
-    ;;)
-  ;;(defun ytel-watch ()
-    ;;"Stream video at point in mpv."
-    ;;(interactive)
-    ;;(let* ((video (ytel-get-current-video))
-           ;;(id    (ytel-video-id video)))
-      ;;(start-process "ytel mpv" nil
-                     ;;"mpv"
-                     ;;(concat "https://www.youtube.com/watch?v=" id))
-      ;;"--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
-    ;;(message "Starting streaming..."))
+  (use-package ytel
+    :straight t
+    :config
+    (setq ytel-invidious-api-url "https://invidious.snopyta.org")
+    )
+  (defun ytel-watch ()
+    "Stream video at point in mpv."
+    (interactive)
+    (let* ((video (ytel-get-current-video))
+           (id    (ytel-video-id video)))
+      (start-process "ytel mpv" nil
+                     "mpv"
+                     (concat "https://www.youtube.com/watch?v=" id))
+      "--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
+    (message "Starting streaming..."))
 #+end_src
 ** Python
 
