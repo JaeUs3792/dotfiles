@@ -24,7 +24,9 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
 
 
 * Configuration
+** EXWM
 #+begin_src emacs-lisp :tangle ~/.emacs.d/desktop.el
+
   (defun efs/run-in-background (command)
     (let ((command-parts (split-string command "[ ]+")))
       (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
@@ -32,6 +34,7 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
   (defun efs/exwm-init-hook ()
     ;; Make workspace 1 be the one where we land at startup
     (exwm-workspace-switch-create 1)
+    (efs/start-panel)
     ;; if not wsl
     (efs/run-in-background "xsetroot -cursor_name left_ptr &")
     (efs/run-in-background "nm-applet &")
@@ -130,8 +133,8 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
             ([s-up] . windmove-up)
             ([s-down] . windmove-down)
 
-              ;;([s-space] . toggle-frame-fullscreen)
-		      ([?\s-f] . exwm-floating-toggle-floating)
+            ;;([s-space] . toggle-frame-fullscreen)
+            ([?\s-f] . exwm-floating-toggle-floating)
 
             ;; Launch applications via shell command
             ([?\s-&] . (lambda (command)
@@ -150,6 +153,9 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
                             (exwm-workspace-switch-create ,i))))
                       (number-sequence 0 9))))
 
+    (require 'exwm-systemtray)
+    (setq exwm-systemtray-height 32)
+    (exwm-systemtray-enable)
     (exwm-enable))
 
   (use-package desktop-environment
@@ -165,3 +171,31 @@ exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/deskto
   (server-start)
 
 #+end_src
+** Polybar
+#+begin_src emacs-lisp :tangle ~/.emacs.d/desktop.el
+
+(defvar efs/polybar-process nil
+  "Holds the process of the running Polybar instance, if any")
+
+(defun efs/kill-panel ()
+  (interactive)
+  (when efs/polybar-process
+    (ignore-errors
+      (kill-process efs/polybar-process)))
+  (setq efs/polybar-process nil))
+
+(defun efs/start-panel ()
+  (interactive)
+  (efs/kill-panel)
+  (setq efs/polybar-process (start-process-shell-command "polybar" nil "polybar panel")))
+
+(defun efs/send-polybar-hook (module-name hook-index)
+  (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" module-name hook-index)))
+
+(defun efs/send-polybar-exwm-workspace ()
+  (efs/send-polybar-hook "exwm-workspace" 1))
+
+;; Update panel indicator when workspace changes
+(add-hook 'exwm-workspace-switch-hook #'efs/send-polybar-exwm-workspace)
+#+end_src
+

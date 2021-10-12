@@ -349,23 +349,24 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   ;;(global-prettify-symbols-mode +1)
 #+end_src
 * Whitespace
+This makes nov to ugly
 #+begin_src emacs-lisp
   ;; somtimes need to check white space. this configuration will be helpful
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(whitespace-line ((nil (:bold t :background "yellow"))))
-   '(whitespace-tab ((nil (:bold t :background "linen"))))
-   '(whitespace-trailing ((nil (:bold t :background "red1")))))
-  (global-whitespace-mode t)
-  (add-hook
-   'after-change-major-mode-hook
-   '(lambda ()
-      (setq whitespace-line-column nil
-            whitespace-style '(face trailing))))
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  ;;(custom-set-faces
+  ;; ;; custom-set-faces was added by Custom.
+  ;; ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; ;; Your init file should contain only one such instance.
+  ;; ;; If there is more than one, they won't work right.
+  ;; '(whitespace-line ((nil (:bold t :background "yellow"))))
+  ;; '(whitespace-tab ((nil (:bold t :background "linen"))))
+  ;; '(whitespace-trailing ((nil (:bold t :background "red1")))))
+  ;;(global-whitespace-mode t)
+  ;;(add-hook
+  ;; 'after-change-major-mode-hook
+  ;; '(lambda ()
+  ;;    (setq whitespace-line-column nil
+  ;;          whitespace-style '(face trailing))))
+  ;;(add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+end_src
 
 * Emojify
