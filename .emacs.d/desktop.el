@@ -1,25 +1,30 @@
+(straight-use-package
+ '(app-launcher :type git :host github :repo "SebastienWae/app-launcher"))
+
 (defun efs/run-in-background (command)
   (let ((command-parts (split-string command "[ ]+")))
     (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
-
+(defun vifon/exwm-terminal ()
+  (interactive)
+  (let ((default-directory (if (derived-mode-p 'dired-mode)
+                               (dired-current-directory)
+                             default-directory)))
+    (start-process "alacritty" nil "alacritty")))
 (defun efs/exwm-init-hook ()
   ;; Make workspace 1 be the one where we land at startup
   (exwm-workspace-switch-create 1)
   (efs/start-panel)
   ;; if not wsl
-  (efs/run-in-background "xsetroot -cursor_name left_ptr &")
-  (efs/run-in-background "nm-applet &")
-  (efs/run-in-background "pamac-tray &")
-  ;;(efs/run-in-background "xfce4-power-manager &")
-  (efs/run-in-background "volumeicon &")
-  (efs/run-in-background "numlockx on &")
-  (efs/run-in-background "blueberry-tray &")
-  (efs/run-in-background "fcitx &")
+  ;;(efs/run-in-background "xsetroot -cursor_name left_ptr")
+  ;;(efs/run-in-background "nm-applet")
+  ;;(efs/run-in-background "pamac-tray")
+  ;;(efs/run-in-background "volumeicon")
+  ;;(efs/run-in-background "numlockx on")
+  ;;(efs/run-in-background "blueberry-tray")
 
   ;; Launch apps that will run in the background
-  (efs/run-in-background "dwall -s firewatch")
-  (efs/run-in-background "picom -b --config $HOME/.xmonad/scripts/picom.conf &")
-  )
+  (efs/run-in-background "fcitx")
+  (efs/run-in-background "dwall -s firewatch"))
 
 (defun efs/exwm-update-class ()
   (exwm-workspace-rename-buffer exwm-class-name))
@@ -36,21 +41,6 @@
          (pos-y (cdr pos)))
 
     (exwm-floating-move (- pos-x) (- pos-y))))
-
-;;(defun efs/configure-window-by-class ()
-;;  (interactive)
-;;  (pcase exwm-class-name
-;;    ("vivaldi-stable" (exwm-workspace-move-window 2))
-;;    ("Sol" (exwm-workspace-move-window 3))
-;;    ("mpv" (exwm-floating-toggle-floating)
-;;           (exwm-layout-toggle-mode-line))))
-
-;; This function should be used only after configuring autorandr!
-;;(defun efs/update-displays ()
-;;  (efs/run-in-background "autorandr --change --force")
-;;  (efs/set-wallpaper)
-;;  (message "Display config: %s"
-;;           (string-trim (shell-command-to-string "autorandr --current"))))
 
 (use-package exwm
   :config
@@ -75,6 +65,10 @@
   ;; Window focus should follow the mouse pointer
   (setq mouse-autoselect-window t
         focus-follows-mouse t)
+
+  (add-hook 'exwm-floating-setup-hook
+            (lambda ()
+              (exwm-layout-hide-mode-line)))
 
   ;; These keys should always pass through to Emacs
   (setq exwm-input-prefix-keys
@@ -112,6 +106,11 @@
                        (interactive (list (read-shell-command "$ ")))
                        (start-process-shell-command command nil command)))
 
+          ([?\s-C] . (lambda () (interactive) (kill-buffer)))
+
+          ;; App
+          (,(kbd "<s-return>") . vifon/exwm-terminal)
+          (,(kbd "<s-SPC>") . app-launcher-run-app)
           ;; Switch workspace
           ([?\s-w] . exwm-workspace-switch)
           ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
@@ -124,19 +123,17 @@
                           (exwm-workspace-switch-create ,i))))
                     (number-sequence 0 9))))
 
-  ;;(require 'exwm-systemtray)
-  ;;(setq exwm-systemtray-height 24)
-  ;;(exwm-systemtray-enable)
   (exwm-enable))
 
-(use-package desktop-environment
-  :after exwm
-  :config (desktop-environment-mode)
-  :custom
-  (desktop-environment-brightness-small-increment "2%+")
-  (desktop-environment-brightness-small-decrement "2%-")
-  (desktop-environment-brightness-normal-increment "5%+")
-  (desktop-environment-brightness-normal-decrement "5%-"))
+;; if not wsl
+;;(use-package desktop-environment
+;;  :after exwm
+;;  :config (desktop-environment-mode)
+;;  :custom
+;;  (desktop-environment-brightness-small-increment "2%+")
+;;  (desktop-environment-brightness-small-decrement "2%-")
+;;  (desktop-environment-brightness-normal-increment "5%+")
+;;  (desktop-environment-brightness-normal-decrement "5%-"))
 
 ;; Make sure the server is started (better to do this in your main Emacs config!)
 (server-start)
