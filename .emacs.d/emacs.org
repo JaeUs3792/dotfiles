@@ -1163,11 +1163,6 @@ https://emacs.stackexchange.com/a/30691
       (setq eshell-visual-commands '("htop" "zsh" "vim"))))
 #+end_src
 
-* App Launcher
-#+begin_src emacs-lisp
-  (straight-use-package
-   '(app-launcher :type git :host github :repo "SebastienWae/app-launcher"))
-#+end_src
 
 * Dired (from Doom Emacs)
 #+begin_src emacs-lisp
