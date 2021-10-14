@@ -4,4 +4,4 @@
 [init]
 	defaultBranch = master
 [core]
-	editor = "emacs -nw"
+	editor = vim
