@@ -12,5 +12,6 @@ VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' 
 export DISPLAY=$VETHER_IP:10.0
 #export DISPLAY=192.168.144.1:10.0
 
+rm ~/.emacs.d/emacs.el
 picom -b --config $HOME/.xmonad/scripts/picom.conf &
 exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/desktop.el

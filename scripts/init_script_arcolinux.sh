@@ -1,18 +1,19 @@
 #!/bin/sh
+paru
 paru -S stow alacritty trayer --noconfirm
 
 # config file handling
-rm ~/.config/nu/config.toml
+rm ~/.config/polybar/config
 rm ~/.zshrc ~/.bashrc ~/.xmonad/xmonad.hs
 rm -rf ~/.config/alacritty ~/.xmonad/scripts
 cd ~/.dotfiles
 stow .
 
-sudo pacman -Syu --noconfirm
 
 #ZSH
-#paru -S zsh-autosuggestions-git --noconfirm
-#/usr/share/oh-my-zsh/tools/install.sh
+paru -S zsh-autosuggestions-git --noconfirm
+/usr/share/oh-my-zsh/tools/install.sh
+mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 
 # NUSHELL
 #paru -S nushell
@@ -21,8 +22,8 @@ sudo pacman -Syu --noconfirm
 #chsh -s /bin/nu   # change shell
 
 # FISH
-paru -S fish starship
-chsh -s /bin/fish
+#paru -S fish starship
+#chsh -s /bin/fish
 
 # neovim
 paru -S neovim --noconfirm
@@ -43,10 +44,10 @@ TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
 
 # Dynamic wallpaper
-#paru -S cronie --noconfirm
-#git clone https://github.com/adi1090x/dynamic-wallpaper.git ~/dynamic-wallpaper
-#cd dynamic-wallpaper
-#./install.sh
+paru -S cronie --noconfirm
+git clone https://github.com/adi1090x/dynamic-wallpaper.git ~/dynamic-wallpaper
+cd dynamic-wallpaper
+./install.sh
 
 # font
 paru -S ttf-fira-code ttf-nanum nerd-fonts-mononoki ttf-monaco ttf-d2coding --noconfirm
