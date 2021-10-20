@@ -260,6 +260,8 @@ sudo chown root:root /etc/sudoers.d/05_proxy
       --keyserver-options "timeout=40 http-proxy=$http_proxy" \
       --recv-keys B0F4253373F8F6F510D42178520A9993A1C052F8
 #+end_src
+
+Pacman의 경우에는 =/etc/pacman.d/gnupg/dirmngr.conf= 파일의 keyserver-options을 위와 같이 추가
 ** Git
 #+begin_src shell
 git config --global http.proxy $proxy_addr
