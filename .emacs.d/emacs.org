@@ -825,6 +825,12 @@ https://emacs.stackexchange.com/a/30691
     :commands (org-capture org-agenda)
     :hook (org-mode . efs/org-mode-setup)
     :config
+    (setq org-todo-keywords
+          '((sequence
+             "TODO(t)"
+             "HOLD(h)"
+             "KILL(k)"
+             "DONE(d)")))
     (setq org-ellipsis " ▾")
     (setq org-hide-emphasis-markers t)
     (setq org-src-fontify-natively t)
