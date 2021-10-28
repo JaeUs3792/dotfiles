@@ -1280,6 +1280,13 @@ https://emacs.stackexchange.com/a/30691
                                       ("\\subsection{%s}" . "\\subsection*{%s}"))))
 #+end_src
 
+* EDiff
+#+begin_src emacs-lisp
+;; Don't let ediff break EXWM, keep it in one frame
+(setq ediff-diff-options "-w"
+      ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
+#+end_src
 * Rainbow Delimiters
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
