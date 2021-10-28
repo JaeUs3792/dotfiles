@@ -1173,6 +1173,7 @@ https://emacs.stackexchange.com/a/30691
     (set-face-foreground 'git-gutter:added "LightGreen")
     (set-face-foreground 'git-gutter:modified "LightGoldenrod")
     (set-face-foreground 'git-gutter:deleted "LightCoral"))
+#+end_src
 ** Org mode latex
 [[https://github.com/GeneKao/orgmode-latex-templates][reference]]
 #+begin_src emacs-lisp
