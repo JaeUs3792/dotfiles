@@ -54,6 +54,9 @@ pip install matplotlib numpy pandas tabulate
 paru -S verilator --noconfirm
 npm install -g @imc-trading/svlangserver
 
+# docx
+paru -S zip unzip libreoffice --noconfirm
+
 ##################################################
 # EXWM
 ##################################################
