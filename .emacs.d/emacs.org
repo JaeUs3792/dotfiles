@@ -875,6 +875,10 @@ https://emacs.stackexchange.com/a/30691
     (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
     (add-to-list 'org-structure-template-alist '("py" . "src python"))
     (org-reload))
+
+  ;; ODT export to docx
+  (setq org-odt-preferred-output-format "docx")
+
 #+end_src
 
 ** Org mode Addons
