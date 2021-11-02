@@ -879,6 +879,9 @@ https://emacs.stackexchange.com/a/30691
   ;; ODT export to docx
   (setq org-odt-preferred-output-format "docx")
 
+  ;; Do not ask when run code block
+  (setq org-confirm-babel-evaluate nil)
+
 #+end_src
 
 ** Org mode Addons
