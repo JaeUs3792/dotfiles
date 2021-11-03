@@ -855,7 +855,8 @@ https://emacs.stackexchange.com/a/30691
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
-       (python . t)))
+       (python . t)
+       (latex . t)))
 
     (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
@@ -1229,6 +1230,18 @@ https://emacs.stackexchange.com/a/30691
                                       ("\\chapter{%s}" . "\\chapter*{%s}")
                                       ("\\section{%s}" . "\\section*{%s}")
                                       ("\\subsection{%s}" . "\\subsection*{%s}"))))
+
+  (add-to-list 'org-latex-packages-alist '("" "minted"))
+  (setq org-latex-listings 'minted) ;; Use minted to highlight source code
+  (setq org-latex-minted-options
+        '(("breaklines" "true")
+          ("tabsize" "4")
+          ("autogobble")
+          ("bgcolor" "monokaibg")))
+  (setq org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 #+end_src
 
 * EDiff
