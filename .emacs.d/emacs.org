@@ -641,7 +641,7 @@ https://emacs.stackexchange.com/a/30691
     :init
     (setq vertico-posframe-parameters
           `((left-fringe . 8)
-            (right-fringe . 8)))
+            (right-fringe . 8) (alpha . 100)))
     (vertico-posframe-mode 1))
 #+end_src
 ** Orderless
