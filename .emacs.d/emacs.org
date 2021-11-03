@@ -635,6 +635,14 @@ https://emacs.stackexchange.com/a/30691
     (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
     :init
     (marginalia-mode))
+  (use-package vertico-posframe
+    :after vertico
+    :ensure t
+    :init
+    (setq vertico-posframe-parameters
+          `((left-fringe . 8)
+            (right-fringe . 8)))
+    (vertico-posframe-mode 1))
 #+end_src
 ** Orderless
 #+begin_src emacs-lisp
