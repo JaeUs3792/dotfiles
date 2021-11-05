@@ -791,7 +791,6 @@ https://emacs.stackexchange.com/a/30691
 #+end_src
 * HI-TOOD
 #+begin_src emacs-lisp
-
   (use-package hl-todo
     :hook (prog-mode . hl-todo-mode)
     :hook (yaml-mode . hl-todo-mode)
@@ -833,11 +832,7 @@ https://emacs.stackexchange.com/a/30691
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-todo-keywords
-          '((sequence
-             "TODO(t)"
-             "HOLD(h)"
-             "KILL(k)"
-             "DONE(d)")))
+          '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
     (setq org-ellipsis " ▾")
     (setq org-hide-emphasis-markers t)
     (setq org-src-fontify-natively t)
@@ -961,7 +956,7 @@ https://emacs.stackexchange.com/a/30691
      nil
      (my/org-roam-filter-by-tag "Project")
      :templates
-     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n*  History\n\n* Notes\n\n"
+     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* History\n\n* Notes\n\n"
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
         :unnarrowed t))))
 
