@@ -636,6 +636,7 @@ https://emacs.stackexchange.com/a/30691
     :init
     (marginalia-mode))
   (use-package vertico-posframe
+    :disabled
     :after vertico
     :ensure t
     :init
