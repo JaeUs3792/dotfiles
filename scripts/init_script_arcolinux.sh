@@ -1,6 +1,6 @@
 #!/bin/sh
 paru
-paru -S stow alacritty trayer --noconfirm
+paru -S stow trayer --noconfirm
 
 # config file handling
 rm ~/.config/polybar/config
@@ -63,9 +63,17 @@ paru -S enpass --noconfirm
 #emacs
 paru -S ripgrep emacs --noconfirm
 paru -S auctex texlive-most texlive-lang --noconfirm
+paru -S jupyter --noconfirm
 
 #seafile
 paru -S seadrive-gui --noconfirm
 
+#syncthing
+paru -S syncthing --noconfirm
+mkdir SyncThing
+
+sudo systemctl enable syncthing@jaeus.service
+
 # etc
 paru -S figlet --noconfirm
+
