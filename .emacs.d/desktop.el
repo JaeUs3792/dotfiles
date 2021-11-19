@@ -21,6 +21,7 @@
   ;;(efs/run-in-background "volumeicon")
   ;;(efs/run-in-background "numlockx on")
   ;;(efs/run-in-background "blueberry-tray")
+  ;;(efs/run-in-background "enpass -minimize")
 
   ;; Launch apps that will run in the background
   (efs/run-in-background "fcitx")

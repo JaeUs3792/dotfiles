@@ -21,6 +21,7 @@ run nm-applet &
 run pamac-tray &
 run xfce4-power-manager &
 run volumeicon &
+run enpass -minimize &
 numlockx on &
 blueberry-tray &
 
