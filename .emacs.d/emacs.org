@@ -407,6 +407,7 @@ This makes nov to ugly
     "b B" '(ibuffer-list-buffers :which-key "IBuffer List Buffers")
     "b K" '(kill-buffer :which-key "IBuffer Kill Buffers")
     ;; Eshell
+    "e" '(:ignore t :which-key "eshell")
     "e h" '(counsel-esh-history :which "Kill history")
     "e s" '(eshell :which "run eshell")
     ;; Workspace
@@ -734,6 +735,7 @@ https://emacs.stackexchange.com/a/30691
     :after projectile
     :config (counsel-projectile-mode))
   (ju/leader-key-def
+    "p" '(:ignore t :which-key "Projectile")
     "p." 'projectile-find-file
     "ps" 'projectile-switch-project
     "pg" 'consult-ripgrep
@@ -832,6 +834,7 @@ https://emacs.stackexchange.com/a/30691
     :commands (org-capture org-agenda)
     :hook (org-mode . efs/org-mode-setup)
     :config
+
     (setq org-todo-keywords
           '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
     (setq org-ellipsis " ▾")
@@ -886,6 +889,12 @@ https://emacs.stackexchange.com/a/30691
   ;; Do not ask when run code block
   (setq org-confirm-babel-evaluate nil)
 
+
+  (ju/leader-key-def
+    "o" '(:ignore t :which-key "Org mode")
+    "oa" '(:ignore t :which-key "Org Agenda")
+    "oar" '(my/org-roam-refresh-agenda-list :which-key "Org agenda refresh list")
+    "oaa" '(org-agenda :which-key "open org agenda"))
 #+end_src
 
 ** Org mode Addons
@@ -907,12 +916,14 @@ https://emacs.stackexchange.com/a/30691
     :config
     (org-roam-db-autosync-mode))
     ;;(org-roam-setup))
-    (ju/leader-key-def
-      "rl" 'org-roam-buffer-toggle
-      "rf" 'org-roam-node-find
-      "ri" 'org-roam-node-insert
-      "rI" 'org-roam-node-insert-immediate
-      "rp" 'my/org-roam-find-project)
+  (ju/leader-key-def
+    "r" '(:ignore t :which-key "Org Roam")
+    "ru" 'org-roam-ui-mode
+    "rl" 'org-roam-buffer-toggle
+    "rf" 'org-roam-node-find
+    "ri" 'org-roam-node-insert
+    "rI" 'org-roam-node-insert-immediate
+    "rp" 'my/org-roam-find-project)
 
   (defun org-roam-node-insert-immediate (arg &rest args)
     (interactive "P")
