@@ -21,12 +21,13 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 ** Application
 *** Base Apps
 #+begin_src shell
-choco install firefox -y
-choco install git -y
-choco install git-fork -y
-choco install dejavufonts -y
-choco install firacode -y
-choco install enpass.install -y
+  choco install powershell-core -y
+  choco install firefox -y
+  choco install git -y
+  choco install git-fork -y
+  choco install dejavufonts -y
+  choco install firacode -y
+  choco install enpass.install -y
 #+end_src
 
 windows에서 기본으로 제공하는 openssh는 proxycommand등의 기능이 지원되지 않는다.
