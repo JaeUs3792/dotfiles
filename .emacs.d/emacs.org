@@ -875,6 +875,9 @@ https://emacs.stackexchange.com/a/30691
     (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
     (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
     (add-to-list 'org-structure-template-alist '("py" . "src python"))
+    (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
+    (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
+    (add-to-list 'org-structure-template-alist '("vh" . "src vhdl"))
     (org-reload))
 
   ;; ODT export to docx
