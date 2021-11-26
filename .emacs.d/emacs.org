@@ -93,6 +93,14 @@ https://github.com/raxod502/straight.el
   (straight-use-package 'use-package)
 #+end_src
 
+** Paradox
+#+begin_src emacs-lisp
+(use-package paradox
+  :init
+  (setq paradox-github-token t)
+  (setq paradox-execute-asynchronously t)
+  (setq paradox-automatically-star t))
+#+end_src
 
 * No-Littering
 #+begin_src emacs-lisp
