@@ -44,6 +44,7 @@ TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
 
 # Dynamic wallpaper
+sudo pip install pywal
 paru -S cronie --noconfirm
 git clone https://github.com/adi1090x/dynamic-wallpaper.git ~/dynamic-wallpaper
 cd dynamic-wallpaper
