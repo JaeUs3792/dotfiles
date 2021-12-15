@@ -28,3 +28,5 @@ alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 #alias fix-key="[ -d ~/.gnupg ] || mkdir ~/.gnupg ; cp /etc/pacman.d/gnupg/gpg.conf ~/.gnupg/ ; echo 'done'"
 
 figlet -w 100 "JaeUs-Device"
+
+cat ~/.cache/wal/sequences &
