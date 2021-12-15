@@ -24,8 +24,8 @@
   ;;(efs/run-in-background "enpass -minimize")
 
   ;; Launch apps that will run in the background
-  (efs/run-in-background "fcitx")
-  (efs/run-in-background "dwall -p -s firewatch"))
+  (efs/run-in-background "fcitx"))
+  ;;(efs/run-in-background "~/scripts/random_wallpaper.sh ~/ShareDirectory/wallpaper/karina/portrait"))
 
 (defun efs/exwm-update-class ()
   (exwm-workspace-rename-buffer exwm-class-name))
@@ -94,10 +94,10 @@
           ([?\s-r] . exwm-reset)
 
           ;; Move between windows
-          ([s-left] . windmove-left)
-          ([s-right] . windmove-right)
-          ([s-up] . windmove-up)
-          ([s-down] . windmove-down)
+          ([?\s-h] . windmove-left)
+          ([?\s-l] . windmove-right)
+          ([?\s-k] . windmove-up)
+          ([?\s-j] . windmove-down)
 
           ;;([s-space] . toggle-frame-fullscreen)
           ([?\s-f] . exwm-floating-toggle-floating)
