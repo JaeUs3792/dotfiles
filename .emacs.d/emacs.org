@@ -926,7 +926,7 @@ https://emacs.stackexchange.com/a/30691
     ;;(org-roam-setup))
   (ju/leader-key-def
     "r" '(:ignore t :which-key "Org Roam")
-    "ru" 'org-roam-ui-mode
+    "ru" 'org-roam-ui-open
     "rl" 'org-roam-buffer-toggle
     "rf" 'org-roam-node-find
     "ri" 'org-roam-node-insert

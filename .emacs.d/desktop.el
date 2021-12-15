@@ -25,7 +25,7 @@
 
   ;; Launch apps that will run in the background
   (efs/run-in-background "fcitx")
-  (efs/run-in-background "dwall -s firewatch"))
+  (efs/run-in-background "dwall -p -s firewatch"))
 
 (defun efs/exwm-update-class ()
   (exwm-workspace-rename-buffer exwm-class-name))

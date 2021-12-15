@@ -13,7 +13,8 @@ function run {
 xsetroot -cursor_name left_ptr &
 
 # background
-feh --bg-fill /usr/share/backgrounds/arcolinux/arco-wallpaper.jpg &
+#feh --bg-fill /usr/share/backgrounds/arcolinux/arco-wallpaper.jpg &
+dwall -p -s firewatch
 
 # other apps
 run variety &
