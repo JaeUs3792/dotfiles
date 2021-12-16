@@ -30,3 +30,9 @@ alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 figlet -w 100 "JaeUs-Device"
 
 cat ~/.cache/wal/sequences &
+
+# Fire it up for WSL2
+#VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
+#export DISPLAY=$VETHER_IP:10.0
+export DISPLAY=192.168.144.1:10.0
+
