@@ -35,6 +35,7 @@ nvim +PlugInstall +q +q
 # git config
 git config --global user.name "JaeYoo-Im"
 git config --global user.email "cpu3792@gmail.com"
+git config --global user.autocrlf input
 
 # tmux
 paru -S tmux --noconfirm
