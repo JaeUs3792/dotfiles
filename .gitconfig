@@ -1,6 +1,7 @@
 [user]
 	name = JaeYoo-Im
 	email = cpu3792@gmail.com
+	autocrlf = input
 [init]
 	defaultBranch = master
 [core]

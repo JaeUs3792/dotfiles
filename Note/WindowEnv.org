@@ -14,6 +14,7 @@ $git_email = "cpu3792@gmail.com"
  reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout" /v "Scancode Map" /t REG_BINARY /d 0000000000000000020000001d003a0000000000 /f
 #+end_src
 *** Win + L 비활성화
+Note : 이거 하면 동작이 이상해지는 듯?
 #+begin_src shell
  reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v "DisableLockWorkstation" /t REG_DWORD /d 1 /f
 #+end_src
@@ -47,6 +48,7 @@ windows에서 기본으로 제공하는 openssh는 proxycommand등의 기능이 
 
   git config --global user.name $git_username
   git config --global user.email $git_email
+  git config --global core.autocrlf true # 저장소로 보낼때 LF로 들여올때 CRLF로 conversion
 
   git clone https://github.com/JaeYoo-Im/myDots.git $HOME/.dotfiles
 #+end_src
