@@ -1270,6 +1270,21 @@ https://emacs.stackexchange.com/a/30691
           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 #+end_src
 
+* Org-Gcal
+#+begin_src emacs-lisp
+  (setq package-check-signature nil)
+
+
+  (use-package org-gcal
+    :ensure t
+    :config
+    (setq org-gcal-client-id "oauth 2.0 client ID"
+          org-gcal-client-secret "client secret"
+          org-gcal-file-alist '(("cpu3792@gmail.com" .  "~/Roam/gcal.org"))))
+  (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+#+end_src
+
 * EDiff
 #+begin_src emacs-lisp
 ;; Don't let ediff break EXWM, keep it in one frame
