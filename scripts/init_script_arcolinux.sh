@@ -67,9 +67,6 @@ paru -S ripgrep emacs --noconfirm
 paru -S auctex texlive-most texlive-lang --noconfirm
 paru -S jupyter --noconfirm
 
-#seafile
-paru -S seadrive-gui --noconfirm
-
 #syncthing
 paru -S syncthing --noconfirm
 mkdir SyncThing
