@@ -30,10 +30,6 @@
   (set-language-environment "Korean")
   (set-default-coding-systems 'utf-8)
   (prefer-coding-system 'utf-8)
-  ;; tab
-  (setq-default tab-width 4)
-  (setq-default evil-shift-width tab-width)
-  (setq-default indent-tabs-mode nil)
   ;; font
   (defun available-font? (font) (member font (font-family-list)))
 #+end_src
@@ -100,6 +96,33 @@ https://github.com/raxod502/straight.el
   (setq paradox-github-token t)
   (setq paradox-execute-asynchronously t)
   (setq paradox-automatically-star t))
+#+end_src
+* Indentation
+#+begin_src emacs-lisp
+  ;; tab
+  (setq-default indent-tabs-mode t)
+  (setq-default tab-width 4)
+  (setq-default evil-shift-width tab-width)
+  ;; verilog
+  (custom-set-variables
+   '(verilog-align-ifelse t)
+   '(verilog-auto-delete-trailing-whitespace t)
+   '(verilog-auto-inst-param-value t)
+   '(verilog-auto-inst-vector nil)
+   '(verilog-auto-lineup (quote all))
+   '(verilog-auto-newline nil)
+   '(verilog-auto-save-policy nil)
+   '(verilog-auto-template-warn-unused t)
+   '(verilog-case-indent 4)
+   '(verilog-cexp-indent 4)
+   '(verilog-highlight-grouping-keywords t)
+   '(verilog-highlight-modules t)
+   '(verilog-indent-level 4)
+   '(verilog-indent-level-behavioral 4)
+   '(verilog-indent-level-declaration 4)
+   '(verilog-indent-level-module 4)
+   '(verilog-tab-to-comment nil))
+
 #+end_src
 
 * No-Littering
@@ -1538,8 +1561,6 @@ https://emacs.stackexchange.com/a/30691
     (setq elfeed-search-feed-face ":foreground #fff :weight bold"
           elfeed-feeds (quote
                         (("https://www.reddit.com/r/linux.rss" reddit linux)
-                         ("https://www.reddit.com/r/commandline.rss" reddit commandline)
-                         ("https://www.reddit.com/r/distrotube.rss" reddit distrotube)
                          ("https://www.reddit.com/r/emacs.rss" reddit emacs)
                          ("https://www.gamingonlinux.com/article_rss.php" gaming linux)
                          ("https://hackaday.com/blog/feed/" hackaday linux)
@@ -1554,7 +1575,8 @@ https://emacs.stackexchange.com/a/30691
                          ("https://www.techrepublic.com/rssfeeds/topic/open-source/" techrepublic linux)
                          ("https://betanews.com/feed" betanews linux)
                          ("http://lxer.com/module/newswire/headlines.rss" lxer linux)
-                         ("https://distrowatch.com/news/dwd.xml" distrowatch linux)))))
+                         ("https://coolenjoy.net/rss?bo_table=38" coolenjoy IT)
+                         ("https://gigglehd.com/gg/ggnews/rss" giggle IT)))))
 
   (use-package elfeed-goodies
     :init
