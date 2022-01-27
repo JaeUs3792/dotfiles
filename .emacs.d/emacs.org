@@ -105,24 +105,15 @@ https://github.com/raxod502/straight.el
   (setq-default evil-shift-width tab-width)
   ;; verilog
   (custom-set-variables
-   '(verilog-align-ifelse t)
-   '(verilog-auto-delete-trailing-whitespace t)
-   '(verilog-auto-inst-param-value t)
-   '(verilog-auto-inst-vector nil)
-   '(verilog-auto-lineup (quote all))
-   '(verilog-auto-newline nil)
-   '(verilog-auto-save-policy nil)
-   '(verilog-auto-template-warn-unused t)
-   '(verilog-case-indent 4)
-   '(verilog-cexp-indent 4)
-   '(verilog-highlight-grouping-keywords t)
-   '(verilog-highlight-modules t)
    '(verilog-indent-level 4)
-   '(verilog-indent-level-behavioral 4)
-   '(verilog-indent-level-declaration 4)
-   '(verilog-indent-level-module 4)
-   '(verilog-tab-to-comment nil))
+   '(verilog-indent-level-module 0)
+   '(verilog-indent-level-declaration 0)
+   '(verilog-indent-level-behavioral 0)
+   '(verilog-indent-level-directive 0)
+   '(verilog-cexp-indent 0)
+   '(verilog-case-indent 4)
 
+   '(verilog-auto-newline nil))
 #+end_src
 
 * No-Littering
@@ -669,7 +660,7 @@ https://emacs.stackexchange.com/a/30691
     :init
     (marginalia-mode))
   (use-package vertico-posframe
-    :disabled
+    ;;:disabled
     :after vertico
     :ensure t
     :init
@@ -1297,8 +1288,6 @@ https://emacs.stackexchange.com/a/30691
 * Org-Gcal
 #+begin_src emacs-lisp
   (setq package-check-signature nil)
-
-
   (use-package org-gcal
     :ensure t
     :config
@@ -1307,6 +1296,8 @@ https://emacs.stackexchange.com/a/30691
           org-gcal-file-alist '(("cpu3792@gmail.com" .  "~/Roam/gcal.org"))))
   (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
   (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+
+
   (add-to-list 'org-agenda-files "~/Roam/Agenda/gcal.org")
   ;;(add-to-list 'org-agenda-files "~/Roam/Agenda/links.org")
   ;;(add-to-list 'org-agenda-files "~/Roam/Agenda/i.org")
