@@ -1,0 +1,3 @@
+
+dp=$(xrandr)
+echo $dp
