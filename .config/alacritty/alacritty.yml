@@ -59,7 +59,7 @@ colors:
     magenta: '0xff92d0'
     cyan:    '0x9aedfe'
     white:   '0xe6e6e6'
-background_opacity: 0.75
+window.opacity: 0.75
 key_bindings:
     # (Windows, Linux, and BSD only)
   - { key: V,        mods: Control|Shift, action: Paste            }
