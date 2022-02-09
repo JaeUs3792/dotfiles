@@ -1116,6 +1116,21 @@ https://emacs.stackexchange.com/a/30691
     :straight t)
   (use-package org-noter)
 #+end_src
+
+** Org Publish
+#+begin_src emacs-lisp
+  (setq org-publish-use-timestamps-flag nil)
+  (setq org-export-with-broken-lilnks t)
+  (setq org-publish-project-alist
+        '(("jaeus.net"
+          :base-directory "~/Roam/www/"
+          :base-extension "org"
+          :publishing-directory "~/Projects/html/"
+          :recursive t
+          :publishing-function org-html-publish-to-html
+          :headline-levels 4
+          :auto-preamble t)))
+#+end_src
 * Magit
 #+begin_src emacs-lisp
   (use-package magit
