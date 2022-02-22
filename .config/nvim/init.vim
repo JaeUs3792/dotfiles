@@ -71,7 +71,7 @@ let g:airline_theme='gruvbox'
 "let g:airline_theme='solarized8'
 """""""""""""" Challenger Deep
 "colorscheme challenger_deep
-colorscheme palenight
+"colorscheme palenight
 
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " Air-line
