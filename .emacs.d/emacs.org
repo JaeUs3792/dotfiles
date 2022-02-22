@@ -286,10 +286,10 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (setq doom_themes-enable-bold t
           doom-themes-enablbe-italic t)
     :config
-    ;;(load-theme 'doom-material t)
     ;;(load-theme 'doom-palenight t)
     ;;(load-theme 'doom-gruvbox t)
-    (load-theme 'doom-one t)
+    ;;(load-theme 'doom-one t)
+    (load-theme 'doom-dracula t)
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
     ;; Corrects (and improves) org-mode's native fontification.
@@ -297,10 +297,10 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
 
   ;; hilight line at the cursor.
   (global-hl-line-mode t)
-  (use-package beacon
-    :straight t
-    :config
-    (beacon-mode))
+  ;;(use-package beacon
+  ;;  :straight t
+  ;;  :config
+  ;;  (beacon-mode))
 
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
@@ -675,13 +675,13 @@ https://emacs.stackexchange.com/a/30691
     :init
     (marginalia-mode))
   (use-package vertico-posframe
-    :disabled
+    ;;:disabled
     :after vertico
     :ensure t
     :init
     (setq vertico-posframe-parameters
           `((left-fringe . 8)
-            (right-fringe . 8) (alpha . 75)))
+            (right-fringe . 8) (alpha . 100)))
     (vertico-posframe-mode 1))
 #+end_src
 ** Orderless
