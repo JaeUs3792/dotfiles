@@ -47,9 +47,10 @@ TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/upda
 # Dynamic wallpaper
 sudo pip install pywal
 paru -S cronie --noconfirm
-git clone https://github.com/adi1090x/dynamic-wallpaper.git ~/dynamic-wallpaper
-cd dynamic-wallpaper
-./install.sh
+sudo systemctl enable cronie
+crontab - e
+# 0 * * * * /home/jaeus/scripts/random_wallpaper.sh 
+
 
 # font
 paru -S ttf-fira-code ttf-nanum nerd-fonts-mononoki ttf-monaco ttf-d2coding --noconfirm
@@ -58,7 +59,8 @@ paru -S ttf-fira-code ttf-nanum nerd-fonts-mononoki ttf-monaco ttf-d2coding --no
 paru -S fcitx-hangul fcitx-configtool --noconfirm
 
 # enpass
-paru -S enpass --noconfirm
+#paru -S enpass --noconfirm
+paru -S bitwarden --noconfirm
 
 #paru -S green-tunnel --noconfirm
 

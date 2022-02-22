@@ -56,8 +56,8 @@ DesktopNames=exwm
     ;;(efs/run-in-background "enpass -minimize")
 
     ;; Launch apps that will run in the background
-    (efs/run-in-background "fcitx"))
-    ;;(efs/run-in-background "~/scripts/random_wallpaper.sh ~/ShareDirectory/wallpaper/karina/portrait"))
+    ;;(efs/run-in-background "fcitx"))
+  )
 
   (defun efs/exwm-update-class ()
     (exwm-workspace-rename-buffer exwm-class-name))
