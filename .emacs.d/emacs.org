@@ -675,7 +675,7 @@ https://emacs.stackexchange.com/a/30691
     :init
     (marginalia-mode))
   (use-package vertico-posframe
-    ;;:disabled
+    :disabled
     :after vertico
     :ensure t
     :init
@@ -1052,7 +1052,7 @@ https://emacs.stackexchange.com/a/30691
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
+          org-roam-ui-open-on-start nil))
 #+end_src
 ** Org present
 #+begin_src emacs-lisp
@@ -1324,7 +1324,7 @@ https://emacs.stackexchange.com/a/30691
     (setq org-gcal-client-id "oauth 2.0 client ID"
           org-gcal-client-secret "client secret"
           org-gcal-file-alist '(("cpu3792@gmail.com" .  "~/Roam/gcal.org"))))
-  (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+  ;;(add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
   (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
 
 
