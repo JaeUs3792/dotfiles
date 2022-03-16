@@ -1,0 +1,7 @@
+(("default" . ((user-emacs-directory . "~/.emacs.rational")
+	       (env . (("RATIONAL_EMACS_HOME" . "~/.emacs.rational.d")))))
+ ("vanilla" . ((user-emacs-directory . "~/.emacs.vanilla")))
+ ("doom" . ((user-emacs-directory . "~/.emacs.doom")
+	    (env . (("DOOMDIR" . "~/.emacs.doom.d")))))
+ ("rational" . ((user-emacs-directory . "~/.emacs.rational")
+		(env . (("RATIONAL_EMACS_HOME" . "~/.emacs.rational.d"))))))

@@ -309,8 +309,8 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
   ;; Set frame transparency
   (set-frame-parameter (selected-frame) 'alpha gvar/frame-transparency)
   (add-to-list 'default-frame-alist `(alpha . ,gvar/frame-transparency))
-  ;;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-  ;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+end_src
 * Dashboard
 #+begin_src emacs-lisp
@@ -1321,8 +1321,8 @@ https://emacs.stackexchange.com/a/30691
   (use-package org-gcal
     :ensure t
     :config
-    (setq org-gcal-client-id "oauth 2.0 client ID"
-          org-gcal-client-secret "client secret"
+    (setq org-gcal-client-id "928945571655-4h4kclj8etm6qfm27jk4jhgil6jsotbc.apps.googleusercontent.com"
+          org-gcal-client-secret "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"
           org-gcal-file-alist '(("cpu3792@gmail.com" .  "~/Roam/gcal.org"))))
   ;;(add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
   (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
