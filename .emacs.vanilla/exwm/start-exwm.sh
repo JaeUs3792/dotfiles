@@ -11,4 +11,4 @@
 rm ~/.emacs.d/emacs.el
 picom -b --config $HOME/.xmonad/scripts/picom.conf &
 ~/scripts/random_wallpaper.sh
-exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.d/desktop.el
+exec dbus-launch --exit-with-session emacs --with-profile vanilla -mm --debug-init -l ~/.emacs.d/desktop.el
