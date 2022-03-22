@@ -83,6 +83,7 @@
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 (use-package rainbow-delimiters
+  :straight t
   :hook (prog-mode . rainbow-delimiters-mode))
 ;; dashboard
 (use-package dashboard
@@ -553,6 +554,7 @@
 ;;;; ORG Roam
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package org-roam
+  :straight t
   :ensure t
   :demand t ;; Ensure org-roam is loaded by default
   :init
