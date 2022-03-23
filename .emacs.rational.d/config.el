@@ -21,6 +21,13 @@
 ;;(require 'rational-windows)
 (require 'rational-use-package)
 
+;; backup in one place. flat, no tree structure
+(setq backup-directory-alist '(("." . "~/.emacs.rational.d/backups")))
+(customize-set-variable
+ 'tramp-backup-directory-alist backup-directory-alist)
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs.rational.d/undo")))
+
+
 (setq user-full-name "JaeYoo-Im"
       user-mail-address "cpu3792@gmail.com")
 
@@ -101,7 +108,7 @@
     (setq dashboard-items '((recents . 10)
                             (agenda . 5)
                             (bookmarks . 5)
-                            ;;(projects . 5)
+                            ;;(projects . 5) <= related projectile
                             (registers . 5)))
     (setq dashboard-set-navigator t)
     ;; Format: "(icon title help action face prefix suffix)"
@@ -142,9 +149,9 @@
                     ;; Also handle undocumented (<active> <inactive>) form.
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
-         '(75 . 75) '(100 . 100)))))
+         '(80 . 80) '(100 . 100)))))
 (global-set-key (kbd "C-c t") 'toggle-transparency)
-(set-frame-parameter (selected-frame) 'alpha '(75 . 75))
+(set-frame-parameter (selected-frame) 'alpha '(80 . 80))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; EMOJIFY ♌ 
