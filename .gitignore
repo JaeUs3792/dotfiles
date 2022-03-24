@@ -1,2 +1,5 @@
 .ssh/*
 !.ssh/config
+/.emacs.rational.d/backups/
+/.emacs.rational.d/var/
+/.emacs.rational.d/undo/
