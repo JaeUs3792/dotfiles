@@ -21,6 +21,10 @@
 ;;(require 'rational-windows)
 (require 'rational-use-package)
 
+;; Load auctex
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
+
 ;; backup in one place. flat, no tree structure
 (setq backup-directory-alist '(("." . "~/.emacs.rational.d/backups")))
 (customize-set-variable
@@ -383,11 +387,11 @@
                        "avi" "wmv" "wav" "mov" "flv"
                        "ogm" "ogg" "mkv"))
                     "mpv"
+                    '(file))
+              (list (openwith-make-extension-regexp
+                     '("pdf"))
+                    "evince"
                     '(file)))))
-;;(list (openwith-make-extension-regexp
-;;       '("pdf"))
-;;      "evince"
-;;      '(file)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -495,14 +499,19 @@
   (setq org-log-into-drawer t)
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8)))
 
- (use-package org-superstar :straight t :after org :hook (org-mode . org-superstar-mode))
- (use-package org-attach-screenshot :straight t)
- (use-package org-download :straight t)
+(use-package org-superstar :straight t :after org :hook (org-mode . org-superstar-mode))
+(use-package org-attach-screenshot :straight t)
+(use-package org-download
+  :straight t
+  :config
+  (setq-default org-download-image-dir "./images")
+  (setq-default org-download-heading-lvl nil))
+(add-hook 'dired-mode-hook 'org-download-enable)
  
- (defun efs/org-mode-visual-fill ()
-   (setq visual-fill-column-width 100
-         visual-fill-column-center-text t)
-   (visual-fill-column-mode 1))
+(defun efs/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
  
 (use-package visual-fill-column
   :straight t
@@ -671,7 +680,7 @@
    ;; Python & Jupyter
    (python . t)
    (jupyter . t)))
-(org-babel-jupyter-override-src-block "python")
+;;(org-babel-jupyter-override-src-block "python")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Eshell
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

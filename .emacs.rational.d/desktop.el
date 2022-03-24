@@ -65,8 +65,8 @@
   (setq exwm-workspace-warp-cursor t)
 
   ;; Window focus should follow the mouse pointer
-  (setq mouse-autoselect-window t
-        focus-follows-mouse t)
+  ;;(setq mouse-autoselect-window t
+  ;;      focus-follows-mouse t)
 
   (add-hook 'exwm-floating-setup-hook
             (lambda ()
