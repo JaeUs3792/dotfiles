@@ -132,16 +132,18 @@ rm ./rustup-init.exe
 
 **** Python Packages
 #+begin_src shell
-choco install python -y
-$env:Path += ";C:/Python310/Scripts"
-python -m pip install --upgrade pip
-#pip install wheel
-#pip install six
-#pip uninstall pygls
-#pip install pygls==0.9.1 # hdl_checker dependency
-#pip install hdl_checker #neovim / modelsim 연동
-pip install numpy
-pip install matplotlib
+  choco install python -y
+  $env:Path += ";C:/Python310/Scripts"
+  python -m pip install --upgrade pip
+  #pip install wheel
+  #pip install six
+  #pip uninstall pygls
+  #pip install pygls==0.9.1 # hdl_checker dependency
+  #pip install hdl_checker #neovim / modelsim 연동
+  pip install numpy
+  pip install matplotlib
+
+  [Environment]::SetEnvironmentVariable("PYTHONSTARTUP", "$HOME\.dotfiles\scripts\my_imports.py", "User")
 #+end_src
 
 **** Julia
