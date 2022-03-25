@@ -37,3 +37,4 @@ cat ~/.cache/wal/sequences &
 export DISPLAY=192.168.144.1:10.0
 export EDITOR=nvim
 
+export PYTHONSTARTUP=~/scripts/my_imports.py
