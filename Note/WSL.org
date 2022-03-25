@@ -7,10 +7,17 @@ WSL1 기반임. WSL2는 네트워크가 불안정해보임.
 ** Windows Function Enable
 Windows Function enable ()
 #+begin_src shell
-# WSL
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
-# Windows Sandbox (optional)
-Enable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online
+  # WSL
+  Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+  dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+  # Install wsl2 kernel
+  wget https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi -OutFile wsl_update_x64.msi
+  ./wsl_update_x64.msi
+  rm ./wsl_update_x64.msi
+
+  # Windows Sandbox (optional)
+  #Enable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online
 #+end_src
 
 ** Download and Installation
@@ -36,7 +43,8 @@ popd
 
 시작 폴더 =shell:startup= 에 다음의 config.xlaunch 넣으면 좋은듯?
 #+begin_src shell
-cp $HOME/.dotfiles/Note/WSL/config.xlaunch $HOME/AppData/Roaming/Microsoft/Windows/"Start Menu"/Programs/Startup/
+  echo "<?xml version=""1.0"" encoding=""UTF-8""?>
+  <XLaunch WindowMode=""Windowed"" ClientMode=""NoClient"" LocalClient=""False"" Display=""10"" LocalProgram=""xcalc"" RemoteProgram=""xterm"" RemotePassword="""" PrivateKey="""" RemoteHost="""" RemoteUser="""" XDMCPHost="""" XDMCPBroadcast=""False"" XDMCPIndirect=""False"" Clipboard=""True"" ClipboardPrimary=""True"" ExtraParams=""-keyhook"" Wgl=""True"" DisableAC=""True"" XDMCPTerminate=""False""/>" > $HOME/AppData/Roaming/Microsoft/Windows/"Start Menu"/Programs/Startup/config.xlaunch
 #+end_src
 
 *** Icon Change
@@ -78,29 +86,6 @@ pacman-key --populate archlinux
 
 #+end_src
 
-** Pacman Mirror List
-WSL1 glibc-2-33-4 이슈가 있음. 마이크로소프트의 WSL1 커널 업데이트를 기대하기 힘든 상황이므로 WSL2를 사용하던지 Update Repo를 2월 14일자로 고정해 놓고 glibc를 업데이트 하면 glibc-2-33-3으로 업데이트됨.
-#+begin_src shell
-echo "Server = https://archive.archlinux.org/repos/2021/02/14/\$repo/os/\$arch" > etc/pacman.d/mirrorlist
-pacman -Sy archlinux-keyring
-pacman -S glibc
-#+end_src
-
-그후 =/etc/pacman.conf= 의 IgnorePkg에 glibc 추가하여 업데이트가 진행되지 않도록 한후 mirrorlist를 최신으로 돌림.
-#+begin_src config
-IgnorePkg = fakeroot glibc
-#+end_src
-
-한국 서버 우선.
-#+begin_src shell
-echo "Server = http://ftp.harukasan.org/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-echo "Server = https://ftp.harukasan.org/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist
-echo "Server = http://ftp.lanet.kr/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist
-echo "Server = https://ftp.lanet.kr/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist
-echo "Server = http://mirror.premi.st/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist
-pacman -Syu man wget
-#+end_src
-
 ** User Addition
 #+begin_src shell
 EDITOR=vim visudo	# uncomment %wheel ALL=(ALL) ALL
@@ -114,39 +99,33 @@ Arch.exe 실행파일 있는곳에서 실행. (in powershell)
 #+end_src
 ** Git
 #+begin_src shell
-sudo pacman -S git
-git config --global user.name "JaeYoo,Im"
-git config --global user.email "cpu3792@gmail.com"
-#+end_src
-
-** Paru (AUR Manager)
-WSL1에서는 fakeroot-tcp를 사용해야 한다.
-#+begin_src shell
-sudo pacman -S base-devel # don't install fakeroot
-cd ~
-git clone https://aur.archlinux.org/paru.git
-cd paru
-makepkg -si
-#+end_src
-** Application
-#+begin_src shell
-paru -S openssh python inetutils
-#+end_src
-*** Copy Configuration
-#+begin_src shell
-  paru -S stow
+  sudo pacman -S git stow
   rm ~/.zshrc
   rm ~/.bashrc
   git clone https://github.com/JaeYoo-Im/myDots.git ~/.dotfiles
   cd ~/.dotfiles
   stow .
 #+end_src
+
+** Paru (AUR Manager)
+WSL1에서는 fakeroot-tcp를 사용해야 한다.
+#+begin_src shell
+sudo pacman -S --needed base-devel # don't install fakeroot
+cd ~
+git clone https://aur.archlinux.org/paru-bin.git
+cd paru-bin
+makepkg -si
+#+end_src
+** Application
+#+begin_src shell
+paru -S openssh python inetutils
+#+end_src
 *** ZSH
 #+begin_src shell
-    paru -S zsh oh-my-zsh-git zsh-syntax-highlighting zsh-autosuggestions
-    chsh -s /bin/zsh jaeus
-    /usr/share/oh-my-zsh/tools/install.sh
-    mv ~/.zshrc.* ~/.zshrc # overwrite configuration
+  paru -S zsh zsh-syntax-highlighting zsh-autosuggestions
+  # Install oh-my-zsh
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  mv ~/.zshrc.* ~/.zshrc # overwrite configuration
 #+end_src
 
 *** TMUX

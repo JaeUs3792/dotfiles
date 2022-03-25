@@ -26,13 +26,12 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 ** Application
 *** Base Apps
 #+begin_src shell
-  choco install powershell-core -y
-  choco install firefox -y
+  choco install vivaldi.install -y
   choco install git -y
   choco install git-fork -y
   choco install dejavufonts -y
   choco install firacode -y
-  choco install enpass.install -y
+  choco install bitwarden -y
 #+end_src
 
 windows에서 기본으로 제공하는 openssh는 proxycommand등의 기능이 지원되지 않는다.
@@ -48,9 +47,9 @@ windows에서 기본으로 제공하는 openssh는 proxycommand등의 기능이 
 
   git config --global user.name $git_username
   git config --global user.email $git_email
-  git config --global core.autocrlf true # 저장소로 보낼때 LF로 들여올때 CRLF로 conversion
+  git config --global core.autocrlf true # 저장소로 보낼때 LF로 들여올때 CRLF로 conversion, Windows/Linux 호환용
 
-  git clone https://github.com/JaeYoo-Im/myDots.git $HOME/.dotfiles
+  git clone https://github.com/JaeUs3792/dotfiles $HOME/.dotfiles
 #+end_src
 
 *** Neovim
@@ -67,21 +66,22 @@ Context 메뉴 추가
 #+begin_src shell
 # Edit with neovim context menu
 reg add HKEY_CLASSES_ROOT\*\shell\NeoVim /t REG_SZ /d "Edit with NeoVim..." /f
-reg add HKEY_CLASSES_ROOT\*\shell\NeoVim /v Icon /t REG_SZ /d "C:\tools\neovim\Neovim\nvim-qt.exe" /f
-reg add HKEY_CLASSES_ROOT\*\shell\NeoVim\Command /t REG_SZ /d  "C:\tools\neovim\Neovim\nvim-qt.exe """"%1""""" /f
+reg add HKEY_CLASSES_ROOT\*\shell\NeoVim /v Icon /t REG_SZ /d "C:\tools\neovim\Neovim\bin\nvim-qt.exe" /f
+reg add HKEY_CLASSES_ROOT\*\shell\NeoVim\Command /t REG_SZ /d  "C:\tools\neovim\Neovim\bin\nvim-qt.exe """"%1""""" /f
 #+end_src
 
 Plugin Manager 설치
 #+begin_src shell
 
-md ~\AppData\Local\nvim\autoload
-$uri = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-(New-Object Net.WebClient).DownloadFile(
-  $uri,
-  $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(
-    "~\AppData\Local\nvim\autoload\plug.vim"
+  md ~\AppData\Local\nvim\autoload
+  $uri = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  (New-Object Net.WebClient).DownloadFile(
+    $uri,
+    $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(
+      "~\AppData\Local\nvim\autoload\plug.vim"
+    )
   )
-)
+  c:\tools\neovim\Neovim\bin\nvim.exe +PlugInstall +q +q
 #+end_src
 
 *** Networking
@@ -133,7 +133,7 @@ rm ./rustup-init.exe
 **** Python Packages
 #+begin_src shell
 choco install python -y
-$env:Path += ";C:/Python39/Scripts"
+$env:Path += ";C:/Python310/Scripts"
 python -m pip install --upgrade pip
 #pip install wheel
 #pip install six
@@ -193,17 +193,18 @@ choco install gnuplot -y
 
 *** Others
 #+begin_src shell
-choco install bandizip -y
-choco install everything -y
-choco install sumatrapdf.install -y
-choco install filezilla -y
-choco install transgui -y
-choco install honeyview -y
-choco install rufus -y
-choco install pdfsam.install -y
+  choco install bandizip -y
+  choco install everything -y
+  choco install sumatrapdf.install -y
+  choco install filezilla -y
+  choco install transgui -y
+  choco install honeyview -y
+  choco install rufus -y
+  choco install pdfsam.install -y
 
-choco install dotnetcore-sdk -y
-choco install powertoys -y
+  choco install powertoys -y
+
+  choco install synctrayzor -y
 #+end_src
 * Proxy
 프록시를 이용하여 특정앱을 업데이트하거나 특정앱의 인터넷접속을 할때 쓰던 방식이다.
