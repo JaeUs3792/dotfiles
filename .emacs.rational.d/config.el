@@ -509,7 +509,7 @@
 (add-hook 'dired-mode-hook 'org-download-enable)
  
 (defun efs/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
+  (setq visual-fill-column-width 150
         visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
  
@@ -678,8 +678,8 @@
  '((emacs-lisp . t) ;; Other languages
    (shell . t)
    ;; Python & Jupyter
-   (python . t)
-   (jupyter . t)))
+   (python . t)))
+   ;;(jupyter . t)))
 ;;(org-babel-jupyter-override-src-block "python")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Eshell
