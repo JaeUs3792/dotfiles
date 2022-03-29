@@ -678,9 +678,9 @@
  '((emacs-lisp . t) ;; Other languages
    (shell . t)
    ;; Python & Jupyter
-   (python . t)))
-   ;;(jupyter . t)))
-;;(org-babel-jupyter-override-src-block "python")
+   (python . t)
+   (jupyter . t)))
+(org-babel-jupyter-override-src-block "python")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Eshell
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
