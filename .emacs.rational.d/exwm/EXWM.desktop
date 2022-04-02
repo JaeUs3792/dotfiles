@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=EXWM
 Comment=Emacs Window Manager
-Exec=sh /home/jaeus/.emacs.d/exwm/start-exwm.sh
+Exec=sh /home/jaeus/.emacs.rational.d/exwm/start-exwm.sh
 TryExec=sh
 Type=Application
 X-LightDM-DesktopName=exwm

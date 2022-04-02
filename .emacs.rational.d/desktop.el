@@ -13,18 +13,17 @@
   ;; Make workspace 1 be the one where we land at startup
   (exwm-workspace-switch-create 1)
   (efs/start-panel)
-  (set-frame-parameter (selected-frame) 'alpha '(75 . 75))
   ;; if not wsl
-  ;;(efs/run-in-background "xsetroot -cursor_name left_ptr")
-  ;;(efs/run-in-background "nm-applet")
-  ;;(efs/run-in-background "pamac-tray")
-  ;;(efs/run-in-background "volumeicon")
-  ;;(efs/run-in-background "numlockx on")
-  ;;(efs/run-in-background "blueberry-tray")
-  ;;(efs/run-in-background "enpass -minimize")
+  (efs/run-in-background "xsetroot -cursor_name left_ptr")
+  (efs/run-in-background "nm-applet")
+  (efs/run-in-background "pamac-tray")
+  (efs/run-in-background "volumeicon")
+  (efs/run-in-background "numlockx on")
+  (efs/run-in-background "blueberry-tray")
+  (efs/run-in-background "bitwarden-desktop")
 
   ;; Launch apps that will run in the background
-  ;;(efs/run-in-background "fcitx"))
+  (efs/run-in-background "fcitx")
 )
 
 (defun efs/exwm-update-class ()

@@ -40,6 +40,7 @@
 (setenv "LC_ALL" "en_US.UTF-8")
 
 ;; Set further font and theme customizations
+(set-frame-parameter (selected-frame) 'alpha '(80 . 80))
 (custom-set-variables
    '(rational-ui-default-font
      '(:font "Fira Code Retina" :weight light :height 110)))
@@ -155,7 +156,6 @@
               100)
          '(80 . 80) '(100 . 100)))))
 (global-set-key (kbd "C-c t") 'toggle-transparency)
-(set-frame-parameter (selected-frame) 'alpha '(80 . 80))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; EMOJIFY ♌ 
