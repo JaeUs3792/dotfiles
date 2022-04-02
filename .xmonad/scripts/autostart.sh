@@ -22,7 +22,7 @@ run nm-applet &
 run pamac-tray &
 run xfce4-power-manager &
 run volumeicon &
-run bitwarden &
+run bitwarden-desktop &
 numlockx on &
 blueberry-tray &
 

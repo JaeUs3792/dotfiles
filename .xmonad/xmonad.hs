@@ -165,6 +165,7 @@ myAppGrid = [ --("Audacity", "audacity")
                  ("Vivaldi", "vivaldi-stable")
                  , ("Emacs", "emacsclient -c -a emacs")
                  , ("Firefox", "firefox")
+                 , ("Vivaldi", "vivaldi-stable")
                  --, ("Geany", "geany")
                  --, ("Geary", "geary")
                  , ("Gimp", "gimp")
@@ -362,8 +363,9 @@ myKeys =
 
     -- Launch Apps
         , ("M-f", spawn "firefox")
+        , ("M-v", spawn "vivaldi-stable")
         , ("M-t", spawn "thunar")
-        , ("M-p", spawn "enpass")
+        , ("M-p", spawn "bitwarden-desktop")
         --, ("M-e", spawn "emacs")
         , ("M-e", spawn myEmacs)
         , ("M-l", spawn "arcolinux-logout")
