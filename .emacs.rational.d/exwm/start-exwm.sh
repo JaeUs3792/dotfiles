@@ -8,7 +8,6 @@
 # Enable screen locking on suspend
 #xss-lock -- slock &
 
-rm ~/.emacs.d/emacs.el
 picom -b --config $HOME/.xmonad/scripts/picom.conf &
 ~/scripts/random_wallpaper.sh
 exec dbus-launch --exit-with-session emacs --with-profile rational -mm --debug-init -l ~/.emacs.rational.d/desktop.el

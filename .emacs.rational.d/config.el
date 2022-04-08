@@ -31,6 +31,10 @@
  'tramp-backup-directory-alist backup-directory-alist)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.rational.d/undo")))
 
+;; tab size
+(setq-default indent-tabs-mode t)
+(setq-default tab-width 4)
+(setq-default evil-shift-width tab-width)
 
 (setq user-full-name "JaeYoo-Im"
       user-mail-address "cpu3792@gmail.com")
@@ -40,7 +44,6 @@
 (setenv "LC_ALL" "en_US.UTF-8")
 
 ;; Set further font and theme customizations
-(set-frame-parameter (selected-frame) 'alpha '(80 . 80))
 (custom-set-variables
    '(rational-ui-default-font
      '(:font "Fira Code Retina" :weight light :height 110)))
@@ -56,6 +59,7 @@
 ;; Fullscreen
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(set-frame-parameter (selected-frame) 'alpha '(80 . 80))
 
 ;; Favorite Themes
 (load-theme 'doom-palenight t)
@@ -70,6 +74,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Additional Evil
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq evil-want-C-u-scroll t)
 ;; EVIL Numbers
 (use-package evil-numbers
   :straight t
