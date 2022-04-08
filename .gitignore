@@ -3,3 +3,6 @@
 /.emacs.rational.d/backups/
 /.emacs.rational.d/var/
 /.emacs.rational.d/undo/
+/.config/htop/
+/.config/qutebrowser/
+/.config/tmux/
