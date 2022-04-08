@@ -1,2 +1,10 @@
-/.emacs.df/emojis/
-/.emacs.df/forge-database.sqlite
+emojis/
+forge-database.sqlite
+backups/
+history
+org-roam.db
+recentf
+straight
+transient
+undo
+projects
