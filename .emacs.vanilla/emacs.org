@@ -25,7 +25,7 @@
   (defvar gvar/default-variable-font-size 110)
   (defvar gvar/frame-transparency '(75 . 75))
   ;;dir
-  (setq user-emacs-directory "~/.cache/emacs")
+  ;;(setq user-emacs-directory "~/.cache/emacs")
   ;; encoding
   (set-language-environment "Korean")
   (set-default-coding-systems 'utf-8)
@@ -321,7 +321,7 @@ https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     (setq dashboard-set-file-icons t)
     ;;(setq dashboard-banner-logo-title "Emacs is more than a text editor!")
     ;;(dashboard-startup-banner 'logo)
-    (setq dashboard-startup-banner "/home/jaeus/.emacs.d/logos/black-hole.png")
+    (setq dashboard-startup-banner "/home/jaeus/.emacs.vanilla/logos/black-hole.png")
     (setq dashboard-center-content t)
     (setq dashboard-week-agenda t)
     (setq dashboard-agenda-time-string-format "%d/%m/%Y %A %H:%M")
@@ -455,8 +455,8 @@ This makes nov to ugly
     "f R" '(revert-buffer :which-key "Revert Buffer")
     "t t" '(toggle-truncate-lines :which-key "Toggle truncate lines")
     ;; Shortcut
-    "f d d" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/desktop.org")) :which-key "open exwm config")
-    "f d e" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/emacs.org")) :which-key "open emacs config"))
+    "f d d" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.vanilla/desktop.org")) :which-key "open exwm config")
+    "f d e" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.vanilla/emacs.org")) :which-key "open emacs config"))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -863,63 +863,64 @@ https://emacs.stackexchange.com/a/30691
 + Initial Setup
 #+begin_src emacs-lisp
   (defun efs/org-mode-setup ()
-    (org-indent-mode)
-    ;;(variable-pitch-mode 1)
-    (visual-line-mode 1))
+	(org-indent-mode)
+	;;(variable-pitch-mode 1)
+	(visual-line-mode 1))
 
   (use-package org
-    :pin org
-    :commands (org-capture org-agenda)
-    :hook (org-mode . efs/org-mode-setup)
-    :config
+	;;:pin org
+	:demand t
+	:commands (org-capture org-agenda)
+	:hook (org-mode . efs/org-mode-setup)
+	:config
 
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
-    (setq org-ellipsis " ▾")
-    (setq org-hide-emphasis-markers t)
-    (setq org-src-fontify-natively t)
-    (setq org-fontify-quote-and-verse-blocks t)
+	(setq org-todo-keywords
+		  '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
+	(setq org-ellipsis " ▾")
+	(setq org-hide-emphasis-markers t)
+	(setq org-src-fontify-natively t)
+	(setq org-fontify-quote-and-verse-blocks t)
 
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8)))
+	(setq org-agenda-start-with-log-mode t)
+	(setq org-log-done 'time)
+	(setq org-log-into-drawer t)
+	(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8)))
   (use-package org-superstar :after org :hook (org-mode . org-superstar-mode))
   (use-package org-attach-screenshot)
   (use-package org-download)
 
   (defun efs/org-mode-visual-fill ()
-    (setq visual-fill-column-width 100
-          visual-fill-column-center-text t)
-    (visual-fill-column-mode 1))
+	(setq visual-fill-column-width 100
+		  visual-fill-column-center-text t)
+	(visual-fill-column-mode 1))
 
   (use-package visual-fill-column
-    :hook (org-mode . efs/org-mode-visual-fill))
+	:hook (org-mode . efs/org-mode-visual-fill))
 
   (with-eval-after-load 'org
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (python . t)
-       (latex . t)))
+	(org-babel-do-load-languages
+	 'org-babel-load-languages
+	 '((emacs-lisp . t)
+	   (python . t)
+	   (latex . t)))
 
-    (push '("conf-unix" . conf-unix) org-src-lang-modes))
+	(push '("conf-unix" . conf-unix) org-src-lang-modes))
 
   (with-eval-after-load 'org
-    ;; This is needed as of Org 9.2
-    (require 'org-tempo)
+	;; This is needed as of Org 9.2
+	(require 'org-tempo)
 
-    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-    (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
-    (add-to-list 'org-structure-template-alist '("cc" . "src c"))
-    (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
-    (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
-    (add-to-list 'org-structure-template-alist '("py" . "src python"))
-    (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
-    (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
-    (add-to-list 'org-structure-template-alist '("vh" . "src vhdl"))
-    (org-reload))
+	(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+	(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+	(add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
+	(add-to-list 'org-structure-template-alist '("cc" . "src c"))
+	(add-to-list 'org-structure-template-alist '("cp" . "src c++"))
+	(add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+	(add-to-list 'org-structure-template-alist '("py" . "src python"))
+	(add-to-list 'org-structure-template-alist '("oc" . "src octave"))
+	(add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
+	(add-to-list 'org-structure-template-alist '("vh" . "src vhdl")))
+	;;(org-reload))
 
   ;; ODT export to docx
   (setq org-odt-preferred-output-format "docx")
@@ -929,10 +930,10 @@ https://emacs.stackexchange.com/a/30691
 
 
   (ju/leader-key-def
-    "o" '(:ignore t :which-key "Org mode")
-    "oa" '(:ignore t :which-key "Org Agenda")
-    "oar" '(my/org-roam-refresh-agenda-list :which-key "Org agenda refresh list")
-    "oaa" '(org-agenda :which-key "open org agenda"))
+	"o" '(:ignore t :which-key "Org mode")
+	"oa" '(:ignore t :which-key "Org Agenda")
+	"oar" '(my/org-roam-refresh-agenda-list :which-key "Org agenda refresh list")
+	"oaa" '(org-agenda :which-key "open org agenda"))
 #+end_src
 
 ** Org mode Addons
@@ -1056,44 +1057,45 @@ https://emacs.stackexchange.com/a/30691
 #+end_src
 ** Org present
 #+begin_src emacs-lisp
-  (defun dw/org-present-prepare-slide ()
-    (org-overview)
-    (org-show-entry)
-    (org-show-children))
-
-  (defun dw/org-present-hook ()
-    (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
-                                       (header-line (:height 4.5) variable-pitch)
-                                       (org-code (:height 1.55) org-code)
-                                       (org-verbatim (:height 1.55) org-verbatim)
-                                       (org-bloc (:height 1.25) org-block)
-                                       (org-block-begin-line (:height 0.7) org-block)))
-    (setq header-line-format " ")
-    (org-display-inline-images)
-    (dw/org-present-prepare-slide))
-
-  (defun dw/org-present-quit-hook ()
-    (setq-local face-remapping-alist '((default variable-pitch default)))
-    (setq header-line-format nil)
-    (org-present-small)
-    (org-remove-inline-images))
-
-  (defun dw/org-present-prev ()
-    (interactive)
-    (org-present-prev)
-    (dw/org-present-prepare-slide))
-
-  (defun dw/org-present-next ()
-    (interactive)
-    (org-present-next)
-    (dw/org-present-prepare-slide))
-
-  (use-package org-present
-    :bind (:map org-present-mode-keymap
-                ("C-c C-j" . dw/org-present-next)
-                ("C-c C-k" . dw/org-present-prev))
-    :hook ((org-present-mode . dw/org-present-hook)
-           (org-present-mode-quit . dw/org-present-quit-hook)))
+;;  (defun dw/org-present-prepare-slide ()
+;;	(org-overview)
+;;	(org-show-entry)
+;;	(org-show-children))
+;;
+;;  (defun dw/org-present-hook ()
+;;	(setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+;;									   (header-line (:height 4.5) variable-pitch)
+;;									   (org-code (:height 1.55) org-code)
+;;									   (org-verbatim (:height 1.55) org-verbatim)
+;;									   (org-bloc (:height 1.25) org-block)
+;;									   (org-block-begin-line (:height 0.7) org-block)))
+;;	(setq header-line-format " ")
+;;	(org-display-inline-images)
+;;	(dw/org-present-prepare-slide))
+;;
+;;  (defun dw/org-present-quit-hook ()
+;;	(setq-local face-remapping-alist '((default variable-pitch default)))
+;;	(setq header-line-format nil)
+;;	(org-present-small)
+;;	(org-remove-inline-images))
+;;
+;;  (defun dw/org-present-prev ()
+;;	(interactive)
+;;	(org-present-prev)
+;;	(dw/org-present-prepare-slide))
+;;
+;;  (defun dw/org-present-next ()
+;;	(interactive)
+;;	(org-present-next)
+;;	(dw/org-present-prepare-slide))
+;;
+;;  (use-package org-present
+;;	:disable
+;;	:bind (:map org-present-mode-keymap
+;;				("C-c C-j" . dw/org-present-next)
+;;				("C-c C-k" . dw/org-present-prev))
+;;	:hook ((org-present-mode . dw/org-present-hook)
+;;		   (org-present-mode-quit . dw/org-present-quit-hook)))
 #+end_src
 ** Translate in org
 #+begin_src emacs-lisp

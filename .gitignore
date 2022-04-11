@@ -6,3 +6,9 @@
 /.config/htop/
 /.config/qutebrowser/
 /.config/tmux/
+/.emacs.vanilla/var/
+/.emacs.vanilla/straight/
+/.emacs.vanilla/elpa/
+/.emacs.vanilla/.org-generic-id-locations
+/.emacs.df/var/
+/.emacs.vanilla/emacs.el

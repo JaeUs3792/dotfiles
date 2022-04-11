@@ -54,7 +54,7 @@
 (setq vc-follow-symlinks t)
 
 ;; configuration
-(setq user-full-name "JaeYoo,Im"
+(setq user-full-name "JaeYoo-Im"
       user-mail-address "cpu3792@gmail.com")
 
 (defvar gvar/default-font-size 110)
@@ -98,11 +98,13 @@
    		    ;; Also handle undocumented (<active> <inactive>) form.
    		    ((numberp (cadr alpha)) (cadr alpha)))
    	      100)
-   	 gvar/frame-transparency '(85 . 85)))))
+   	 gvar/frame-transparency '(100 . 100)))))
 
 (global-set-key (kbd "C-c t") 'toggle-transparency)
 
-;; Fullscreen
+;; Set transparency & Fullscreen
+(set-frame-parameter (selected-frame) 'alpha gvar/frame-transparency)
+(add-to-list 'default-frame-alist `(alpha . ,gvar/frame-transparency))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -224,6 +226,12 @@
           (which-key--show-keymap "Embark" map nil nil 'no-paging)
           #'which-key--hide-popup-ignore-command)
         embark-become-indicator embark-action-indicator))
+
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles . (partial-completion))))))
 
 (use-package embark-consult
   :after embark)
