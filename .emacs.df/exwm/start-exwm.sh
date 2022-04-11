@@ -10,4 +10,4 @@
 
 picom -b --config $HOME/.xmonad/scripts/picom.conf &
 ~/scripts/random_wallpaper.sh
-exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.rational.d/desktop.el
+exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.emacs.df/desktop.el
