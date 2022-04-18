@@ -10,6 +10,10 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
 #export DISPLAY=$VETHER_IP:10.0
 
+# emacs
+alias emd="emacs --daemon"
+alias em="emacsclient -c -a 'emacs'"
+alias emt="emacsclient -c -a 'emacs -nw'"
 #neovim to vi
 alias vi=nvim
 #pacman unlock
