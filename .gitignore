@@ -12,3 +12,14 @@
 /.emacs.vanilla/.org-generic-id-locations
 /.emacs.df/var/
 /.emacs.vanilla/emacs.el
+/.config/blender/
+/.config/configstore/
+/.config/dconf/
+/.config/fcitx/
+/.config/gatsby/
+/.config/inkscape/
+/.config/libreoffice/
+/.config/nyxt/
+/.config/pulse/
+/.config/tmuxinator/
+/.config/vimb/

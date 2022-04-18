@@ -4,6 +4,11 @@
 input_dir=/mnt/wsl/PHYSICALDRIVE1/input/WAAA
 output_dir=~/Downloads/input
 
+# get bitrate
+mediainfo --Output="General;File Name: %FileName%\r\n
+Video;BitRate: %BitRate/String%\r\nDimensions : %Width%x%Height%\r\n\n" *.mp4
+
+
 walk_dir () {
     shopt -s nullglob dotglob
 
