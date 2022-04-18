@@ -66,8 +66,8 @@ Context 메뉴 추가
 #+begin_src shell
 # Edit with neovim context menu
 reg add HKEY_CLASSES_ROOT\*\shell\NeoVim /t REG_SZ /d "Edit with NeoVim..." /f
-reg add HKEY_CLASSES_ROOT\*\shell\NeoVim /v Icon /t REG_SZ /d "C:\tools\neovim\Neovim\bin\nvim-qt.exe" /f
-reg add HKEY_CLASSES_ROOT\*\shell\NeoVim\Command /t REG_SZ /d  "C:\tools\neovim\Neovim\bin\nvim-qt.exe """"%1""""" /f
+reg add HKEY_CLASSES_ROOT\*\shell\NeoVim /v Icon /t REG_SZ /d "C:\tools\neovim\nvim-win64\bin\nvim-qt.exe" /f
+reg add HKEY_CLASSES_ROOT\*\shell\NeoVim\Command /t REG_SZ /d  "C:\tools\neovim\nvim-win64\bin\nvim-qt.exe """"%1""""" /f
 #+end_src
 
 Plugin Manager 설치
@@ -81,7 +81,7 @@ Plugin Manager 설치
       "~\AppData\Local\nvim\autoload\plug.vim"
     )
   )
-  c:\tools\neovim\Neovim\bin\nvim.exe +PlugInstall +q +q
+  c:\tools\neovim\nvim-win64\bin\nvim.exe +PlugInstall +q +q
 #+end_src
 
 *** Networking
