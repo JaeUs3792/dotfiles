@@ -31,7 +31,8 @@ alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 #alias fix-gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
 #alias fix-key="[ -d ~/.gnupg ] || mkdir ~/.gnupg ; cp /etc/pacman.d/gnupg/gpg.conf ~/.gnupg/ ; echo 'done'"
 
-figlet -w 100 "JaeUs-Device"
+hostname=$(cat /etc/hostname)
+figlet -w 100 "$hostname"
 
 cat ~/.cache/wal/sequences &
 
