@@ -23,3 +23,5 @@
 /.config/pulse/
 /.config/tmuxinator/
 /.config/vimb/
+/.emacs.df/.org-id-locations
+/.emacs.df/bookmarks
