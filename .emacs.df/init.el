@@ -17,6 +17,7 @@
 (customize-set-variable
  'tramp-backup-directory-alist backup-directory-alist)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.df/undo")))
+(setq auto-save-default nil)
 
 ;; straight.el
 (defvar bootstrap-version)
