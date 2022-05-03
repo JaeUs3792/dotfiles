@@ -963,7 +963,7 @@ capture was not aborted."
                     '(file))
               (list (openwith-make-extension-regexp
                      '("pdf"))
-                    "evince"
+                    "zathura"
                     '(file)))))
 (use-package vlf
   :config (progn
