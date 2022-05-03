@@ -68,6 +68,7 @@ paru -S bitwarden --noconfirm
 paru -S ripgrep emacs --noconfirm
 paru -S auctex texlive-most texlive-lang --noconfirm
 paru -S jupyter --noconfirm
+paru -S zathura zathura-cb zathura-pdf-mupdf
 
 #syncthing
 paru -S syncthing --noconfirm
