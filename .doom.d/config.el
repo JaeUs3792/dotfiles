@@ -105,7 +105,8 @@ same directory as the org-buffer and insert a link to this file."
   (let* ((target-file
           (concat
            (make-temp-name
-            (concat (buffer-file-name)
+            (concat "~/org/images/"
+                    (f-filename buffer-file-name)
                     "_"
                     (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
          (wsl-path
