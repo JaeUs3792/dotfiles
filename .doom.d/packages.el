@@ -54,3 +54,4 @@
 (package! dired-hide-dotfiles)
 (package! nov)
 ;;(package! org-caldav)
+(package! openwith)
