@@ -96,7 +96,7 @@
 (global-set-key (kbd "C-c t") 'toggle-transparency)
 
 ;; --------------------------------------------------------------------------------------------
-;; - Screenshot
+;; - Org Paste Clipboard image for windows, in linux(use org-screenshot-take)
 ;; --------------------------------------------------------------------------------------------
 (defun my-org-paste-image ()
   "Paste an image into a time stamped unique-named file in the
@@ -151,14 +151,34 @@ same directory as the org-buffer and insert a link to this file."
   (add-to-list 'org-structure-template-alist '("cc" . "src c"))
   (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
   (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("py" . "src jupyter-python"))
   (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
   (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
   (add-to-list 'org-structure-template-alist '("vh" . "src vhdl")))
+;; --------------------------------------------------------------------------------------------
+;; - Org Mode extra configuration
+;; --------------------------------------------------------------------------------------------
 (setq org-odt-preferred-output-format "docx")
 (use-package! ob-translate
   :config
   (setq ob-translate:default-dest "ko"))
+(use-package! org-journal
+  :config
+  (setq org-journal-file-type 'weekly))
+
+;; --------------------------------------------------------------------------------------------
+;; - Org Caldav
+;; --------------------------------------------------------------------------------------------
+;;(use-package! org-caldav
+;;  :after org)
+;;(defun my/caldav-sync-perso ()
+;;  "Sync my local calendar in ~/org/calendar.org with my remote calendar"
+;;  (interactive)
+;;  (let ((org-caldav-inbox "~/org/cal_inbox.org")
+;;        (org-caldav-calendar-id "org")
+;;        (org-caldav-url "https://jaeus.net/webdav")
+;;        (org-caldav-files '("~/org/calendar.org")))
+;;    (call-interactively 'org-caldav-sync)))
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Roam UI Mode
 ;; --------------------------------------------------------------------------------------------
