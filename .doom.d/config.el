@@ -216,6 +216,29 @@ same directory as the org-buffer and insert a link to this file."
 (use-package! nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 ;; --------------------------------------------------------------------------------------------
+;; - Open with external program
+;; --------------------------------------------------------------------------------------------
+(use-package! openwith
+  :after dired
+  :config
+  (setq larget-file-warning-threshold nil)
+  (openwith-mode t)
+  (setq openwith-associations
+        (list (list (openwith-make-extension-regexp
+                     '("mpg" "mpeg" "mp3" "mp4" "m4v"
+                       "avi" "wmv" "wav" "mov" "flv"
+                       "ogm" "ogg" "mkv"))
+                    "mpv"
+                    '(file))
+              ;;(list (openwith-make-extension-regexp
+              ;;       '("pdf"))
+              ;;      "zathura"
+              ;;      '(file))
+              (list (openwith-make-extension-regexp
+                     '("html"))
+                    "qutebrowser"
+                    '(file)))))
+;; --------------------------------------------------------------------------------------------
 ;; - KeyBindings
 ;; --------------------------------------------------------------------------------------------
 (map! "C-s" 'consult-line)
