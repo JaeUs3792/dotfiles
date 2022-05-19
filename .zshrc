@@ -1,6 +1,6 @@
 export ZSH="/home/jaeus/.oh-my-zsh"
 ZSH_THEME="random"
-plugins=(git)
+#plugins=(git)
 source $ZSH/oh-my-zsh.sh
 prompt_context(){}
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

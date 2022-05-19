@@ -55,3 +55,4 @@
 (package! nov)
 ;;(package! org-caldav)
 (package! openwith)
+(package! org-super-agenda)
