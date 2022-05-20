@@ -32,7 +32,11 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-palenight)
+(if (display-graphic-p)
+    (setq doom-theme 'doom-palenight)
+    (setq doom-theme 'doom-gruvbox))
+(unless (display-graphic-p)
+  (xterm-mouse-mode))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -372,6 +376,7 @@ capture was not aborted."
 (map! "C-s" 'consult-line)
 (map! "C-M-l" 'consult-imenu)
 (map! "C-M-j" 'persp-switch-to-buffer)
+
 (use-package! dired
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
