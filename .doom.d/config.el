@@ -175,13 +175,10 @@ same directory as the org-buffer and insert a link to this file."
         (:name "Quick Picks"
                :effort< "0:30"))))
 (setq org-agenda-custom-commands
-      '(("z" "Super zaen view"
-          (alltodo "" ((org-agenda-overriding-header "")
+      '(("z" "Categorized view"
+          ((alltodo "" ((org-agenda-overriding-header "")
                        (org-super-agenda-groups
-                        '((:name "Next to do"
-                                 :todo "NEXT"
-                                 :order 1)
-                          (:name "Important"
+                        '((:name "Important"
                                  :tag "Important"
                                  :priority "A"
                                  :order 6)
@@ -209,12 +206,11 @@ same directory as the org-buffer and insert a link to this file."
                           (:name "trivial"
                                  :priority<= "C"
                                  :tag ("Trivial" "Unimportant")
-                                 :todo ("SOMEDAY" )
                                  :order 90)
-                          (:discard (:tag ("Chore" "Routine" "Daily"))))))))))
+                          (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
 (after! org
-  (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)")))
+  ;;(setq org-todo-keywords
+  ;;    '((sequence "TODO(t@/!)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)")))
   (setq! org-log-into-drawer "LOGBOOK")
   (setq! org-priority-lowest 68))
 (use-package! org-fancy-priorities
@@ -293,7 +289,8 @@ capture was not aborted."
 (setq org-odt-preferred-output-format "docx")
 (use-package! ob-translate
   :config
-  (setq ob-translate:default-dest "ko"))
+  (setq ob-translate:default-dest "ko")
+  (setq google-translate-backend-method 'wget))
 (use-package! org-journal
   :config
   (setq org-journal-file-type 'weekly))
