@@ -164,14 +164,61 @@ same directory as the org-buffer and insert a link to this file."
   (org-super-agenda-mode 1)
   (my/org-roam-refresh-agenda-list)
   (setq org-super-agenda-groups
-        '(;; Each group has an implicit boolean OR operator between its selectors.
-          (:name "Today"  ; Optionally specify section name
-                 :time-grid t  ; Items that appear on the time grid
-                 :todo "NEXT")  ; Items that have this TODO keyword
-          (:name "Important"
-                 ;; Single arguments given alone
-                 :priority "A")
-          )))
+      '((:name "TODAY"
+               :deadline today)
+        (:name "Important"
+               :priority "A")
+        (:name "Quick Picks"
+               :effort< "0:30"))))
+(setq org-agenda-custom-commands
+      '(("z" "Super zaen view"
+          (alltodo "" ((org-agenda-overriding-header "")
+                       (org-super-agenda-groups
+                        '((:name "Next to do"
+                                 :todo "NEXT"
+                                 :order 1)
+                          (:name "Important"
+                                 :tag "Important"
+                                 :priority "A"
+                                 :order 6)
+                          (:name "Due Today"
+                                 :deadline today
+                                 :order 2)
+                          (:name "Due Soon"
+                                 :deadline future
+                                 :order 8)
+                          (:name "Overdue"
+                                 :deadline past
+                                 :order 7)
+                          (:name "Projects"
+                                 :tag "Project"
+                                 :order 14)
+                          (:name "To read"
+                                 :tag "Read"
+                                 :order 30)
+                          (:name "Waiting"
+                                 :todo "WAIT"
+                                 :order 20)
+                          (:name "Holding"
+                                 :todo "HOLD"
+                                 :order 21)
+                          (:name "trivial"
+                                 :priority<= "C"
+                                 :tag ("Trivial" "Unimportant")
+                                 :todo ("SOMEDAY" )
+                                 :order 90)
+                          (:discard (:tag ("Chore" "Routine" "Daily"))))))))))
+(after! org
+  (setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)")))
+  (setq! org-log-into-drawer "LOGBOOK")
+  (setq! org-priority-lowest 68))
+(use-package! org-fancy-priorities
+  :config
+  (setq! org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
+;; --------------------------------------------------------------------------------------------
+;; - Org Roam
+;; --------------------------------------------------------------------------------------------
 (defun my/org-roam-list-notes-by-tag (tag-name)
   (mapcar #'org-roam-node-file
           (seq-filter
