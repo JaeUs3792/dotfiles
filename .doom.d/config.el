@@ -3,11 +3,6 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 (setq default-input-method "korean-hangul")
-;; | 12345678 |   |
-;; |----------+---|
-;; | 일이삼사 |   |
-;;(add-to-list 'default-frame-alist `(font . "D2Coding"))
-;;(set-fontset-font t 'hangul (font-spec :name "D2Coding"))
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "JaeYoo-Im"
@@ -33,11 +28,26 @@
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
 
+;; | 12345678 |   |
+;; |----------+---|
+;; | 일이삼사 |   |
+;;(setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
+(set-face-attribute 'default nil
+                       :font "Fira Code Retina"
+                       :weight 'light
+                       :height 120)
+(set-face-attribute 'fixed-pitch nil
+                    :font "Fira Code Retina"
+                    :weight 'light
+                    :height 120)
+;;(set-fontset-font t 'hangul (font-spec :name "NanumPen"))
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (if (display-graphic-p)
-    (setq doom-theme 'doom-palenight)
+    ;;(setq doom-theme 'doom-palenight)
+    ;;(setq doom-theme 'doom-monokai-pro)
+    (setq doom-theme 'doom-one)
     (setq doom-theme 'doom-gruvbox))
 (unless (display-graphic-p)
   (xterm-mouse-mode))
@@ -163,6 +173,46 @@ same directory as the org-buffer and insert a link to this file."
   (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
   (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
   (add-to-list 'org-structure-template-alist '("vh" . "src vhdl")))
+(after! org
+  (setq! org-hide-emphasis-markers t)
+  (custom-set-faces!
+    '(org-level-1 :height 1.15 :inherit outline-1)
+    '(org-level-2 :height 1.13 :inherit outline-2)
+    '(org-level-3 :height 1.11 :inherit outline-3)
+    '(org-level-4 :height 1.09 :inherit outline-4)
+    '(org-level-5 :height 1.07 :inherit outline-5)
+    '(org-level-6 :height 1.05 :inherit outline-6)
+    '(org-level-7 :height 1.03 :inherit outline-7)
+    '(org-level-8 :height 1.01 :inherit outline-8))
+   (setq org-superstar-item-bullet-alist
+        '((?+ . ?➤)
+          (?* . ?–)
+          (?- . ?•)))
+
+  (custom-set-faces!
+    '(org-document-title :height 1.15))
+  ;;(let* ((variable-tuple
+  ;;        (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+  ;;              ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+  ;;              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+  ;;              ((x-list-fonts "Verdana")         '(:font "Verdana"))
+  ;;              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+  ;;              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+  ;;       (base-font-color     (face-foreground 'default nil 'default))
+  ;;       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  ;;  (custom-theme-set-faces
+  ;;   'user
+  ;;   `(org-level-8 ((t (,@headline ,@variable-tuple))))
+  ;;   `(org-level-7 ((t (,@headline ,@variable-tuple))))
+  ;;   `(org-level-6 ((t (,@headline ,@variable-tuple))))
+  ;;   `(org-level-5 ((t (,@headline ,@variable-tuple))))
+  ;;   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+  ;;   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+  ;;   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+  ;;   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+  ;;   `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+  )
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Agenda
 ;; --------------------------------------------------------------------------------------------
@@ -217,10 +267,10 @@ same directory as the org-buffer and insert a link to this file."
   ;;    '((sequence "TODO(t@/!)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)")))
   (setq! org-log-into-drawer "LOGBOOK")
   (setq! org-clock-into-drawer "CLOCKING")
-  (setq! org-priority-lowest 68))
+  (setq! org-lowest-priority 68))
 (use-package! org-fancy-priorities
   :config
-  (setq! org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
+  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Roam
 ;; --------------------------------------------------------------------------------------------
@@ -326,7 +376,7 @@ capture was not aborted."
 ;;         if you don't care about startup time, use
 ;;  :hook (after-init . org-roam-ui-mode)
     :config
-    (setq org-roam-ui-sync-theme t
+    (setq! org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
@@ -352,10 +402,10 @@ capture was not aborted."
 ;; --------------------------------------------------------------------------------------------
 ;; - Open with external program
 ;; --------------------------------------------------------------------------------------------
-(use-package! openwith
-  :after dired
+(use-package openwith
+  :after-call pre-command-hook
   :config
-  (setq larget-file-warning-threshold nil)
+  (setq large-file-warning-threshold nil)
   (openwith-mode t)
   (setq openwith-associations
         (list (list (openwith-make-extension-regexp
@@ -389,3 +439,25 @@ capture was not aborted."
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "H" 'dired-hide-dotfiles-mode))
+(map! :leader
+      ;; Eshell
+      :desc "eshell"
+      "e" '(:ignore t)
+      :desc "eshell"
+      "e s" 'eshell
+      ;; AVY
+      :desc "AVY"
+      "v" '(:ignore t)
+      :desc "Avy goto char"
+      "vc" 'avy-goto-char
+      :desc "Avy goto word"
+      "vw" 'avy-goto-word-0
+      :desc "Avy goto line"
+      "vl" 'avy-goto-line
+      ;; Org mode
+      :desc "org roam refresh agenda list"
+      "oar" 'my/org-roam-refresh-agenda-list
+      :desc "org roam ui open"
+      "nru" 'org-roam-ui-open
+      :desc "org roam find tag:project"
+      "nrp" 'my/org-roam-find-project)
