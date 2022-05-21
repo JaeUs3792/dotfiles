@@ -3,7 +3,11 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 (setq default-input-method "korean-hangul")
-
+;; | 12345678 |   |
+;; |----------+---|
+;; | 일이삼사 |   |
+;;(add-to-list 'default-frame-alist `(font . "D2Coding"))
+;;(set-fontset-font t 'hangul (font-spec :name "D2Coding"))
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "JaeYoo-Im"
@@ -212,6 +216,7 @@ same directory as the org-buffer and insert a link to this file."
   ;;(setq org-todo-keywords
   ;;    '((sequence "TODO(t@/!)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)")))
   (setq! org-log-into-drawer "LOGBOOK")
+  (setq! org-clock-into-drawer "CLOCKING")
   (setq! org-priority-lowest 68))
 (use-package! org-fancy-priorities
   :config
@@ -359,10 +364,10 @@ capture was not aborted."
                        "ogm" "ogg" "mkv"))
                     "mpv"
                     '(file))
-              ;;(list (openwith-make-extension-regexp
-              ;;       '("pdf"))
-              ;;      "zathura"
-              ;;      '(file))
+              (list (openwith-make-extension-regexp
+                     '("pdf"))
+                    "zathura"
+                    '(file))
               (list (openwith-make-extension-regexp
                      '("html"))
                     "qutebrowser"
