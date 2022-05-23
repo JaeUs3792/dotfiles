@@ -3,6 +3,7 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 (setq default-input-method "korean-hangul")
+(global-set-key (kbd "<Hangul>") 'toggle-input-method)
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "JaeYoo-Im"
@@ -46,9 +47,10 @@
 ;; `load-theme' function. This is the default:
 (if (display-graphic-p)
     ;;(setq doom-theme 'doom-palenight)
-    ;;(setq doom-theme 'doom-monokai-pro)
+    ;(setq doom-theme 'doom-monokai-pro)
     (setq doom-theme 'doom-one)
-    (setq doom-theme 'doom-gruvbox))
+    ;;(setq doom-theme 'doom-gruvbox)
+    (setq doom-theme 'doom-monokai-pro))
 (unless (display-graphic-p)
   (xterm-mouse-mode))
 
@@ -374,12 +376,12 @@ capture was not aborted."
 ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
 ;;         a hookable mode anymore, you're advised to pick something yourself
 ;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
+;;    :hook (after-init . org-roam-ui-mode)
     :config
     (setq! org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
+          org-roam-ui-open-on-start nil))
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Publish
 ;; --------------------------------------------------------------------------------------------
