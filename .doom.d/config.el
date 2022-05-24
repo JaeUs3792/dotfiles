@@ -47,10 +47,9 @@
 ;; `load-theme' function. This is the default:
 (if (display-graphic-p)
     ;;(setq doom-theme 'doom-palenight)
-    ;(setq doom-theme 'doom-monokai-pro)
-    (setq doom-theme 'doom-one)
-    ;;(setq doom-theme 'doom-gruvbox)
-    (setq doom-theme 'doom-monokai-pro))
+    (setq doom-theme 'doom-monokai-pro)
+    ;;(setq doom-theme 'doom-one)
+    (setq doom-theme 'doom-gruvbox))
 (unless (display-graphic-p)
   (xterm-mouse-mode))
 
@@ -192,29 +191,7 @@ same directory as the org-buffer and insert a link to this file."
           (?- . ?•)))
 
   (custom-set-faces!
-    '(org-document-title :height 1.15))
-  ;;(let* ((variable-tuple
-  ;;        (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
-  ;;              ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-  ;;              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-  ;;              ((x-list-fonts "Verdana")         '(:font "Verdana"))
-  ;;              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-  ;;              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-  ;;       (base-font-color     (face-foreground 'default nil 'default))
-  ;;       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-  ;;  (custom-theme-set-faces
-  ;;   'user
-  ;;   `(org-level-8 ((t (,@headline ,@variable-tuple))))
-  ;;   `(org-level-7 ((t (,@headline ,@variable-tuple))))
-  ;;   `(org-level-6 ((t (,@headline ,@variable-tuple))))
-  ;;   `(org-level-5 ((t (,@headline ,@variable-tuple))))
-  ;;   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-  ;;   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-  ;;   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-  ;;   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-  ;;   `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
-  )
+    '(org-document-title :height 1.15)))
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Agenda
 ;; --------------------------------------------------------------------------------------------
@@ -222,16 +199,9 @@ same directory as the org-buffer and insert a link to this file."
   :after org
   :config
   (org-super-agenda-mode 1)
-  (my/org-roam-refresh-agenda-list)
-  (setq org-super-agenda-groups
-      '((:name "TODAY"
-               :deadline today)
-        (:name "Important"
-               :priority "A")
-        (:name "Quick Picks"
-               :effort< "0:30"))))
+  (my/org-roam-refresh-agenda-list))
 (setq org-agenda-custom-commands
-      '(("z" "Categorized view"
+      '(("z" "Org mode super agenda"
           ((alltodo "" ((org-agenda-overriding-header "")
                        (org-super-agenda-groups
                         '((:name "Important"
