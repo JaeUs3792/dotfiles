@@ -412,6 +412,15 @@ capture was not aborted."
   (evil-collection-define-key 'normal 'dired-mode-map
     "H" 'dired-hide-dotfiles-mode))
 (map! :leader
+      ;; file bind
+      :desc "Org Agenda Common"
+      "oac" '(lambda () (interactive) (find-file (expand-file-name "~/org/agenda/agenda.org")))
+      :desc "dOtfiles"
+      "fo" '(:ignore t)
+      :desc "doom config.el"
+      "foc" '(lambda () (interactive) (find-file (expand-file-name "~/.doom.d/config.el")))
+      :desc "doom package.el"
+      "fop" '(lambda () (interactive) (find-file (expand-file-name "~/.doom.d/package.el")))
       ;; Eshell
       :desc "eshell"
       "e" '(:ignore t)
