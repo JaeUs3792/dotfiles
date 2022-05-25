@@ -47,7 +47,8 @@
 ;; `load-theme' function. This is the default:
 (if (display-graphic-p)
     ;;(setq doom-theme 'doom-palenight)
-    (setq doom-theme 'doom-monokai-pro)
+    ;;(setq doom-theme 'doom-monokai-pro)
+    (setq doom-theme 'doom-dracula)
     ;;(setq doom-theme 'doom-one)
     (setq doom-theme 'doom-gruvbox))
 (unless (display-graphic-p)
