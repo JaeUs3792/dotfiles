@@ -314,10 +314,11 @@ capture was not aborted."
 ;; - Org Mode extra configuration
 ;; --------------------------------------------------------------------------------------------
 (setq org-odt-preferred-output-format "docx")
-(use-package! ob-translate
-  :config
-  (setq ob-translate:default-dest "ko")
-  (setq google-translate-backend-method 'wget))
+;;(use-package! ob-translate
+;;  :config
+;;  (setq ob-translate:default-dest "ko")
+;;  (setq google-translate-backend-method 'wget))
+(setq google-translate-backend-method 'curl)
 (use-package! org-journal
   :config
   (setq org-journal-file-type 'weekly))
@@ -346,7 +347,7 @@ capture was not aborted."
 ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
 ;;         a hookable mode anymore, you're advised to pick something yourself
 ;;         if you don't care about startup time, use
-;;    :hook (after-init . org-roam-ui-mode)
+    ;;:hook (after-init . org-roam-ui-mode)
     :config
     (setq! org-roam-ui-sync-theme t
           org-roam-ui-follow t
@@ -389,10 +390,6 @@ capture was not aborted."
               (list (openwith-make-extension-regexp
                      '("pdf"))
                     "zathura"
-                    '(file))
-              (list (openwith-make-extension-regexp
-                     '("html"))
-                    "qutebrowser"
                     '(file)))))
 ;; --------------------------------------------------------------------------------------------
 ;; - KeyBindings
@@ -420,7 +417,7 @@ capture was not aborted."
       :desc "doom config.el"
       "foc" '(lambda () (interactive) (find-file (expand-file-name "~/.doom.d/config.el")))
       :desc "doom package.el"
-      "fop" '(lambda () (interactive) (find-file (expand-file-name "~/.doom.d/package.el")))
+      "fop" '(lambda () (interactive) (find-file (expand-file-name "~/.doom.d/packages.el")))
       ;; Eshell
       :desc "eshell"
       "e" '(:ignore t)
