@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Input Directory
-input_dir=$1 #~/mnt/EAST/Aimi\ Rei
+input_dir=$1
 output_dir=~/Downloads/input
 
 # get bitrate
