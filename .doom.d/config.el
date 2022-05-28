@@ -419,6 +419,8 @@ capture was not aborted."
       "foc" '(lambda () (interactive) (find-file (expand-file-name "~/.doom.d/config.el")))
       :desc "doom package.el"
       "fop" '(lambda () (interactive) (find-file (expand-file-name "~/.doom.d/packages.el")))
+      :desc "doom init.el"
+      "foi" '(lambda () (interactive) (find-file (expand-file-name "~/.doom.d/init.el")))
       ;; Eshell
       :desc "eshell"
       "e" '(:ignore t)
