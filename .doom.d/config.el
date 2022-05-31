@@ -376,23 +376,28 @@ capture was not aborted."
 ;; --------------------------------------------------------------------------------------------
 ;; - Open with external program
 ;; --------------------------------------------------------------------------------------------
-(use-package openwith
-  :after-call pre-command-hook
-  :config
-  (setq large-file-warning-threshold nil)
-  (openwith-mode t)
-  (setq openwith-associations
-        (list (list (openwith-make-extension-regexp
-                     '("mpg" "mpeg" "mp3" "mp4" "m4v"
-                       "avi" "wmv" "wav" "mov" "flv"
-                       "ogm" "ogg" "mkv"))
-                    "mpv"
-                    '(file))
-              (list (openwith-make-extension-regexp
-                     '("pdf"))
-                    "zathura"
-                    '(file)))))
+;;(use-package openwith
+;;  :after-call pre-command-hook
+;;  :config
+;;  (setq large-file-warning-threshold nil)
+;;  (openwith-mode t)
+;;  (setq openwith-associations
+;;        (list (list (openwith-make-extension-regexp
+;;                     '("mpg" "mpeg" "mp3" "mp4" "m4v"
+;;                       "avi" "wmv" "wav" "mov" "flv"
+;;                       "ogm" "ogg" "mkv"))
+;;                    "mpv"
+;;                    '(file))
+;;              (list (openwith-make-extension-regexp
+;;                     '("pdf"))
+;;                    "zathura"
+;;                    '(file)))))
 ;; --------------------------------------------------------------------------------------------
+;; - Lang
+;; --------------------------------------------------------------------------------------------
+(setq! +latex-viewers '(zathura))
+; --------------------------------------------------------------------------------------------
+;;
 ;; - KeyBindings
 ;; --------------------------------------------------------------------------------------------
 (map! "C-s" 'consult-line)
