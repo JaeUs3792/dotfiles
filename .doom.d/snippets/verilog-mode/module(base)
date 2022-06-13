@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: module(base)
+# uuid:
+# key: trigger-key
+# condition: t
+# --
+
+module example
+#(
+parameter DIN_LEN = 8
+)
+(/*AUTOARG*/);
+
+/*AUTOINPUT*/
+/*AUTOOUTPUT*/
+
+/*AUTOWIRE*/
+/*AUTOREG*/
+
+
+endmodule

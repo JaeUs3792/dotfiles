@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: always (asynchronous rstn)
+# uuid:
+# key: trigger-key
+# condition: t
+# --
+
+always@(posedge clk or negedge rstn)
+if(!rstn) begin
+/*AUTORESET*/
+end
+else begin
+end
+end
