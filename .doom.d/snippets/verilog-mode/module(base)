@@ -1,10 +1,7 @@
 # -*- mode: snippet -*-
 # name: module(base)
-# uuid:
-# key: trigger-key
-# condition: t
+# key:
 # --
-
 module example
 #(
 parameter DIN_LEN = 8

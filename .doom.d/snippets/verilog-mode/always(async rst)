@@ -1,10 +1,7 @@
 # -*- mode: snippet -*-
-# name: always (asynchronous rst)
-# uuid:
-# key: trigger-key
-# condition: t
+# name: always(async rst)
+# key:
 # --
-
 always@(posedge clk or posedge rst)
 if(rst) begin
 /*AUTORESET*/
