@@ -11,7 +11,9 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #export DISPLAY=$VETHER_IP:10.0
 
 # emacs
+alias emupgrade="~/.emacs.d/bin/doom upgrade"
 alias emd="emacs --daemon"
+alias emdk="emacsclient --eval '(kill-emacs)'"
 alias em="emacsclient -c -a 'emacs'"
 alias emt="emacsclient -c -a 'emacs -nw'"
 #neovim to vi
