@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: always(async rst)
+# key:
+# --
+always@(posedge clk) begin
+if(rst) begin
+/*AUTORESET*/
+end
+else begin
+end
