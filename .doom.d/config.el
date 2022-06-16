@@ -1,5 +1,6 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
+(setq-default tab-width 4)
+(defvaralias 'c-basic-offset 'tab-width)
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 (setq default-input-method "korean-hangul")
@@ -33,14 +34,14 @@
 ;; |----------+---|
 ;; | 일이삼사 |   |
 ;;(setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
-(set-face-attribute 'default nil
-                       :font "Fira Code Retina"
-                       :weight 'light
-                       :height 120)
-(set-face-attribute 'fixed-pitch nil
-                    :font "Fira Code Retina"
-                    :weight 'light
-                    :height 120)
+;;(set-face-attribute 'default nil
+;;                       :font "Fira Code Retina"
+;;                       :weight 'light
+;;                       :height 120)
+;;(set-face-attribute 'fixed-pitch nil
+;;                    :font "Fira Code Retina"
+;;                    :weight 'light
+;;                    :height 120)
 ;;(set-fontset-font t 'hangul (font-spec :name "NanumPen"))
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -48,8 +49,8 @@
 (if (display-graphic-p)
     ;;(setq doom-theme 'doom-palenight)
     ;;(setq doom-theme 'doom-monokai-pro)
-    (setq doom-theme 'doom-dracula)
-    ;;(setq doom-theme 'doom-one)
+    ;;(setq doom-theme 'doom-dracula)
+    (setq doom-theme 'doom-one)
     (setq doom-theme 'doom-gruvbox))
 (unless (display-graphic-p)
   (xterm-mouse-mode))
