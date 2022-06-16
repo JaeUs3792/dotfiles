@@ -22,6 +22,8 @@ walk_dir () {
                 printf "$base_name 's bit rate is $brate_int\n"
                 if [ $brate_int -gt 550000 ]; then
                     HandBrakeCLI -i "$pathname" -o $output_dir/$base_name -Z "General/Very Fast 480p30" --no-two-pass -b 500
+	        else
+		    echo $pathname >> $output_dir/exceptions.txt
                 fi
             fi
             #printf '%s, %s\n' "$base_name" "$output_dir/$base_name"
