@@ -2,7 +2,7 @@
 # name: always(sync rst)
 # key:
 # --
-always@(posedge clk)
+always@(posedge clk) begin
 if(rst) begin
 /*AUTORESET*/
 end

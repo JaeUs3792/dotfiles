@@ -2,7 +2,7 @@
 # name: always(async rstn)
 # key:
 # --
-always@(posedge clk or negedge rstn)
+always@(posedge clk or negedge rstn) begin
 if(!rstn) begin
 /*AUTORESET*/
 end
