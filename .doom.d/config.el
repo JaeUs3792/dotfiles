@@ -158,6 +158,10 @@ same directory as the org-buffer and insert a link to this file."
   (call-process "powershell.exe" nil nil nil
                 "-Command" (concat "& {" script "}")))
 
+;; --------------------------------------------------------------------------------------------
+;; - Rainbow delimiter mode for programming.
+;; --------------------------------------------------------------------------------------------
+(add-hook 'verilog-mode-hook #'rainbow-delimiters-mode)
 
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Mode
