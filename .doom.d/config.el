@@ -401,9 +401,21 @@ capture was not aborted."
 ;;                    "zathura"
 ;;                    '(file)))))
 ;; --------------------------------------------------------------------------------------------
-;; - Lang
+;; - Lang - Latex
 ;; --------------------------------------------------------------------------------------------
 (setq! +latex-viewers '(zathura))
+;; --------------------------------------------------------------------------------------------
+;; - Lang - Verilog
+;; --------------------------------------------------------------------------------------------
+(setq! verilog-auto-newline nil)
+(setq! verilog-highlight-translate-off t)
+(setq! verilog-indent-level 4)
+(setq! verilog-indent-level-module 0)
+(setq! verilog-indent-level-behavioral 4)
+(setq! verilog-indent-level-declaration 0)
+(setq! verilog-case-indent 4)
+(setq! verilog-cexp-indent 4)
+(setq! verilog-indent-lists nil)
 ; --------------------------------------------------------------------------------------------
 ;;
 ;; - KeyBindings
