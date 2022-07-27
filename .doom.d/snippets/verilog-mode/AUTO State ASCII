@@ -1,0 +1,29 @@
+# -*- mode: snippet -*-
+# name: AUTO State ASCII
+# uuid:
+# key: trigger-key
+# condition: t
+# --
+
+localparam // auto enum state_info
+           S_IDLE = 0;
+reg [2:0]  // auto enum state_info
+           cstate, nstate;
+// synthesis translate_off
+/*AUTOASCIIENUM("cstate", "cstate_ascii_r", "")*/
+// synthesis translate_on
+always@(posedge clk) begin
+    if(rst) begin
+        cstate <= S_IDLE;
+    end
+    else begin
+        cstate <= nstate;
+    end
+end
+
+always@* begin
+    case(cstate)
+        S_IDLE : nstate = S_IDLE;
+        default : nstate = S_IDLE;
+    endcase
+end
