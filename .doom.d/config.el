@@ -33,28 +33,26 @@
 ;; | 12345678 |   |
 ;; |----------+---|
 ;; | 일이삼사 |   |
-;;(setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
-;;(set-face-attribute 'default nil
-;;                       :font "Fira Code Retina"
-;;                       :weight 'light
-;;                       :height 120)
-;;(set-face-attribute 'fixed-pitch nil
-;;                    :font "Fira Code Retina"
-;;                    :weight 'light
-;;                    :height 120)
-;;(set-fontset-font t 'hangul (font-spec :name "NanumPen"))
+
+(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "Ubuntu" :size 13))
+(set-fontset-font t 'hangul (font-spec :name "NanumGothic"))
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (if (display-graphic-p)
     ;;(setq doom-theme 'doom-palenight)
     ;;(setq doom-theme 'doom-monokai-pro)
+    (setq doom-theme 'doom-material)
     ;;(setq doom-theme 'doom-dracula)
-    (setq doom-theme 'doom-one)
+    ;;(setq doom-theme 'doom-one)
     (setq doom-theme 'doom-gruvbox))
 (unless (display-graphic-p)
   (xterm-mouse-mode))
+(beacon-mode 1)
 
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
@@ -171,6 +169,19 @@ same directory as the org-buffer and insert a link to this file."
 ;; --------------------------------------------------------------------------------------------
 (setq! avy-all-windows t)
 ;; --------------------------------------------------------------------------------------------
+;; - Calendar
+;; --------------------------------------------------------------------------------------------
+(use-package! calfw)
+(use-package! calfw-org)
+;; --------------------------------------------------------------------------------------------
+;; - Neotree
+;; --------------------------------------------------------------------------------------------
+;; comment ~/.emacs.d/modules/ui/doom/config.el (add-hook 'doom-load-theme-hook #'doom-themes-neotree-config)
+(setq! neo-theme (if (display-graphic-p) 'icons 'arrow))
+(setq! neo-smart-open t)
+;;(doom-themes-neotree-config)
+;;(setq! doom-themes-neotree-file-icons t)
+;;;; --------------------------------------------------------------------------------------------
 ;; - Org Mode
 ;; --------------------------------------------------------------------------------------------
 (with-eval-after-load 'org
@@ -187,24 +198,99 @@ same directory as the org-buffer and insert a link to this file."
   (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
   (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
   (add-to-list 'org-structure-template-alist '("vh" . "src vhdl")))
+
+(defun my/org-colors-tomorrow-night ()
+  "Enable Tomorrow Night colors for Org headers."
+  (interactive)
+  (dolist
+      (face
+       '((org-level-1 1.7 "#81a2be" ultra-bold)
+         (org-level-2 1.6 "#b294bb" extra-bold)
+         (org-level-3 1.5 "#b5bd68" bold)
+         (org-level-4 1.4 "#e6c547" semi-bold)
+         (org-level-5 1.3 "#cc6666" normal)
+         (org-level-6 1.2 "#70c0ba" normal)
+         (org-level-7 1.1 "#b77ee0" normal)
+         (org-level-8 1.0 "#9ec400" normal)))
+    (set-face-attribute (nth 0 face) nil :font doom-variable-pitch-font :weight (nth 3 face) :height (nth 1 face) :foreground (nth 2 face)))
+    (set-face-attribute 'org-table nil :font doom-font :weight 'normal :height 1.0 :foreground "#bfafdf"))
 (after! org
   (setq! org-hide-emphasis-markers t)
-  (custom-set-faces!
-    '(org-level-1 :height 1.15 :inherit outline-1)
-    '(org-level-2 :height 1.13 :inherit outline-2)
-    '(org-level-3 :height 1.11 :inherit outline-3)
-    '(org-level-4 :height 1.09 :inherit outline-4)
-    '(org-level-5 :height 1.07 :inherit outline-5)
-    '(org-level-6 :height 1.05 :inherit outline-6)
-    '(org-level-7 :height 1.03 :inherit outline-7)
-    '(org-level-8 :height 1.01 :inherit outline-8))
    (setq org-superstar-item-bullet-alist
         '((?+ . ?➤)
           (?* . ?–)
           (?- . ?•)))
+   (my/org-colors-tomorrow-night)
+   (custom-set-faces!
+     '(org-document-title :height 2.0)))
 
-  (custom-set-faces!
-    '(org-document-title :height 1.15)))
+;; --------------------------------------------------------------------------------------------
+;; - Org Roam
+;; --------------------------------------------------------------------------------------------
+(defun my/org-roam-list-notes-by-tag (tag-name)
+  (mapcar #'org-roam-node-file
+          (seq-filter
+           (my/org-roam-filter-by-tag tag-name)
+           (org-roam-node-list))))
+
+(defun my/org-roam-refresh-agenda-list ()
+  (interactive)
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project"))
+  (add-to-list 'org-agenda-files "~/org/agenda/agenda.org"))
+(defun my/org-roam-filter-by-tag (tag-name)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+
+;;(with-eval-after-load 'org-roam
+;;  (defun my/org-roam-project-finalize-hook ()
+;;    "Adds the captured project file to `org-agenda-files' if the
+;;capture was not aborted."
+;;    ;; Remove the hook since it was added temporarily
+;;    (remove-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+;;
+;;    ;; Add project file to the agenda list if the capture was confirmed
+;;    (unless org-note-abort
+;;      (with-current-buffer (org-capture-get :buffer)
+;;        (add-to-list 'org-agenda-files (buffer-file-name)))))
+;;  (defun my/org-roam-find-project ()
+;;    (interactive)
+;;    ;; Add the project file to the agenda after capture is finished
+;;    (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+;;
+;;    ;; Select a project file to open, creating it if necessary
+;;    (org-roam-node-find
+;;     nil
+;;     nil
+;;     (my/org-roam-filter-by-tag "Project")
+;;     :templates
+;;     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
+;;        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
+;;        :unnarrowed t))))
+;;  (defun my/org-roam-capture-inbox ()
+;;    (interactive)
+;;    (org-roam-capture- :node (org-roam-node-create)
+;;                       :templates '(("i" "inbox" plain "* %?"
+;;                                     :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
+;;
+;;  (defun my/org-roam-copy-todo-to-today ()
+;;    (interactive)
+;;    (let ((org-refile-keep t) ;; Set this to nil to delete the original!
+;;          (org-roam-dailies-capture-templates
+;;           '(("t" "tasks" entry "%?"
+;;              :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+;;          (org-after-refile-insert-hook #'save-buffer)
+;;          today-file
+;;          pos)
+;;      (save-window-excursion
+;;        (org-roam-dailies--capture (current-time) t)
+;;        (setq today-file (buffer-file-name))
+;;        (setq pos (point)))
+;;
+;;      ;; Only refile if the target file is different than the current file
+;;      (unless (equal (file-truename today-file)
+;;                     (file-truename (buffer-file-name)))
+;;        (org-refile nil nil (list "Tasks" today-file nil pos))))))
+
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Agenda
 ;; --------------------------------------------------------------------------------------------
@@ -256,73 +342,6 @@ same directory as the org-buffer and insert a link to this file."
 (use-package! org-fancy-priorities
   :config
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
-;; --------------------------------------------------------------------------------------------
-;; - Org Roam
-;; --------------------------------------------------------------------------------------------
-(defun my/org-roam-list-notes-by-tag (tag-name)
-  (mapcar #'org-roam-node-file
-          (seq-filter
-           (my/org-roam-filter-by-tag tag-name)
-           (org-roam-node-list))))
-
-(defun my/org-roam-refresh-agenda-list ()
-  (interactive)
-  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project"))
-  (add-to-list 'org-agenda-files "~/org/agenda/agenda.org"))
-(defun my/org-roam-filter-by-tag (tag-name)
-  (lambda (node)
-    (member tag-name (org-roam-node-tags node))))
-
-(with-eval-after-load 'org-roam
-  (defun my/org-roam-project-finalize-hook ()
-    "Adds the captured project file to `org-agenda-files' if the
-capture was not aborted."
-    ;; Remove the hook since it was added temporarily
-    (remove-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-    ;; Add project file to the agenda list if the capture was confirmed
-    (unless org-note-abort
-      (with-current-buffer (org-capture-get :buffer)
-        (add-to-list 'org-agenda-files (buffer-file-name)))))
-  (defun my/org-roam-find-project ()
-    (interactive)
-    ;; Add the project file to the agenda after capture is finished
-    (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-    ;; Select a project file to open, creating it if necessary
-    (org-roam-node-find
-     nil
-     nil
-     (my/org-roam-filter-by-tag "Project")
-     :templates
-     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
-        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
-        :unnarrowed t))))
-  (defun my/org-roam-capture-inbox ()
-    (interactive)
-    (org-roam-capture- :node (org-roam-node-create)
-                       :templates '(("i" "inbox" plain "* %?"
-                                     :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
-
-  (defun my/org-roam-copy-todo-to-today ()
-    (interactive)
-    (let ((org-refile-keep t) ;; Set this to nil to delete the original!
-          (org-roam-dailies-capture-templates
-           '(("t" "tasks" entry "%?"
-              :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
-          (org-after-refile-insert-hook #'save-buffer)
-          today-file
-          pos)
-      (save-window-excursion
-        (org-roam-dailies--capture (current-time) t)
-        (setq today-file (buffer-file-name))
-        (setq pos (point)))
-
-      ;; Only refile if the target file is different than the current file
-      (unless (equal (file-truename today-file)
-                     (file-truename (buffer-file-name)))
-        (org-refile nil nil (list "Tasks" today-file nil pos))))))
-
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Mode extra configuration
 ;; --------------------------------------------------------------------------------------------
@@ -421,13 +440,8 @@ capture was not aborted."
 (setq! verilog-cexp-indent 4)
 (setq! verilog-indent-lists nil)
 ; --------------------------------------------------------------------------------------------
-;;
-;; - KeyBindings
+;; - Dired
 ;; --------------------------------------------------------------------------------------------
-(map! "C-s" 'consult-line)
-(map! "C-M-l" 'consult-imenu)
-(map! "C-M-j" 'persp-switch-to-buffer)
-
 (use-package! dired
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
@@ -438,6 +452,27 @@ capture was not aborted."
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "H" 'dired-hide-dotfiles-mode))
+(setq! delete-by-moving-to-trash t
+       trash-directory "~/.local/share/Trash/files/")
+(map! :leader
+      (:prefix ("d" . "dired")
+       :desc "Open dired" "d" #'dired
+       :desc "Dired jump to current" "j" #'dired-jump)
+      (:after dired
+       (:map dired-mode-map
+        :desc "Peep-dired image previews" "d p" #'peep-dired
+        :desc "Dired view file" "d v" #'dired-view-file)))
+(evil-define-key 'normal peep-dired-mode-map
+  (kbd "j") 'peep-dired-next-file
+  (kbd "k") 'peep-dired-prev-file)
+(add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+; --------------------------------------------------------------------------------------------
+;; - KeyBindings
+;; --------------------------------------------------------------------------------------------
+(map! "C-s" 'consult-line)
+(map! "C-M-l" 'consult-imenu)
+(map! "C-M-j" 'persp-switch-to-buffer)
+
 (map! :leader
       ;; file bind
       :desc "Org Agenda Common"
