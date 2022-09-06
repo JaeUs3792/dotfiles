@@ -63,3 +63,5 @@
 (package! beacon)
 (package! calfw)
 (package! calfw-org)
+(package! dashboard)
+(package! page-break-lines)

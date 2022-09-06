@@ -96,7 +96,7 @@
 ;; they are implemented.
 
 ;; --------------------------------------------------------------------------------------------
-;; -Transparency
+;; -Virtico
 ;; --------------------------------------------------------------------------------------------
 (if (display-graphic-p)
     (vertico-posframe-mode 1))
@@ -160,7 +160,45 @@ same directory as the org-buffer and insert a link to this file."
   "executes the given script within a powershell and returns its return value"
   (call-process "powershell.exe" nil nil nil
                 "-Command" (concat "& {" script "}")))
+;; --------------------------------------------------------------------------------------------
+;; - Dashboard
+;; --------------------------------------------------------------------------------------------
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  ;;(setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
+  (setq dashboard-center-content t) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 10)
+                          (bookmarks . 5)
+                          (projects . 10)))
+  (setq dashboard-set-footer t)
+  (setq dashboard-page-separator "\n\f\n")
+  (setq dashboard-set-navigator t)
+  ;; Format: "(icon title help action face prefix suffix)"
+  (setq dashboard-navigator-buttons
+        `(;; line1
+          ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+            "Github"
+            "Browse my Github"
+            (lambda (&rest _) (browse-url "https://github.com/JaeUs3792/")))
+           (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
+            "Homepage"
+            "Browse my Homepage"
+            (lambda (&rest _) (browse-url "https://jaeus.net")))
+           (,(all-the-icons-octicon "zap" :height 1.1 :v-adjust 0.0)
+            "Update"
+            "Doom upgrade"
+            (lambda (&rest _) (doom/upgrade)) warning))))
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+                                    (bookmarks . "book"))))
 
+(setq doom-fallback-buffer-name "*dashboard*")
+(after! dashboard
+  (page-break-lines-mode))
 ;; --------------------------------------------------------------------------------------------
 ;; - Rainbow delimiter mode for programming.
 ;; --------------------------------------------------------------------------------------------
