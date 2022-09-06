@@ -43,8 +43,8 @@
 (if (display-graphic-p)
     ;;(setq doom-theme 'doom-palenight)
     ;;(setq doom-theme 'doom-monokai-pro)
-    (setq doom-theme 'doom-material)
-    ;;(setq doom-theme 'morning-star)
+    ;;(setq doom-theme 'doom-material)
+    (setq doom-theme 'morning-star)
     ;;(setq doom-theme 'doom-dracula)
     ;;(setq doom-theme 'doom-one)
     (setq doom-theme 'doom-gruvbox))
@@ -470,6 +470,8 @@ same directory as the org-buffer and insert a link to this file."
       ;; file bind
       :desc "Org Agenda Common"
       "oac" '(lambda () (interactive) (find-file (expand-file-name "~/org/agenda/agenda.org")))
+      :desc "Org Calendar"
+      "oc" 'cfw:open-org-calendar
       :desc "dOtfiles"
       "fo" '(:ignore t)
       :desc "doom config.el"
