@@ -43,8 +43,8 @@
 (if (display-graphic-p)
     ;;(setq doom-theme 'doom-palenight)
     ;;(setq doom-theme 'doom-monokai-pro)
-    ;;(setq doom-theme 'doom-material)
-    (setq doom-theme 'morning-star)
+    (setq doom-theme 'doom-material)
+    ;;(setq doom-theme 'morning-star)
     ;;(setq doom-theme 'doom-dracula)
     ;;(setq doom-theme 'doom-one)
     (setq doom-theme 'doom-gruvbox))
@@ -200,31 +200,23 @@ same directory as the org-buffer and insert a link to this file."
   (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
   (add-to-list 'org-structure-template-alist '("vh" . "src vhdl")))
 
-(defun my/org-colors-tomorrow-night ()
-  "Enable Tomorrow Night colors for Org headers."
-  (interactive)
-  (dolist
-      (face
-       '((org-level-1 1.7 "#81a2be" ultra-bold)
-         (org-level-2 1.6 "#b294bb" extra-bold)
-         (org-level-3 1.5 "#b5bd68" bold)
-         (org-level-4 1.4 "#e6c547" semi-bold)
-         (org-level-5 1.3 "#cc6666" normal)
-         (org-level-6 1.2 "#70c0ba" normal)
-         (org-level-7 1.1 "#b77ee0" normal)
-         (org-level-8 1.0 "#9ec400" normal)))
-    (set-face-attribute (nth 0 face) nil :font doom-variable-pitch-font :weight (nth 3 face) :height (nth 1 face) :foreground (nth 2 face)))
-    (set-face-attribute 'org-table nil :font doom-font :weight 'normal :height 1.0 :foreground "#bfafdf"))
 (after! org
   (setq! org-hide-emphasis-markers t)
    (setq org-superstar-item-bullet-alist
         '((?+ . ?➤)
           (?* . ?–)
           (?- . ?•)))
-   (my/org-colors-tomorrow-night)
+   (custom-set-faces!
+     '(org-level-1 :height 1.7  :weight ultra-bold)         ;; :foreground "#81a2be"
+     '(org-level-2 :height 1.6  :weight extra-bold)         ;; :foreground "#b294bb"
+     '(org-level-3 :height 1.5  :weight bold)               ;; :foreground "#b5bd68"
+     '(org-level-4 :height 1.4  :weight semi-bold)          ;; :foreground "#e6c547"
+     '(org-level-5 :height 1.3  :weight normal)             ;; :foreground "#cc6666"
+     '(org-level-6 :height 1.2  :weight normal)             ;; :foreground "#70c0ba"
+     '(org-level-7 :height 1.1  :weight normal)             ;; :foreground "#b77ee0"
+     '(org-level-8 :height 1.0  :weight normal))            ;; :foreground "#9ec400"
    (custom-set-faces!
      '(org-document-title :height 2.0)))
-
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Roam
 ;; --------------------------------------------------------------------------------------------
