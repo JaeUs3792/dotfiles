@@ -59,3 +59,7 @@
 (package! org-super-agenda)
 (package! graphviz-dot-mode)
 (package! vertico-posframe)
+(package! peep-dired)
+(package! beacon)
+(package! calfw)
+(package! calfw-org)
