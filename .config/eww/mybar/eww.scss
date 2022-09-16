@@ -1,0 +1,107 @@
+// EWW.SCSS 
+// GLOBALS
+*{
+    all: unset;
+    font-family: "Ubuntu Mono";
+    font-weight: 400;
+}
+
+.bars {
+    background-image: url("images/background.png");
+    background-color: #120010;
+    border: 3px solid #ff1475;
+    border-radius: 20px;
+}
+
+
+// LEFT MODULES
+// Workspaces
+.workspaces {
+    margin-left: 5px;
+    margin-top: -2px;
+}
+.workspace_buttons {
+    font-family: Hack;
+    font-size: 15px;
+    margin: 0 2 0 1;
+    color: #e6dafc;
+}
+
+
+// CENTER MODULES
+.center_icons {
+    margin-right: 3px;
+    margin-left: 15px;
+}
+.center_labels {
+    font-size: 15px;
+    margin-bottom: -3px;
+    margin-top: 1px;
+    color: #e6dafc;
+}
+.center_revealers {
+    border-radius: 5px;
+    background-color: rgba(18,0,16, 1);
+    min-height: 32px;
+    border: solid 2px #ffff01;
+    color: #3081c6;
+}
+.center_info scale trough highlight {
+    all: unset;
+    background: #FFCD01;
+    border-radius: 10px;            
+    border: solid 2px #ffff01;
+}
+.center_info scale trough {
+    all: unset;
+    background-color: rgba(230,218,252, 0.4);
+    border-radius: 10px;
+    min-width: 110px;
+    min-height: 10px;               
+}
+
+
+// RIGHT MODULES 
+.power_button {
+    color: #ff4c5f;
+    font-size: 20px;
+    margin: -10 15 -10 15;
+}
+.time_box {
+    margin-top: -10px;
+    margin-bottom: -10px;
+}
+.time {
+    color: #e6dafc;
+    font-size: 25px;
+    margin-bottom: -20px;
+    margin-top: -20px;
+}
+.date {
+    color: #e6dafc;
+    font-size: 25px;
+    margin-top: 8px;
+}
+.kb_box {
+    color: #e6dafc;
+    font-size: 15px;
+    margin-left: 2px;
+    margin-right: 10px;
+}
+.kb_button_us {
+    font-size: 15px;
+    margin-bottom: -3px;
+}
+.kb_button_es {
+    font-size: 15px;
+    margin-top: -2px;
+}
+.cal {
+    font-size: 16px;
+    background-color: #120010;
+    background-image: url("images/background.png");
+    color: #e6dafc;
+    border: 5px solid #ff1475;
+    border-radius: 0 0 20 20;
+    padding: 10px;
+}
