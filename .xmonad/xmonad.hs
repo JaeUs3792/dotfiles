@@ -1,7 +1,7 @@
--- Base
+  -- Base
 import XMonad
 import System.Directory
-import System.IO (hPutStrLn)
+import System.IO (hClose, hPutStr, hPutStrLn)
 import System.Exit (exitSuccess)
 import qualified XMonad.StackSet as W
 
@@ -27,10 +27,13 @@ import qualified Data.Map as M
     -- Hooks
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
 import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
-import XMonad.Hooks.ManageDocks (avoidStruts, docksEventHook, manageDocks, ToggleStruts(..))
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
+import XMonad.Hooks.ManageDocks (avoidStruts, docks, manageDocks, ToggleStruts(..))
+import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, doCenterFloat)
 import XMonad.Hooks.ServerMode
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
+import XMonad.Hooks.WindowSwallowing
 import XMonad.Hooks.WorkspaceHistory
 
     -- Layouts
@@ -45,7 +48,6 @@ import XMonad.Layout.ThreeColumns
     -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.LimitWindows (limitWindows, increaseLimit, decreaseLimit)
-import XMonad.Layout.Magnifier
 import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
 import XMonad.Layout.NoBorders
@@ -55,15 +57,55 @@ import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
+import XMonad.Layout.WindowNavigation
 import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
 import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
    -- Utilities
 import XMonad.Util.Dmenu
-import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeysP, mkNamedKeymap)
+import XMonad.Util.NamedActions
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
+
+   -- ColorScheme module (SET ONLY ONE!)
+      -- Possible choice are:
+      -- DoomOne
+      -- Dracula
+      -- GruvboxDark
+      -- MonokaiPro
+      -- Nord
+      -- OceanicNext
+      -- Palenight
+      -- SolarizedDark
+      -- SolarizedLight
+      -- TomorrowNight
+
+colorScheme = "doom-one"
+
+colorBack = "#282c34"
+colorFore = "#bbc2cf"
+
+color01 = "#1c1f24"
+color02 = "#ff6c6b"
+color03 = "#98be65"
+color04 = "#da8548"
+color05 = "#51afef"
+color06 = "#c678dd"
+color07 = "#5699af"
+color08 = "#202328"
+color09 = "#5b6268"
+color10 = "#da8548"
+color11 = "#4db5bd"
+color12 = "#ecbe7b"
+color13 = "#3071db"
+color14 = "#a9a1e1"
+color15 = "#46d9ff"
+color16 = "#dfdfdf"
+
+colorTrayer :: String
+colorTrayer = "--tint 0x282c34"
 
 myFont :: String
 myFont = "xft:NanumGothic:regular:size=9:antialias=true:hinting=true"
@@ -130,83 +172,7 @@ myStartupHook = do
   -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
   setWMName "LG3D"
 
-myColorizer :: Window -> Bool -> X (String, String)
-myColorizer = colorRangeFromClassName
-                  (0x28,0x2c,0x34) -- lowest inactive bg
-                  (0x28,0x2c,0x34) -- highest inactive bg
-                  (0xc7,0x92,0xea) -- active bg
-                  (0xc0,0xa7,0x9a) -- inactive fg
-                  (0x28,0x2c,0x34) -- active fg
-
--- gridSelect menu layout
-mygridConfig :: p -> GSConfig Window
-mygridConfig colorizer = (buildDefaultGSConfig myColorizer)
-    { gs_cellheight   = 40
-    , gs_cellwidth    = 200
-    , gs_cellpadding  = 6
-    , gs_originFractX = 0.5
-    , gs_originFractY = 0.5
-    , gs_font         = myFont
-    }
-
-spawnSelected' :: [(String, String)] -> X ()
-spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
-    where conf = def
-                   { gs_cellheight   = 40
-                   , gs_cellwidth    = 200
-                   , gs_cellpadding  = 6
-                   , gs_originFractX = 0.5
-                   , gs_originFractY = 0.5
-                   , gs_font         = myFont
-                   }
-
-myAppGrid = [ --("Audacity", "audacity")
-                 --, ("Deadbeef", "deadbeef")
-                 ("Vivaldi", "vivaldi-stable")
-                 , ("Emacs", "emacsclient -c -a emacs")
-                 , ("Firefox", "firefox")
-                 , ("Vivaldi", "vivaldi-stable")
-                 --, ("Geany", "geany")
-                 --, ("Geary", "geary")
-                 , ("Gimp", "gimp")
-                 , ("Kdenlive", "kdenlive")
-                 , ("LibreOffice Impress", "loimpress")
-                 , ("LibreOffice Writer", "lowriter")
-                 --, ("OBS", "obs")
-                 , ("PCManFM", "pcmanfm")
-                 ]
-
-myScratchPads :: [NamedScratchpad]
-myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
-                , NS "mocp" spawnMocp findMocp manageMocp
-                , NS "calculator" spawnCalc findCalc manageCalc
-                ]
-  where
-    spawnTerm  = myTerminal ++ " -t scratchpad"
-    findTerm   = title =? "scratchpad"
-    manageTerm = customFloating $ W.RationalRect l t w h
-               where
-                 h = 0.9
-                 w = 0.9
-                 t = 0.95 -h
-                 l = 0.95 -w
-    spawnMocp  = myTerminal ++ " -t mocp -e mocp"
-    findMocp   = title =? "mocp"
-    manageMocp = customFloating $ W.RationalRect l t w h
-               where
-                 h = 0.9
-                 w = 0.9
-                 t = 0.95 -h
-                 l = 0.95 -w
-    spawnCalc  = "qalculate-gtk"
-    findCalc   = className =? "Qalculate-gtk"
-    manageCalc = customFloating $ W.RationalRect l t w h
-               where
-                 h = 0.5
-                 w = 0.4
-                 t = 0.75 -h
-                 l = 0.70 -w
-
+-- Theme for showWName which prints current workspace when you change workspaces.
 --Makes setting the spacingRaw simpler to write. The spacingRaw module adds a configurable amount of space around windows.
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
@@ -220,53 +186,52 @@ mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 -- limitWindows n sets maximum number of windows displayed for layout.
 -- mySpacing n sets the gap size around the windows.
 tall     = renamed [Replace "tall"]
+           $ limitWindows 5
            $ smartBorders
+           $ windowNavigation
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
-           $ limitWindows 12
-           $ mySpacing 8
-           $ ResizableTall 1 (3/100) (1/2) []
-magnify  = renamed [Replace "magnify"]
-           $ smartBorders
-           $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
-           $ magnifier
-           $ limitWindows 12
            $ mySpacing 8
            $ ResizableTall 1 (3/100) (1/2) []
 monocle  = renamed [Replace "monocle"]
            $ smartBorders
+           $ windowNavigation
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
-           $ limitWindows 20 Full
+           $ Full
 floats   = renamed [Replace "floats"]
            $ smartBorders
-           $ limitWindows 20 simplestFloat
+           $ simplestFloat
 grid     = renamed [Replace "grid"]
+           $ limitWindows 9
            $ smartBorders
+           $ windowNavigation
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
-           $ limitWindows 12
            $ mySpacing 8
            $ mkToggle (single MIRROR)
            $ Grid (16/10)
 spirals  = renamed [Replace "spirals"]
+           $ limitWindows 9
            $ smartBorders
+           $ windowNavigation
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
            $ mySpacing' 8
            $ spiral (6/7)
 threeCol = renamed [Replace "threeCol"]
+           $ limitWindows 7
            $ smartBorders
+           $ windowNavigation
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
-           $ limitWindows 7
            $ ThreeCol 1 (3/100) (1/2)
 threeRow = renamed [Replace "threeRow"]
+           $ limitWindows 7
            $ smartBorders
+           $ windowNavigation
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
-           $ limitWindows 7
            -- Mirror takes a layout and rotates it by 90 degrees.
            -- So we are applying Mirror to the ThreeCol layout.
            $ Mirror
@@ -282,38 +247,40 @@ wideAccordion  = renamed [Replace "wideAccordion"]
 
 -- setting colors for tabs layout and tabs sublayout.
 myTabTheme = def { fontName            = myFont
-                 , activeColor         = "#46d9ff"
-                 , inactiveColor       = "#313846"
-                 , activeBorderColor   = "#46d9ff"
-                 , inactiveBorderColor = "#282c34"
-                 , activeTextColor     = "#282c34"
-                 , inactiveTextColor   = "#d0d0d0"
+                 , activeColor         = color15
+                 , inactiveColor       = color08
+                 , activeBorderColor   = color15
+                 , inactiveBorderColor = colorBack
+                 , activeTextColor     = colorBack
+                 , inactiveTextColor   = color16
                  }
 
 -- Theme for showWName which prints current workspace when you change workspaces.
 myShowWNameTheme :: SWNConfig
 myShowWNameTheme = def
-    { swn_font              = "xft:Ubuntu:bold:size=60"
-    , swn_fade              = 1.0
-    , swn_bgcolor           = "#1c1f24"
-    , swn_color             = "#ffffff"
-    }
+  { swn_font              = "xft:Ubuntu:bold:size=60"
+  , swn_fade              = 1.0
+  , swn_bgcolor           = "#1c1f24"
+  , swn_color             = "#ffffff"
+  }
 
 -- The layout hook
-myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts floats
+myLayoutHook = avoidStruts
+               $ mouseResize
+               $ windowArrange
+               $ T.toggleLayouts floats
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
-             where
-               myDefaultLayout =     withBorder myBorderWidth tall
-                                 ||| magnify
-                                 ||| noBorders monocle
-                                 ||| floats
-                                 ||| noBorders tabs
-                                 ||| grid
-                                 ||| spirals
-                                 ||| threeCol
-                                 ||| threeRow
-                                 ||| tallAccordion
-                                 ||| wideAccordion
+  where
+    myDefaultLayout = withBorder myBorderWidth tall
+                                           ||| noBorders monocle
+                                           ||| floats
+                                           ||| noBorders tabs
+                                           ||| grid
+                                           ||| spirals
+                                           ||| threeCol
+                                           ||| threeRow
+                                           ||| tallAccordion
+                                           ||| wideAccordion
 
 myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
 -- myWorkspaces = [" dev ", " www ", " sys ", " doc ", " vbox ", " chat ", " mus ", " vid ", " gfx "]
@@ -347,7 +314,7 @@ myManageHook = composeAll
      --, className =? "VirtualBox Manager" --> doShift  ( myWorkspaces !! 4 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
      , (className =? "steam" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
-     ] <+> namedScratchpadManageHook myScratchPads
+     ]
 
 myKeys :: [(String, X ())]
 myKeys =
@@ -397,8 +364,8 @@ myKeys =
         --, ("M-S-i", incScreenSpacing 4)         -- Increase screen spacing
 
     -- Grid Select (CTR-g followed by a key)
-        , ("M-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
-        , ("M-g t", goToSelected $ mygridConfig myColorizer)  -- goto selected window
+        --, ("M-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
+        --, ("M-g t", goToSelected $ mygridConfig myColorizer)  -- goto selected window
         --, ("C-g b", bringSelected $ mygridConfig myColorizer) -- bring selected window
 
     -- Windows navigation
@@ -495,8 +462,7 @@ main = do
         , handleEventHook    = serverModeEventHookCmd
                                <+> serverModeEventHook
                                <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn)
-                               <+> docksEventHook
-                               <+> fullscreenEventHook  -- this does NOT work right if using multi-monitors!
+                               -- <+> fullscreenEventHook  -- this does NOT work right if using multi-monitors!
         , modMask            = myModMask
         , terminal           = myTerminal
         , startupHook        = myStartupHook
@@ -505,7 +471,7 @@ main = do
         , borderWidth        = myBorderWidth
         , normalBorderColor  = myNormColor
         , focusedBorderColor = myFocusColor
-        , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
+        , logHook = dynamicLogWithPP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
               { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
                               -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 2
