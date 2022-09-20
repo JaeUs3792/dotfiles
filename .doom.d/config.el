@@ -47,7 +47,8 @@
     (setq doom-theme 'morning-star)
     ;;(setq doom-theme 'doom-dracula)
     ;;(setq doom-theme 'doom-one)
-    (setq doom-theme 'doom-gruvbox))
+    (setq doom-theme 'morning-star))
+    ;;(setq doom-theme 'doom-gruvbox))
 (unless (display-graphic-p)
   (xterm-mouse-mode))
 (beacon-mode 1)
@@ -118,6 +119,10 @@
          gvar/frame-transparency '(100 . 100)))))
 
 (global-set-key (kbd "C-c t") 'toggle-transparency)
+;; --------------------------------------------------------------------------------------------
+;; - Language Server Client
+;; --------------------------------------------------------------------------------------------
+(use-package! eglot)
 
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Paste Clipboard image for windows, in linux(use org-screenshot-take)
@@ -373,6 +378,12 @@ same directory as the org-buffer and insert a link to this file."
 (use-package! org-fancy-priorities
   :config
   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
+;; --------------------------------------------------------------------------------------------
+;; - Org Graphviz
+;; --------------------------------------------------------------------------------------------
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((dot . t)))
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Mode extra configuration
 ;; --------------------------------------------------------------------------------------------
