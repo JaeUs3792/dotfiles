@@ -153,6 +153,14 @@ same directory as the org-buffer and insert a link to this file."
       (user-error
        "Error pasting the image, make sure you have an image in the clipboard!"))
     ))
+(defun my-org-remove-link-and-trash-linked-file ()
+  "Remove `org-mode' link at point and trash linked file."
+  (interactive)
+  (let* ((link (org-element-context))
+         (path (org-element-property :path link)))
+    (move-file-to-trash path)
+    (delete-region (org-element-property :begin link)
+                   (org-element-property :end link))))
 
 (defun as-windows-path (unix-path)
   "Takes a unix path and returns a matching WSL path"
