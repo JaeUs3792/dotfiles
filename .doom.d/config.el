@@ -119,6 +119,12 @@
          gvar/frame-transparency '(100 . 100)))))
 
 (global-set-key (kbd "C-c t") 'toggle-transparency)
+(defun my/org-roam-rg-search ()
+  "Search org-roam directory using consult-ripgrep. With live-preview."
+  (interactive)
+  (let ((consult-ripgrep-command "rg --null --ignore-case --type org --line-buffered --color=always --max-columns=500 --no-heading --line-number . -e ARG OPTS"))
+        (consult-ripgrep org-roam-directory)))
+
 ;; --------------------------------------------------------------------------------------------
 ;; - Language Server Client
 ;; --------------------------------------------------------------------------------------------
@@ -557,4 +563,6 @@ same directory as the org-buffer and insert a link to this file."
       :desc "org roam ui open"
       "nru" 'org-roam-ui-open
       :desc "org roam find tag:project"
-      "nrp" 'my/org-roam-find-project)
+      "nrp" 'my/org-roam-find-project
+      :desc "org roam find with ripgrep (preview)"
+      "nrg" 'my/org-roam-rg-search)
