@@ -65,4 +65,4 @@
 (package! calfw-org)
 (package! dashboard)
 (package! page-break-lines)
-(package! eglot)
+;;(package! eglot)
