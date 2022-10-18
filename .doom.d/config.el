@@ -274,6 +274,8 @@ same directory as the org-buffer and insert a link to this file."
      '(org-level-8 :height 1.0  :weight normal))            ;; :foreground "#9ec400"
    (custom-set-faces!
      '(org-document-title :height 2.0)))
+(setq org-use-sub-superscripts '{})
+(setq org-export-with-sub-superscripts '{})
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Roam
 ;; --------------------------------------------------------------------------------------------
