@@ -128,8 +128,17 @@
 ;; --------------------------------------------------------------------------------------------
 ;; - Language Server Client
 ;; --------------------------------------------------------------------------------------------
-(use-package! eglot)
+;;(use-package! eglot)
 
+;;(dap-register-debug-template "Rust::GDB Run Configuration"
+;;                             (list :type "gdb"
+;;                                   :request "launch"
+;;                                   :name "GDB::Run"
+;;                           :gdbpath "rust-gdb"
+;;                                   :target nil
+;;                                   :cwd nil))
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Paste Clipboard image for windows, in linux(use org-screenshot-take)
 ;; --------------------------------------------------------------------------------------------
