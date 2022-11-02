@@ -1,6 +1,7 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 (setq-default tab-width 4)
 (defvaralias 'c-basic-offset 'tab-width)
+(setq! indent-tabs-mode t)
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 (setq default-input-method "korean-hangul")
@@ -41,14 +42,8 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (if (display-graphic-p)
-    ;;(setq doom-theme 'doom-palenight)
-    ;;(setq doom-theme 'doom-monokai-pro)
-    ;;(setq doom-theme 'doom-material)
-    (setq doom-theme 'morning-star)
-    ;;(setq doom-theme 'doom-dracula)
-    ;;(setq doom-theme 'doom-one)
-    (setq doom-theme 'morning-star))
-    ;;(setq doom-theme 'doom-gruvbox))
+    (setq doom-theme 'doom-palenight)
+  (setq doom-theme 'doom-gruvbox))
 (unless (display-graphic-p)
   (xterm-mouse-mode))
 (beacon-mode 1)
@@ -99,8 +94,8 @@
 ;; --------------------------------------------------------------------------------------------
 ;; -Virtico
 ;; --------------------------------------------------------------------------------------------
-(if (display-graphic-p)
-    (vertico-posframe-mode 1))
+;;(if (display-graphic-p)
+;;    (vertico-posframe-mode 1))
 ;; --------------------------------------------------------------------------------------------
 ;; -Transparency
 ;; --------------------------------------------------------------------------------------------
@@ -112,31 +107,22 @@
     (set-frame-parameter
      nil 'alpha
      (if (eql (cond ((numberp alpha) alpha)
-                    ((numberp (cdr alpha)) (cdr alpha))
-                    ;; Also handle undocumented (<active> <inactive>) form.
-                    ((numberp (cadr alpha)) (cadr alpha)))
-              100)
-         gvar/frame-transparency '(100 . 100)))))
+		    ((numberp (cdr alpha)) (cdr alpha))
+		    ;; Also handle undocumented (<active> <inactive>) form.
+		    ((numberp (cadr alpha)) (cadr alpha)))
+	      100)
+	 gvar/frame-transparency '(100 . 100)))))
 
 (global-set-key (kbd "C-c t") 'toggle-transparency)
 (defun my/org-roam-rg-search ()
   "Search org-roam directory using consult-ripgrep. With live-preview."
   (interactive)
   (let ((consult-ripgrep-command "rg --null --ignore-case --type org --line-buffered --color=always --max-columns=500 --no-heading --line-number . -e ARG OPTS"))
-        (consult-ripgrep org-roam-directory)))
+    (consult-ripgrep org-roam-directory)))
 
 ;; --------------------------------------------------------------------------------------------
 ;; - Language Server Client
 ;; --------------------------------------------------------------------------------------------
-;;(use-package! eglot)
-
-;;(dap-register-debug-template "Rust::GDB Run Configuration"
-;;                             (list :type "gdb"
-;;                                   :request "launch"
-;;                                   :name "GDB::Run"
-;;                           :gdbpath "rust-gdb"
-;;                                   :target nil
-;;                                   :cwd nil))
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
 ;; --------------------------------------------------------------------------------------------
@@ -147,24 +133,24 @@
 same directory as the org-buffer and insert a link to this file."
   (interactive)
   (let* ((target-file
-          (concat
-           (make-temp-name
-            (concat "~/org/images/"
-                    (f-filename buffer-file-name)
-                    "_"
-                    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
-         (wsl-path
-          (concat (as-windows-path(file-name-directory target-file))
-                  "/"
-                  (file-name-nondirectory target-file)))
-         (ps-script
-          (concat "(Get-Clipboard -Format image).Save('" wsl-path "')")))
+	  (concat
+	   (make-temp-name
+	    (concat "~/org/images/"
+		    (f-filename buffer-file-name)
+		    "_"
+		    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+	 (wsl-path
+	  (concat (as-windows-path(file-name-directory target-file))
+		  "/"
+		  (file-name-nondirectory target-file)))
+	 (ps-script
+	  (concat "(Get-Clipboard -Format image).Save('" wsl-path "')")))
 
     (powershell ps-script)
 
     (if (file-exists-p target-file)
-        (progn (insert (concat "[[" target-file "]]"))
-               (org-display-inline-images))
+	(progn (insert (concat "[[" target-file "]]"))
+	       (org-display-inline-images))
       (user-error
        "Error pasting the image, make sure you have an image in the clipboard!"))
     ))
@@ -172,10 +158,10 @@ same directory as the org-buffer and insert a link to this file."
   "Remove `org-mode' link at point and trash linked file."
   (interactive)
   (let* ((link (org-element-context))
-         (path (org-element-property :path link)))
+	 (path (org-element-property :path link)))
     (move-file-to-trash path)
     (delete-region (org-element-property :begin link)
-                   (org-element-property :end link))))
+		   (org-element-property :end link))))
 
 (defun as-windows-path (unix-path)
   "Takes a unix path and returns a matching WSL path"
@@ -187,7 +173,7 @@ same directory as the org-buffer and insert a link to this file."
 (defun powershell (script)
   "executes the given script within a powershell and returns its return value"
   (call-process "powershell.exe" nil nil nil
-                "-Command" (concat "& {" script "}")))
+		"-Command" (concat "& {" script "}")))
 ;; --------------------------------------------------------------------------------------------
 ;; - Dashboard
 ;; --------------------------------------------------------------------------------------------
@@ -199,30 +185,30 @@ same directory as the org-buffer and insert a link to this file."
   ;;(setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
   (setq dashboard-center-content t) ;; set to 't' for centered content
   (setq dashboard-items '((recents . 10)
-                          (bookmarks . 5)
-                          (projects . 10)))
+			  (bookmarks . 5)
+			  (projects . 10)))
   (setq dashboard-set-footer t)
   (setq dashboard-page-separator "\n\f\n")
   (setq dashboard-set-navigator t)
   ;; Format: "(icon title help action face prefix suffix)"
   (setq dashboard-navigator-buttons
-        `(;; line1
-          ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-            "Github"
-            "Browse my Github"
-            (lambda (&rest _) (browse-url "https://github.com/JaeUs3792/")))
-           (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
-            "Homepage"
-            "Browse my Homepage"
-            (lambda (&rest _) (browse-url "https://jaeus.net")))
-           (,(all-the-icons-octicon "zap" :height 1.1 :v-adjust 0.0)
-            "Update"
-            "Doom upgrade"
-            (lambda (&rest _) (doom/upgrade)) warning))))
+	`(;; line1
+	  ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+	    "Github"
+	    "Browse my Github"
+	    (lambda (&rest _) (browse-url "https://github.com/JaeUs3792/")))
+	   (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
+	    "Homepage"
+	    "Browse my Homepage"
+	    (lambda (&rest _) (browse-url "https://jaeus.net")))
+	   (,(all-the-icons-octicon "zap" :height 1.1 :v-adjust 0.0)
+	    "Update"
+	    "Doom upgrade"
+	    (lambda (&rest _) (doom/upgrade)) warning))))
   :config
   (dashboard-setup-startup-hook)
   (dashboard-modify-heading-icons '((recents . "file-text")
-                                    (bookmarks . "book"))))
+				    (bookmarks . "book"))))
 
 (setq doom-fallback-buffer-name "*dashboard*")
 (after! dashboard
@@ -268,21 +254,21 @@ same directory as the org-buffer and insert a link to this file."
 
 (after! org
   (setq! org-hide-emphasis-markers t)
-   (setq org-superstar-item-bullet-alist
-        '((?+ . ?➤)
-          (?* . ?–)
-          (?- . ?•)))
-   (custom-set-faces!
-     '(org-level-1 :height 1.7  :weight ultra-bold)         ;; :foreground "#81a2be"
-     '(org-level-2 :height 1.6  :weight extra-bold)         ;; :foreground "#b294bb"
-     '(org-level-3 :height 1.5  :weight bold)               ;; :foreground "#b5bd68"
-     '(org-level-4 :height 1.4  :weight semi-bold)          ;; :foreground "#e6c547"
-     '(org-level-5 :height 1.3  :weight normal)             ;; :foreground "#cc6666"
-     '(org-level-6 :height 1.2  :weight normal)             ;; :foreground "#70c0ba"
-     '(org-level-7 :height 1.1  :weight normal)             ;; :foreground "#b77ee0"
-     '(org-level-8 :height 1.0  :weight normal))            ;; :foreground "#9ec400"
-   (custom-set-faces!
-     '(org-document-title :height 2.0)))
+  (setq org-superstar-item-bullet-alist
+	'((?+ . ?➤)
+	  (?* . ?–)
+	  (?- . ?•)))
+  (custom-set-faces!
+    '(org-level-1 :height 1.7  :weight ultra-bold :foreground "#81a2be")         ;; :foreground "#81a2be"
+    '(org-level-2 :height 1.6  :weight extra-bold :foreground "#b294bb")         ;; :foreground "#b294bb"
+    '(org-level-3 :height 1.5  :weight bold :foreground "#b5bd68")               ;; :foreground "#b5bd68"
+    '(org-level-4 :height 1.4  :weight semi-bold :foreground "#e6c547")          ;; :foreground "#e6c547"
+    '(org-level-5 :height 1.3  :weight normal :foreground "#cc6666")             ;; :foreground "#cc6666"
+    '(org-level-6 :height 1.2  :weight normal :foreground "#70c0ba")             ;; :foreground "#70c0ba"
+    '(org-level-7 :height 1.1  :weight normal :foreground "#b77ee0")             ;; :foreground "#b77ee0"
+    '(org-level-8 :height 1.0  :weight normal :foreground "#9ec400"))            ;; :foreground "#9ec400"
+  (custom-set-faces!
+    '(org-document-title :height 2.0)))
 (setq org-use-sub-superscripts '{})
 (setq org-export-with-sub-superscripts '{})
 ;; --------------------------------------------------------------------------------------------
@@ -290,9 +276,9 @@ same directory as the org-buffer and insert a link to this file."
 ;; --------------------------------------------------------------------------------------------
 (defun my/org-roam-list-notes-by-tag (tag-name)
   (mapcar #'org-roam-node-file
-          (seq-filter
-           (my/org-roam-filter-by-tag tag-name)
-           (org-roam-node-list))))
+	  (seq-filter
+	   (my/org-roam-filter-by-tag tag-name)
+	   (org-roam-node-list))))
 
 (defun my/org-roam-refresh-agenda-list ()
   (interactive)
@@ -362,38 +348,38 @@ same directory as the org-buffer and insert a link to this file."
   (my/org-roam-refresh-agenda-list))
 (setq org-agenda-custom-commands
       '(("z" "Org mode super agenda"
-          ((alltodo "" ((org-agenda-overriding-header "")
-                       (org-super-agenda-groups
-                        '((:name "Important"
-                                 :tag "Important"
-                                 :priority "A"
-                                 :order 6)
-                          (:name "Due Today"
-                                 :deadline today
-                                 :order 2)
-                          (:name "Due Soon"
-                                 :deadline future
-                                 :order 8)
-                          (:name "Overdue"
-                                 :deadline past
-                                 :order 7)
-                          (:name "Projects"
-                                 :tag "Project"
-                                 :order 14)
-                          (:name "To read"
-                                 :tag "Read"
-                                 :order 30)
-                          (:name "Waiting"
-                                 :todo "WAIT"
-                                 :order 20)
-                          (:name "Holding"
-                                 :todo "HOLD"
-                                 :order 21)
-                          (:name "trivial"
-                                 :priority<= "C"
-                                 :tag ("Trivial" "Unimportant")
-                                 :order 90)
-                          (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
+	 ((alltodo "" ((org-agenda-overriding-header "")
+		       (org-super-agenda-groups
+			'((:name "Important"
+			   :tag "Important"
+			   :priority "A"
+			   :order 6)
+			  (:name "Due Today"
+			   :deadline today
+			   :order 2)
+			  (:name "Due Soon"
+			   :deadline future
+			   :order 8)
+			  (:name "Overdue"
+			   :deadline past
+			   :order 7)
+			  (:name "Projects"
+			   :tag "Project"
+			   :order 14)
+			  (:name "To read"
+			   :tag "Read"
+			   :order 30)
+			  (:name "Waiting"
+			   :todo "WAIT"
+			   :order 20)
+			  (:name "Holding"
+			   :todo "HOLD"
+			   :order 21)
+			  (:name "trivial"
+			   :priority<= "C"
+			   :tag ("Trivial" "Unimportant")
+			   :order 90)
+			  (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
 (after! org
   ;;(setq org-todo-keywords
   ;;    '((sequence "TODO(t@/!)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)")))
@@ -439,19 +425,19 @@ same directory as the org-buffer and insert a link to this file."
 ;; - Org Roam UI Mode
 ;; --------------------------------------------------------------------------------------------
 (use-package! websocket
-    :after org-roam)
+  :after org-roam)
 
 (use-package! org-roam-ui
-    :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-    ;;:hook (after-init . org-roam-ui-mode)
-    :config
-    (setq! org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil))
+  :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;:hook (after-init . org-roam-ui-mode)
+  :config
+  (setq! org-roam-ui-sync-theme t
+	 org-roam-ui-follow t
+	 org-roam-ui-update-on-save t
+	 org-roam-ui-open-on-start nil))
 ;; --------------------------------------------------------------------------------------------
 ;; - Org Publish
 ;; --------------------------------------------------------------------------------------------
@@ -459,13 +445,13 @@ same directory as the org-buffer and insert a link to this file."
 (setq org-export-with-broken-lilnks t)
 (setq org-publish-project-alist
       '(("jaeus.net"
-        :base-directory "~/org/www/"
-        :base-extension "org"
-        :publishing-directory "~/Projects/html/"
-        :recursive t
-        :publishing-function org-html-publish-to-html
-        :headline-levels 4
-        :auto-preamble t)))
+	 :base-directory "~/org/www/"
+	 :base-extension "org"
+	 :publishing-directory "~/Projects/html/"
+	 :recursive t
+	 :publishing-function org-html-publish-to-html
+	 :headline-levels 4
+	 :auto-preamble t)))
 ;; --------------------------------------------------------------------------------------------
 ;; - EPUB
 ;; --------------------------------------------------------------------------------------------
@@ -506,7 +492,7 @@ same directory as the org-buffer and insert a link to this file."
 (setq! verilog-case-indent 4)
 (setq! verilog-cexp-indent 4)
 (setq! verilog-indent-lists nil)
-; --------------------------------------------------------------------------------------------
+					; --------------------------------------------------------------------------------------------
 ;; - Dired
 ;; --------------------------------------------------------------------------------------------
 (use-package! dired
@@ -526,14 +512,14 @@ same directory as the org-buffer and insert a link to this file."
        :desc "Open dired" "d" #'dired
        :desc "Dired jump to current" "j" #'dired-jump)
       (:after dired
-       (:map dired-mode-map
-        :desc "Peep-dired image previews" "d p" #'peep-dired
-        :desc "Dired view file" "d v" #'dired-view-file)))
+	      (:map dired-mode-map
+	       :desc "Peep-dired image previews" "d p" #'peep-dired
+	       :desc "Dired view file" "d v" #'dired-view-file)))
 (evil-define-key 'normal peep-dired-mode-map
   (kbd "j") 'peep-dired-next-file
   (kbd "k") 'peep-dired-prev-file)
 (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
-; --------------------------------------------------------------------------------------------
+					; --------------------------------------------------------------------------------------------
 ;; - KeyBindings
 ;; --------------------------------------------------------------------------------------------
 (map! "C-s" 'consult-line)
