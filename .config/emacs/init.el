@@ -57,10 +57,13 @@ package.el or Guix depending on the value of
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(doom-themes)))
+ '(package-selected-packages '(auctex doom-themes)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:font "Fira Code 12"))))
+ '(fixed-pitch ((t (:inherit (default)))))
+ '(fixed-pitch-serif ((t (:inherit (default)))))
+ '(variable-pitch ((t (:font "Ubuntu Mono 12")))))
