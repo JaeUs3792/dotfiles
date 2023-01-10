@@ -2,15 +2,15 @@
 (crafted-package-install-package 'dashboard)
 
 (require 'dashboard)
+(setq dashboard-projects-backend "project-el")
 (setq dashboard-set-heading-icons t)
 (setq dashboard-set-file-icons t)
-(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
 (setq dashboard-center-content t) ;; set to 't' for centered content
 (setq dashboard-items '((recents . 10)
                         (bookmarks . 5)))
-                        ;;(projects . 10))) // TODO after projectile
+                        ;;(projects . 10))) ;; TODO after projectile
 (setq dashboard-set-footer t)
-(setq dashboard-page-separator "\n\n\f\n\n")
+(setq dashboard-page-separator "\n\f\n")
 (setq dashboard-set-navigator t)
 ;; Format: "(icon title help action face prefix suffix)"
 (setq dashboard-navigator-buttons
@@ -28,11 +28,10 @@
 (dashboard-modify-heading-icons '((recents . "file-text")
                                   (bookmarks . "book")))
 
-(setq doom-fallback-buffer-name "*dashboard*")
+(setq dashboard-startup-banner (expand-file-name "logo.png" user-emacs-directory))
 
 (require 'linum)
 (add-hook 'dashboard-mode-hook page-break-lines-mode)
-
 
 (provide 'custom-dashboard)
 ;;; custom-dashboard.el end here
