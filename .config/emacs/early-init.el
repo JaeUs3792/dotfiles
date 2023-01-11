@@ -5,8 +5,7 @@
 (customize-set-variable 'load-prefer-newer t)
 
 (setq package-enable-at-startup nil
-      inhibit-startup-message t
-      frame-resize-pixelwise t
+      inhibit-startup-message t frame-resize-pixelwise t
       package-native-compile t)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)

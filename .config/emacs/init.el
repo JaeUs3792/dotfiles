@@ -49,6 +49,9 @@
       trash-directory "~/.local/share/Trash/files/")
 (setq undo-limit 100000000
       auto-save-default t)
+(use-package no-littering)
+(setq auto-save-file-name-transforms
+      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
 (set-default-coding-systems 'utf-8)
 (customize-set-variable 'large-file-warning-threshold 100000000) ;; 100MB

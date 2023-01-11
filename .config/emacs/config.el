@@ -10,3 +10,5 @@
 
 (require 'custom-ui)
 (require 'custom-keybindings)
+(require 'custom-org)
+(require 'custom-completion)
