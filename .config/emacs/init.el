@@ -1,69 +1,67 @@
 ;;; init.el -*- lexical-binding: t; -*-
-
-;; Profile emacs startup
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (message "Crafted Emacs loaded in %s."
+            (message "Crafted Emacs loaded in %s"
                      (emacs-init-time))))
 
-(when (eq crafted-package-system 'package)
-  (crafted-package-initialize))
+(require 'package)
+(add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(setq straight-use-package-by-default t)
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
-;; Add the modules folder to the load path
 (add-to-list 'load-path (expand-file-name "modules/" user-emacs-directory))
 
-;; Set default coding system (especially for Windows)
+(add-hook 'before-save-hook #'whitespace-cleanup)
+
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+
+(column-number-mode)
+(global-display-line-numbers-mode t)
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                dired-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+(setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory))))
+(setq-default custom-file (expand-file-name ".custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+(setq delete-by-moving-to-trash t
+      trash-directory "~/.local/share/Trash/files/")
+(setq undo-limit 100000000
+      auto-save-default t)
+
 (set-default-coding-systems 'utf-8)
-(customize-set-variable 'visible-bell 1)  ; turn off beeps, make them flash!
-(customize-set-variable 'large-file-warning-threshold 100000000) ;; change to ~100 MB
+(customize-set-variable 'large-file-warning-threshold 100000000) ;; 100MB
 
-(defun crafted-ensure-package (package &optional args)
-  "Ensure that PACKAGE is installed on the system, either via
-package.el or Guix depending on the value of
-`crafted-prefer-guix-packages'."
-  (if crafted-prefer-guix-packages
-      (unless (featurep package)
-        (message "Package '%s' does not appear to be installed by Guix: " package))
-    (crafted-package-install-package package)))
-
-;; Check the system used
-(defconst ON-LINUX   (eq system-type 'gnu/linux))
-(defconst ON-MAC     (eq system-type 'darwin))
-(defconst ON-BSD     (or ON-MAC (eq system-type 'berkeley-unix)))
+(defconst ON-LINUX (eq system-type 'gnu/linux))
+(defconst ON-MAC (eq system-type 'darwin))
 (defconst ON-WINDOWS (memq system-type '(cygwin windows-nt ms-dos)))
 
+(setq gc-cons-threshold (* 2 1024 1024)) ; decreasing the threshold to 2MB
 
-;; Defines the user configuration var and etc folders
-;; and ensure they exist.
-(defvar crafted-config-etc-directory (expand-file-name "etc/" crafted-config-path)
-  "The user's configuration etc/ folder.")
-(defvar crafted-config-var-directory (expand-file-name "var/" crafted-config-path)
-  "The user's configuration var/ folder.")
-(mkdir crafted-config-etc-directory t)
-(mkdir crafted-config-var-directory t)
+(defvar my-config-file (expand-file-name "config.el" user-emacs-directory))
+(when (file-exists-p my-config-file)
+  (load my-config-file nil 'nomessage))
 
-;; Find the user configuration file
-(defvar crafted-config-file (expand-file-name "config.el" "~/.config/emacs")
-  "The user's configuration file.")
-;; Load the user configuration file if it exists
-(when (file-exists-p crafted-config-file)
-  (load crafted-config-file nil 'nomessage))
-
-;; Make GC pauses faster by decreasing the threshold.
-(setq gc-cons-threshold (* 2 1000 1000))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages '(auctex doom-themes)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:font "Fira Code 12"))))
- '(fixed-pitch ((t (:inherit (default)))))
- '(fixed-pitch-serif ((t (:inherit (default)))))
- '(variable-pitch ((t (:font "Ubuntu Mono 12")))))
+;;(defalias 'yes-or-no-p 'y-or-n-p)
+(global-auto-revert-mode t)
