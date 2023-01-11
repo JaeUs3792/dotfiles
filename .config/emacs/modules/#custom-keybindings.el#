@@ -1,0 +1,23 @@
+(use-package which-key
+  :defer t
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.5))
+
+(use-package general
+  :init
+  (general-auto-unbind-keys)
+  :config
+  (general-evil-setup t)
+  (general-create-definer ju/leader-key-def
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC"))
+
+(ju/leader-key-def
+ "." 'find-file)
+ ;; Buffer)
+
+(provide 'custom-keybindings)
+;;; custom-keybindings.el ends here
