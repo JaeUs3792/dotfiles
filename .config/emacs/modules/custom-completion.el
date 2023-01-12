@@ -8,6 +8,15 @@
   (vertico-cycle t)
   :init
   (vertico-mode))
+(use-package vertico-posframe
+  :disabled
+  :after vertico
+  :ensure t
+  :init
+  (setq vertico-posframe-parameters
+        `((left-fringe . 8)
+          (right-fringe . 8) (alpha . 100)))
+  (vertico-posframe-mode 1))
 
 (use-package marginalia
   :after vertico

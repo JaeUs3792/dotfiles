@@ -4,26 +4,26 @@
 Emacs Configuration for emacs 29.50
 ** Early Init
 #+begin_src emacs-lisp :tangle ~/.config/emacs/early-init.el
-;;; early-init.el -*- lexical-binding: t; -*-
-;; garbage collection
-(setq gc-cons-threshold (* 50 1024 1024)) ;; 50MB
-;; prefers newest version of a file
-(customize-set-variable 'load-prefer-newer t)
+  ;;; early-init.el -*- lexical-binding: t; -*-
+  ;; garbage collection
+  (setq gc-cons-threshold (* 50 1024 1024)) ;; 50MB
+  ;; prefers newest version of a file
+  (customize-set-variable 'load-prefer-newer t)
 
-(setq package-enable-at-startup nil
-      inhibit-startup-message t frame-resize-pixelwise t
-      package-native-compile t)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(set-fringe-mode 10)
-(menu-bar-mode -1)
-;;(blink-cursor-mode 0)
+  (setq package-enable-at-startup nil
+        inhibit-startup-message t frame-resize-pixelwise t
+        package-native-compile t)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (set-fringe-mode 10)
+  (menu-bar-mode -1)
+  ;;(blink-cursor-mode 0)
 
-;; initial load with blue theme
-(load-theme 'deeper-blue)
+  ;; initial load with blue theme
+  (load-theme 'deeper-blue)
 
-(customize-set-variable 'initial-major-mode 'fundamental-mode)
+  (customize-set-variable 'initial-major-mode 'fundamental-mode)
 
 #+end_src
 
@@ -135,7 +135,7 @@ Emacs Configuration for emacs 29.50
 (when (file-exists-p my-config-file)
   (load my-config-file nil 'nomessage))
 
-;;(defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answer t)
 (global-auto-revert-mode t)
 
 #+end_src
@@ -145,11 +145,19 @@ Emacs Configuration for emacs 29.50
   (setq user-full-name "JaeYoo-Im"
         user-mail-address "cpu3792@gmail.com")
 
-  (add-to-list 'default-frame-alist `(font . "Fira Code Retina"))
-  (set-face-attribute 'default nil :font "Fira Code Retina" :height 12)
-  (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height 12)
-  (set-face-attribute 'variable-pitch nil :font "Fira Code Retina" :height 12 :weight 'regular)
-  (set-fontset-font t 'hangul (font-spec :family "NanumGothic" :height 12))
+  ;;(add-to-list 'default-frame-alist `(font . "Fira Code Retina"))
+  ;;(set-face-attribute 'default nil :font "Fira Code Retina" :height 12)
+  ;;(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height 12)
+  ;;(set-face-attribute 'variable-pitch nil :font "Fira Code Retina" :height 12 :weight 'regular)
+  ;;(set-fontset-font t 'hangul (font-spec :family "NanumGothic" :height 12))
+
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (custom-set-faces
+               `(default ((t (:font "Fira Code Retina 12"))))
+               `(fixed-pitch ((t (:inherit (default)))))
+               `(fixed-pitch-serif ((t (:inherit (default)))))
+               `(variable-pitch ((t (:font "Ubuntu 12")))))))
 
   (require 'custom-ui)
   (require 'custom-keybindings)
@@ -454,7 +462,7 @@ https://github.com/SystemCrafter/crafted-emacs
     :init
     (vertico-mode))
   (use-package vertico-posframe
-    ;;:disabled
+    :disabled
     :after vertico
     :ensure t
     :init
@@ -625,6 +633,6 @@ Quick Action in minibuffer
 
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-(provide 'custom-org)
-;;; custom-org.el ends here
+  (provide 'custom-org)
+  ;;; custom-org.el ends here
 #+end_src
