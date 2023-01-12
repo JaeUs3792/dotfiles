@@ -148,13 +148,13 @@ Emacs Configuration for emacs 29.50
 
   (setq default-input-method "korean-hangul")
 
-  ;;(add-hook 'emacs-startup-hook
-  ;;          (lambda ()
-  ;;            (custom-set-faces
-  ;;             `(default ((t (:font "Fira Code 10"))))
-  ;;             `(fixed-pitch ((t (:inherit (default)))))
-  ;;             `(fixed-pitch-serif ((t (:inherit (default)))))
-  ;;             `(variable-pitch ((t (:font "Ubuntu 10")))))))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (custom-set-faces
+               `(default ((t (:font "Fira Code 10"))))
+               `(fixed-pitch ((t (:inherit (default)))))
+               `(fixed-pitch-serif ((t (:inherit (default)))))
+               `(variable-pitch ((t (:font "Ubuntu 10")))))))
 
   (require 'custom-ui)
   (require 'custom-keybindings)
@@ -163,6 +163,7 @@ Emacs Configuration for emacs 29.50
   (require 'custom-completion)
   (require 'custom-projects)
   (require 'custom-workspaces)
+  (require 'custom-latex)
   (require 'custom-extra)
 #+end_src
 
@@ -330,7 +331,7 @@ emacs built-in package config
   (use-package visual-fill-column
     :hook
     (org-mode . write-room-enable)
-    (text-mode . write-room-enable)
+    ;;(text-mode . write-room-enable)
     (markdown-mode . write-room-enable)
     (nov-mode . write-room-enable))
 #+end_src
@@ -704,11 +705,11 @@ Quick Action in minibuffer
     (add-to-list 'completion-at-point-functions #'cape-file)
     ;;(add-to-list 'completion-at-point-functions #'cape-history)
     ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
-    ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+    (add-to-list 'completion-at-point-functions #'cape-tex)
     ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
     ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
     ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-    ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
+    (add-to-list 'completion-at-point-functions #'cape-ispell)
     ;;(add-to-list 'completion-at-point-functions #'cape-dict)
     ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
@@ -821,7 +822,38 @@ get link from pdf,
     ;;; custom-workspaces.el ends here
 #+end_src
 *** Latex
-
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
+  ;;(use-package auctex)
+  ;;  :defer t
+  ;;  :straight (:build t)
+  ;;  :hook (tex-mode . lsp-deferred)
+  ;;  :hook (latex-mode . lsp-deferred)
+  ;;  :init
+  ;;  (setq TeX-command-default   (if (executable-find "latexmk") "LatexMk" "LaTeX")
+  ;;        TeX-engine            (if (executable-find "xetex")   'xetex    'default)
+  ;;        TeX-auto-save                     t
+  ;;        TeX-parse-self                    t
+  ;;        TeX-syntactic-comment             t
+  ;;        TeX-auto-local                    ".auctex-auto"
+  ;;        TeX-style-local                   ".auctex-style"
+  ;;        TeX-source-correlate-mode         t
+  ;;        TeX-source-correlate-method       'synctex
+  ;;        TeX-source-correlate-start-server nil
+  ;;        TeX-electric-sub-and-superscript  t
+  ;;        TeX-fill-break-at-separators      nil
+  ;;        TeX-save-query                    t)
+  ;;  :config
+  ;;  (setq TeX-master t)
+  ;;  (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 -H %s")
+  ;;  (add-hook 'TeX-mode-hook (lambda ()
+  ;;                             (setq ispell-parser          'tex
+  ;;                                   fill-nobreak-predicate (cons #'texmathp fill-nobreak-predicate))))
+  ;;  (add-hook 'TeX-mode-hook #'visual-line-mode)
+  ;;  (add-hook 'TeX-update-style-hook #'rainbow-delimiters-mode)
+    (use-package auctex
+      :straight (:build nil))
+    (use-package latex-preview-pane)
+#+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
   (provide 'custom-latex)
