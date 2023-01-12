@@ -66,5 +66,5 @@
 (when (file-exists-p my-config-file)
   (load my-config-file nil 'nomessage))
 
-;;(defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answer t)
 (global-auto-revert-mode t)

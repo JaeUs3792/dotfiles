@@ -1,0 +1,9 @@
+# generated from emacs.org
+
+
+# auto generated
+modules/
+eln-cache/
+elpa/
+straight/
+var/
