@@ -94,15 +94,16 @@ Emacs Configuration for emacs 29.50
   #+end_src
 **** Line number
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-(column-number-mode)
-(global-display-line-numbers-mode t)
-;; Disable line numbers for some modes
-(dolist (mode '(org-mode-hook
-                shell-mode-hook
-                treemacs-mode-hook
-                dired-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  nov-mode-hook
+                  shell-mode-hook
+                  treemacs-mode-hook
+                  dired-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
 *** Backup options
@@ -145,27 +146,103 @@ Emacs Configuration for emacs 29.50
   (setq user-full-name "JaeYoo-Im"
         user-mail-address "cpu3792@gmail.com")
 
-  ;;(add-to-list 'default-frame-alist `(font . "Fira Code Retina"))
-  ;;(set-face-attribute 'default nil :font "Fira Code Retina" :height 12)
-  ;;(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height 12)
-  ;;(set-face-attribute 'variable-pitch nil :font "Fira Code Retina" :height 12 :weight 'regular)
-  ;;(set-fontset-font t 'hangul (font-spec :family "NanumGothic" :height 12))
+  (setq default-input-method "korean-hangul")
 
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (custom-set-faces
-               `(default ((t (:font "Fira Code Retina 12"))))
-               `(fixed-pitch ((t (:inherit (default)))))
-               `(fixed-pitch-serif ((t (:inherit (default)))))
-               `(variable-pitch ((t (:font "Ubuntu 12")))))))
+  ;;(add-hook 'emacs-startup-hook
+  ;;          (lambda ()
+  ;;            (custom-set-faces
+  ;;             `(default ((t (:font "Fira Code 10"))))
+  ;;             `(fixed-pitch ((t (:inherit (default)))))
+  ;;             `(fixed-pitch-serif ((t (:inherit (default)))))
+  ;;             `(variable-pitch ((t (:font "Ubuntu 10")))))))
 
   (require 'custom-ui)
   (require 'custom-keybindings)
+  (require 'custom-default)
   (require 'custom-org)
   (require 'custom-completion)
+  (require 'custom-projects)
+  (require 'custom-workspaces)
+  (require 'custom-extra)
 #+end_src
 
 ** Module Lists
+*** Default
+emacs built-in package config
+**** Eshell
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
+(use-package eshell
+  :defer t
+  :straight (:type built-in :build t)
+  :config
+  (setq eshell-prompt-function
+        (lambda ()
+          (concat (abbreviate-file-name (eshell/pwd))
+                  (if (= (user-uid) 0) " # " " λ ")))
+        eshell-prompt-regexp "^[^#λ\n]* [#λ] "))
+#+end_src
+**** Dired
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
+  (use-package dired
+    :straight (:type built-in)
+    :ensure nil
+    :commands (dired dired-jump)
+    :bind (("C-x C-j" . dired-jump))
+    :custom ((dired-listing-switches "-agho --group-directories-first"))
+    :config
+    (evil-collection-define-key 'normal 'dired-mode-map
+      "h" 'dired-single-up-directory
+      "l" 'dired-single-buffer))
+  (autoload 'dired-omit-mode "dired-x")
+  (add-hook 'dired-load-hook
+            (lambda ()
+              (interactive)
+              (dired-hide-dotfiles--hide)))
+  ;;;; to use h,l key
+  (use-package dired-single
+    :commands (dired dired-jump))
+  ;;;; colorful dired
+  (use-package diredfl
+    :hook (dired-mode . diredfl-mode))
+  ;;;; from doom emacs
+  (defun +dired-enable-git-info-h ()
+    "Enable `dired-git-info-mode' in git repos."
+    (and (not (file-remote-p default-directory))
+         (locate-dominating-file "." ".git")
+         (dired-git-info-mode 1)))
+  (use-package dired-git-info)
+  (use-package diff-hl
+    :hook (dired-mode . diff-hl-dired-mode-unless-remote)
+    :hook (magit-post-refresh . diff-hl-magit-post-refresh)
+    :config
+    ;; use margin instead of fringe
+    (diff-hl-margin-mode))
+  (use-package dired-rsync
+    :config
+    (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
+  (use-package all-the-icons-dired
+    :hook (dired-mode . all-the-icons-dired-mode)
+    :config
+    ;; HACK Fixes #1929: icons break file renaming in Emacs 27+, because the icon
+    ;;      is considered part of the filename, so we disable icons while we're in
+    ;;      wdired-mode.
+    ;;(when EMACS27+
+    (defvar +wdired-icons-enabled -1))
+  (use-package dired-hide-dotfiles
+    :hook (dired-mode . dired-hide-dotfiles-mode)
+    :config
+    (evil-collection-define-key 'normal 'dired-mode-map
+      "H" 'dired-hide-dotfiles-mode))
+
+  ;; TODO check emacs29 updates
+  ;;(csetq dired-mouse-drag-files                   t
+  ;;       mouse-drag-and-drop-region-cross-program t)
+#+end_src
+**** Provide Modules
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
+  (provide 'custom-default)
+  ;;; custom-default.el ends here
+#+end_src
 *** UI
 **** Doom themes
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
@@ -218,14 +295,17 @@ Emacs Configuration for emacs 29.50
 #+end_src
 **** Modeline
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
-(use-package all-the-icons)
-(use-package doom-modeline
-  :init
-  (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-height 15
-        doom-modeline-env-version t
-        doom-modeline-indent-info t))
+  (use-package all-the-icons)
+  (use-package doom-modeline
+    :init
+    (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-height 15
+          doom-modeline-env-version t
+          doom-modeline-persp-name t
+          doom-modeline-persp-icon t
+          doom-modeline-display-default-persp-name t
+          doom-modeline-indent-info t))
 #+end_src
 **** Whiteroom
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
@@ -260,19 +340,19 @@ Emacs Configuration for emacs 29.50
   (use-package page-break-lines)
   (use-package dashboard
     :init      ;; tweak dashboard config before loading it
-    (setq dashboard-projects-backend "project-el"
+    (setq dashboard-projects-backend `project-el
           dashboard-set-heading-icons t
           dashboard-set-file-icons t
           dashboard-center-content t ;; set to 't' for centered content
           dashboard-items '((recents . 10)
-                            (bookmarks . 5))
-          ;;(projects . 10)))
+                            (bookmarks . 5)
+                            (projects . 10))
           dashboard-set-footer t
           dashboard-page-separator "\n\f\n"
-          dashboard-startup-banner 'logo ;; use standard emacs logo as banner
           dashboard-set-navigator t)
 
-    ;;(setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
+    (setq dashboard-startup-banner 'logo)
+    ;;(setq dashboard-startup-banner "~/.dotfiles/.config/emacs/logo3d.png")
     ;; Format: "(icon title help action face prefix suffix)"
     (setq dashboard-navigator-buttons
           `(;; line1
@@ -329,7 +409,14 @@ and ending with the extension of the requested TYPE."
 *** Key Bindings
 **** Global Key
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
-(global-set-key (kbd "C-c t") 'toggle-transparency)
+  (global-set-key (kbd "C-c t") 'toggle-transparency)
+
+  ;; Make ESC quit prompts
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  ;; this annoying binding.
+  (global-unset-key (kbd "C-j"))
+  (global-unset-key (kbd "C-k"))
+  (global-unset-key (kbd "S-SPC"))    ;; use only S-\
 #+end_src
 **** Which keys
 When you begin a keybind, whichkey will show you all keybinds you can follow the first one with in order to form a full keywords.
@@ -383,42 +470,75 @@ for managing keybindings.
     "h" '(:ignore t :which-key "hydra")
     "h t" '(hydra-text-scale/body :which-key "scale text")
     "h w" '(hydra-writeroom-scale/body :which-key "scale whiteroom")
-    "h a" '(hydra-modify-alpha/body :which-key "modify alpha background"))
+    "h a" '(hydra-modify-alpha/body :which-key "modify alpha background")
+    ;; Magit
+    "g" '(:ignore t :which-key "magit")
+    "g g" '(magit :which-key "magit")
+    ;; Project-el
+    "p" '(:ignore t :which-key "project")
+    "p ." '(project-switch-project :which-key "switch project")
+    "p p" '(project-switch-project :which-key "switch project")
+    "p c" '(project-compile :which-key "compile")
+    "p f" '(project-find-file :which-key "find-file")
+    "p k" '(project-kill-buffers :which-key "kill buffers")
+    "p s" '(project-shell :which-key "shell")
+    "p e" '(project-eshell :which-key "eshell")
+    "p d" '(project-dired :which-key "dired")
+    "p g" '(project-find-regexp :which-key "find-regexp")
+    ;; Workspace
+    "TAB" '(perspective-map :which-key "Perspective"))
 #+end_src
 **** Evil Mode
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
-(use-package evil
-  :after (general)
-  :init
-  (setq evil-want-integration t
-        evil-want-keybinding nil
-        evil-want-C-u-scroll t
-        evil-want-C-i-jump nil)
-  (require 'evil-vars)
-  (evil-set-undo-system 'undo-tree)
-  :config
-  (evil-mode 1)
-  (setq evil-want-fine-undo t) ; more granular undo with evil
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
-(use-package undo-tree
-  :init
-  (global-undo-tree-mode)
-  (setq undo-tree-visualizer-diff       t
-        undo-tree-visualizer-timestamps t)
-        undo-tree-auto-save-history     t
-        undo-tree-enable-undo-in-region t
-        undo-limit        (* 800 1024)
-        undo-strong-limit (* 12 1024 1024)
-        undo-outer-limit  (* 128 1024 1024))
+  (use-package evil
+    :after (general)
+    :init
+    (setq evil-want-integration t
+          evil-want-keybinding nil
+          evil-want-C-u-scroll t
+          evil-want-C-i-jump nil)
+    (require 'evil-vars)
+    (evil-set-undo-system 'undo-tree)
+    :config
+    (evil-mode 1)
+    (setq evil-want-fine-undo t) ; more granular undo with evil
+    (evil-set-initial-state 'messages-buffer-mode 'normal)
+    (evil-set-initial-state 'dashboard-mode 'normal))
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+  (use-package evil-nerd-commenter
+    :after evil
+    :config
+    (define-key evil-normal-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines)
+    (define-key evil-visual-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines))
+  (use-package evil-numbers
+    :after evil
+    :config
+    ;; unfortunately C-x is emacs common key binding.
+    (define-key evil-normal-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
+    (define-key evil-normal-state-map (kbd "g -") 'evil-numbers/dec-at-pt)
+    (define-key evil-visual-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
+    (define-key evil-visual-state-map (kbd "g -") 'evil-numbers/dec-at-pt))
+
+  (modify-syntax-entry ?_ "w")
+#+end_src
+**** Undo Tree
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
+  (use-package undo-tree
+    :init
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-diff       t
+          undo-tree-visualizer-timestamps t)
+          undo-tree-auto-save-history     t
+          undo-tree-enable-undo-in-region t
+          undo-limit        (* 800 1024)
+          undo-strong-limit (* 12 1024 1024)
+          undo-outer-limit  (* 128 1024 1024))
 #+end_src
 **** Hydra
-
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
   (use-package hydra
     :defer t)
@@ -431,13 +551,13 @@ for managing keybindings.
   (defhydra hydra-writeroom-scale (:timeout 4)
     "scale whiteroom"
     ("t" writeroom-increase-width "enlarge")
-    ("s" writeroom-decrease-width "shrink")
+    ("S" writeroom-decrease-width "shrink")
     ("r" writeroom-adjust-width "adjust")
     ("q" nil "finished" :exit t))
   (defhydra hydra-modify-alpha ()
-    ("q" nil :exit t)
-    ("s" my/decrease-frame-alpha-background)
-    ("t" my/increase-frame-alpha-background))
+    ("s" my/decrease-frame-alpha-background "decrease alpha")
+    ("t" my/increase-frame-alpha-background "increase alpha")
+    ("q" nil "finished" :exit t))
 #+end_src
 
 **** Provide Modules
@@ -484,17 +604,13 @@ annotations placed at the margin of the minibuffer
 #+end_src
 **** Consult
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-  ;;(defun my/get-project-root ()   ;; TODO after projectile
-  ;;  (when (fboundp 'projectile-project-root)
-  ;;    (projectile-project-root)))
-  (use-package consult
-    :demand t
-    :bind (("C-s" . consult-line)
-           :map minibuffer-local-map
-           ("C-r" . consult-history))
-    :custom
-    ;;(consult-project-root-function #'get-project-root)
-    (completion-in-region-function #'consult-completion-in-region))
+    (use-package consult
+      :demand t
+      :bind (("C-s" . consult-line)
+             :map minibuffer-local-map
+             ("C-r" . consult-history))
+      :custom
+      (completion-in-region-function #'consult-completion-in-region))
 #+end_src
 
 **** Orderless
@@ -630,9 +746,131 @@ Quick Action in minibuffer
   ;; :hook ((org-mode markdown-mode) . valign-mode)
   :custom ((valign-fancy-bar t)))
 #+end_src
-
+**** Org PDF tools
+get link from pdf,
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (use-package org-pdftools
+    :hook (org-mode . org-pdftools-setup-link))
+#+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (provide 'custom-org)
   ;;; custom-org.el ends here
+#+end_src
+*** Projects
+**** MAGIT
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
+  (use-package magit
+    :commands (magit-status magit-get-current-branch)
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+  (use-package magit-todos)
+  (use-package forge
+    :after magit)
+#+end_src
+**** Highlight TODOs
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
+  (use-package hl-todo
+    :hook (prog-mode . hl-todo-mode)
+    :config
+    (setq hl-todo-highlight-punctuation ":"
+          hl-todo-keyword-faces
+          `(;; For things that need to be done, just not today.
+            ("TODO" warning bold)
+            ;; For problems that will become bigger problems later if not
+            ;; fixed ASAP.
+            ("FIXME" error bold)
+            ;; For tidbits that are unconventional and not intended uses of the
+            ;; constituent parts, and may break in a future update.
+            ("HACK" font-lock-constant-face bold)
+            ;; For things that were done hastily and/or hasn't been thoroughly
+            ;; tested. It may not even be necessary!
+            ("REVIEW" font-lock-keyword-face bold)
+            ;; For especially important gotchas with a given implementation,
+            ;; directed at another user other than the author.
+            ("NOTE" success bold)
+            ;; For things that just gotta go and will soon be gone.
+            ("DEPRECATED" font-lock-doc-face bold)
+            ;; For a known bug that needs a workaround
+            ("BUG" error bold)
+            ;; For warning about a problematic or misguiding code
+            ("XXX" font-lock-constant-face bold))))
+#+end_src
+**** Provide Modules
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
+  (provide 'custom-projects)
+  ;;; custom-projects.el ends here
+#+end_src
+*** Workspaces
+**** Perspective
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-workspaces.el
+  (use-package perspective
+    :demand t
+    :bind (("C-M-j" . consult-buffer)
+           ("C-M-k" . persp-switch)
+           ("C-M-n" . persp-next)
+           ("C-x k" . persp-kill-buffer*))
+    :custom
+    (persp-initial-frame-name "Main")
+    (persp-mode-prefix-key (kbd "C-c p"))
+    :config
+    ;; Running `persp-mode' multiple times resets the perspective list...
+    (unless (equal persp-mode t)
+      (persp-mode)))
+  (provide 'custom-workspaces)
+    ;;; custom-workspaces.el ends here
+#+end_src
+*** Latex
+
+**** Provide Modules
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
+  (provide 'custom-latex)
+  ;;; custom-latex.el ends here
+#+end_src
+*** Extra
+**** Helpful
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key)
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . describe-variable)
+    ([remap describe-key] . helpful-key))
+#+end_src
+
+**** PDF Tool
+enhanced PDF viewer on emacs
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (use-package pdf-tools
+    :straight t
+    :config
+    (pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-width)
+    (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+    :custom
+    (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
+#+end_src
+**** PDF view restore
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (use-package pdf-view-restore
+    :after pdf-tools
+    :defer t
+    :hook (pdf-view-mode . pdf-view-restore-mode)
+    :config
+    (setq pdf-view-restore-filename (expand-file-name ".tmp/pdf-view-restore"
+                                                      user-emacs-directory)))
+#+end_src
+**** Nov
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (use-package nov
+    :mode ("\\.epub\\'" . nov-mode))
+#+end_src
+**** Provide Modules
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (provide 'custom-extra)
+  ;;; custom-extra.el ends here
 #+end_src
