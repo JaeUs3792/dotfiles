@@ -1,5 +1,5 @@
 # generated from emacs.org
-
+*.el
 
 # auto generated
 modules/
@@ -7,3 +7,4 @@ eln-cache/
 elpa/
 straight/
 var/
+.tmp/

@@ -16,7 +16,7 @@ alias emd="emacs --daemon"
 alias emdk="emacsclient --eval '(kill-emacs)'"
 alias em="emacsclient -c -a 'emacs'"
 alias emt="emacsclient -c -a 'emacs -nw'"
-alias emtangle="emacs --batch -eval '(require 'org)' --eval '(org-babel-tangle-file \"~/.config/emacs/emacs.org\")'"
+alias emtangle="emacs --batch -eval \"(require 'org)\" --eval '(org-babel-tangle-file \"~/.config/emacs/emacs.org\")'"
 #neovim to vi
 alias vi=nvim
 #pacman unlock
