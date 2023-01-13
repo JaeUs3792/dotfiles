@@ -162,9 +162,9 @@ Emacs Configuration for emacs 29.50
   (require 'custom-org)
   (require 'custom-completion)
   (require 'custom-projects)
-  (require 'custom-workspaces)
-  (require 'custom-latex)
-  (require 'custom-extra)
+  ;;(require 'custom-workspaces)
+  ;;(require 'custom-latex)
+  ;;(require 'custom-extra)
 #+end_src
 
 ** Module Lists
@@ -411,6 +411,7 @@ and ending with the extension of the requested TYPE."
 **** Global Key
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
   (global-set-key (kbd "C-c t") 'toggle-transparency)
+  (global-set-key (kbd "C-M-j") 'consult-buffer)
 
   ;; Make ESC quit prompts
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -485,9 +486,7 @@ for managing keybindings.
     "p s" '(project-shell :which-key "shell")
     "p e" '(project-eshell :which-key "eshell")
     "p d" '(project-dired :which-key "dired")
-    "p g" '(project-find-regexp :which-key "find-regexp")
-    ;; Workspace
-    "TAB" '(perspective-map :which-key "Perspective"))
+    "p g" '(project-find-regexp :which-key "find-regexp"))
 #+end_src
 **** Evil Mode
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
@@ -803,9 +802,32 @@ get link from pdf,
   ;;; custom-projects.el ends here
 #+end_src
 *** Workspaces
+**** Tabspace
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-workspaces.el
+  (use-package tabspaces
+    :disabled
+    ;; use this next line only if you also use straight, otherwise ignore it.
+    :straight (:type git :host github :repo "mclear-tools/tabspaces")
+    :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+    :commands (tabspaces-switch-or-create-workspace
+               tabspaces-open-or-create-project-and-workspace)
+    :custom
+    (tabspaces-use-filtered-buffers-as-default t)
+    (tabspaces-default-tab "Default")
+    (tabspaces-remove-to-default t)
+    (tabspaces-include-buffers '("*scratch*"))
+    ;; sessions
+    (tabspaces-session t)
+    (tabspaces-session-auto-restore t)
+    :config
+    (ju/leader-key-def
+      "TAB" '(tabspaces-command-map :which-key "tabspaces-command-map")))
+#+end_src
+
 **** Perspective
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-workspaces.el
   (use-package perspective
+    :disabled
     :demand t
     :bind (("C-M-j" . consult-buffer)
            ("C-M-k" . persp-switch)
@@ -815,6 +837,8 @@ get link from pdf,
     (persp-initial-frame-name "Main")
     (persp-mode-prefix-key (kbd "C-c p"))
     :config
+    ;;(ju/leader-key-def
+      ;;"TAB" '(perspective-command-map :which-key "tabspaces-command-map"))
     ;; Running `persp-mode' multiple times resets the perspective list...
     (unless (equal persp-mode t)
       (persp-mode)))
@@ -826,8 +850,6 @@ get link from pdf,
   ;;(use-package auctex)
   ;;  :defer t
   ;;  :straight (:build t)
-  ;;  :hook (tex-mode . lsp-deferred)
-  ;;  :hook (latex-mode . lsp-deferred)
   ;;  :init
   ;;  (setq TeX-command-default   (if (executable-find "latexmk") "LatexMk" "LaTeX")
   ;;        TeX-engine            (if (executable-find "xetex")   'xetex    'default)
@@ -850,9 +872,9 @@ get link from pdf,
   ;;                                   fill-nobreak-predicate (cons #'texmathp fill-nobreak-predicate))))
   ;;  (add-hook 'TeX-mode-hook #'visual-line-mode)
   ;;  (add-hook 'TeX-update-style-hook #'rainbow-delimiters-mode)
-    (use-package auctex
-      :straight (:build nil))
-    (use-package latex-preview-pane)
+  (use-package auctex
+    :defer t)
+  (use-package latex-preview-pane)
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
@@ -877,14 +899,7 @@ get link from pdf,
 **** PDF Tool
 enhanced PDF viewer on emacs
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package pdf-tools
-    :straight t
-    :config
-    (pdf-tools-install)
-    (setq-default pdf-view-display-size 'fit-width)
-    (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-    :custom
-    (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
+  (use-package pdf-tools)
 #+end_src
 **** PDF view restore
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
