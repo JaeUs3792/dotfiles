@@ -57,6 +57,9 @@ Emacs Configuration for emacs 29.50
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
+(straight-use-package '(use-package :build t))
+(setq use-package-always-ensure t)
+
 #+end_src
 *** Add other modules
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -163,8 +166,8 @@ Emacs Configuration for emacs 29.50
   (require 'custom-completion)
   (require 'custom-projects)
   ;;(require 'custom-workspaces)
-  ;;(require 'custom-latex)
-  ;;(require 'custom-extra)
+  (require 'custom-latex)
+  (require 'custom-extra)
 #+end_src
 
 ** Module Lists
@@ -764,11 +767,16 @@ get link from pdf,
     :commands (magit-status magit-get-current-branch)
     :custom
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-  (use-package magit-todos)
+  (use-package magit-todos
+    :after (magit todo)
+    :config
+    (setq magit-todos-ignore-case t))
   (use-package forge
     :after magit)
 #+end_src
 **** Highlight TODOs
+
+***** TODO test
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
   (use-package hl-todo
     :hook (prog-mode . hl-todo-mode)
@@ -837,8 +845,8 @@ get link from pdf,
     (persp-initial-frame-name "Main")
     (persp-mode-prefix-key (kbd "C-c p"))
     :config
-    ;;(ju/leader-key-def
-      ;;"TAB" '(perspective-command-map :which-key "tabspaces-command-map"))
+    (ju/leader-key-def
+      "TAB" '(perspective-map :which-key "perspective"))
     ;; Running `persp-mode' multiple times resets the perspective list...
     (unless (equal persp-mode t)
       (persp-mode)))
@@ -846,36 +854,63 @@ get link from pdf,
     ;;; custom-workspaces.el ends here
 #+end_src
 *** Latex
+**** AUCTEX
+writing and formatting tex file in Emacs.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-  ;;(use-package auctex)
-  ;;  :defer t
-  ;;  :straight (:build t)
-  ;;  :init
-  ;;  (setq TeX-command-default   (if (executable-find "latexmk") "LatexMk" "LaTeX")
-  ;;        TeX-engine            (if (executable-find "xetex")   'xetex    'default)
-  ;;        TeX-auto-save                     t
-  ;;        TeX-parse-self                    t
-  ;;        TeX-syntactic-comment             t
-  ;;        TeX-auto-local                    ".auctex-auto"
-  ;;        TeX-style-local                   ".auctex-style"
-  ;;        TeX-source-correlate-mode         t
-  ;;        TeX-source-correlate-method       'synctex
-  ;;        TeX-source-correlate-start-server nil
-  ;;        TeX-electric-sub-and-superscript  t
-  ;;        TeX-fill-break-at-separators      nil
-  ;;        TeX-save-query                    t)
-  ;;  :config
-  ;;  (setq TeX-master t)
-  ;;  (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 -H %s")
-  ;;  (add-hook 'TeX-mode-hook (lambda ()
-  ;;                             (setq ispell-parser          'tex
-  ;;                                   fill-nobreak-predicate (cons #'texmathp fill-nobreak-predicate))))
-  ;;  (add-hook 'TeX-mode-hook #'visual-line-mode)
-  ;;  (add-hook 'TeX-update-style-hook #'rainbow-delimiters-mode)
   (use-package auctex
-    :defer t)
+    :defer t
+    :init
+    (setq TeX-command-default   (if (executable-find "latexmk") "LatexMk" "LaTeX")
+          TeX-engine            (if (executable-find "xetex")   'xetex    'default)
+          TeX-auto-save                     t
+          TeX-parse-self                    t
+          TeX-syntactic-comment             t
+          TeX-auto-local                    ".auctex-auto"
+          TeX-style-local                   ".auctex-style"
+          TeX-source-correlate-mode         t
+          TeX-source-correlate-method       'synctex
+          TeX-source-correlate-start-server nil
+          TeX-electric-sub-and-superscript  t
+          TeX-fill-break-at-separators      nil
+          TeX-save-query                    t)
+    :config
+    (setq TeX-master t)
+    (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 -H %s")
+    (add-hook 'TeX-mode-hook (lambda ()
+                               (setq ispell-parser          'tex
+                                     fill-nobreak-predicate (cons #'texmathp fill-nobreak-predicate))))
+    (add-hook 'TeX-mode-hook #'visual-line-mode)
+    (add-hook 'TeX-update-style-hook #'rainbow-delimiters-mode))
+#+end_src
+**** Cdlatex
+speed-up insertion of environments and math templates.
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
+(use-package cdlatex
+  :defer t
+  :after auctex
+  :hook (LaTeX-mode . cdlatex-mode)
+  :hook (org-mode   . org-cdlatex-mode)
+  :config
+  (setq cdlatex-use-dollar-to-ensure-math nil)
+  :general
+  (phundrak/major-leader-key
+    :packages 'cdlatex
+    :keymaps 'cdlatex-mode-map
+    "$" nil
+    "(" nil
+    "{" nil
+    "[" nil
+    "|" nil
+    "<" nil
+    "^" nil
+    "_" nil
+    [(control return)] nil))
+#+end_src
+**** Preview pane
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
   (use-package latex-preview-pane)
 #+end_src
+** TODO gddg
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
   (provide 'custom-latex)
