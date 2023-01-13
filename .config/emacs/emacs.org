@@ -313,17 +313,16 @@ emacs built-in package config
 #+end_src
 **** Whiteroom
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
-  (use-package writeroom-mode
-    :disabled
-    :defer t
-    :straight (:build t)
-    :init (global-writeroom-mode 1)
-    :config
-    (setq writeroom-width             100
-          writeroom-fullscreen-effect nil
-          writeroom-maximize-window   nil
-          writeroom-mode-line         t
-          writeroom-major-modes       '(text-mode org-mode markdown-mode nov-mode Info-mode)))
+  ;;(use-package writeroom-mode
+  ;;  :defer t
+  ;;  :straight (:build t)
+  ;;  :init (global-writeroom-mode 1)
+  ;;  :config
+  ;;  (setq writeroom-width             100
+  ;;        writeroom-fullscreen-effect nil
+  ;;        writeroom-maximize-window   nil
+  ;;        writeroom-mode-line         t
+  ;;        writeroom-major-modes       '(text-mode org-mode markdown-mode nov-mode Info-mode)))
 #+end_src
 **** Visual Fill Column
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
@@ -584,15 +583,15 @@ https://github.com/SystemCrafter/crafted-emacs
     (vertico-cycle t)
     :init
     (vertico-mode))
-  (use-package vertico-posframe
-    :disabled
-    :after vertico
-    :ensure t
-    :init
-    (setq vertico-posframe-parameters
-          `((left-fringe . 8)
-            (right-fringe . 8) (alpha . 100)))
-    (vertico-posframe-mode 1))
+  ;;(use-package vertico-posframe
+    ;;:disabled
+    ;;:after vertico
+    ;;:ensure t
+    ;;:init
+    ;;(setq vertico-posframe-parameters
+          ;;`((left-fringe . 8)
+            ;;(right-fringe . 8) (alpha . 100)))
+    ;;(vertico-posframe-mode 1))
 #+end_src
 **** Marginalia
 annotations placed at the margin of the minibuffer
@@ -812,45 +811,45 @@ get link from pdf,
 *** Workspaces
 **** Tabspace
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-workspaces.el
-  (use-package tabspaces
-    :disabled
-    ;; use this next line only if you also use straight, otherwise ignore it.
-    :straight (:type git :host github :repo "mclear-tools/tabspaces")
-    :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
-    :commands (tabspaces-switch-or-create-workspace
-               tabspaces-open-or-create-project-and-workspace)
-    :custom
-    (tabspaces-use-filtered-buffers-as-default t)
-    (tabspaces-default-tab "Default")
-    (tabspaces-remove-to-default t)
-    (tabspaces-include-buffers '("*scratch*"))
-    ;; sessions
-    (tabspaces-session t)
-    (tabspaces-session-auto-restore t)
-    :config
-    (ju/leader-key-def
-      "TAB" '(tabspaces-command-map :which-key "tabspaces-command-map")))
+  ;;(use-package tabspaces
+  ;;  :disabled
+  ;;  ;; use this next line only if you also use straight, otherwise ignore it.
+  ;;  :straight (:type git :host github :repo "mclear-tools/tabspaces")
+  ;;  :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+  ;;  :commands (tabspaces-switch-or-create-workspace
+  ;;             tabspaces-open-or-create-project-and-workspace)
+  ;;  :custom
+  ;;  (tabspaces-use-filtered-buffers-as-default t)
+  ;;  (tabspaces-default-tab "Default")
+  ;;  (tabspaces-remove-to-default t)
+  ;;  (tabspaces-include-buffers '("*scratch*"))
+  ;;  ;; sessions
+  ;;  (tabspaces-session t)
+  ;;  (tabspaces-session-auto-restore t)
+  ;;  :config
+  ;;  (ju/leader-key-def
+  ;;    "TAB" '(tabspaces-command-map :which-key "tabspaces-command-map")))
 #+end_src
 
 **** Perspective
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-workspaces.el
-  (use-package perspective
-    :disabled
-    :demand t
-    :bind (("C-M-j" . consult-buffer)
-           ("C-M-k" . persp-switch)
-           ("C-M-n" . persp-next)
-           ("C-x k" . persp-kill-buffer*))
-    :custom
-    (persp-initial-frame-name "Main")
-    (persp-mode-prefix-key (kbd "C-c p"))
-    :config
-    (ju/leader-key-def
-      "TAB" '(perspective-map :which-key "perspective"))
-    ;; Running `persp-mode' multiple times resets the perspective list...
-    (unless (equal persp-mode t)
-      (persp-mode)))
-  (provide 'custom-workspaces)
+  ;;(use-package perspective
+  ;;  :disabled
+  ;;  :demand t
+  ;;  :bind (("C-M-j" . consult-buffer)
+  ;;         ("C-M-k" . persp-switch)
+  ;;         ("C-M-n" . persp-next)
+  ;;         ("C-x k" . persp-kill-buffer*))
+  ;;  :custom
+  ;;  (persp-initial-frame-name "Main")
+  ;;  (persp-mode-prefix-key (kbd "C-c p"))
+  ;;  :config
+  ;;  (ju/leader-key-def
+  ;;    "TAB" '(perspective-map :which-key "perspective"))
+  ;;  ;; Running `persp-mode' multiple times resets the perspective list...
+  ;;  (unless (equal persp-mode t)
+  ;;    (persp-mode)))
+  ;;(provide 'custom-workspaces)
     ;;; custom-workspaces.el ends here
 #+end_src
 *** Latex
