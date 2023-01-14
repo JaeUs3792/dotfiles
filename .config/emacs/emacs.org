@@ -600,6 +600,9 @@ for managing keybindings.
         undo-limit        (* 800 1024)
         undo-strong-limit (* 12 1024 1024)
         undo-outer-limit  (* 128 1024 1024))
+  (undo-tree-history-directory-alist
+   `(("." . ,(expand-file-name (file-name-as-directory "undo-tree-hist")
+                               user-emacs-directory))))
   (global-undo-tree-mode)
 #+end_src
 **** Hydra
