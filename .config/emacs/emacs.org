@@ -46,26 +46,28 @@ Emacs Configuration for emacs 29.50
 #+end_src
 *** Package Function
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-      (require 'package)
-    (add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-    (customize-set-variable 'package-archive-priorities
-                            '(("gnu"    . 99)   ; prefer GNU packages
-                              ("nongnu" . 80)   ; use non-gnu packages if
-                                                ; not found in GNU elpa
-                              ("stable" . 70)   ; prefer "released" versions
-                                                ; from melpa
-                              ("melpa"  . 0)))  ; if all else fails, get it
-                                                ; from melpa
-    ;; make sure the elpa/ folder exists after setting it above.
-    (unless (file-exists-p package-user-dir)
-      (mkdir package-user-dir t))
+  (require 'package)
+  (add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+  (customize-set-variable 'package-archive-priorities
+                          '(("gnu"    . 99)   ; prefer GNU packages
+                            ("nongnu" . 80)   ; use non-gnu packages if
+                                          ; not found in GNU elpa
+                            ("stable" . 70)   ; prefer "released" versions
+                                          ; from melpa
+                            ("melpa"  . 0)))  ; if all else fails, get it
+                                          ; from melpa
+  ;; make sure the elpa/ folder exists after setting it above.
+  (unless (file-exists-p package-user-dir)
+    (mkdir package-user-dir t))
 
   (defmacro usr-package-install (package)
     `(unless (package-installed-p ,package) (package-install ,package)))
   (package-initialize)
 
-    ;;; init.el ends here
+  (if (version< emacs-version "29")
+      (usr-package-install 'use-package)) ;; <emacs29
+  ;;; init.el ends here
 #+end_src
 *** Add other modules
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -137,6 +139,8 @@ Emacs Configuration for emacs 29.50
 
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (unless (display-graphic-p)
+    (xterm-mouse-mode))
 #+end_src
 * Modules Selection module
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
@@ -163,7 +167,7 @@ Emacs Configuration for emacs 29.50
   ;;(require 'custom-workspaces)
   (require 'custom-latex)
   (require 'custom-languages)
-  ;;(require 'custom-extra)
+  (require 'custom-extra)
 
   ;;; config.el ends here
 #+end_src
@@ -243,12 +247,13 @@ emacs built-in package config
   (usr-package-install 'dired-rsync)
   (usr-package-install 'all-the-icons-dired)
   (usr-package-install 'dired-hide-dotfiles)
+  (usr-package-install 'peep-dired)
   ;; dired default
   (setq dired-listing-switches "-agho --group-directories-first")
   (evil-collection-define-key 'normal 'dired-mode-map
-    "h" 'dired-single-up-directory
-    "l" 'dired-single-buffer)
-  (require 'dired-single)
+    "h" 'dired-up-directory ;dired-single-up-directory
+    "l" 'dired-find-file) ;dired-single-buffer)
+  ;;(require 'dired-single)
   ;;(use-package dired-single
   ;;  :commands (dired dired-jump))
   ;; colorful
@@ -278,6 +283,12 @@ emacs built-in package config
   ;; TODO: check emacs29 updates
   ;;(csetq dired-mouse-drag-files                   t
   ;;       mouse-drag-and-drop-region-cross-program t)
+
+  ; peep dired
+  (evil-define-key 'normal peep-dired-mode-map
+    (kbd "j") 'peep-dired-next-file
+    (kbd "k") 'peep-dired-prev-file)
+  (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
@@ -391,6 +402,8 @@ emacs built-in package config
   ;;(setq dashboard-startup-banner 'logo)
   (setq dashboard-center-content t)
   (setq dashboard-week-agenda t)
+  (setq dashboard-set-footer t)
+  (setq dashboard-page-separator "\n\f\n")
   (setq dashboard-agenda-time-string-format "%d/%m/%Y %A %H:%M")
   (setq dashboard-items '((recents . 10)
                           (agenda . 5)
@@ -408,7 +421,11 @@ emacs built-in package config
            (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
             "Homepage"
             "Browse my Homepage"
-            (lambda (&rest _) (browse-url "https://jaeus.net"))))))
+            (lambda (&rest _) (browse-url "https://jaeus.net")))
+           (,(all-the-icons-octicon "zap" :height 1.1 :v-adjust 0.0)
+            "Referesh"
+            "Referesh Packages"
+            (lambda (&rest _) (package-refresh-contents)) warning))))
 
   (dashboard-setup-startup-hook)
   (dashboard-modify-heading-icons '((recents . "file-text")
@@ -419,31 +436,31 @@ emacs built-in package config
 
 **** Others
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
-  (setq visible-bell t)
-  (defun self-screenshot (&optional type)
-    "Save a screenshot of type TYPE of the current Emacs frame.
-  As shown by the function `', type can weild the value `svg',
-  `png', `pdf'.
+      (setq visible-bell t)
+      (defun my/self-screenshot (&optional type)
+        "Save a screenshot of type TYPE of the current Emacs frame.
+        As shown by the function `', type can weild the value `svg',
+        `png', `pdf'.
 
-  This function will output in /tmp a file beginning with \"Emacs\"
-  and ending with the extension of the requested TYPE."
-    (interactive)
-    (let* ((type (if type type
-                   (intern (completing-read "Screenshot Type: "
-                                            '(png svg pdf postscript)))))
-           (extension (pcase type
-                        ('png        ".png")
-                        ('svg        ".svg")
-                        ('pdf        ".pdf")
-                        ('postscript ".ps")
-                        (otherwise (error "Cannot export screenshot of type %s" otherwise))))
-           (filename (make-temp-file "Emacs-" nil extension))
-           (data     (x-export-frames nil type)))
-      (with-temp-file filename
-        (insert data))
-      (kill-new filename)
-      (rename-file filename (expand-file-name (file-name-nondirectory filename) "~"))
-      (message filename)))
+        This function will output in /tmp a file beginning with \"Emacs\"
+        and ending with the extension of the requested TYPE."
+        (interactive)
+        (let* ((type (if type type
+                       (intern (completing-read "Screenshot Type: "
+                                                '(png svg pdf postscript)))))
+               (extension (pcase type
+                            ('png        ".png")
+                            ('svg        ".svg")
+                            ('pdf        ".pdf")
+                            ('postscript ".ps")
+                            (otherwise (error "Cannot export screenshot of type %s" otherwise))))
+               (filename (make-temp-file "Emacs-" nil extension))
+               (data     (x-export-frames nil type)))
+          (with-temp-file filename
+            (insert data))
+          (kill-new filename)
+          (rename-file filename (expand-file-name (file-name-nondirectory filename) "~"))
+          (message filename)))
 #+end_src
 
 **** Provide Modules
@@ -504,17 +521,25 @@ for managing keybindings.
     ;; Eshell
     "e" '(:ignore t :which-key "eshell")
     "e h" '(counsel-esh-history :which "Kill history")
-    "e s" '(eshell :which "run eshell")
+    "e s" '(eshell :which-key "run eshell")
+    "e e" '(elfeed :which-key "elfeed")
     ;; Counsel
     "f" '(:ignore t :which-key "file op.")
     "f r" '(consult-recent-file :which-key "Recent files")
     ;; Shortcut
-    "f o d" '((lambda () (interactive) (find-file (expand-file-name "~/.config/emacs/desktop.org"))) :which-key "open exwm config")
-    "f o p" '((lambda () (interactive) (find-file (expand-file-name "~/org/example/emacs_my_previous.org"))) :which-key "open exwm config")
-    "f o e" '((lambda () (interactive) (find-file (expand-file-name "~/org/example/emacs_another.org"))) :which-key "open exwm config")
-    "f o c" '((lambda () (interactive) (find-file (expand-file-name "~/.config/emacs/emacs.org"))) :which-key "open emacs config")
+    "f o" '(:ignore t :which-key "dOt files")
+    "f o d" '((lambda () (interactive) (find-file "~/.config/emacs/desktop.org")) :which-key "open exwm config")
+    "f o p" '((lambda () (interactive) (find-file "~/org/example/emacs_my_previous.org")) :which-key "open exwm config")
+    "f o e" '((lambda () (interactive) (find-file "~/org/example/emacs_another.org")) :which-key "open exwm config")
+    "f o c" '((lambda () (interactive) (find-file "~/.config/emacs/emacs.org")) :which-key "open emacs config")
     ;; Insert something
     "i" '(:ignore t :which-key "insert something.")
+    ;; Org mode
+    "o" '(:ignore t :which-key "org mode")
+    "o a" '(:ignore t :which-key "org agenda")
+    "o a c" '((lambda () (interactive) (find-file (expand-file-name "agenda/agenda.org" org-directory))) :which-key "org agenda file")
+    "o c" '(cfw:open-org-calendar :which-key "org calendar")
+
     ;; Project-el
     "p" '(:ignore t :which-key "project")
     "p ." '(project-switch-project :which-key "switch project")
@@ -747,6 +772,7 @@ simple but effective sorting and filtering for emacs.
 #+end_src
 **** configure org
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (setq org-directory "~/org") ; use for relative file location
   ;; hooks
   (add-hook 'org-mode-hook #'org-indent-mode)
   (setq org-todo-keywords
@@ -758,12 +784,60 @@ simple but effective sorting and filtering for emacs.
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
+  ;;(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
 
   ;; ODT export to docx
   (setq org-odt-preferred-output-format "docx")
   ;; Do not ask when run code block
   (setq org-confirm-babel-evaluate nil)
+#+end_src
+**** my org mode functions
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+(defun my/org-remove-link-and-trash-linked-file ()
+  "Remove `org-mode' link at point and trash linked file."
+  (interactive)
+  (let* ((link (org-element-context))
+     (path (org-element-property :path link)))
+    (move-file-to-trash path)
+    (delete-region (org-element-property :begin link)
+           (org-element-property :end link))))
+(defun my/powershell (script)
+  "executes the given script within a powershell and returns its return value"
+  (call-process "powershell.exe" nil nil nil
+        "-Command" (concat "& {" script "}")))
+  (defun my/as-windows-path (unix-path)
+    "Takes a unix path and returns a matching WSL path"
+    ;; substring removes the trailing \n
+    (substring
+     (shell-command-to-string
+      (concat "wslpath -w " unix-path)) 0 -1))
+  (defun my/org-paste-image-win2wsl ()
+    "Paste an image into a time stamped unique-named file in the
+        same directory as the org-buffer and insert a link to this file."
+    (interactive)
+    (let* ((target-file
+            (concat
+             (make-temp-name
+              (concat org-directory
+                      "/images/"
+                      (f-filename buffer-file-name)
+                      "_"
+                      (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+           (wsl-path
+            (concat (my/as-windows-path(file-name-directory target-file))
+                    "/"
+                    (file-name-nondirectory target-file)))
+           (ps-script
+            (concat "(Get-Clipboard -Format image).Save('" wsl-path "')")))
+
+      (my/powershell ps-script)
+
+      (if (file-exists-p target-file)
+          (progn (insert (concat "[[" target-file "]]"))
+                 (org-display-inline-images))
+        (user-error
+         "Error pasting the image, make sure you have an image in the clipboard!"))
+      ))
 #+end_src
 **** Org superstar
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -782,39 +856,45 @@ download image link
 **** Org Roam
 + TODO: Project todos
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-(use-package org-roam
-  :ensure t
-  :custom
-  (org-roam-directory (file-truename "~/org/roam2"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  ;; If you're using a vertical completion framework, you might want a more informative completion interface
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode))
+;;(use-package org-roam
+;;  :ensure t
+;;  :custom
+;;  (org-roam-directory (file-truename "~/org/roam2"))
+;;  :bind (("C-c n l" . org-roam-buffer-toggle)
+;;         ("C-c n f" . org-roam-node-find)
+;;         ("C-c n g" . org-roam-graph)
+;;         ("C-c n i" . org-roam-node-insert)
+;;         ("C-c n c" . org-roam-capture)
+;;         ;; Dailies
+;;         ("C-c n j" . org-roam-dailies-capture-today))
+;;  :config
+;;  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+;;  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+;;  (org-roam-db-autosync-mode))
 
-;;      (setq org-roam-v2-ack t)
-;;      (customize-set-variable 'org-roam-directory "~/org/roam2")
-;;      (customize-set-variable 'org-roam-completion-everywhere t)
-;;      (org-roam-db-autosync-mode)
-;;      ;; Org roam ui
-;;      (setq org-roam-ui-sync-theme t
-;;            org-roam-ui-follow t
-;;            org-roam-ui-update-on-save t
-;;            org-roam-ui-open-on-start nil)
-;;      (ju/leader-key-def
-;;        "r" '(:ignore t :which-key "Org Roam")
-;;        "ru" 'org-roam-ui-open
-;;        "rl" 'org-roam-buffer-toggle
-;;        "rf" 'org-roam-node-find
-;;        "ri" 'org-roam-node-insert
-;;        "rI" 'org-roam-node-insert-immediate
-;;        "rp" 'my/org-roam-find-project)
+      (setq org-roam-v2-ack t)
+      (customize-set-variable 'org-roam-directory "~/org/roam2")
+      (customize-set-variable 'org-roam-completion-everywhere t)
+      (org-roam-db-autosync-mode)
+      ;; Org roam ui
+      (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start nil)
+      (ju/leader-key-def
+        "n r" '(:ignore t :which-key "Org Roam")
+        "n r u" 'org-roam-ui-open
+        "n r l" 'org-roam-buffer-toggle
+        "n r f" 'org-roam-node-find
+        "n r i" 'org-roam-node-insert
+        "n r I" 'org-roam-node-insert-immediate
+        "n r p" 'my/org-roam-find-project)
+      ;;:desc "org roam refresh agenda list"
+      ;;"oar" 'my/org-roam-refresh-agenda-list
+      ;;:desc "org roam find tag:project"
+      ;;"nrp" 'my/org-roam-find-project
+      ;;:desc "org roam find with ripgrep (preview)"
+      ;;"nrg" 'my/org-roam-rg-search)
 #+end_src
 
 **** Valign
@@ -1018,7 +1098,6 @@ speed-up insertion of environments and math templates.
 **** Preview pane
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
   (require 'latex-preview-pane)
-  ;;(use-package latex-preview-pane)
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
@@ -1028,18 +1107,10 @@ speed-up insertion of environments and math templates.
 *** Extra
 **** Install Packages
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'helpful)
-  (usr-package-install 'pdf-tools)
-  (usr-package-install 'pdf-view-restore)
-  (usr-package-install 'nov)
-  (usr-package-install 'emojify)
-  (usr-package-install 'avy)
-  (usr-package-install 'yasnippet)
-  (usr-package-install 'yasnippet-snippets)
-  (usr-package-install 'openwith)
 #+end_src
 **** Helpful
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'helpful)
   (customize-set-variable 'counsel-describe-function-function #'helpful-callable)
   (customize-set-variable 'counsel-describe-variable-function #'helpful-variable)
   (require 'helpful)
@@ -1051,6 +1122,8 @@ speed-up insertion of environments and math templates.
 #+end_src
 **** Avy
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'avy)
+  (setq avy-all-windows t)
   (ju/leader-key-def
     "v" '(:ignore t :which-key "Avy")
     "vc" '(avy-goto-char :which-key "Avy Goto Char")
@@ -1059,6 +1132,8 @@ speed-up insertion of environments and math templates.
 #+end_src
 **** Snippet
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'yasnippet)
+  (usr-package-install 'yasnippet-snippets)
   (defvar yas-snippet-dirs nil)
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   (add-to-list 'yas-snippet-dirs "~/.config/emacs/snippets")
@@ -1068,6 +1143,7 @@ speed-up insertion of environments and math templates.
 #+end_src
 **** Emojify
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'emojify)
   (global-emojify-mode 1)
   (ju/leader-key-def
     "i e" '(emojify-insert-emoji :which-key "emoji"))
@@ -1075,22 +1151,26 @@ speed-up insertion of environments and math templates.
 **** PDF Tool
 enhanced PDF viewer on emacs
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'pdf-tools)
   (require 'pdf-tools)
   (pdf-tools-install)
   (setq-default pdf-view-display-size 'fit-width)
 #+end_src
 **** PDF view restore
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'pdf-view-restore)
   (add-hook 'pdf-view-mode-hook #'pdf-view-restore-mode)
   (setq pdf-view-restore-filename (expand-file-name ".tmp/pdf-view-restore"
                                                     user-emacs-directory))
 #+end_src
 **** Nov
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'nov)
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 #+end_src
 **** Openwith
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'openwith)
   (setq larget-file-warning-threshold nil)
   (openwith-mode t)
   (setq openwith-associations
@@ -1105,8 +1185,22 @@ enhanced PDF viewer on emacs
                 ;;      "qutebrowser"
                 ;;      '(file))))
 #+end_src
-**** TODO: ELFEED
+**** Calfw
+org calendar
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'calfw)
+  (usr-package-install 'calfw-org)
+#+end_src
+**** ELFEED
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'elfeed)
+  (usr-package-install 'elfeed-goodies)
+  (usr-package-install 'elfeed-org)
 
+  (require 'elfeed-org)
+  (elfeed-org)
+  (setq rmh-elfeed-org-files (list "~/org/elfeed.org"))
+#+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
   (provide 'custom-extra)
@@ -1141,6 +1235,11 @@ enhanced PDF viewer on emacs
 **** Rust
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
   (usr-package-install 'rust-mode)
+#+end_src
+**** Python
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (usr-package-install 'jupyter)
+  (setq org-babel-jupyter-override-src-block "python")
 #+end_src
 **** CMAKE
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
