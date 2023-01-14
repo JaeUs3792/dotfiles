@@ -40,7 +40,7 @@ Emacs Configuration for emacs 29.50
 ;;; init.el -*- lexical-binding: t; -*-
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (message "Crafted Emacs loaded in %s"
+            (message "Emacs loaded in %s"
                      (emacs-init-time))))
 #+end_src
 *** Package Function
@@ -64,7 +64,7 @@ Emacs Configuration for emacs 29.50
     `(unless (package-installed-p ,package) (package-install ,package)))
   (package-initialize)
 
-	;;; init.el ends here
+    ;;; init.el ends here
 #+end_src
 *** Add other modules
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -100,19 +100,6 @@ Emacs Configuration for emacs 29.50
   // -*- mode: js; indent-tabs-mode: nil; tab-width: 4 -*-
   // code: language=rust insertSpaces=false tabSize=4
   #+end_src
-**** Line number
-#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-  (column-number-mode)
-  (global-display-line-numbers-mode t)
-  ;; Disable line numbers for some modes
-  (dolist (mode '(org-mode-hook
-                  nov-mode-hook
-                  shell-mode-hook
-                  treemacs-mode-hook
-                  dired-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+end_src
 
 *** Backup options
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -131,20 +118,21 @@ Emacs Configuration for emacs 29.50
 
 *** Other options
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-(set-default-coding-systems 'utf-8)
-(customize-set-variable 'large-file-warning-threshold 100000000) ;; 100MB
+  (set-default-coding-systems 'utf-8)
+  (set-language-environment "utf-8")
+  (customize-set-variable 'large-file-warning-threshold 100000000) ;; 100MB
 
-(defconst ON-LINUX (eq system-type 'gnu/linux))
-(defconst ON-MAC (eq system-type 'darwin))
-(defconst ON-WINDOWS (memq system-type '(cygwin windows-nt ms-dos)))
+  (defconst ON-LINUX (eq system-type 'gnu/linux))
+  (defconst ON-MAC (eq system-type 'darwin))
+  (defconst ON-WINDOWS (memq system-type '(cygwin windows-nt ms-dos)))
 
-(setq gc-cons-threshold (* 2 1024 1024)) ; decreasing the threshold to 2MB
+  (setq gc-cons-threshold (* 2 1024 1024)) ; decreasing the threshold to 2MB
 
-(defvar my-config-file (expand-file-name "config.el" user-emacs-directory))
-(load my-config-file nil 'nomessage)
+  (defvar my-config-file (expand-file-name "config.el" user-emacs-directory))
+  (load my-config-file nil 'nomessage)
 
-(setq use-short-answer t)
-(global-auto-revert-mode t)
+  (setq use-short-answer t)
+  (global-auto-revert-mode t)
 
 #+end_src
 * Modules Selection module
@@ -164,14 +152,14 @@ Emacs Configuration for emacs 29.50
                `(variable-pitch ((t (:font "Ubuntu 14")))))))
 
   (require 'custom-ui)
-  ;;(require 'custom-keybindings)
-  ;;(require 'custom-default)
-  ;;(require 'custom-org)
-  ;;(require 'custom-completion)
-  ;;(require 'custom-projects)
+  (require 'custom-keybindings)
+  (require 'custom-default)
+  (require 'custom-completion)
+  (require 'custom-projects)
+  (require 'custom-org)
   ;;(require 'custom-workspaces)
-  ;;(require 'custom-latex)
-  ;;(require 'custom-extra)
+  (require 'custom-latex)
+  (require 'custom-extra)
 
   ;;; config.el ends here
 #+end_src
@@ -181,70 +169,54 @@ Emacs Configuration for emacs 29.50
 emacs built-in package config
 **** Eshell
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
-(use-package eshell
-  :defer t
-  :straight (:type built-in :build t)
-  :config
   (setq eshell-prompt-function
         (lambda ()
           (concat (abbreviate-file-name (eshell/pwd))
                   (if (= (user-uid) 0) " # " " λ ")))
-        eshell-prompt-regexp "^[^#λ\n]* [#λ] "))
+        eshell-prompt-regexp "^[^#λ\n]* [#λ] ")
 #+end_src
 **** Dired
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
-  (use-package dired
-    :straight (:type built-in)
-    :ensure nil
-    :commands (dired dired-jump)
-    :bind (("C-x C-j" . dired-jump))
-    :custom ((dired-listing-switches "-agho --group-directories-first"))
-    :config
-    (evil-collection-define-key 'normal 'dired-mode-map
-      "h" 'dired-single-up-directory
-      "l" 'dired-single-buffer))
-  (autoload 'dired-omit-mode "dired-x")
-  (add-hook 'dired-load-hook
-            (lambda ()
-              (interactive)
-              (dired-hide-dotfiles--hide)))
-  ;;;; to use h,l key
-  (use-package dired-single
-    :commands (dired dired-jump))
-  ;;;; colorful dired
-  (use-package diredfl
-    :hook (dired-mode . diredfl-mode))
-  ;;;; from doom emacs
-  (defun +dired-enable-git-info-h ()
-    "Enable `dired-git-info-mode' in git repos."
-    (and (not (file-remote-p default-directory))
-         (locate-dominating-file "." ".git")
-         (dired-git-info-mode 1)))
-  (use-package dired-git-info)
-  (use-package diff-hl
-    :hook (dired-mode . diff-hl-dired-mode-unless-remote)
-    :hook (magit-post-refresh . diff-hl-magit-post-refresh)
-    :config
-    ;; use margin instead of fringe
-    (diff-hl-margin-mode))
-  (use-package dired-rsync
-    :config
-    (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode)
-    :config
-    ;; HACK Fixes #1929: icons break file renaming in Emacs 27+, because the icon
-    ;;      is considered part of the filename, so we disable icons while we're in
-    ;;      wdired-mode.
-    ;;(when EMACS27+
-    (defvar +wdired-icons-enabled -1))
-  (use-package dired-hide-dotfiles
-    :hook (dired-mode . dired-hide-dotfiles-mode)
-    :config
-    (evil-collection-define-key 'normal 'dired-mode-map
-      "H" 'dired-hide-dotfiles-mode))
+  (usr-package-install 'dired-single)
+  (usr-package-install 'diredfl) ;; colorful dired
+  (usr-package-install 'dired-git-info)
+  (usr-package-install 'diff-hl)  ;; diff highlight
+  (usr-package-install 'dired-rsync)
+  (usr-package-install 'all-the-icons-dired)
+  (usr-package-install 'dired-hide-dotfiles)
+  ;; dired default
+  (setq dired-listing-switches "-agho --group-directories-first")
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "h" 'dired-single-up-directory
+    "l" 'dired-single-buffer)
+  (require 'dired-single)
+  ;;(use-package dired-single
+  ;;  :commands (dired dired-jump))
+  ;; colorful
+  (add-hook 'dired-mode-hook #'diredfl-mode)
+  ;; git info
+  (evil-collection-define-key 'normal 'dired-mode-map
+    ")" 'dired-git-info-mode)
+  ;; diff highlight
+  (add-hook 'dired-mode-hook #'diff-hl-dired-mode-unless-remote)
+  (add-hook 'magit-post-refresh-hook #'diff-hl-dired-mode-unless-remote)
+  (diff-hl-margin-mode)
+  ;; rsync
+  (bind-key "C-c C-r" 'dired-rsync dired-mode-map)
+  ;; all-the icons
+  (add-hook 'dired-mode-hook #'all-the-icons-dired-mode)
+  ;; HACK:Fixes #1929: icons break file renaming in Emacs 27+, because the icon
+  ;;      is considered part of the filename, so we disable icons while we're in
+  ;;      wdired-mode.
+  ;;(when EMACS27+
+  (defvar +wdired-icons-enabled -1)
 
-  ;; TODO check emacs29 updates
+  ;; hide dotfiles
+  (add-hook 'dired-mode-hook #'dired-hide-dotfiles-mode)
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "H" 'dired-hide-dotfiles-mode)
+
+  ;; TODO: check emacs29 updates
   ;;(csetq dired-mouse-drag-files                   t
   ;;       mouse-drag-and-drop-region-cross-program t)
 #+end_src
@@ -256,24 +228,38 @@ emacs built-in package config
 *** UI
 **** Install Packages
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
+  (usr-package-install 'all-the-icons)
   (usr-package-install 'doom-themes)
   (usr-package-install 'rainbow-delimiters)
-  (usr-package-install 'all-the-icons)
   (usr-package-install 'doom-modeline)
   (usr-package-install 'visual-fill-column)
+  (usr-package-install 'dashboard)
 #+end_src
+**** Line number
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  nov-mode-hook
+                  dashboard-mode-hook
+                  dired-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+end_src
+
 **** Doom themes
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
   (require 'doom-themes)
   (disable-theme 'deeper-blue)
   (if (display-graphic-p)
-     (load-theme 'doom-palenight t)
-   (load-theme 'doom-gruvbox t))
+      (load-theme 'doom-palenight t)
+    (load-theme 'doom-gruvbox t))
 #+end_src
 **** Rainbow Delimiters
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
   (require 'rainbow-delimiters)
-  (add-hook 'prog-mode rainbow-delimiters-mode)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 **** Setting Transparency
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
@@ -286,43 +272,42 @@ emacs built-in package config
       (if (eq (frame-parameter nil 'alpha-background) alpha-transparency)
           (set-frame-parameter nil 'alpha-background 0.9)
         (set-frame-parameter nil 'alpha-background alpha-transparency))))
-(defun my/transparency-round (val)
-  "Round VAL to the nearest tenth of an integer."
-  (/ (round (* 10 val)) 10.0))
+  (defun my/transparency-round (val)
+    "Round VAL to the nearest tenth of an integer."
+    (/ (round (* 10 val)) 10.0))
 
-(defun my/increase-frame-alpha-background ()
-  "Increase current frame’s alpha background."
-  (interactive)
-  (set-frame-parameter nil
-                       'alpha-background
-                       (my/transparency-round
-                        (min 1.0
-                             (+ (frame-parameter nil 'alpha-background) 0.1))))
-  (message "%s" (frame-parameter nil 'alpha-background)))
+  (defun my/increase-frame-alpha-background ()
+    "Increase current frame’s alpha background."
+    (interactive)
+    (set-frame-parameter nil
+                         'alpha-background
+                         (my/transparency-round
+                          (min 1.0
+                               (+ (frame-parameter nil 'alpha-background) 0.1))))
+    (message "%s" (frame-parameter nil 'alpha-background)))
 
-(defun my/decrease-frame-alpha-background ()
-  "Decrease current frame’s alpha background."
-  (interactive)
-  (set-frame-parameter nil
-                       'alpha-background
-                       (my/transparency-round
-                        (max 0.0
-                             (- (frame-parameter nil 'alpha-background) 0.1))))
-  (message "%s" (frame-parameter nil 'alpha-background)))
-
+  (defun my/decrease-frame-alpha-background ()
+    "Decrease current frame’s alpha background."
+    (interactive)
+    (set-frame-parameter nil
+                         'alpha-background
+                         (my/transparency-round
+                          (max 0.0
+                               (- (frame-parameter nil 'alpha-background) 0.1))))
+    (message "%s" (frame-parameter nil 'alpha-background)))
+  (global-set-key (kbd "C-c t") 'toggle-transparency)
 #+end_src
 **** Modeline
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
-(require 'doom-modeline)
-
-     (setq doom-modeline-height 15
-           doom-modeline-env-version t
-           doom-modeline-persp-name t
-           doom-modeline-persp-icon t
-           doom-modeline-display-default-persp-name t
-           doom-modeline-indent-info t)
+  (require 'doom-modeline)
+  (setq doom-modeline-height 15
+        doom-modeline-env-version t
+        doom-modeline-persp-name t
+        doom-modeline-persp-icon t
+        doom-modeline-display-default-persp-name t
+        doom-modeline-indent-info t)
   (doom-modeline-mode 1)
-          #+end_src
+#+end_src
 **** Whiteroom
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
   ;;(use-package writeroom-mode
@@ -341,48 +326,48 @@ emacs built-in package config
   (require 'visual-fill-column)
   (defun write-room-enable ()
     (setq visual-fill-column-width 100
-          visual-fill-column-center-text t)
-    (add-hook 'org-mode write-room-enable)
-    (add-hook 'markdown-mode write-room-enable)
-    (add-hook 'nov-mode write-room-enable)
-
-    (visual-fill-column-mode 1)
+         visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+    (add-hook 'org-mode-hook #'write-room-enable)
+    (add-hook 'markdown-mode-hook #'write-room-enable)
+    (add-hook 'nov-mode-hook #'write-room-enable)
 #+end_src
 
 **** Dashboard
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
-;;; (use-package page-break-lines)
-;;  (use-package dashboard
-;;    :init      ;; tweak dashboard config before loading it
-;;    (setq dashboard-projects-backend `project-el
-;;          dashboard-set-heading-icons t
-;;          dashboard-set-file-icons t
-;;          dashboard-center-content t ;; set to 't' for centered content
-;;          dashboard-items '((recents . 10)
-;;                            (bookmarks . 5)
-;;                            (projects . 10))
-;;          dashboard-set-footer t
-;;          dashboard-page-separator "\n\f\n"
-;;          dashboard-set-navigator t)
-;;
-;;    (setq dashboard-startup-banner 'logo)
-;;    ;;(setq dashboard-startup-banner "~/.dotfiles/.config/emacs/logo3d.png")
-;;    ;; Format: "(icon title help action face prefix suffix)"
-;;    (setq dashboard-navigator-buttons
-;;          `(;; line1
- ;;           ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-  ;;            "Github"
-   ;           "Browse my Github"
-   ;;           (lambda (&rest _) (browse-url "https://github.com/JaeUs3792/")))
-    ;         (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
-    ;          "Homepage"
-    ;          "Browse my Homepage"
-    ;          (lambda (&rest _) (browse-url "https://jaeus.net"))))))
-;    :config
-;    (dashboard-setup-startup-hook)
-;    (dashboard-modify-heading-icons '((recents . "file-text")
-;                                      (bookmarks . "book"))))
-;  (setq doom-fallback-buffer-name "*dashboard*")
+  (require 'linum) ;; for dashboard seperator
+  ;;(add-hook 'dashboard-mode page-break-lines-mode)
+  (require 'dashboard)
+
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  ;;(setq dashboard-banner-logo-title "Emacs is more than a text editor!")
+  ;;(setq dashboard-startup-banner 'logo)
+  (setq dashboard-center-content t)
+  (setq dashboard-week-agenda t)
+  (setq dashboard-agenda-time-string-format "%d/%m/%Y %A %H:%M")
+  (setq dashboard-items '((recents . 10)
+                          (agenda . 5)
+                          (bookmarks . 5)
+                          ;;(projects . 5)
+                          (registers . 5)))
+  (setq dashboard-set-navigator t)
+
+  (setq dashboard-navigator-buttons
+        `(;; line1
+          ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+            "Github"
+            "Browse my Github"
+            (lambda (&rest _) (browse-url "https://github.com/JaeUs3792/")))
+           (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
+            "Homepage"
+            "Browse my Homepage"
+            (lambda (&rest _) (browse-url "https://jaeus.net"))))))
+
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+                                    (bookmarks . "book")))
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
 #+end_src
 
@@ -422,11 +407,19 @@ emacs built-in package config
 #+end_src
 
 *** Key Bindings
+**** Install Packages
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
+  (usr-package-install 'which-key)
+  (usr-package-install 'general)
+  (usr-package-install 'evil)
+  (usr-package-install 'evil-collection)
+  (usr-package-install 'evil-nerd-commenter)
+  (usr-package-install 'evil-numbers)
+  ;;(usr-package-install 'undo-tree)
+  (usr-package-install 'hydra)
+#+end_src
 **** Global Key
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
-  (global-set-key (kbd "C-c t") 'toggle-transparency)
-  ;;(global-set-key (kbd "C-M-j") 'consult-buffer)
-
   ;; Make ESC quit prompts
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
   ;; this annoying binding.
@@ -437,26 +430,19 @@ emacs built-in package config
 **** Which keys
 When you begin a keybind, whichkey will show you all keybinds you can follow the first one with in order to form a full keywords.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
-(use-package which-key
-  :defer t
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 0.5))
+  (require 'which-key)
+  (setq which-key-idle-delay 0.5)
 #+end_src
 **** General
 for managing keybindings.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
-  (use-package general
-    :init
-    (general-auto-unbind-keys)
-    :config
-    (general-evil-setup t)
-    (general-create-definer ju/leader-key-def
-      :keymaps '(normal insert visual emacs)
-      :prefix "SPC"
-      :global-prefix "C-SPC"))
-
+  (require 'general)
+  (general-auto-unbind-keys)
+  (general-evil-setup t)
+  (general-create-definer ju/leader-key-def
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
   (ju/leader-key-def
     "." 'find-file
     ;; Buffer
@@ -504,59 +490,59 @@ for managing keybindings.
 #+end_src
 **** Evil Mode
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
-  (use-package evil
-    :after (general)
-    :init
-    (setq evil-want-integration t
-          evil-want-keybinding nil
-          evil-want-C-u-scroll t
-          evil-want-C-i-jump nil)
-    (require 'evil-vars)
-    (evil-set-undo-system 'undo-tree)
-    :config
-    (evil-mode 1)
-    (setq evil-want-fine-undo t) ; more granular undo with evil
-    (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal))
-  (use-package evil-collection
-    :after evil
-    :ensure t
-    :config
-    (evil-collection-init))
-  (use-package evil-nerd-commenter
-    :after evil
-    :config
-    (define-key evil-normal-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines)
-    (define-key evil-visual-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines))
-  (use-package evil-numbers
-    :after evil
-    :config
-    ;; unfortunately C-x is emacs common key binding.
-    (define-key evil-normal-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
-    (define-key evil-normal-state-map (kbd "g -") 'evil-numbers/dec-at-pt)
-    (define-key evil-visual-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
-    (define-key evil-visual-state-map (kbd "g -") 'evil-numbers/dec-at-pt))
+  (customize-set-variable 'evil-want-integration t)
+  (customize-set-variable 'evil-want-keybinding nil)
+  (customize-set-variable 'evil-want-C-u-scroll t)
+  (customize-set-variable 'evil-want-C-i-jump nil)
+  (customize-set-variable 'evil-respect-visual-line-mode nil) ; t : on the screen, nil : by cr characters
 
+  (customize-set-variable 'evil-set-fine-undo t); more granular undo with evil
+
+  (require 'evil)
+  (evil-mode 1)
+  ;; Make evil search more like vim
+  ;;(evil-select-search-module 'evil-search-module 'evil-search)
+
+  (evil-set-undo-system 'undo-redo)
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal)
+
+  ;; evil nerd commenter
+  (define-key evil-normal-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines)
+  (define-key evil-visual-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines)
+
+  ;; evil collection
+  (evil-collection-init)
+
+  ;; evil numbers
+  ;; unfortunately C-x is emacs common key binding.
+  (define-key evil-normal-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "g -") 'evil-numbers/dec-at-pt)
+  (define-key evil-visual-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
+  (define-key evil-visual-state-map (kbd "g -") 'evil-numbers/dec-at-pt)
+
+  ;; eshell no evil
+  (dolist (mode '(eshell-mode))
+    (add-to-list 'evil-emacs-state-modes mode))
+
+  ;; when programming _
   (modify-syntax-entry ?_ "w")
 #+end_src
 **** Undo Tree
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
-  (use-package undo-tree
-    :init
-    (global-undo-tree-mode)
-    (setq undo-tree-visualizer-diff       t
-          undo-tree-visualizer-timestamps t)
-          undo-tree-auto-save-history     t
-          undo-tree-enable-undo-in-region t
-          undo-limit        (* 800 1024)
-          undo-strong-limit (* 12 1024 1024)
-          undo-outer-limit  (* 128 1024 1024))
+  ;;(require 'undo-tree)
+  ;;(setq undo-tree-visualizer-diff       t
+  ;;      undo-tree-visualizer-timestamps t
+  ;;      undo-tree-auto-save-history     t
+  ;;      undo-tree-enable-undo-in-region t
+  ;;      undo-limit        (* 800 1024)
+  ;;      undo-strong-limit (* 12 1024 1024)
+  ;;      undo-outer-limit  (* 128 1024 1024))
+  ;;(global-undo-tree-mode)
 #+end_src
 **** Hydra
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
-  (use-package hydra
-    :defer t)
-
+  (require 'hydra)
   (defhydra hydra-text-scale (:timeout 4)
     "scale text"
     ("t" text-scale-increase "in")
@@ -583,188 +569,131 @@ for managing keybindings.
 *** Completion
 config from crafted-emacs
 https://github.com/SystemCrafter/crafted-emacs
+**** Install Packages
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
+  (usr-package-install 'vertico)
+  (usr-package-install 'marginalia)
+  (usr-package-install 'consult)
+  (usr-package-install 'orderless)
+  (usr-package-install 'embark)
+  (usr-package-install 'embark-consult)
+  (usr-package-install 'corfu)
+  (usr-package-install 'corfu-terminal)
+  (usr-package-install 'cape)
+#+end_src
 **** Vertico
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-  (use-package vertico
-    :ensure t
-    :bind (:map vertico-map
-                ("C-j" . vertico-next)
-                ("C-k" . vertico-previous)
-                ("M-h" . vertico-directory-up))
-    :custom
-    (vertico-cycle t)
-    :init
-    (vertico-mode))
-  ;;(use-package vertico-posframe
-    ;;:disabled
-    ;;:after vertico
-    ;;:ensure t
-    ;;:init
-    ;;(setq vertico-posframe-parameters
-          ;;`((left-fringe . 8)
-            ;;(right-fringe . 8) (alpha . 100)))
-    ;;(vertico-posframe-mode 1))
+  (require 'vertico)
+  (require 'vertico-directory)
+  (with-eval-after-load 'evil
+    (define-key vertico-map (kbd "C-j") 'vertico-next)
+    (define-key vertico-map (kbd "C-k") 'vertico-previous)
+    (define-key vertico-map (kbd "M-h") 'vertico-directory-up))
+  (customize-set-variable 'vertico-cycle t)
+  (vertico-mode 1)
 #+end_src
 **** Marginalia
 annotations placed at the margin of the minibuffer
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-  (use-package marginalia
-    :after vertico
-    :ensure t
-    :custom
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (marginalia-mode))
+  (require 'marginalia)
+  (customize-set-variable 'marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  (marginalia-mode 1)
 #+end_src
 **** Consult
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-    (use-package consult
-      :demand t
-      :bind (("C-s" . consult-line)
-             :map minibuffer-local-map
-             ("C-r" . consult-history))
-      :custom
-      (completion-in-region-function #'consult-completion-in-region))
+  (global-set-key (kbd "C-s") 'consult-line)
+  (define-key minibuffer-local-map (kbd "C-r") 'consult-history)
+  (global-set-key (kbd "C-M-j") 'consult-buffer)
+  (setq completion-in-region-function #'consult-completion-in-region)
 #+end_src
-
 **** Orderless
 orderless completion
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-  (use-package orderless
-    :ensure t
-    :custom
-    (completion-styles '(orderless basic))
-    (completion-category-overrides '((file (style basic partial-completion)))))
+  (require 'orderless)
+  (customize-set-variable 'completion-styles '(orderless basic))
+  (customize-set-variable 'completion-category-overrides '((file (style basic partial-completion))))
 #+end_src
-**** Embark
+**** Embark / Embark Consult
 Quick Action in minibuffer
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-  (use-package embark
-    :ensure t
-    :bind (("C-." . embark-act)
-           ("C-;" . embark-dwim)
-           ("C-h B" . embark-bindings))
-    :init
-    ;; Optionally replace the key help with a completing-read interface
-    (setq prefix-help-command #'embark-prefix-help-command)
-
-    :config
-
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none)))))
-  (use-package embark-consult
-    :ensure t
-    :after (embark consult)
-    :demand t ; only necessary if you have the hook below
-    ;; if you want to have consult previews as you move around an
-    ;; auto-updating embark collect buffer
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
+  (require 'embark)
+  (require 'embark-consult)
+  (global-set-key [remap describe-bindings] #'embark-bindings)
+  (global-set-key (kbd "C-.") 'embark-act)
+  ;; Use Embark to show bindings in a key prefix with `C-h`
+  (setq prefix-help-command #'embark-prefix-help-command)
+  (with-eval-after-load 'embark-consult
+  (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
 #+end_src
 
-**** Corfu
+**** Corfu / Cape
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-  (use-package corfu)
-  (use-package popon
-    :defer t
-    :straight (popon :build t
-                     :type git
-                     :host nil
-                     :repo "https://codeberg.org/akib/emacs-popon.git"))
-  (use-package confu-terminal
-  :defer t
-  :straight (confu-terminal :build t
-                       :type git
-                       :host nil
-                       :repo "https://codeberg.org/akib/emacs-corfu-terminal.git"))
-  (add-to-list 'load-path
-               (expand-file-name "straight/build/corfu/extensions"
-                                 user-emacs-directory))
+  ;;; Corfu
   (require 'corfu-popupinfo)
   (require 'corfu)
+
   (unless (display-graphic-p)
     (require 'corfu-terminal)
     (corfu-terminal-mode +1))
 
-  (customize-set-variable 'corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (customize-set-variable 'corfu-auto t)                 ;; Enable auto completion
-  (customize-set-variable 'corfu-auto-prefix 2)
-  (customize-set-variable 'corfu-auto-delay 0.0)
-  ;; (customize-set-variable 'corfu-separator ?\s)          ;; Orderless field separator
-  ;; (customize-set-variable 'corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (customize-set-variable 'corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;; (customize-set-variable 'corfu-preview-current nil)    ;; Disable current candidate preview
-  ;; (customize-set-variable 'corfu-preselect 'prompt)      ;; Preselect the prompt
-  ;; (customize-set-variable 'corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  ;; (customize-set-variable 'corfu-scroll-margin 5)        ;; Use scroll margin
-  (customize-set-variable 'corfu-echo-documentation 0.25)
+  ;; Setup corfu for popup like completion
+  (customize-set-variable 'corfu-cycle t) ; Allows cycling through candidates
+  (customize-set-variable 'corfu-auto t)  ; Enable auto completion
+  (customize-set-variable 'corfu-auto-prefix 2) ; Complete with less prefix keys
+  (customize-set-variable 'corfu-auto-delay 0.0) ; No delay for completion
+  (customize-set-variable 'corfu-echo-documentation 0.25) ; Echo docs for current completion option
+
   (global-corfu-mode 1)
   (corfu-popupinfo-mode 1)
   (eldoc-add-command #'corfu-insert)
   (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
   (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
   (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle)
-#+end_src
 
-**** Cape
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-  (use-package cape
-    :init
-    ;; Add `completion-at-point-functions', used by `completion-at-point'.
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    ;;(add-to-list 'completion-at-point-functions #'cape-history)
-    ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
-    (add-to-list 'completion-at-point-functions #'cape-tex)
-    ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
-    ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-    ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-    (add-to-list 'completion-at-point-functions #'cape-ispell)
-    ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-    ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
-    ;;(add-to-list 'completion-at-point-functions #'cape-line)
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-    ;; Silence the pcomplete capf, no errors or messages!
-    ;; Important for corfu
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+  ;;; Cape
 
-    ;; Ensure that pcomplete does not write to the buffer
-    ;; and behaves as a pure `completion-at-point-function'.
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
-    )
+  ;; Setup Cape for better completion-at-point support and more
+  (require 'cape)
+
+  ;; Add useful defaults completion sources from cape
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+
+  ;; Silence the pcomplete capf, no errors or messages!
+  ;; Important for corfu
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+
+  ;; Ensure that pcomplete does not write to the buffer
+  ;; and behaves as a pure `completion-at-point-function'.
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
   (add-hook 'eshell-mode-hook
             (lambda () (setq-local corfu-quit-at-boundary t
-                                   corfu-quit-no-match t
-                                   corfu-auto nil)
+                              corfu-quit-no-match t
+                              corfu-auto nil)
               (corfu-mode)))
 #+end_src
-
-
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
 (provide 'custom-completion)
 ;;; custom-completion.el ends here
 #+end_src
 *** Org Mode
+**** Install Packages
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (usr-package-install 'valign)
+  (usr-package-install 'org-pdftools)
+#+end_src
 **** Valign
 | 12345678 |   |
 |----------+---|
 |   일이삼사 |   |
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-(use-package valign
-  :defer t
-  :after (org markdown-mode)
-  ;; :hook ((org-mode markdown-mode) . valign-mode)
-  :custom ((valign-fancy-bar t)))
+  (customize-set-variable 'valign-fancy-bar t)
 #+end_src
 **** Org PDF tools
 get link from pdf,
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (use-package org-pdftools
-    :hook (org-mode . org-pdftools-setup-link))
+  (add-hook 'org-mode-hook #'org-pdftools-setup-link)
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -772,48 +701,59 @@ get link from pdf,
   ;;; custom-org.el ends here
 #+end_src
 *** Projects
+**** Install Packages
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
+  (usr-package-install 'magit)
+  (usr-package-install 'magit-todos)
+  ;;(usr-package-install 'forge)
+  (usr-package-install 'hl-todo)
+#+end_src
 **** MAGIT
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
-  (use-package magit)
-    ;;:commands (magit-status magit-get-current-branch)
-    ;;:custom
-    ;;(magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-  (use-package magit-todos
-    :after (magit todo)
-    :config
-    (setq magit-todos-ignore-case t))
-  (use-package forge
-    :after magit)
+  ;;(use-package magit)
+  (require 'magit)
+  ;;(magit-status magit-get-current-branch)
+  ;;  ;;:custom
+  (setq magit-clone-default-directory "~/Project/"
+         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  ;;(use-package magit-todos
+  ;;  :after (magit todo)
+  ;;  :config
+  ;;  (setq magit-todos-ignore-case t))
+  ;;(use-package forge
+  ;;  :after magit)
 #+end_src
 **** Highlight TODOs
-
-***** TODO test
+***** TODO: test
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
-  (use-package hl-todo
-    :hook (prog-mode . hl-todo-mode)
-    :config
-    (setq hl-todo-highlight-punctuation ":"
-          hl-todo-keyword-faces
-          `(;; For things that need to be done, just not today.
-            ("TODO" warning bold)
-            ;; For problems that will become bigger problems later if not
-            ;; fixed ASAP.
-            ("FIXME" error bold)
-            ;; For tidbits that are unconventional and not intended uses of the
-            ;; constituent parts, and may break in a future update.
-            ("HACK" font-lock-constant-face bold)
-            ;; For things that were done hastily and/or hasn't been thoroughly
-            ;; tested. It may not even be necessary!
-            ("REVIEW" font-lock-keyword-face bold)
-            ;; For especially important gotchas with a given implementation,
-            ;; directed at another user other than the author.
-            ("NOTE" success bold)
-            ;; For things that just gotta go and will soon be gone.
-            ("DEPRECATED" font-lock-doc-face bold)
-            ;; For a known bug that needs a workaround
-            ("BUG" error bold)
-            ;; For warning about a problematic or misguiding code
-            ("XXX" font-lock-constant-face bold))))
+  (require 'hl-todo)
+  (setq hl-todo-keyword-faces
+        `(;; For things that need to be done, just not today.
+          ("TODO" warning bold)
+          ;; For problems that will become bigger problems later if not
+          ;; fixed ASAP.
+          ("FIXME" error bold)
+          ;; For tidbits that are unconventional and not intended uses of the
+          ;; constituent parts, and may break in a future update.
+          ("HACK" font-lock-constant-face bold)
+          ;; For things that were done hastily and/or hasn't been thoroughly
+          ;; tested. It may not even be necessary!
+          ("REVIEW" font-lock-keyword-face bold)
+          ;; For especially important gotchas with a given implementation,
+          ;; directed at another user other than the author.
+          ("NOTE" success bold)
+          ;; For things that just gotta go and will soon be gone.
+          ("DEPRECATED" font-lock-doc-face bold)
+          ;; For a known bug that needs a workaround
+          ("BUG" error bold)
+          ;; For warning about a problematic or misguiding code
+          ("XXX" font-lock-constant-face bold)))
+  (global-hl-todo-mode 1)
+#+end_src
+**** Magit TODOs
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
+  (require 'magit-todos)
+  (add-hook 'magit-mode-hook #'magit-todos-mode)
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
@@ -865,102 +805,111 @@ get link from pdf,
     ;;; custom-workspaces.el ends here
 #+end_src
 *** Latex
+**** Install Packages
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
+  (usr-package-install 'auctex)
+  (usr-package-install 'cdlatex)
+  (usr-package-install 'latex-preview-pane)
+#+end_src
 **** AUCTEX
 writing and formatting tex file in Emacs.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-  (use-package auctex
-    :defer t
-    :init
-    (setq TeX-command-default   (if (executable-find "latexmk") "LatexMk" "LaTeX")
-          TeX-engine            (if (executable-find "xetex")   'xetex    'default)
-          TeX-auto-save                     t
-          TeX-parse-self                    t
-          TeX-syntactic-comment             t
-          TeX-auto-local                    ".auctex-auto"
-          TeX-style-local                   ".auctex-style"
-          TeX-source-correlate-mode         t
-          TeX-source-correlate-method       'synctex
-          TeX-source-correlate-start-server nil
-          TeX-electric-sub-and-superscript  t
-          TeX-fill-break-at-separators      nil
-          TeX-save-query                    t)
-    :config
-    (setq TeX-master t)
-    (setcar (cdr (assoc "Check" TeX-command-list)) "chktex -v6 -H %s")
-    (add-hook 'TeX-mode-hook (lambda ()
-                               (setq ispell-parser          'tex
-                                     fill-nobreak-predicate (cons #'texmathp fill-nobreak-predicate))))
-    (add-hook 'TeX-mode-hook #'visual-line-mode)
-    (add-hook 'TeX-update-style-hook #'rainbow-delimiters-mode))
+  (with-eval-after-load 'latex
+    (customize-set-variable 'TeX-auto-save t)
+    (customize-set-variable 'TeX-parse-self t)
+    (setq-default TeX-master nil)
+
+    ;; compile to pdf
+    (tex-pdf-mode)
+
+    ;; correlate the source and the output
+    (TeX-source-correlate-mode)
+
+    ;; set a correct indentation in a few additional environments
+    (add-to-list 'LaTeX-indent-environment-list '("lstlisting" current-indentation))
+    (add-to-list 'LaTeX-indent-environment-list '("tikzcd" LaTeX-indent-tabular))
+    (add-to-list 'LaTeX-indent-environment-list '("tikzpicture" current-indentation))
+
+    ;; add a few macros and environment as verbatim
+    (add-to-list 'LaTeX-verbatim-environments "lstlisting")
+    (add-to-list 'LaTeX-verbatim-environments "Verbatim")
+    (add-to-list 'LaTeX-verbatim-macros-with-braces "lstinline")
+    (add-to-list 'LaTeX-verbatim-macros-with-delims "lstinline")
+
+    ;; to use pdfview with auctex
+    (customize-set-variable 'TeX-view-program-selection '((output-pdf "PDF Tools")))
+    (customize-set-variable 'TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+    (customize-set-variable 'TeX-source-correlate-start-server t)
+
+    ;; electric pairs in auctex
+    (customize-set-variable 'TeX-electric-sub-and-superscript t)
+    (customize-set-variable 'LaTeX-electric-left-right-brace t)
+    (customize-set-variable 'TeX-electric-math (cons "$" "$"))
+
+    ;; open all buffers with the math mode and auto-fill mode
+    (add-hook 'LaTeX-mode-hook #'auto-fill-mode)
+    (add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
+
+    ;; add support for references
+    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+    (customize-set-variable 'reftex-plug-into-AUCTeX t)
+
+    ;; to have the buffer refresh after compilation
+    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer))
 #+end_src
 **** Cdlatex
 speed-up insertion of environments and math templates.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-(use-package cdlatex
-  :defer t
-  :after auctex
-  :hook (LaTeX-mode . cdlatex-mode)
-  :hook (org-mode   . org-cdlatex-mode)
-  :config
+  (add-hook 'org-mode-hook #'org-cdlatex-mode)
+  (add-hook 'LaTeX-mode-hook #'cdlatex-mode)
   (setq cdlatex-use-dollar-to-ensure-math nil)
-  :general
-  (phundrak/major-leader-key
-    :packages 'cdlatex
-    :keymaps 'cdlatex-mode-map
-    "$" nil
-    "(" nil
-    "{" nil
-    "[" nil
-    "|" nil
-    "<" nil
-    "^" nil
-    "_" nil
-    [(control return)] nil))
 #+end_src
 **** Preview pane
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-  (use-package latex-preview-pane)
+  (require 'latex-preview-pane)
+  ;;(use-package latex-preview-pane)
 #+end_src
-** TODO gddg
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
   (provide 'custom-latex)
   ;;; custom-latex.el ends here
 #+end_src
 *** Extra
+**** Install Packages
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (usr-package-install 'helpful)
+  (usr-package-install 'pdf-tools)
+  (usr-package-install 'pdf-view-restore)
+  (usr-package-install 'nov)
+#+end_src
 **** Helpful
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package helpful
-    :commands (helpful-callable helpful-variable helpful-command helpful-key)
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
-    :bind
-    ([remap describe-function] . describe-function)
-    ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . describe-variable)
-    ([remap describe-key] . helpful-key))
+  (customize-set-variable 'counsel-describe-function-function #'helpful-callable)
+  (customize-set-variable 'counsel-describe-variable-function #'helpful-variable)
+  (require 'helpful)
+  ;;:commands (helpful-callable helpful-variable helpful-command helpful-key)
+  (global-set-key [remap describe-function] #'describe-function)
+  (global-set-key [remap describe-command] #'helpful-command)
+  (global-set-key [remap describe-variable] #'describe-variable)
+  (global-set-key [remap describe-key] #'helpful-key)
 #+end_src
 
 **** PDF Tool
 enhanced PDF viewer on emacs
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package pdf-tools)
+  (require 'pdf-tools)
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-width)
 #+end_src
 **** PDF view restore
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package pdf-view-restore
-    :after pdf-tools
-    :defer t
-    :hook (pdf-view-mode . pdf-view-restore-mode)
-    :config
-    (setq pdf-view-restore-filename (expand-file-name ".tmp/pdf-view-restore"
-                                                      user-emacs-directory)))
+  (add-hook 'pdf-view-mode-hook #'pdf-view-restore-mode)
+  (setq pdf-view-restore-filename (expand-file-name ".tmp/pdf-view-restore"
+                                                    user-emacs-directory))
 #+end_src
 **** Nov
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package nov
-    :mode ("\\.epub\\'" . nov-mode))
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
