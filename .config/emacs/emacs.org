@@ -171,11 +171,60 @@ Emacs Configuration for emacs 29.50
 emacs built-in package config
 **** Eshell
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
+  (when (eq system-type 'windows-nt)
+    (setq explicit-shell-file-name "powershell.exe")
+    (setq explicit-powershell.exe-args '()))
+  (defun dw/get-prompt-path ()
+    (let* ((current-path (eshell/pwd))
+           (git-output (shell-command-to-string "git rev-parse --show-toplevel"))
+           (has-path (not (string-match "^fatal" git-output))))
+      (if (not has-path)
+          (abbreviate-file-name current-path)
+        (string-remove-prefix (file-name-directory git-output) current-path))))
+
+  (defun dw/eshell-prompt ()
+    (let ((current-branch (magit-get-current-branch)))
+      (concat
+       "\n"
+       (propertize (system-name) 'face `(:foreground "#62aeed"))
+       (propertize " ॐ " 'face `(:foreground "white"))
+       (propertize (dw/get-prompt-path) 'face `(:foreground "#82cfd3"))
+       (when current-branch
+         (concat
+          (propertize " • " 'face `(:foreground "white"))
+          (propertize (concat " " current-branch) 'face `(:foreground "#c475f0"))))
+       (propertize " • " 'face `(:foreground "white"))
+       (propertize (format-time-string "%I:%M:%S %p") 'face `(:foreground "#5a5b7f"))
+       (if (= (user-uid) 0)
+           (propertize "\n#" 'face `(:foreground "red2"))
+         (propertize "\nλ" 'face `(:foreground "#aece4a")))
+       (propertize " " 'face `(:foreground "white")))))
+
+  (defun efs/configure-eshell ()
+    ;; Save command history when commands are entered
+    (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+
+    ;; Truncate buffer for performance
+    (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
+
+    ;; Bind some useful keys for evil-mode
+    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "<home>") 'eshell-bol)
+    (evil-normalize-keymaps)
+
+    (setq eshell-prompt-function      'dw/eshell-prompt
+          eshell-prompt-regexp        "^λ "
+          eshell-history-size         10000
+          eshell-buffer-maximum-lines 10000
+          eshell-hist-ignoredups t
+          eshell-scroll-to-bottom-on-input t))
+  (add-hook 'eshell-first-time-mode-hook #'efs/configure-eshell)
   (setq eshell-prompt-function
         (lambda ()
           (concat (abbreviate-file-name (eshell/pwd))
                   (if (= (user-uid) 0) " # " " λ ")))
         eshell-prompt-regexp "^[^#λ\n]* [#λ] ")
+
 #+end_src
 **** Dired
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
