@@ -162,7 +162,8 @@ Emacs Configuration for emacs 29.50
   (require 'custom-org)
   ;;(require 'custom-workspaces)
   (require 'custom-latex)
-  (require 'custom-extra)
+  (require 'custom-languages)
+  ;;(require 'custom-extra)
 
   ;;; config.el ends here
 #+end_src
@@ -735,13 +736,87 @@ simple but effective sorting and filtering for emacs.
 *** Org Mode
 **** Install Packages
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (usr-package-install 'org-contrib)
+  (usr-package-install 'org-superstar)
+  (usr-package-install 'org-attach-screenshot)
+  (usr-package-install 'org-download)
   (usr-package-install 'valign)
   (usr-package-install 'org-pdftools)
+  (usr-package-install 'org-roam)
+  (usr-package-install 'org-roam-ui)
 #+end_src
 **** configure org
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  ;; hooks
+  (add-hook 'org-mode-hook #'org-indent-mode)
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
+  (setq org-ellipsis " ▾")
+  (setq org-hide-emphasis-markers t)
+  (setq org-src-fontify-natively t)
+  (setq org-fontify-quote-and-verse-blocks t)
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
 
+  ;; ODT export to docx
+  (setq org-odt-preferred-output-format "docx")
+  ;; Do not ask when run code block
+  (setq org-confirm-babel-evaluate nil)
 #+end_src
+**** Org superstar
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (add-hook 'org-mode-hook #'org-superstar-mode)
+#+end_src
+**** Org attach screenshot (linux)
+to use org-screenshot-take
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (require 'org-attach-screenshot)
+#+end_src
+**** Org download
+download image link
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (require 'org-download)
+#+end_src
+**** Org Roam
++ TODO: Project todos
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/org/roam2"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode))
+
+;;      (setq org-roam-v2-ack t)
+;;      (customize-set-variable 'org-roam-directory "~/org/roam2")
+;;      (customize-set-variable 'org-roam-completion-everywhere t)
+;;      (org-roam-db-autosync-mode)
+;;      ;; Org roam ui
+;;      (setq org-roam-ui-sync-theme t
+;;            org-roam-ui-follow t
+;;            org-roam-ui-update-on-save t
+;;            org-roam-ui-open-on-start nil)
+;;      (ju/leader-key-def
+;;        "r" '(:ignore t :which-key "Org Roam")
+;;        "ru" 'org-roam-ui-open
+;;        "rl" 'org-roam-buffer-toggle
+;;        "rf" 'org-roam-node-find
+;;        "ri" 'org-roam-node-insert
+;;        "rI" 'org-roam-node-insert-immediate
+;;        "rp" 'my/org-roam-find-project)
+#+end_src
+
 **** Valign
 | 12345678 |   |
 |----------+---|
@@ -753,6 +828,14 @@ simple but effective sorting and filtering for emacs.
 get link from pdf,
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (add-hook 'org-mode-hook #'org-pdftools-setup-link)
+#+end_src
+**** Keybindings
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (ju/leader-key-def
+    "o" '(:ignore t :which-key "Org mode")
+    "oa" '(:ignore t :which-key "Org Agenda")
+    "oar" '(my/org-roam-refresh-agenda-list :which-key "Org agenda refresh list")
+    "oaa" '(org-agenda :which-key "open org agenda"))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -1016,14 +1099,82 @@ enhanced PDF viewer on emacs
                        "avi" "wmv" "wav" "mov" "flv"
                        "ogm" "ogg" "mkv"))
                     "mpv"
-                    '(file))
-                (list (openwith-make-extension-regexp
-                       '("html" "htm"))
-                      "qutebrowser"
-                      '(file))))
+                    '(file))))
+                ;;(list (openwith-make-extension-regexp
+                ;;       '("html" "htm"))
+                ;;      "qutebrowser"
+                ;;      '(file))))
 #+end_src
+**** TODO: ELFEED
+
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
   (provide 'custom-extra)
   ;;; custom-extra.el ends here
+#+end_src
+
+*** Languages
+**** Default
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (with-eval-after-load 'org
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)
+       (latex . t)))
+    (push '("conf-unix" . conf-unix) org-src-lang-modes)
+    ;; This is needed as of Org 9.2
+    (require 'org-tempo)
+
+    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
+    (add-to-list 'org-structure-template-alist '("cc" . "src c"))
+    (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
+    (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python"))
+    (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
+    (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
+    (add-to-list 'org-structure-template-alist '("vh" . "src vhdl"))
+    (org-reload))
+#+end_src
+**** Rust
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (usr-package-install 'rust-mode)
+#+end_src
+**** CMAKE
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (usr-package-install 'cmake-mode)
+#+end_src
+
+**** Haskell
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (usr-package-install 'haskell-mode)
+#+end_src
+**** Markdown
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (usr-package-install 'markdown-mode)
+  (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  (setq markdown-command "multimarkdown")
+#+end_src
+**** Verilog Indent
+LSP -> veriloter
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (custom-set-variables
+   '(verilog-indent-level 4)
+   '(verilog-indent-level-module 0)
+   '(verilog-indent-level-declaration 0)
+   '(verilog-indent-level-behavioral 0)
+   '(verilog-indent-level-directive 0)
+   '(verilog-cexp-indent 0)
+   '(verilog-case-indent 4)
+
+   '(verilog-auto-newline nil))
+#+end_src
+**** Provide modules
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (provide 'custom-languages)
+  ;;; custom-languages.el ends here
 #+end_src
