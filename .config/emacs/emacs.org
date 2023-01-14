@@ -111,15 +111,13 @@ Emacs Configuration for emacs 29.50
       trash-directory "~/.local/share/Trash/files/")
 (setq undo-limit 100000000
       auto-save-default t)
-;;(require 'no-littering)
-;;(setq auto-save-file-name-transforms
-;;      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
 
 *** Other options
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (set-default-coding-systems 'utf-8)
   (set-language-environment "utf-8")
+  (prefer-coding-system 'utf-8)
   (customize-set-variable 'large-file-warning-threshold 100000000) ;; 100MB
 
   (defconst ON-LINUX (eq system-type 'gnu/linux))
@@ -132,8 +130,12 @@ Emacs Configuration for emacs 29.50
   (load my-config-file nil 'nomessage)
 
   (setq use-short-answer t)
+
+  (setq global-auto-revert-non-file-buffers t)
   (global-auto-revert-mode t)
 
+  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+end_src
 * Modules Selection module
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
@@ -432,6 +434,7 @@ When you begin a keybind, whichkey will show you all keybinds you can follow the
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
   (require 'which-key)
   (setq which-key-idle-delay 0.5)
+  (which-key-mode 1)
 #+end_src
 **** General
 for managing keybindings.
@@ -458,11 +461,9 @@ for managing keybindings.
     "e" '(:ignore t :which-key "eshell")
     "e h" '(counsel-esh-history :which "Kill history")
     "e s" '(eshell :which "run eshell")
-    ;; Workspace
     ;; Counsel
     "f" '(:ignore t :which-key "file op.")
     "f r" '(consult-recent-file :which-key "Recent files")
-    "t t" '(toggle-truncate-lines :which-key "Toggle truncate lines")
     ;; Shortcut
     "f o d" '((lambda () (interactive) (find-file (expand-file-name "~/.config/emacs/desktop.org"))) :which-key "open exwm config")
     "f o p" '((lambda () (interactive) (find-file (expand-file-name "~/org/example/emacs_my_previous.org"))) :which-key "open exwm config")
@@ -473,6 +474,10 @@ for managing keybindings.
     "h t" '(hydra-text-scale/body :which-key "scale text")
     "h w" '(hydra-writeroom-scale/body :which-key "scale whiteroom")
     "h a" '(hydra-modify-alpha/body :which-key "modify alpha background")
+    ;; Insert something
+    "i" '(:ignore t :which-key "insert something.")
+    "i s" '(yas-insert-snippet :which-key "snippet")
+    "i e" '(emojify-insert-emoji :which-key "emoji")
     ;; Magit
     "g" '(:ignore t :which-key "magit")
     "g g" '(magit :which-key "magit")
@@ -486,7 +491,12 @@ for managing keybindings.
     "p s" '(project-shell :which-key "shell")
     "p e" '(project-eshell :which-key "eshell")
     "p d" '(project-dired :which-key "dired")
-    "p g" '(project-find-regexp :which-key "find-regexp"))
+    "p g" '(project-find-regexp :which-key "find-regexp")
+
+    ;; Extra
+    "t" '(:ignore t :which-key "extra")
+    "t a" '(toggle-transparency :which-key "Toggle Transparency")
+    "t t" '(toggle-truncate-lines :which-key "Toggle truncate lines"))
 #+end_src
 **** Evil Mode
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-keybindings.el
@@ -572,9 +582,10 @@ https://github.com/SystemCrafter/crafted-emacs
 **** Install Packages
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
   (usr-package-install 'vertico)
+  (usr-package-install 'vertico-prescient)
   (usr-package-install 'marginalia)
-  (usr-package-install 'consult)
   (usr-package-install 'orderless)
+  (usr-package-install 'consult)
   (usr-package-install 'embark)
   (usr-package-install 'embark-consult)
   (usr-package-install 'corfu)
@@ -672,6 +683,11 @@ Quick Action in minibuffer
                               corfu-auto nil)
               (corfu-mode)))
 #+end_src
+**** Prescient
+simple but effective sorting and filtering for emacs.
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
+  (vertico-prescient-mode)
+#+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
 (provide 'custom-completion)
@@ -682,6 +698,10 @@ Quick Action in minibuffer
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (usr-package-install 'valign)
   (usr-package-install 'org-pdftools)
+#+end_src
+**** configure org
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+
 #+end_src
 **** Valign
 | 12345678 |   |
@@ -705,6 +725,7 @@ get link from pdf,
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
   (usr-package-install 'magit)
   (usr-package-install 'magit-todos)
+  (usr-package-install 'git-gutter)
   ;;(usr-package-install 'forge)
   (usr-package-install 'hl-todo)
 #+end_src
@@ -716,12 +737,16 @@ get link from pdf,
   ;;  ;;:custom
   (setq magit-clone-default-directory "~/Project/"
          magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-  ;;(use-package magit-todos
-  ;;  :after (magit todo)
-  ;;  :config
-  ;;  (setq magit-todos-ignore-case t))
-  ;;(use-package forge
-  ;;  :after magit)
+#+end_src
+**** Gitgutter
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
+
+#+end_src
+**** Forge
+Git forge
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
+  (global-git-gutter-mode)
+  (setq git-gutter:update-interval 2)
 #+end_src
 **** Highlight TODOs
 ***** TODO: test
@@ -881,6 +906,7 @@ speed-up insertion of environments and math templates.
   (usr-package-install 'pdf-tools)
   (usr-package-install 'pdf-view-restore)
   (usr-package-install 'nov)
+  (usr-package-install 'emojify)
 #+end_src
 **** Helpful
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
@@ -892,6 +918,10 @@ speed-up insertion of environments and math templates.
   (global-set-key [remap describe-command] #'helpful-command)
   (global-set-key [remap describe-variable] #'describe-variable)
   (global-set-key [remap describe-key] #'helpful-key)
+#+end_src
+**** Emojify
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (global-emojify-mode 1)
 #+end_src
 
 **** PDF Tool
