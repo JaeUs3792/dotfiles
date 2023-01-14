@@ -182,7 +182,7 @@ emacs built-in package config
   (when (eq system-type 'windows-nt)
     (setq explicit-shell-file-name "powershell.exe")
     (setq explicit-powershell.exe-args '()))
-  (defun dw/get-prompt-path ()
+  (defun ju/get-prompt-path ()
     (let* ((current-path (eshell/pwd))
            (git-output (shell-command-to-string "git rev-parse --show-toplevel"))
            (has-path (not (string-match "^fatal" git-output))))
@@ -190,13 +190,13 @@ emacs built-in package config
           (abbreviate-file-name current-path)
         (string-remove-prefix (file-name-directory git-output) current-path))))
 
-  (defun dw/eshell-prompt ()
+  (defun ju/eshell-prompt ()
     (let ((current-branch (magit-get-current-branch)))
       (concat
        "\n"
        (propertize (system-name) 'face `(:foreground "#62aeed"))
        (propertize " ॐ " 'face `(:foreground "white"))
-       (propertize (dw/get-prompt-path) 'face `(:foreground "#82cfd3"))
+       (propertize (ju/get-prompt-path) 'face `(:foreground "#82cfd3"))
        (when current-branch
          (concat
           (propertize " • " 'face `(:foreground "white"))
@@ -208,7 +208,7 @@ emacs built-in package config
          (propertize "\nλ" 'face `(:foreground "#aece4a")))
        (propertize " " 'face `(:foreground "white")))))
 
-  (defun efs/configure-eshell ()
+  (defun ju/configure-eshell ()
     ;; Save command history when commands are entered
     (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
 
@@ -220,13 +220,13 @@ emacs built-in package config
     (evil-define-key '(normal insert visual) eshell-mode-map (kbd "<home>") 'eshell-bol)
     (evil-normalize-keymaps)
 
-    (setq eshell-prompt-function      'dw/eshell-prompt
+    (setq eshell-prompt-function      'ju/eshell-prompt
           eshell-prompt-regexp        "^λ "
           eshell-history-size         10000
           eshell-buffer-maximum-lines 10000
           eshell-hist-ignoredups t
           eshell-scroll-to-bottom-on-input t))
-  (add-hook 'eshell-first-time-mode-hook #'efs/configure-eshell)
+  (add-hook 'eshell-first-time-mode-hook #'ju/configure-eshell)
   (setq eshell-prompt-function
         (lambda ()
           (concat (abbreviate-file-name (eshell/pwd))
