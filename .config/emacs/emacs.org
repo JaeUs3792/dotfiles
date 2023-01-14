@@ -419,8 +419,8 @@ emacs built-in package config
             "Browse my Homepage"
             (lambda (&rest _) (browse-url "https://jaeus.net")))
            (,(all-the-icons-octicon "zap" :height 1.1 :v-adjust 0.0)
-            "Referesh"
-            "Referesh Packages"
+            "Refresh"
+            "Refresh Packages"
             (lambda (&rest _) (package-refresh-contents)) warning))))
 
   (dashboard-setup-startup-hook)
@@ -1409,6 +1409,20 @@ calendar
     (add-to-list 'org-structure-template-alist '("vh" . "src vhdl"))
     (org-reload))
 #+end_src
+**** Treesitter
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (if (version< emacs-version "29")
+      (progn
+        (usr-package-install 'tree-sitter)
+        (usr-package-install 'tree-sitter-langs)
+        (require 'tree-sitter)
+        (global-tree-sitter-mode)))
+#+end_src
+**** eglot
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (if (version< emacs-version "29")
+      (usr-package-install 'eglot))
+#+end_src
 **** Rust
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
   (usr-package-install 'rust-mode)
@@ -1434,6 +1448,33 @@ calendar
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (setq markdown-command "multimarkdown")
+#+end_src
+**** PKGBUILD
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (usr-package-install 'pkgbuild-mode)
+  ;;(phundrak/major-leader-key
+  ;;  :keymaps 'pkgbuild-mode-map
+  ;;  "c"  #'pkgbuild-syntax-check
+  ;;  "i"  #'pkgbuild-initialize
+  ;;  "I"  #'pkgbuild-increase-release-tag
+  ;;  "m"  #'pkgbuild-makepkg
+  ;;  "u"  '(:ignore :wk "update")
+  ;;  "us" #'pkgbuild-update-sums-line
+  ;;  "uS" #'pkgbuild-update-srcinfo))
+#+end_src
+**** Systemd
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (usr-package-install 'systemd)
+#+end_src
+**** Toml
+#+begin_src emacs-lisp
+  (usr-package-install 'toml-mode)
+  (add-to-list 'auto-mode-alist '("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . toml-mode))
+#+end_src
+
+**** Gnuplot
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (usr-package-install 'gnuplot)
 #+end_src
 **** Graphviz dot Mode
 org mode graph drawing with graphviz
