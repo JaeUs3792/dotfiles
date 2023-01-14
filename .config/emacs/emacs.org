@@ -600,9 +600,9 @@ for managing keybindings.
         undo-limit        (* 800 1024)
         undo-strong-limit (* 12 1024 1024)
         undo-outer-limit  (* 128 1024 1024))
-  (undo-tree-history-directory-alist
-   `(("." . ,(expand-file-name (file-name-as-directory "undo-tree-hist")
-                               user-emacs-directory))))
+  (setq undo-tree-history-directory-alist
+        `(("." . ,(expand-file-name (file-name-as-directory "undo-tree-hist")
+                                    user-emacs-directory))))
   (global-undo-tree-mode)
 #+end_src
 **** Hydra
@@ -755,25 +755,105 @@ Quick Action in minibuffer
 *** Org Mode
 **** configure org
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-contrib)
-  (setq org-directory "~/org") ; use for relative file location
-  ;; hooks
-  (add-hook 'org-mode-hook #'org-indent-mode)
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
-  (setq org-ellipsis " ▾")
-  (setq org-hide-emphasis-markers t)
-  (setq org-src-fontify-natively t)
-  (setq org-fontify-quote-and-verse-blocks t)
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
-  ;;(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
+    (usr-package-install 'org-contrib)
+    (setq org-directory "~/org") ; use for relative file location
+    ;; hooks
+    (add-hook 'org-mode-hook #'org-indent-mode)
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
+    (setq org-ellipsis                       " ⤵"
+          org-hide-emphasis-markers          t
+          org-image-actual-width             600
+          org-redisplay-inline-images        t
+          org-display-inline-images          t
+          org-startup-with-inline-images     "inlineimages"
+          org-src-fontify-natively           t
+          org-fontify-quote-and-verse-blocks t
+          org-agenda-start-with-log-mode     t
+          org-startup-indented               t
+          org-startup-align-all-tables       t
+          org-log-done                       'time
+          org-log-into-drawer                "LOGBOOK"
+          org-clock-into-drawer              "CLOCKING"
+          org-lowest-priority                68)
+    ;;(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
 
-  ;; ODT export to docx
-  (setq org-odt-preferred-output-format "docx")
-  ;; Do not ask when run code block
-  (setq org-confirm-babel-evaluate nil)
+    ;; ODT export to docx
+    (setq org-odt-preferred-output-format "docx")
+    ;; Do not ask when run code block
+    (setq org-confirm-babel-evaluate nil)
+
+    (custom-set-faces
+    '(org-level-1 ((t (:height 1.7  :weight ultra-bold :foreground "#81a2be"))))         ;; :foreground "#81a2be"
+    '(org-level-2 ((t (:height 1.6  :weight extra-bold :foreground "#b294bb"))))         ;; :foreground "#b294bb"
+    '(org-level-3 ((t (:height 1.5  :weight bold :foreground "#b5bd68"))))               ;; :foreground "#b5bd68"
+    '(org-level-4 ((t (:height 1.4  :weight semi-bold :foreground "#e6c547"))))          ;; :foreground "#e6c547"
+    '(org-level-5 ((t (:height 1.3  :weight normal :foreground "#cc6666"))))             ;; :foreground "#cc6666"
+    '(org-level-6 ((t (:height 1.2  :weight normal :foreground "#70c0ba"))))             ;; :foreground "#70c0ba"
+    '(org-level-7 ((t (:height 1.1  :weight normal :foreground "#b77ee0"))))             ;; :foreground "#b77ee0"
+    '(org-level-8 ((t (:height 1.0  :weight normal :foreground "#9ec400"))))
+    '(org-document-title ((t (:height 2.0  :weight ultra-bold :foreground "#9ec400")))))
+    (setq org-use-sub-superscripts '{})
+    (setq org-export-with-sub-superscripts '{})
+#+end_src
+**** Org Agenda
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+(setq org-agenda-files (list "~/org/agenda/agenda.org"))
+#+end_src
+**** Org Super Agenda
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (usr-package-install 'org-super-agenda)
+  (org-super-agenda-mode 1)
+  (setq org-agenda-custom-commands
+        '(("z" "Org mode super agenda"
+           ((alltodo "" ((org-agenda-overriding-header "")
+                         (org-super-agenda-groups
+                          '((:name "Important"
+                                   :tag "Important"
+                                   :priority "A"
+                                   :order 6)
+                            (:name "Due Today"
+                                   :deadline today
+                                   :order 2)
+                            (:name "Due Soon"
+                                   :deadline future
+                                   :order 8)
+                            (:name "Overdue"
+                                   :deadline past
+                                   :order 7)
+                            (:name "Projects"
+                                   :tag "Project"
+                                   :order 14)
+                            (:name "To read"
+                                   :tag "Read"
+                                   :order 30)
+                            (:name "Waiting"
+                                   :todo "WAIT"
+                                   :order 20)
+                            (:name "Holding"
+                                   :todo "HOLD"
+                                   :order 21)
+                            (:name "trivial"
+                                   :priority<= "C"
+                                   :tag ("Trivial" "Unimportant")
+                                   :order 90)
+                            (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
+#+end_src
+**** Org fancy Priorities
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (usr-package-install 'org-fancy-priorities)
+  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕"))
+  (org-fancy-priorities-mode)
+#+end_src
+
+**** Org superstar
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (usr-package-install 'org-superstar)
+  (setq org-superstar-item-bullet-alist
+    '((?+ . ?➢)
+      (?* . ?✰)
+      (?- . ?➸)))
+  (add-hook 'org-mode-hook #'org-superstar-mode)
 #+end_src
 **** my org mode functions
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -823,11 +903,6 @@ Quick Action in minibuffer
          "Error pasting the image, make sure you have an image in the clipboard!"))
       ))
 #+end_src
-**** Org superstar
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-superstar)
-  (add-hook 'org-mode-hook #'org-superstar-mode)
-#+end_src
 **** Org attach screenshot (linux)
 to use org-screenshot-take
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -854,6 +929,7 @@ download image link
 + TODO: Project todos
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (usr-package-install 'org-roam)
+  ;;(my/org-roam-refresh-agenda-list)
 
   (setq org-roam-v2-ack t)
   (customize-set-variable 'org-roam-directory "~/org/roam")
@@ -884,7 +960,7 @@ download image link
 **** Valign
 | 12345678 |   |
 |----------+---|
-|   일이삼사 |   |
+| 일이삼사 |   |
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (usr-package-install 'valign)
   (customize-set-variable 'valign-fancy-bar t)
