@@ -404,7 +404,8 @@ emacs built-in package config
   (setq dashboard-items '((recents . 10)
                           (agenda . 5)
                           (bookmarks . 5)
-                          ;;(projects . 5)
+                          ;;(if (version< emacs-version "29")
+                          ;;    (projects . 5))
                           (registers . 5)))
   (setq dashboard-set-navigator t)
 
@@ -1375,7 +1376,7 @@ calendar
 
   (require 'elfeed-org)
   (elfeed-org)
-  (setq rmh-elfeed-org-files (list "~/org/elfeed.org"))
+  (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" user-emacs-directory)))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el

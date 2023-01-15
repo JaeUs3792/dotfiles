@@ -1,0 +1,20 @@
+#+title: Rss
+* root :elfeed:
+** News :news:
+*** [[https://www.phoronix.com/rss.php][phoronix]] :phoronix:
+*** [[https://www.computerworld.com/index.rss][Computer world]] :computerworld:
+*** [[https://coolenjoy.net/rss?bo_table=38][Coolenjoy]] :coolenjoy:
+*** [[https://gigglehd.com/gg/ggnews/rss][GiggleHardware]] :gigglehd:
+** Paper :study:
+*** [[https://arxiv.org/rss/cs][Computer Science]] :computerscience:
+*** [[https://arxiv.org/rss/eess][Electrical Engineering and System Science]] :eess:
+** Linux :linux:
+*** [[https://www.reddit.com/r/linux.rss][Reddit Linux]]
+*** [[https://www.gamingonlinux.com/article_rss.php][Gaming on linux]] :gaming:
+*** [[https://hackaday.com/blog/feed/][Hackaday]] :hackaday:
+*** [[http://lxer.com/module/newswire/headlines.rss][Lxer]]
+** Programming :programming:
+*** [[https://this-week-in-rust.org/rss.xml][This Week in Rust]] :rust:
+*** [[https://opensource.com/feed][Opensource]] :opensource:
+** Emacs :emacs:
+*** [[https://www.reddit.com/r/emacs.rss][Reddit Emacs]] :reddit:
