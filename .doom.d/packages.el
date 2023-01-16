@@ -48,3 +48,11 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
+
+
+(package! dired-hide-dotfiles)
+(package! peep-dired)
+(package! visual-fill-column)
+(package! dashboard)
+(package! page-break-lines)
+(package! valign)
