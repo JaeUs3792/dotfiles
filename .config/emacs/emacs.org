@@ -64,28 +64,10 @@ Emacs Configuration for emacs 29.50
     (package-refresh-contents))
   (straight-use-package '(use-package :build t))
   (setq use-package-always-ensure t)
-  ;;(require 'package)
-  ;;(add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
-  ;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-  ;;(customize-set-variable 'package-archive-priorities
-  ;;                        '(("gnu"    . 99)   ; prefer GNU packages
-  ;;                          ("nongnu" . 80)   ; use non-gnu packages if
-  ;;                                        ; not found in GNU elpa
-  ;;                          ("stable" . 70)   ; prefer "released" versions
-  ;;                                        ; from melpa
-  ;;                          ("melpa"  . 0)))  ; if all else fails, get it
-  ;;                                        ; from melpa
-  ;; make sure the elpa/ folder exists after setting it above.
-  ;;(defmacro usr-package-install (package)
-  ;;  `(unless (package-installed-p ,package) (package-install ,package)))
-  ;;(package-initialize)
-  ;;(if (version< emacs-version "29")
-  ;;    (usr-package-install 'use-package)) ;; <emacs29
+
   (unless (file-exists-p package-user-dir)
     (mkdir package-user-dir t))
-
-
-    ;;; init.el ends here
+  ;;; init.el ends here
 #+end_src
 *** Add other modules
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -175,18 +157,18 @@ Emacs Configuration for emacs 29.50
   (add-hook 'emacs-startup-hook
             (lambda ()
               (custom-set-faces
-               `(default ((t (:font "Fira Code 14"))))
+               `(default ((t (:font "Fira Code 11"))))
                `(fixed-pitch ((t (:inherit (default)))))
                `(fixed-pitch-serif ((t (:inherit (default)))))
-               `(variable-pitch ((t (:font "Ubuntu 14")))))))
+               `(variable-pitch ((t (:font "Ubuntu 11")))))))
 
   (require 'custom-ui)
   (require 'custom-keybindings)
   (require 'custom-default)
   (require 'custom-completion)
-  ;;(require 'custom-projects)
-  ;;(require 'custom-latex)
-  ;;(require 'custom-org)
+  (require 'custom-projects)
+  (require 'custom-latex)
+  (require 'custom-org)
   ;;(require 'custom-workspaces)
   ;;(require 'custom-languages)
   ;;(require 'custom-extra)
@@ -215,7 +197,7 @@ emacs built-in package config
            (has-path (not (string-match "^fatal" git-output))))
       (if (not has-path)
           (abbreviate-file-name current-path)
-        (string-remove-prefix (file-name-directory git-output) current-path))))
+       (string-remove-prefix (file-name-directory git-output) current-path))))
 
   (defun ju/eshell-prompt ()
     (let ((current-branch (magit-get-current-branch)))
@@ -270,8 +252,8 @@ emacs built-in package config
     :custom ((dired-listing-switches "-agho --group-directories-first"))
     :config
     (evil-collection-define-key 'normal 'dired-mode-map
-      "h" 'dired-up-directory ;dired-single-up-directory
-      "l" 'dired-find-file)) ;dired-single-buffer)
+      "h" 'dired-single-up-directory
+      "l" 'dired-single-buffer))
   (use-package dired-single
     :straight (:build t)
     :defer t
@@ -289,8 +271,8 @@ emacs built-in package config
   (use-package diff-hl
     :straight (:build t)
     :defer t
-    :hook ((dired-mode-hook . diff-hl-dired-mode-unless-remote)
-           (magit-post-refresh-hook . diff-hl-magit-post-refresh))
+    :hook ((dired-mode . diff-hl-dired-mode-unless-remote)
+           (magit-post-refresh . diff-hl-magit-post-refresh))
     :config
     (diff-hl-margin-mode))
   (use-package dired-rsync
@@ -310,7 +292,6 @@ emacs built-in package config
     (evil-collection-define-key 'normal 'dired-mode-map
       "H" 'dired-hide-dotfiles-mode))
 
-  ;;(usr-package-install 'peep-dired)
   ;; HACK:Fixes #1929: icons break file renaming in Emacs 27+, because the icon
   ;;      is considered part of the filename, so we disable icons while we're in
   ;;      wdired-mode.
@@ -324,7 +305,7 @@ emacs built-in package config
   (use-package peep-dired
     :straight (:build t)
     :defer t
-    :hook (peep-dired-hook . evil-normalize-keymaps)
+    :hook (peep-dired . evil-normalize-keymaps)
     :config
     (evil-define-key 'normal peep-dired-mode-map
       (kbd "j") 'peep-dired-next-file
@@ -424,6 +405,7 @@ emacs built-in package config
     (interactive)
     (setq visual-fill-column-width 100
           visual-fill-column-center-text t)
+    (visual-line-mode t)
     (visual-fill-column-mode t))
 
   (use-package visual-fill-column
@@ -564,7 +546,7 @@ for managing keybindings.
     "b K" '(kill-buffer :which-key "IBuffer Kill Buffers")
     ;; Eshell
     "e" '(:ignore t :which-key "eshell")
-    "e h" '(counsel-esh-history :which "Kill history")
+    "e h" '(counsel-esh-history :which-key "Kill history")
     "e s" '(eshell :which-key "run eshell")
     "e e" '(elfeed :which-key "elfeed")
     ;; Counsel
@@ -578,11 +560,6 @@ for managing keybindings.
     "f o c" '((lambda () (interactive) (find-file "~/.config/emacs/emacs.org")) :which-key "open emacs config")
     ;; Insert something
     "i" '(:ignore t :which-key "insert something.")
-    ;; Org mode
-    "o" '(:ignore t :which-key "org mode")
-    "o a" '(:ignore t :which-key "org agenda")
-    "o a c" '((lambda () (interactive) (find-file (expand-file-name "agenda/agenda.org" org-directory))) :which-key "org agenda file")
-    "o c" '(cfw:open-org-calendar :which-key "org calendar")
     ;; Project-el
     "p" '(:ignore t :which-key "project")
     "p ." '(project-switch-project :which-key "switch project")
@@ -721,17 +698,6 @@ https://github.com/SystemCrafters/crafted-emacs
     (vertico-cycle t)
     :init
     (vertico-mode))
-  ;;(use-package vertico
-  ;;  :straight (:build t)
-  ;;  :ensure t
-  ;;  :bind (:map vertico-map
-  ;;              ("C-j" 'vertico-next)
-  ;;              ("C-k" 'vertico-previous)
-  ;;              ("M-h" 'vertico-directory-up))
-  ;;  :custom
-  ;;  (vertico-cycle t)
-  ;;  :config
-  ;;  (vertico-mode))
 #+end_src
 **** Prescient
 simple but effective sorting and filtering for emacs.
@@ -860,72 +826,91 @@ Quick Action in minibuffer
 **** Normal Function
 ***** configure org
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-contrib)
   (setq org-directory "~/org") ; use for relative file location
-  ;; hooks
-  (add-hook 'org-mode-hook #'org-indent-mode)
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
-  (setq org-ellipsis                       " ⤵"
-        org-hide-emphasis-markers          t
-        org-image-actual-width             600
-        org-redisplay-inline-images        t
-        org-display-inline-images          t
-        org-startup-with-inline-images     "inlineimages"
-        org-src-fontify-natively           t
-        org-fontify-quote-and-verse-blocks t
-        org-agenda-start-with-log-mode     t
-        org-startup-indented               t
-        org-startup-align-all-tables       t
-        org-log-done                       'time
-        org-log-into-drawer                "LOGBOOK"
-        org-clock-into-drawer              "CLOCKING"
-        org-lowest-priority                68)
-  ;;(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
+  (use-package org
+    :straight (:build t)
+    :defer t
+    :config
+    (add-hook 'org-mode-hook #'org-indent-mode)
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
+    (setq org-ellipsis                       " ⤵"
+          org-hide-emphasis-markers          t
+          org-image-actual-width             600
+          org-redisplay-inline-images        t
+          org-display-inline-images          t
+          org-startup-with-inline-images     "inlineimages"
+          org-src-fontify-natively           t
+          org-fontify-quote-and-verse-blocks t
+          org-agenda-start-with-log-mode     t
+          org-startup-indented               t
+          org-startup-align-all-tables       t
+          org-log-done                       'time
+          org-log-into-drawer                "LOGBOOK"
+          org-clock-into-drawer              "CLOCKING"
+          org-lowest-priority                68)
+    ;;(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
 
-  (setq org-use-sub-superscripts (quote {}))
-  ;; Do not ask when run code block
-  (setq org-confirm-babel-evaluate nil)
+    (setq org-use-sub-superscripts '{})
+    ;; Do not ask when run code block
+    (setq org-confirm-babel-evaluate nil)
 
-  (custom-set-faces
-   '(org-level-1 ((t (:height 1.7  :weight ultra-bold :foreground "#81a2be"))))         ;; :foreground "#81a2be"
-   '(org-level-2 ((t (:height 1.6  :weight extra-bold :foreground "#b294bb"))))         ;; :foreground "#b294bb"
-   '(org-level-3 ((t (:height 1.5  :weight bold :foreground "#b5bd68"))))               ;; :foreground "#b5bd68"
-   '(org-level-4 ((t (:height 1.4  :weight semi-bold :foreground "#e6c547"))))          ;; :foreground "#e6c547"
-   '(org-level-5 ((t (:height 1.3  :weight normal :foreground "#cc6666"))))             ;; :foreground "#cc6666"
-   '(org-level-6 ((t (:height 1.2  :weight normal :foreground "#70c0ba"))))             ;; :foreground "#70c0ba"
-   '(org-level-7 ((t (:height 1.1  :weight normal :foreground "#b77ee0"))))             ;; :foreground "#b77ee0"
-   '(org-level-8 ((t (:height 1.0  :weight normal :foreground "#9ec400"))))
-   '(org-document-title ((t (:height 2.0  :weight ultra-bold :foreground "#9ec400")))))
-  (setq org-use-sub-superscripts '{})
+    (custom-set-faces
+     '(org-level-1 ((t (:height 1.7  :weight ultra-bold :foreground "#81a2be"))))         ;; :foreground "#81a2be"
+     '(org-level-2 ((t (:height 1.6  :weight extra-bold :foreground "#b294bb"))))         ;; :foreground "#b294bb"
+     '(org-level-3 ((t (:height 1.5  :weight bold :foreground "#b5bd68"))))               ;; :foreground "#b5bd68"
+     '(org-level-4 ((t (:height 1.4  :weight semi-bold :foreground "#e6c547"))))          ;; :foreground "#e6c547"
+     '(org-level-5 ((t (:height 1.3  :weight normal :foreground "#cc6666"))))             ;; :foreground "#cc6666"
+     '(org-level-6 ((t (:height 1.2  :weight normal :foreground "#70c0ba"))))             ;; :foreground "#70c0ba"
+     '(org-level-7 ((t (:height 1.1  :weight normal :foreground "#b77ee0"))))             ;; :foreground "#b77ee0"
+     '(org-level-8 ((t (:height 1.0  :weight normal :foreground "#9ec400"))))
+     '(org-document-title ((t (:height 2.0  :weight ultra-bold :foreground "#9ec400")))))
+    ;; org latex preview scaled.
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.5))
+    ;; odt -> docx
+    (setq org-odt-preferred-output-format "docx" ;; opt -> docx
+          org-export-with-sub-superscripts '{}   ;; ODT export to docx
+          org-latex-compiler "xelatex"))
+  (use-package org-contrib
+    :straight (:build t)
+    :after org
+    :defer t)
     #+end_src
 ***** Org fancy Priorities
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-    (usr-package-install 'org-fancy-priorities)
-    ;;(setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕"))
-    (add-hook 'org-mode-hook #'org-fancy-priorities-mode)
-    (add-hook 'org-agenda-mode-hook #'org-fancy-priorities-mode)
-    (setq org-fancy-priorities-list `(,(all-the-icons-faicon "flag"     :height 1.1 :v-adjust 0.0)
-                                      ,(all-the-icons-faicon "arrow-up" :height 1.1 :v-adjust 0.0)
-                                      ,(all-the-icons-faicon "square"   :height 1.1 :v-adjust 0.0)
-                                      ,(all-the-icons-faicon "ban"      :height 1.1 :v-adjust 0.0)))
+  (use-package org-fancy-priorities
+    :straight (:build t)
+    :defer t
+    :after (org all-the-icons)
+    :hook (org-mode org-agenda-mode)
+    :config
+  (setq org-fancy-priorities-list `(,(all-the-icons-faicon "flag"     :height 1.1 :v-adjust 0.0)
+                                    ,(all-the-icons-faicon "arrow-up" :height 1.1 :v-adjust 0.0)
+                                    ,(all-the-icons-faicon "square"   :height 1.1 :v-adjust 0.0)
+                                    ,(all-the-icons-faicon "ban"      :height 1.1 :v-adjust 0.0))))
 #+end_src
 ***** Org superstar
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-superstar)
-  (setq org-superstar-item-bullet-alist
-    '((?+ . ?➢)
-      (?* . ?✰)
-      (?- . ?➸)))
-  (add-hook 'org-mode-hook #'org-superstar-mode)
+  (use-package org-superstar
+    :straight (:build t)
+    ;;:defer t
+    :hook (org-mode)
+    :config
+    (setq org-superstar-item-bullet-alist
+          '((?+ . ?➢)
+            (?* . ?✰)
+            (?- . ?➸))))
 #+end_src
 ***** Valign
 | 12345678 |   |
 |----------+---|
-| 일이삼사 |   |
+|   일이삼사 |   |
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'valign)
-  (customize-set-variable 'valign-fancy-bar t)
+  (use-package valign
+    :straight (:build t)
+    :defer t
+    :custom
+    (valign-fancy-bar t))
 #+end_src
 ***** Emphasize text
 bold : *bold*
@@ -936,37 +921,43 @@ code : ~code~
 strike-through : +strike-through+
 ***** Org Appear
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-appear)
-  (add-hook 'org-mode-hook #'org-appear-mode)
-  (setq org-appear-autoemphasis   t
-        org-appear-autolinks      t
-        org-appear-autoentities   t
-        org-appear-autosubmarkers t)
+  (use-package org-appear
+    :straight (:build t)
+    :defer t
+    :hook (org-mode)
+    :config
+    (setq org-appear-autoemphasis   t
+          org-appear-autolinks      t
+          org-appear-autoentities   t
+          org-appear-autosubmarkers t))
 #+end_src
 ***** Org fragtog
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-fragtog)
-  (add-hook 'org-mode-hook #'org-fragtog-mode)
-#+end_src
-***** Org latex preview
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.5))
+  (use-package org-fragtog
+    :straight (:build t)
+    :defer t
+    :hook (org-mode))
 #+end_src
 **** Attachment
 ***** Org attach screenshot (linux)
 to use org-screenshot-take
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-attach-screenshot)
+  (use-package org-attach-screenshot
+    :straight (:build t)
+    :defer t)
 #+end_src
 ***** Org download
 download image link
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-download)
+  (use-package org-download
+    :straight (:build t))
 #+end_src
+#+DOWNLOADED: https://avatars.githubusercontent.com/u/74564409?s=120&v=4 @ 2023-01-17 14:15:54
+
 ***** ob-latex-as-png
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'ob-latex-as-png)
-  (require 'ob-latex-as-png)
+  (use-package ob-latex-as-png
+    :straight (:build t))
 #+end_src
 
 ****** Example 1
@@ -1071,20 +1062,12 @@ download image link
       ))
 #+end_src
 **** Exporter
-export with ^, _ character
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  ;; ODT export to docx
-  (setq org-odt-preferred-output-format "docx"
-        org-export-with-sub-superscripts '{}
-        org-latex-compiler "xelatex")
-  ;;
-  (dolist (ext '("bbl" "lot"))
-    (add-to-list 'org-latex-logfiles-extensions ext t))
-#+end_src
 ***** Hugo
 my-blog jaeus.net
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'ox-hugo)
+  (use-package ox-hugo
+    :straight (:build t)
+    :defer t)
 #+end_src
 ***** TODO Engrave-faces
 latex export code block
@@ -1098,40 +1081,36 @@ latex export code block
 **** Additional Functions
 ***** Org Journal
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-journal)
-  (setq org-journal-dir (expand-file-name "journal/" org-directory))
-  (setq org-journal-file-type 'weekly)
-  (ju/leader-key-def
-    "n j" '(:ignore t :which-key "Org Journal")
-    "n j j" '(org-journal-new-entry :which-key "new Entry")
-    "n j J" '(org-journal-new-scheduled-entry :which-key "New Scheduled entry")
-    "n j s" '(org-journal-search :which-key "Journal Search"))
+  (use-package org-journal
+    :straight (:build t)
+    :defer t
+    :config
+    (setq org-journal-dir (expand-file-name "journal/" org-directory))
+    (setq org-journal-file-type 'weekly))
 #+end_src
 
 ***** Org Roam
 + TODO: Project todos
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-roam)
+  (use-package org-roam
+    :straight (:build t)
+    :ensure t
+    :custom
+    (org-roam-directory "~/org/roam")
+    (org-roam-completion-everywhere t)
+    :config
+    (org-roam-db-autosync-mode))
   ;;(my/org-roam-refresh-agenda-list)
 
-  (setq org-roam-v2-ack t)
-  (customize-set-variable 'org-roam-directory "~/org/roam")
-  (customize-set-variable 'org-roam-completion-everywhere t)
-  (org-roam-db-autosync-mode)
   ;; Org roam ui
-  (usr-package-install 'org-roam-ui)
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start nil)
-  (ju/leader-key-def
-    "n r" '(:ignore t :which-key "Org Roam")
-    "n r u" 'org-roam-ui-open
-    "n r l" 'org-roam-buffer-toggle
-    "n r f" 'org-roam-node-find
-    "n r i" 'org-roam-node-insert
-    "n r I" 'org-roam-node-insert-immediate
-    "n r p" 'my/org-roam-find-project)
+  (use-package org-roam-ui
+    :straight (:build t)
+    :defer t
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start nil))
   ;;:desc "org roam refresh agenda list"
   ;;"oar" 'my/org-roam-refresh-agenda-list
   ;;:desc "org roam find tag:project"
@@ -1145,49 +1124,54 @@ latex export code block
 #+end_src
 ***** Org Super Agenda
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-super-agenda)
-  (org-super-agenda-mode 1)
-  (setq org-agenda-custom-commands
-        '(("z" "Org mode super agenda"
-           ((alltodo "" ((org-agenda-overriding-header "")
-                         (org-super-agenda-groups
-                          '((:name "Important"
-                                   :tag "Important"
-                                   :priority "A"
-                                   :order 6)
-                            (:name "Due Today"
-                                   :deadline today
-                                   :order 2)
-                            (:name "Due Soon"
-                                   :deadline future
-                                   :order 8)
-                            (:name "Overdue"
-                                   :deadline past
-                                   :order 7)
-                            (:name "Projects"
-                                   :tag "Project"
-                                   :order 14)
-                            (:name "To read"
-                                   :tag "Read"
-                                   :order 30)
-                            (:name "Waiting"
-                                   :todo "WAIT"
-                                   :order 20)
-                            (:name "Holding"
-                                   :todo "HOLD"
-                                   :order 21)
-                            (:name "trivial"
-                                   :priority<= "C"
-                                   :tag ("Trivial" "Unimportant")
-                                   :order 90)
-                            (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
+  (use-package org-super-agenda
+    :straight (:build t)
+    :defer t
+    :init
+    (org-super-agenda-mode 1)
+    :config
+    (setq org-agenda-custom-commands
+          '(("z" "Org mode super agenda"
+             ((alltodo "" ((org-agenda-overriding-header "")
+                           (org-super-agenda-groups
+                            '((:name "Important"
+                                     :tag "Important"
+                                     :priority "A"
+                                     :order 6)
+                              (:name "Due Today"
+                                     :deadline today
+                                     :order 2)
+                              (:name "Due Soon"
+                                     :deadline future
+                                     :order 8)
+                              (:name "Overdue"
+                                     :deadline past
+                                     :order 7)
+                              (:name "Projects"
+                                     :tag "Project"
+                                     :order 14)
+                              (:name "To read"
+                                     :tag "Read"
+                                     :order 30)
+                              (:name "Waiting"
+                                     :todo "WAIT"
+                                     :order 20)
+                              (:name "Holding"
+                                     :todo "HOLD"
+                                     :order 21)
+                              (:name "trivial"
+                                     :priority<= "C"
+                                     :tag ("Trivial" "Unimportant")
+                                     :order 90)
+                              (:discard (:tag ("Chore" "Routine" "Daily"))))))))))))
 #+end_src
 **** Tools
 ***** ob-async
 asynchronous execution of org-babel src blocks
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'ob-async)
-  (require 'ob-async)
+  (use-package ob-async
+    :straight (:build t)
+    :defer t)
 #+end_src
 
 some language should add
@@ -1197,16 +1181,34 @@ some language should add
 ***** Org PDF tools
 get link from pdf,
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (usr-package-install 'org-pdftools)
-  (add-hook 'org-mode-hook #'org-pdftools-setup-link)
+    (use-package org-pdftools
+      :straight (:build t)
+      :defer t
+      :hook (org-mode . org-pdftools-setup-link))
 #+end_src
 **** Keybindings
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (ju/leader-key-def
+    ;; Org mode
     "o" '(:ignore t :which-key "Org mode")
     "o a" '(:ignore t :which-key "Org Agenda")
+    "o a a" '(org-agenda :which-key "open org agenda")
     "o a r" '(my/org-roam-refresh-agenda-list :which-key "Org agenda refresh list")
-    "o a a" '(org-agenda :which-key "open org agenda"))
+    "o a c" '((lambda () (interactive) (find-file (expand-file-name "agenda/agenda.org" org-directory))) :which-key "org agenda file")
+    "o c" '(cfw:open-org-calendar :which-key "org calendar"))
+  (ju/leader-key-def
+    "n j" '(:ignore t :which-key "Org Journal")
+    "n j j" '(org-journal-new-entry :which-key "new Entry")
+    "n j J" '(org-journal-new-scheduled-entry :which-key "New Scheduled entry")
+    "n j s" '(org-journal-search :which-key "Journal Search"))
+  (ju/leader-key-def
+    "n r" '(:ignore t :which-key "Org Roam")
+    "n r u" 'org-roam-ui-open
+    "n r l" 'org-roam-buffer-toggle
+    "n r f" 'org-roam-node-find
+    "n r i" 'org-roam-node-insert
+    "n r I" 'org-roam-node-insert-immediate
+    "n r p" 'my/org-roam-find-project)
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -1216,13 +1218,14 @@ get link from pdf,
 *** Projects
 **** MAGIT
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
-  (usr-package-install 'magit)
-  ;;(use-package magit)
-  (require 'magit)
-  ;;(magit-status magit-get-current-branch)
-  ;;  ;;:custom
-  (setq magit-clone-default-directory "~/Project/"
-         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  (use-package magit
+    :straight (:build t)
+    :defer t
+    :commands (magit-status magit-get-current-branch)
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+    :config
+    (setq magit-clone-default-directory "~/Project/"))
   (ju/leader-key-def
     ;; Magit
     "g" '(:ignore t :which-key "magit")
@@ -1230,9 +1233,12 @@ get link from pdf,
 #+end_src
 **** Gitgutter
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
-  (usr-package-install 'git-gutter)
-  (global-git-gutter-mode)
-  (setq git-gutter:update-interval 2)
+  (use-package git-gutter
+    :straight (:build t)
+    :defer t
+    :init (global-git-gutter-mode)
+    :config
+    (setq git-gutter:update-interval 2))
 #+end_src
 **** Forge
 Git forge
@@ -1241,36 +1247,40 @@ Git forge
 **** Highlight TODOs
 ***** TODO: test
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
-  (usr-package-install 'hl-todo)
-  (require 'hl-todo)
-  (setq hl-todo-keyword-faces
-        `(;; For things that need to be done, just not today.
-          ("TODO" warning bold)
-          ;; For problems that will become bigger problems later if not
-          ;; fixed ASAP.
-          ("FIXME" error bold)
-          ;; For tidbits that are unconventional and not intended uses of the
-          ;; constituent parts, and may break in a future update.
-          ("HACK" font-lock-constant-face bold)
-          ;; For things that were done hastily and/or hasn't been thoroughly
-          ;; tested. It may not even be necessary!
-          ("REVIEW" font-lock-keyword-face bold)
-          ;; For especially important gotchas with a given implementation,
-          ;; directed at another user other than the author.
-          ("NOTE" success bold)
-          ;; For things that just gotta go and will soon be gone.
-          ("DEPRECATED" font-lock-doc-face bold)
-          ;; For a known bug that needs a workaround
-          ("BUG" error bold)
-          ;; For warning about a problematic or misguiding code
-          ("XXX" font-lock-constant-face bold)))
-  (global-hl-todo-mode 1)
+  (use-package hl-todo
+    :straight (:build t)
+    :defer t
+    :init (global-hl-todo-mode 1)
+    :config
+    (setq hl-todo-keyword-faces
+          `(;; For things that need to be done, just not today.
+            ("TODO" warning bold)
+            ;; For problems that will become bigger problems later if not
+            ;; fixed ASAP.
+            ("FIXME" error bold)
+            ;; For tidbits that are unconventional and not intended uses of the
+            ;; constituent parts, and may break in a future update.
+            ("HACK" font-lock-constant-face bold)
+            ;; For things that were done hastily and/or hasn't been thoroughly
+            ;; tested. It may not even be necessary!
+            ("REVIEW" font-lock-keyword-face bold)
+            ;; For especially important gotchas with a given implementation,
+            ;; directed at another user other than the author.
+            ("NOTE" success bold)
+            ;; For things that just gotta go and will soon be gone.
+            ("DEPRECATED" font-lock-doc-face bold)
+            ;; For a known bug that needs a workaround
+            ("BUG" error bold)
+            ;; For warning about a problematic or misguiding code
+            ("XXX" font-lock-constant-face bold))))
 #+end_src
 **** Magit TODOs
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
-  (usr-package-install 'magit-todos)
-  (require 'magit-todos)
-  (add-hook 'magit-mode-hook #'magit-todos-mode)
+  (use-package magit-todos
+    :straight (:build t)
+    :defer t
+    :after (magit hl-todo)
+    :hook (magit-mode))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
@@ -1325,38 +1335,35 @@ Git forge
 **** AUCTEX
 writing and formatting tex file in Emacs.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-  (usr-package-install 'auctex)
-  (with-eval-after-load 'latex
-    (customize-set-variable 'TeX-auto-save t)
-    (customize-set-variable 'TeX-parse-self t)
+  (use-package auctex
+    :straight (:build t)
+    :defer t
+    :custom
+    (TeX-auto-save t)
+    (TeX-parse-self t)
+    ;; to use pdfview with auctex
+    (TeX-view-program-selection '((output-pdf "PDF Tools")))
+    (TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+    (TeX-source-correlate-start-server t)
+    ;; electric pairs in auctex
+    (TeX-electric-sub-and-superscript t)
+    (LaTeX-electric-left-right-brace t)
+    (TeX-electric-math (cons "$" "$"))
+    :config
     (setq-default TeX-master nil)
-
     ;; compile to pdf
     (tex-pdf-mode)
-
     ;; correlate the source and the output
     (TeX-source-correlate-mode)
-
     ;; set a correct indentation in a few additional environments
     (add-to-list 'LaTeX-indent-environment-list '("lstlisting" current-indentation))
     (add-to-list 'LaTeX-indent-environment-list '("tikzcd" LaTeX-indent-tabular))
     (add-to-list 'LaTeX-indent-environment-list '("tikzpicture" current-indentation))
-
     ;; add a few macros and environment as verbatim
     (add-to-list 'LaTeX-verbatim-environments "lstlisting")
     (add-to-list 'LaTeX-verbatim-environments "Verbatim")
     (add-to-list 'LaTeX-verbatim-macros-with-braces "lstinline")
     (add-to-list 'LaTeX-verbatim-macros-with-delims "lstinline")
-
-    ;; to use pdfview with auctex
-    (customize-set-variable 'TeX-view-program-selection '((output-pdf "PDF Tools")))
-    (customize-set-variable 'TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
-    (customize-set-variable 'TeX-source-correlate-start-server t)
-
-    ;; electric pairs in auctex
-    (customize-set-variable 'TeX-electric-sub-and-superscript t)
-    (customize-set-variable 'LaTeX-electric-left-right-brace t)
-    (customize-set-variable 'TeX-electric-math (cons "$" "$"))
 
     ;; open all buffers with the math mode and auto-fill mode
     (add-hook 'LaTeX-mode-hook #'auto-fill-mode)
@@ -1372,15 +1379,19 @@ writing and formatting tex file in Emacs.
 **** Cdlatex
 speed-up insertion of environments and math templates.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-  (usr-package-install 'cdlatex)
-  (add-hook 'org-mode-hook #'org-cdlatex-mode)
-  (add-hook 'LaTeX-mode-hook #'cdlatex-mode)
-  (setq cdlatex-use-dollar-to-ensure-math nil)
+  (use-package cdlatex
+    :straight (:build t)
+    :hook
+    ((org-mode . org-cdlatex-mode)
+     (LaTex-mode . cdlatex-mode))
+    :config
+    (setq cdlatex-use-dollar-to-ensure-math nil))
 #+end_src
 **** Preview pane
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-  (usr-package-install 'latex-preview-pane)
-  (require 'latex-preview-pane)
+  (use-package latex-preview-pane
+    :straight (:build t)
+    :defer t)
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
