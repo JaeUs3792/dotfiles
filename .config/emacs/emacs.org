@@ -278,8 +278,8 @@ emacs built-in package config
   (use-package dired-rsync
     :straight (:build t)
     :defer t
-    :config
-    (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
+    :bind (:map dired-mode-map
+                ("C-c C-r" . dired-rsync)))
   (use-package all-the-icons-dired
     :straight (:build t)
     :defer t
@@ -435,11 +435,12 @@ emacs built-in package config
     (setq dashboard-page-separator "\n\n")
     ;;(setq dashboard-page-separator "\n\f\n")
     (setq dashboard-agenda-time-string-format "%d/%m/%Y %A %H:%M")
+    (setq dashboard-projects-backend 'project-el)
     (setq dashboard-items '((recents . 10)
                             (agenda . 5)
                             (bookmarks . 5)
                             ;;(if (version< emacs-version "29")
-                            ;;    (projects . 5))
+                            (projects . 5)
                             (registers . 5)))
     (setq dashboard-set-navigator t)
 
@@ -765,7 +766,6 @@ Quick Action in minibuffer
       ;;; Corfu
   (use-package corfu
     :straight (:build t)
-    :defer t
     :custom
     (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
     (corfu-auto t)                 ;; Enable auto completion
@@ -797,7 +797,6 @@ Quick Action in minibuffer
   ;; Setup Cape for better completion-at-point support and more
   (use-package cape
     :straight (:build t)
-    :defer t
     :config
     ;; Add useful defaults completion sources from cape
     (add-to-list 'completion-at-point-functions #'cape-file)
@@ -952,7 +951,6 @@ download image link
   (use-package org-download
     :straight (:build t))
 #+end_src
-#+DOWNLOADED: https://avatars.githubusercontent.com/u/74564409?s=120&v=4 @ 2023-01-17 14:15:54
 
 ***** ob-latex-as-png
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -1015,18 +1013,18 @@ download image link
 [[file:using-picture-environment.png]]
 ***** def-functions
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-(defun my/org-remove-link-and-trash-linked-file ()
-  "Remove `org-mode' link at point and trash linked file."
-  (interactive)
-  (let* ((link (org-element-context))
-     (path (org-element-property :path link)))
-    (move-file-to-trash path)
-    (delete-region (org-element-property :begin link)
-           (org-element-property :end link))))
-(defun my/powershell (script)
-  "executes the given script within a powershell and returns its return value"
-  (call-process "powershell.exe" nil nil nil
-        "-Command" (concat "& {" script "}")))
+  (defun my/org-remove-link-and-trash-linked-file ()
+    "Remove `org-mode' link at point and trash linked file."
+    (interactive)
+    (let* ((link (org-element-context))
+           (path (org-element-property :path link)))
+      (move-file-to-trash path)
+      (delete-region (org-element-property :begin link)
+                     (org-element-property :end link))))
+  (defun my/powershell (script)
+    "executes the given script within a powershell and returns its return value"
+    (call-process "powershell.exe" nil nil nil
+                  "-Command" (concat "& {" script "}")))
   (defun my/as-windows-path (unix-path)
     "Takes a unix path and returns a matching WSL path"
     ;; substring removes the trailing \n
@@ -1035,7 +1033,7 @@ download image link
       (concat "wslpath -w " unix-path)) 0 -1))
   (defun my/org-paste-image-win2wsl ()
     "Paste an image into a time stamped unique-named file in the
-        same directory as the org-buffer and insert a link to this file."
+          same directory as the org-buffer and insert a link to this file."
     (interactive)
     (let* ((target-file
             (concat
