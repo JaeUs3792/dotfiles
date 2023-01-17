@@ -170,8 +170,8 @@ Emacs Configuration for emacs 29.50
   (require 'custom-latex)
   (require 'custom-org)
   ;;(require 'custom-workspaces)
-  ;;(require 'custom-languages)
-  ;;(require 'custom-extra)
+  (require 'custom-languages)
+  (require 'custom-extra)
 
   ;;; config.el ends here
 #+end_src
@@ -1065,7 +1065,7 @@ my-blog jaeus.net
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (use-package ox-hugo
     :straight (:build t)
-    :defer t)
+    :after ox)
 #+end_src
 ***** TODO Engrave-faces
 latex export code block
@@ -1389,7 +1389,7 @@ speed-up insertion of environments and math templates.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
   (use-package latex-preview-pane
     :straight (:build t)
-    :defer t)
+    :ensure t)
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
@@ -1399,10 +1399,12 @@ speed-up insertion of environments and math templates.
 *** Extra
 **** Helpful
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'helpful)
-  (customize-set-variable 'counsel-describe-function-function #'helpful-callable)
-  (customize-set-variable 'counsel-describe-variable-function #'helpful-variable)
-  (require 'helpful)
+  (use-package helpful
+    :straight (:build t)
+    :defer t
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable))
   ;;:commands (helpful-callable helpful-variable helpful-command helpful-key)
   (global-set-key [remap describe-function] #'describe-function)
   (global-set-key [remap describe-command] #'helpful-command)
@@ -1411,8 +1413,11 @@ speed-up insertion of environments and math templates.
 #+end_src
 **** Avy
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'avy)
-  (setq avy-all-windows t)
+  (use-package avy
+    :straight (:build t)
+    :defer t
+    :config
+    (setq avy-all-windows t))
   (ju/leader-key-def
     "v" '(:ignore t :which-key "Avy")
     "vc" '(avy-goto-char :which-key "Avy Goto Char")
@@ -1421,74 +1426,94 @@ speed-up insertion of environments and math templates.
 #+end_src
 **** Snippet
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'yasnippet)
-  (usr-package-install 'yasnippet-snippets)
+  (use-package yasnippet
+    :straight (:build t)
+    :defer t
+    :hook (prog-mode . yas-minor-mode)
+    :config
   (defvar yas-snippet-dirs nil)
-  (add-hook 'prog-mode-hook #'yas-minor-mode)
   (add-to-list 'yas-snippet-dirs "~/.config/emacs/snippets")
-  (yas-global-mode 1)
+  (yas-global-mode 1))
   (ju/leader-key-def
     "i s" '(yas-insert-snippet :which-key "snippet"))
 #+end_src
 **** Emojify
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'emojify)
-  (global-emojify-mode 1)
+  (use-package emojify
+    :straight (:build t)
+    :defer t
+    :init (global-emojify-mode 1))
   (ju/leader-key-def
     "i e" '(emojify-insert-emoji :which-key "emoji"))
 #+end_src
 **** PDF Tool
 enhanced PDF viewer on emacs
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'pdf-tools)
-  (require 'pdf-tools)
-  (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-width)
+  (use-package pdf-tools
+    :defer t
+    :config
+    ;;(pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-width))
 #+end_src
 **** PDF view restore
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'pdf-view-restore)
-  (add-hook 'pdf-view-mode-hook #'pdf-view-restore-mode)
-  (setq pdf-view-restore-filename (expand-file-name ".tmp/pdf-view-restore"
-                                                    user-emacs-directory))
+  (use-package pdf-view-restore
+    :straight (:build t)
+    :defer t
+    :hook (pdf-view-mode . pdf-view-restore-mode)
+    :config
+    (setq pdf-view-restore-filename (expand-file-name ".tmp/pdf-view-restore"
+                                                      user-emacs-directory)))
 #+end_src
 **** Nov
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'nov)
-  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+  (use-package nov
+    :straight (:build t)
+    :defer t
+    :config
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 #+end_src
 **** Openwith
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'openwith)
-  (setq larget-file-warning-threshold nil)
-  (openwith-mode t)
-  (setq openwith-associations
-        (list (list (openwith-make-extension-regexp
-                     '("mpg" "mpeg" "mp3" "mp4" "m4v"
-                       "avi" "wmv" "wav" "mov" "flv"
-                       "ogm" "ogg" "mkv"))
-                    "mpv"
-                    '(file))))
-                ;;(list (openwith-make-extension-regexp
-                ;;       '("html" "htm"))
-                ;;      "qutebrowser"
-                ;;      '(file))))
+  (use-package openwith
+    :straight (:build t)
+    :defer t
+    :config
+    (openwith-mode t)
+    (setq larget-file-warning-threshold nil)
+    (setq openwith-associations
+          (list (list (openwith-make-extension-regexp
+                       '("mpg" "mpeg" "mp3" "mp4" "m4v"
+                         "avi" "wmv" "wav" "mov" "flv"
+                         "ogm" "ogg" "mkv"))
+                      "mpv"
+                      '(file)))))
+  ;;(list (openwith-make-extension-regexp
+  ;;       '("html" "htm"))
+  ;;      "qutebrowser"
+  ;;      '(file))))
 #+end_src
 **** Calfw
 calendar
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'calfw)
-  (usr-package-install 'calfw-org)
+  (use-package calfw
+    :straight (:build t)
+    :defer t)
 #+end_src
 **** ELFEED
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (usr-package-install 'elfeed)
-  (usr-package-install 'elfeed-goodies)
-  (usr-package-install 'elfeed-org)
-
-  (require 'elfeed-org)
-  (elfeed-org)
-  (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" user-emacs-directory)))
+  (use-package elfeed
+    :straight (:build t)
+    :defer t)
+  (use-package elfeed-goodies
+    :straight (:build t)
+    :defer t)
+  (use-package elfeed-org
+    :straight (:build t)
+    :defer t
+    :config
+    (elfeed-org)
+    (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" user-emacs-directory))))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
@@ -1524,75 +1549,94 @@ calendar
 #+end_src
 **** Treesitter
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (if (version< emacs-version "29")
-      (progn
-        (usr-package-install 'tree-sitter)
-        (usr-package-install 'tree-sitter-langs)
-        (require 'tree-sitter)
-        (global-tree-sitter-mode)))
+  ;;(if (version< emacs-version "29")
+  ;;(use-package tree-sitter
+  ;;  :straight (:build t)
+  ;;  :defer t
+  ;;  :init (global-tree-sitter-mode))
+  ;;(use-package tree-sitter-langs
+  ;;  :straight (:build t)
+  ;;  :defer t
+  ;;  :after tree-sitter))
 #+end_src
 **** eglot
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
   (if (version< emacs-version "29")
-      (usr-package-install 'eglot))
+      (use-package eglot
+        :straight (:build t)
+        :defer t))
 #+end_src
 **** Rust
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'rust-mode)
+  (use-package rust-mode
+    :straight (:build t)
+    :defer t)
 #+end_src
 **** Python
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'jupyter)
-  (setq org-babel-jupyter-override-src-block "python")
+  (use-package jupyter
+    :straight (:build t)
+    :defer t
+    :config
+    (setq org-babel-jupyter-override-src-block "python"))
 #+end_src
 **** CMAKE
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'cmake-mode)
+  ;;(use-package cmake-mode
+  ;;  :straight (:build t)
+  ;;  :defer t)
 #+end_src
 
 **** Haskell
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'haskell-mode)
+  (use-package haskell-mode
+    :straight (:build t)
+    :defer t)
 #+end_src
 **** Markdown
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'markdown-mode)
-  (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (setq markdown-command "multimarkdown")
+  (use-package markdown-mode
+    :straight (:build t)
+    :defer t
+    :config
+    (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+    (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+    (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+    (setq markdown-command "multimarkdown"))
 #+end_src
 **** PKGBUILD
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'pkgbuild-mode)
-  ;;(phundrak/major-leader-key
-  ;;  :keymaps 'pkgbuild-mode-map
-  ;;  "c"  #'pkgbuild-syntax-check
-  ;;  "i"  #'pkgbuild-initialize
-  ;;  "I"  #'pkgbuild-increase-release-tag
-  ;;  "m"  #'pkgbuild-makepkg
-  ;;  "u"  '(:ignore :wk "update")
-  ;;  "us" #'pkgbuild-update-sums-line
-  ;;  "uS" #'pkgbuild-update-srcinfo))
+  (use-package pkgbuild-mode
+    :straight (:build t)
+    :defer t)
 #+end_src
 **** Systemd
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'systemd)
+  (use-package systemd
+    :straight (:build t)
+    :defer t)
 #+end_src
 **** Toml
 #+begin_src emacs-lisp
-  (usr-package-install 'toml-mode)
-  (add-to-list 'auto-mode-alist '("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . toml-mode))
+  (use-package toml-mode
+    :straight (:build t)
+    :defer t
+    :config
+    (add-to-list 'auto-mode-alist '("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . toml-mode)))
 #+end_src
 
 **** Gnuplot
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'gnuplot)
+  (use-package gnuplot
+    :straight (:build t)
+    :defer t)
 #+end_src
 **** Graphviz dot Mode
 org mode graph drawing with graphviz
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (usr-package-install 'graphviz-dot-mode)
+  (use-package graphviz-dot-mode
+    :straight (:build t)
+    :defer t)
 #+end_src
 **** Verilog Indent
 LSP -> veriloter
