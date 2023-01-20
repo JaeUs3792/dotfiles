@@ -8,6 +8,7 @@ oh-my-posh init fish --config ~/.poshthemes/craver.omp.json | source
 
 # emacs
 alias emupgrade="~/.emacs.d/bin/doom upgrade"
+alias emsync="~/.emacs.d/bin/doom sync"
 alias emd="emacs --daemon"
 alias emdk="emacsclient --eval '(kill-emacs)'"
 alias em="emacsclient -c -a 'emacs'"
@@ -29,8 +30,9 @@ alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 #alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
 #alias fix-gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
 #alias fix-key="[ -d ~/.gnupg ] || mkdir ~/.gnupg ; cp /etc/pacman.d/gnupg/gpg.conf ~/.gnupg/ ; echo 'done'"
+alias startsv="ssh odroid startsv"
+alias stopsv="ssh odroid stopsv"
+alias gpulls="pushd ~/.config/emacs && git pull && pushd ~/org && git pull && popd && popd"
 
-#!/bin/sh
-set hostname $(cat /etc/hostname)
 figlet -w 100 "$hostname"
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
