@@ -1,5 +1,5 @@
 export ZSH="/home/jaeus/.oh-my-zsh"
-ZSH_THEME="random"
+ZSH_THEME="agnoster"
 #plugins=(git)
 source $ZSH/oh-my-zsh.sh
 prompt_context(){}
@@ -11,12 +11,14 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #export DISPLAY=$VETHER_IP:10.0
 
 # emacs
-alias emupgrade="~/.emacs.d/bin/doom upgrade"
 alias emd="emacs --daemon"
 alias emdk="emacsclient --eval '(kill-emacs)'"
 alias em="emacsclient -c -a 'emacs'"
 alias emt="emacsclient -c -a 'emacs -nw'"
 alias emtangle="emacs --batch -eval \"(require 'org)\" --eval '(org-babel-tangle-file \"~/.config/emacs/emacs.org\")'"
+alias startsv="ssh odroid startsv"
+alias stopsv="ssh odroid stopsv"
+alias gpulls="pushd ~/.config/emacs && git pull && pushd ~/org && git pull && popd && popd"
 #neovim to vi
 alias vi=nvim
 #pacman unlock
