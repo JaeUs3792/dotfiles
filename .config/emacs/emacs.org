@@ -1076,6 +1076,55 @@ latex export code block
   ;;(require 'engrave-faces-latex)
   ;;(setq org-latex-src-block-backend 'engraved)
 #+end_src
+***** Code Block Minted
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (setq org-latex-minted-options '(("breaklines" "true")
+                                   ("tabsize" "4")
+                                   ("autogobble")
+                                   ("breakanywhere" "true")
+                                   ("bgcolor" "gray!40")
+                                   ("frame" "lines")))
+  (setq org-latex-listings 'minted
+        org-latex-packages-alist '(("" "minted"))
+        org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+#+end_src
+***** Additional Fix
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("org-plain-latex"
+                   "\\documentclass[a4paper,11pt,titlepage]{memoir}
+  \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
+          \\usepackage{kotex}
+        [NO-DEFAULT-PACKAGES]
+        [PACKAGES]
+        [EXTRA]
+  \\linespread{1.1}
+  \\hypersetup{pdfborder=0 0 0}"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+    (add-to-list 'org-latex-classes
+                 '("article"
+                   "\\documentclass[11pt,a4paper]{article}
+  \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
+  \\usepackage{kotex}
+        [NO-DEFAULT-PACKAGES]
+        [PACKAGES]
+        [EXTRA]
+  \\linespread{1.1}
+  \\hypersetup{pdfborder=0 0 0}"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}"))))
+
+#+end_src
 
 **** Additional Functions
 ***** Org Journal
