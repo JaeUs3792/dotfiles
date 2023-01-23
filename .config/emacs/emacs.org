@@ -801,6 +801,7 @@ Quick Action in minibuffer
     ;; Add useful defaults completion sources from cape
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-ispell)
     ;; Silence the pcomplete capf, no errors or messages!
     ;; Important for corfu
     (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
@@ -892,7 +893,7 @@ Quick Action in minibuffer
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (use-package org-superstar
     :straight (:build t)
-    ;;:defer t
+    :ensure t
     :hook (org-mode)
     :config
     (setq org-superstar-item-bullet-alist
@@ -1452,7 +1453,7 @@ enhanced PDF viewer on emacs
   (use-package pdf-tools
     :defer t
     :config
-    ;;(pdf-tools-install)
+    (pdf-tools-install :no-query)
     (setq-default pdf-view-display-size 'fit-width))
 #+end_src
 **** PDF view restore
@@ -1471,7 +1472,7 @@ enhanced PDF viewer on emacs
     :straight (:build t)
     :defer t
     :config
-  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+    (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 #+end_src
 **** Openwith
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
@@ -1487,7 +1488,11 @@ enhanced PDF viewer on emacs
                          "avi" "wmv" "wav" "mov" "flv"
                          "ogm" "ogg" "mkv"))
                       "mpv"
-                      '(file)))))
+                      '(file)))
+          (list (openwith-make-extension-regexp
+                 '("pdf"))
+                "zathura"
+                '(file))))
   ;;(list (openwith-make-extension-regexp
   ;;       '("html" "htm"))
   ;;      "qutebrowser"
@@ -1522,31 +1527,6 @@ calendar
 #+end_src
 
 *** Languages
-**** Default
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (with-eval-after-load 'org
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (python . t)
-       (dot . t)
-       (latex . t)))
-    (push '("conf-unix" . conf-unix) org-src-lang-modes)
-    ;; This is needed as of Org 9.2
-    (require 'org-tempo)
-
-    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-    (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
-    (add-to-list 'org-structure-template-alist '("cc" . "src c"))
-    (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
-    (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
-    (add-to-list 'org-structure-template-alist '("py" . "src python"))
-    (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
-    (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
-    (add-to-list 'org-structure-template-alist '("vh" . "src vhdl"))
-    (org-reload))
-#+end_src
 **** Treesitter
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
   ;;(if (version< emacs-version "29")
@@ -1575,10 +1555,7 @@ calendar
 **** Python
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
   (use-package jupyter
-    :straight (:build t)
-    :defer t
-    :config
-    (setq org-babel-jupyter-override-src-block "python"))
+    :straight (:build t))
 #+end_src
 **** CMAKE
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
@@ -1651,6 +1628,33 @@ LSP -> veriloter
    '(verilog-case-indent 4)
 
    '(verilog-auto-newline nil))
+#+end_src
+**** Default
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
+  (with-eval-after-load 'org
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)
+       (jupyter . t)
+       (dot . t)
+       (latex . t)))
+    (org-babel-jupyter-override-src-block "python")
+    (push '("conf-unix" . conf-unix) org-src-lang-modes)
+    ;; This is needed as of Org 9.2
+    (require 'org-tempo)
+
+    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
+    (add-to-list 'org-structure-template-alist '("cc" . "src c"))
+    (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
+    (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python"))
+    (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
+    (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
+    (add-to-list 'org-structure-template-alist '("vh" . "src vhdl"))
+    (org-reload))
 #+end_src
 **** Provide modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
