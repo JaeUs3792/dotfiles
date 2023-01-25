@@ -833,7 +833,20 @@ Quick Action in minibuffer
     :config
     (add-hook 'org-mode-hook #'org-indent-mode)
     (setq org-todo-keywords
-          '((sequence "TODO(t)" "HOLD(h)" "|" "KILL(k)" "DONE(d)")))
+          '((sequence
+             "TODO(t)" ; doing later
+             "NEXT(n)" ; doing now or soon
+             "|"
+             "DONE(d)" ; done
+             )
+            (sequence
+             "WAIT(w)" ; waiting for some external change (event)
+             "HOLD(h)" ; waiting for some internal change (of mind)
+             "IDEA(i)" ; maybe someday
+             "|"
+             "NOTE(o@/!)" ; end state, just keep track of it
+             "STOP(s@/!)" ; stopped waiting, decided not to work on it
+             )))
     (setq org-ellipsis                       " ⤵"
           org-hide-emphasis-markers          t
           org-image-actual-width             600
