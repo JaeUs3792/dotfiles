@@ -144,7 +144,7 @@ Emacs Configuration for emacs 29.50
 #+end_src
 * Modules Selection module
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
-    ;;; config.el -*- lexical-binding: t; -*-
+  ;;; config.el -*- lexical-binding: t; -*-
   (setq user-full-name "JaeYoo-Im"
         user-mail-address "cpu3792@gmail.com")
 
@@ -176,7 +176,7 @@ Emacs Configuration for emacs 29.50
   (require 'custom-languages)
   (require 'custom-extra)
 
-    ;;; config.el ends here
+  ;;; config.el ends here
 #+end_src
 
 ** Module Lists
@@ -467,7 +467,13 @@ emacs built-in package config
                                       (bookmarks . "book")))
     (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
 #+end_src
-
+**** Beacon
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
+  (use-package beacon
+    :straight (:build t)
+    :defer t
+    :config (beacon-mode 1))
+#+end_src
 **** Others
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
   (defun my/self-screenshot (&optional type)
@@ -1178,11 +1184,14 @@ latex export code block
     :ensure t
     :custom
     (org-roam-directory "~/org/roam")
-    (org-roam-completion-everywhere t)
+    ;;(org-roam-completion-everywhere t)
     :config
     (org-roam-db-autosync-mode))
   ;;(my/org-roam-refresh-agenda-list)
-
+  (use-package org-roam-bibtex
+    :straight (:build t)
+    :defer t
+    :after org-roam)
   ;; Org roam ui
   (use-package org-roam-ui
     :straight (:build t)
@@ -1262,10 +1271,10 @@ some language should add
 ***** Org PDF tools
 get link from pdf,
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-    (use-package org-pdftools
-      :straight (:build t)
-      :defer t
-      :hook (org-mode . org-pdftools-setup-link))
+  (use-package org-pdftools
+    :straight (:build t)
+    :defer t
+    :hook (org-mode . org-pdftools-setup-link))
 #+end_src
 **** Keybindings
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -1532,11 +1541,14 @@ speed-up insertion of environments and math templates.
 **** PDF Tool
 enhanced PDF viewer on emacs
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package pdf-tools
-    :defer t
-    :config
-    (pdf-tools-install :no-query)
-    (setq-default pdf-view-display-size 'fit-width))
+    (use-package pdf-tools
+      :defer t
+      :hook ((pdf-tools-enabled . pdf-view-themed-minor-mode)
+             (pdf-tools-enabled . pdf-view-fit-page-to-window))
+      :config
+      (pdf-tools-install :no-query)
+      (setq-default pdf-view-display-size 'fit-width)
+      (pdf-view-contin))
 #+end_src
 **** PDF view restore
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
