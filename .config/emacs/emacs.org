@@ -875,7 +875,6 @@ Quick Action in minibuffer
           ("KILL" . +org-todo-cancel)))
     (setq org-ellipsis                       " ⤵"
           org-hide-emphasis-markers          t
-          org-image-actual-width             600
           org-redisplay-inline-images        t
           org-display-inline-images          t
           org-startup-with-inline-images     "inlineimages"
@@ -893,6 +892,8 @@ Quick Action in minibuffer
     (setq org-use-sub-superscripts '{})
     ;; Do not ask when run code block
     (setq org-confirm-babel-evaluate nil)
+
+    (setq org-image-actual-width nil)
 
     (custom-set-faces
      '(org-level-1 ((t (:height 1.7  :weight ultra-bold :foreground "#81a2be"))))         ;; :foreground "#81a2be"
@@ -1127,7 +1128,7 @@ latex export code block
         org-latex-packages-alist '(("" "minted"))
         org-latex-pdf-process
         '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+          "pdflatex -interaction nonstopmode -output-directory %o %f"))
 #+end_src
 ***** Additional Fix
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
@@ -1136,10 +1137,10 @@ latex export code block
                  '("org-plain-latex"
                    "\\documentclass[a4paper,11pt,titlepage]{memoir}
   \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
-          \\usepackage{kotex}
-        [NO-DEFAULT-PACKAGES]
-        [PACKAGES]
-        [EXTRA]
+  [DEFAULT-PACKAGES]
+  \\usepackage{kotex}
+  [PACKAGES]
+  [EXTRA]
   \\linespread{1.1}
   \\hypersetup{pdfborder=0 0 0}"
                  ("\\chapter{%s}" . "\\chapter*{%s}")
@@ -1152,10 +1153,10 @@ latex export code block
                  '("article"
                    "\\documentclass[11pt,a4paper]{article}
   \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
+  [DEFAULT-PACKAGES]
   \\usepackage{kotex}
-        [NO-DEFAULT-PACKAGES]
-        [PACKAGES]
-        [EXTRA]
+  [PACKAGES]
+  [EXTRA]
   \\linespread{1.1}
   \\hypersetup{pdfborder=0 0 0}"
                    ("\\section{%s}" . "\\section*{%s}")
@@ -1541,14 +1542,13 @@ speed-up insertion of environments and math templates.
 **** PDF Tool
 enhanced PDF viewer on emacs
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-    (use-package pdf-tools
-      :defer t
-      :hook ((pdf-tools-enabled . pdf-view-themed-minor-mode)
-             (pdf-tools-enabled . pdf-view-fit-page-to-window))
-      :config
-      (pdf-tools-install :no-query)
-      (setq-default pdf-view-display-size 'fit-width)
-      (pdf-view-contin))
+  (use-package pdf-tools
+    :defer t
+    :hook ((pdf-tools-enabled . pdf-view-themed-minor-mode)
+           (pdf-tools-enabled . pdf-view-fit-page-to-window))
+    :config
+    (pdf-tools-install :no-query)
+    (setq-default pdf-view-display-size 'fit-width))
 #+end_src
 **** PDF view restore
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
