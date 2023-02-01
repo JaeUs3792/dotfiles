@@ -592,8 +592,6 @@ for managing keybindings.
     ;; Shortcut
     "f o" '(:ignore t :which-key "dOt files")
     "f o d" '((lambda () (interactive) (find-file "~/.config/emacs/desktop.org")) :which-key "open exwm config")
-    "f o p" '((lambda () (interactive) (find-file "~/org/example/emacs_my_previous.org")) :which-key "open exwm config")
-    "f o e" '((lambda () (interactive) (find-file "~/org/example/emacs_another.org")) :which-key "open exwm config")
     "f o c" '((lambda () (interactive) (find-file "~/.config/emacs/emacs.org")) :which-key "open emacs config")
     ;; Insert something
     "i" '(:ignore t :which-key "insert something.")
@@ -1189,13 +1187,11 @@ latex export code block
   (use-package org-roam
     :custom
     (org-roam-directory "~/org/roam")
+    (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
     ;;(org-roam-completion-everywhere t)
     :config
     (org-roam-db-autosync-mode))
   ;;(my/org-roam-refresh-agenda-list)
-  (use-package org-roam-bibtex
-    :defer t
-    :after org-roam)
   ;; Org roam ui
   (use-package org-roam-ui
     :defer t
@@ -1204,12 +1200,6 @@ latex export code block
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start nil))
-  ;;:desc "org roam refresh agenda list"
-  ;;"oar" 'my/org-roam-refresh-agenda-list
-  ;;:desc "org roam find tag:project"
-  ;;"nrp" 'my/org-roam-find-project
-  ;;:desc "org roam find with ripgrep (preview)"
-  ;;"nrg" 'my/org-roam-rg-search)
 #+end_src
 
 - Org roam related function
@@ -1234,6 +1224,34 @@ latex export code block
             (seq-filter
              (my/org-roam-filter-by-tag tag-name)
              (org-roam-node-list))))
+  (defun my/org-roam-refresh-agenda-list ()
+    (interactive)
+    (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+  (defun my/org-roam-project-finalize-hook ()
+    "Adds the captured project file to `org-agenda-files' if the
+    capture was not aborted."
+    ;; Remove the hook since it was added temporarily
+    (remove-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+    ;; Add project file to the agenda list if the capture was confirmed
+    (unless org-note-abort
+      (with-current-buffer (org-capture-get :buffer)
+        (add-to-list 'org-agenda-files (buffer-file-name)))))
+
+  (defun my/org-roam-find-project ()
+    (interactive)
+    ;; Add the project file to the agenda after capture is finished
+    (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+    ;; Select a project file to open, creating it if necessary
+    (org-roam-node-find
+     nil
+     nil
+     (my/org-roam-filter-by-tag "Project")
+     :templates
+     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* History\n\n* Notes\n\n"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
+        :unnarrowed t))))
 #+end_src
 
 ***** Org Agenda
@@ -1326,10 +1344,9 @@ get link from pdf,
     "n r p" 'my/org-roam-find-project
     "n r g" 'my/org-roam-rg-search
     "n r t" '(:ignore t :which-key "Org Roam Tags")
-    "n r t n" '(org-roam-tag-add :which-key "new tag")
+    "n r t t" '(org-roam-tag-add :which-key "new tag")
     "n r t d" '(org-roam-tag-remove :which-key "delete tag"))
   ;; TODO org-roam-ref-find
-  ;; TODO citar
 
 #+end_src
 
