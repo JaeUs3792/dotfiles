@@ -1,6 +1,6 @@
 #+title: Emacs Configuration
-#+AUTHOR: JaeYoo-Im, (cpu3792@gmail.com)
-#+latex_header: \usepackage{kotex}
+#+author: JaeYoo-Im
+#+email: (cpu3792@gmail.com)
 
 * Basic Configuration
 Emacs Configuration for emacs 29.50
@@ -45,29 +45,68 @@ Emacs Configuration for emacs 29.50
                      (emacs-init-time))))
 #+end_src
 *** Package Function
+**** Use-package
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-  (defvar bootstrap-version)
-  (defvar comp-deferred-compilation-deny-list ()) ; workaround, otherwise straight shits itself
-  (let ((bootstrap-file
-         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-        (bootstrap-version 5))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-  (package-initialize)
+  (require 'package)
+  (when (version< emacs-version "28")
+    (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+  (add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
+  (customize-set-variable 'package-archive-priorities
+            '(("gnu"    . 99)   ; prefer GNU packages
+              ("nongnu" . 80)   ; use non-gnu packages if
+                        ; not found in GNU elpa
+              ("stable" . 70)   ; prefer "released" versions
+                        ; from melpa
+              ("melpa"  . 0)))  ; if all else fails, get it
+                        ; from melpa
+  (customize-set-variable 'package-user-dir
+            (expand-file-name "elpa/" user-emacs-directory))
+
+  ;;(package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
-  (straight-use-package '(use-package :build t))
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
   (setq use-package-always-ensure t)
 
-  (unless (file-exists-p package-user-dir)
-    (mkdir package-user-dir t))
-  ;;; init.el ends here
+  (use-package auto-package-update
+    :custom
+    (auto-package-update-interval 7)
+    (auto-package-update-prompt-before-update t)
+    (auto-package-update-hide-results t)
+    :config
+    (auto-package-update-maybe)
+    (auto-package-update-at-time "09:00"))
+#+end_src
+**** Straight
+#+begin_src emacs-lisp
+  ;;##+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+    (defvar bootstrap-version)
+    (defvar comp-deferred-compilation-deny-list ()) ; workaround, otherwise straight shits itself
+    (let ((bootstrap-file
+           (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+          (bootstrap-version 5))
+      (unless (file-exists-p bootstrap-file)
+        (with-current-buffer
+            (url-retrieve-synchronously
+             "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+             'silent 'inhibit-cookies)
+          (goto-char (point-max))
+          (eval-print-last-sexp)))
+      (load bootstrap-file nil 'nomessage))
+    (package-initialize)
+    (unless package-archive-contents
+      (package-refresh-contents))
+    (straight-use-package '(use-package :build t))
+    (setq use-package-always-ensure t)
+
+    (unless (file-exists-p package-user-dir)
+      (mkdir package-user-dir t))
+    ;;; init.el ends here
 #+end_src
 *** Add other modules
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -106,15 +145,18 @@ Emacs Configuration for emacs 29.50
 
 *** Backup options
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-(setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory))))
-(setq-default custom-file (expand-file-name ".custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
-(setq delete-by-moving-to-trash t
-      trash-directory "~/.local/share/Trash/files/")
-(setq undo-limit 100000000
-      auto-save-default t)
+    (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory))))
+    (setq-default custom-file (expand-file-name ".custom.el" user-emacs-directory))
+    (when (file-exists-p custom-file)
+      (load custom-file))
+    (setq delete-by-moving-to-trash t
+          trash-directory "~/.local/share/Trash/files/")
+    (setq undo-limit 100000000
+          auto-save-default t)
+    (setq auto-save-file-name-transforms
+          `((".*" ,(expand-file-name "backups/" user-emacs-directory) t)))
 #+end_src
+
 
 *** Other options
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -165,16 +207,17 @@ Emacs Configuration for emacs 29.50
                `(fixed-pitch-serif ((t (:inherit (default)))))
                `(variable-pitch ((t (:font "Ubuntu 11")))))))
 
-  (require 'custom-ui)
-  (require 'custom-keybindings)
-  (require 'custom-default)
-  (require 'custom-completion)
-  (require 'custom-projects)
-  (require 'custom-latex)
-  (require 'custom-org)
+  ;;(require 'custom-ui)
+  ;;(require 'custom-keybindings)
+  ;;(require 'custom-default)
+  ;;(require 'custom-completion)
+  ;;(require 'custom-projects)
+  ;;(require 'custom-latex)
+  ;;(require 'custom-org)
+  ;;(require 'custom-languages)
+  ;;(require 'custom-extra)
+
   ;;(require 'custom-workspaces)
-  (require 'custom-languages)
-  (require 'custom-extra)
 
   ;;; config.el ends here
 #+end_src
