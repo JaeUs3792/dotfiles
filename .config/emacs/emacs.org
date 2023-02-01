@@ -1214,6 +1214,31 @@ latex export code block
   ;;:desc "org roam find with ripgrep (preview)"
   ;;"nrg" 'my/org-roam-rg-search)
 #+end_src
+
+- Org roam related function
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
+  (defun my/org-roam-rg-search ()
+    "Search org-roam directory using consult-ripgrep. With live-preview."
+    (interactive)
+    (let ((consult-ripgrep-command "rg --null --ignore-case --type org --line-buffered --color=always --max-columns=500 --no-heading --line-number . -e ARG OPTS"))
+      (consult-ripgrep org-roam-directory)))
+  (defun my/org-roam-node-insert-with-capture (arg &rest args)
+    "Org roam insert node with capture templates"
+    (interactive "P")
+    (let ((args (push arg args))
+          (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                    '(:immediate-finish t)))))
+      (apply #'org-roam-node-insert args)))
+  (defun my/org-roam-filter-by-tag (tag-name)
+    (lambda (node)
+      (member tag-name (org-roam-node-tags node))))
+  (defun my/org-roam-list-notes-by-tag (tag-name)
+    (mapcar #'org-roam-node-file
+            (seq-filter
+             (my/org-roam-filter-by-tag tag-name)
+             (org-roam-node-list))))
+#+end_src
+
 ***** Org Agenda
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
 (setq org-agenda-files (list "~/org/agenda/agenda.org"))
@@ -1303,9 +1328,17 @@ get link from pdf,
     "n r l" 'org-roam-buffer-toggle
     "n r f" 'org-roam-node-find
     "n r i" 'org-roam-node-insert
-    "n r I" 'org-roam-node-insert-immediate
-    "n r p" 'my/org-roam-find-project)
+    "n r I" 'org-id-get-create
+    "n r p" 'my/org-roam-find-project
+    "n r g" 'my/org-roam-rg-search
+    "n r t" '(:ignore t :which-key "Org Roam Tags")
+    "n r t n" '(org-roam-tag-add :which-key "new tag")
+    "n r t d" '(org-roam-tag-remove :which-key "delete tag"))
+  ;; TODO org-roam-ref-find
+  ;; TODO citar
+
 #+end_src
+
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (provide 'custom-org)
