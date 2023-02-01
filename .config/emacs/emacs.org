@@ -580,7 +580,8 @@ for managing keybindings.
     "p s" '(project-shell :which-key "shell")
     "p e" '(project-eshell :which-key "eshell")
     "p d" '(project-dired :which-key "dired")
-    "p g" '(project-find-regexp :which-key "find-regexp")
+    ;;"p g" '(project-find-regexp :which-key "find-regexp")
+    "p g" '(consult-ripgrep :which-key "ripgrep")
     ;; Extra
     "t" '(:ignore t :which-key "extra")
     "t a" '(toggle-transparency :which-key "Toggle Transparency")
@@ -721,11 +722,14 @@ simple but effective sorting and filtering for emacs.
 **** Marginalia
 annotations placed at the margin of the minibuffer
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
-  (use-package vertico-prescient
+  (use-package Marginalia
     :straight (:build t)
+    :after vertico
+    :ensure t
     :defer t
-    :custom (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :config (marginalia-mode 1))
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init (marginalia-mode))
 #+end_src
 **** Consult
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-completion.el
@@ -1130,9 +1134,24 @@ latex export code block
         '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
           "pdflatex -interaction nonstopmode -output-directory %o %f"))
 #+end_src
-***** Additional Fix
+***** Org latex classes
+=article= is default.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("article"
+                   "\\documentclass[11pt,a4paper]{article}
+    \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
+    [DEFAULT-PACKAGES]
+    \\usepackage{kotex}
+    [PACKAGES]
+    [EXTRA]
+    \\linespread{1.1}
+    \\hypersetup{pdfborder=0 0 0}"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")))
     (add-to-list 'org-latex-classes
                  '("org-plain-latex"
                    "\\documentclass[a4paper,11pt,titlepage]{memoir}
@@ -1143,26 +1162,12 @@ latex export code block
   [EXTRA]
   \\linespread{1.1}
   \\hypersetup{pdfborder=0 0 0}"
-                 ("\\chapter{%s}" . "\\chapter*{%s}")
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-    (add-to-list 'org-latex-classes
-                 '("article"
-                   "\\documentclass[11pt,a4paper]{article}
-  \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
-  [DEFAULT-PACKAGES]
-  \\usepackage{kotex}
-  [PACKAGES]
-  [EXTRA]
-  \\linespread{1.1}
-  \\hypersetup{pdfborder=0 0 0}"
+                   ("\\chapter{%s}" . "\\chapter*{%s}")
                    ("\\section{%s}" . "\\section*{%s}")
                    ("\\subsection{%s}" . "\\subsection*{%s}")
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                   ("\\paragraph{%s}" . "\\paragraph*{%s}"))))
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 #+end_src
 
