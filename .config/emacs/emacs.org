@@ -1340,17 +1340,16 @@ get link from pdf,
     "n j s" '(org-journal-search :which-key "Journal Search"))
   (ju/leader-key-def
     "n r" '(:ignore t :which-key "Org Roam")
-    "n r u" 'org-roam-ui-open
-    "n r l" 'org-roam-buffer-toggle
-    "n r f" 'org-roam-node-find
-    "n r i" 'org-roam-node-insert
-    "n r I" 'org-id-get-create
-    "n r g" 'my/org-roam-rg-search
+    "n r c" '(org-roam-capture :which-key "capture")
+    "n r u" '(org-roam-ui-open :which-key "UI")
+    "n r l" '(org-roam-buffer-toggle :which-key "buffer toggle")
+    "n r f" '(org-roam-node-find :which-key "node find")
+    "n r i" '(org-roam-node-insert :which-key "node insert")
+    "n r I" '(org-id-get-create :which-key "create id")
+    "n r g" '(my/org-roam-rg-search :which-key "roam ripgrep")
     "n r t" '(:ignore t :which-key "Org Roam Tags")
     "n r t t" '(org-roam-tag-add :which-key "new tag")
     "n r t d" '(org-roam-tag-remove :which-key "delete tag"))
-  ;; TODO org-roam-ref-find
-
 #+end_src
 
 **** Provide Modules
