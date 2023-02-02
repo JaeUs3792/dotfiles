@@ -301,7 +301,22 @@ emacs built-in package config
     :config
     (evil-collection-define-key 'normal 'dired-mode-map
       "h" 'dired-single-up-directory
-      "l" 'dired-single-buffer))
+      "l" 'dired-single-buffer
+      "e" 'my/dired-openwith-external-program))
+  (defun my/dired-openwith-external-program ()
+    (interactive)
+    (let (current-file current-ex)
+      (setq current-file
+            (dired-get-filename nil t))
+      (setq current-ex
+            (file-name-extension current-file))
+      (cond ((string-equal current-ex "pdf")
+             (async-shell-command
+              (format "zathura \"%s\"" current-file)))
+            ((string-equal current-ex "html")
+             (async-shell-command
+              (format "qutebrowser \"%s\"" current-file)))
+            (t (message "file exception.")))))
   (use-package dired-single
     :defer t
     :commands (dired dired-jump))
@@ -1198,14 +1213,12 @@ latex export code block
     (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
     ;;(org-roam-completion-everywhere t)
     :config
-    (setq org-roam-capture-templates '(("d" "default" plain "%?"
-                                        :target (file+head "${slug}.org"
-                                                           "#+title: ${title}\n")
-                                        :unnarrowed t)
-                                       ("p" "project" plain "* TODO %?"
-                                        :target (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
-                                                               "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
-                                                               ("Tasks")))))
+    (setq org-roam-capture-templates '(("p" "project" plain "* TODO %?"
+                                        :target (file+head+olp
+                                                 "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                 "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
+                                                 ("Tasks"))
+                                        :unnarrowed t)))
     (org-roam-db-autosync-mode))
   ;; Org roam ui
   (use-package org-roam-ui
@@ -1246,33 +1259,6 @@ latex export code block
     (unless org-note-abort
       (with-current-buffer (org-capture-get :buffer)
         (add-to-list 'org-agenda-files (buffer-file-name)))))
-  (defun my/org-roam-find-project ()
-    (interactive)
-    ;; Add the project file to the agenda after capture is finished
-    (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-    ;; Select a project file to open, creating it if necessary
-    (org-roam-node-find
-     nil
-     nil
-     (my/org-roam-filter-by-tag "Project")
-     :templates
-     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* History\n\n* Notes\n\n"
-        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
-        :unnarrowed t))))
-  (defun my/org-roam-capture-task ()
-    (interactive)
-    ;; Add the project file to the agenda after capture is finished
-    ;;(add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-    ;; Capture the new task, creating the project file if necessary
-    (org-roam-capture- :node (org-roam-node-read
-                              nil
-                              (my/org-roam-filter-by-tag "Project"))
-                       :templates '(("p" "project" plain "* TODO %?"
-                                     :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
-                                                            "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
-                                                            ("Tasks"))))))
   (my/org-roam-refresh-agenda-list)
 #+end_src
 
@@ -1359,7 +1345,6 @@ get link from pdf,
     "n r f" 'org-roam-node-find
     "n r i" 'org-roam-node-insert
     "n r I" 'org-id-get-create
-    "n r p" 'my/org-roam-find-project
     "n r g" 'my/org-roam-rg-search
     "n r t" '(:ignore t :which-key "Org Roam Tags")
     "n r t t" '(org-roam-tag-add :which-key "new tag")
@@ -1538,11 +1523,6 @@ speed-up insertion of environments and math templates.
     :config
     (setq cdlatex-use-dollar-to-ensure-math nil))
 #+end_src
-**** Preview pane
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-  (use-package latex-preview-pane
-    :defer t)
-#+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
   (provide 'custom-latex)
@@ -1602,8 +1582,17 @@ enhanced PDF viewer on emacs
     :hook ((pdf-tools-enabled . pdf-view-themed-minor-mode)
            (pdf-tools-enabled . pdf-view-fit-page-to-window))
     :config
+
     (pdf-tools-install :no-query)
     (setq-default pdf-view-display-size 'fit-width))
+  (defun my/pdf-view-open-in-zathura ()
+    (interactive)
+    (save-window-excursion
+      (let ((current-file (buffer-file-name))
+            (current-page (number-to-string (pdf-view-current-page))))
+        (async-shell-command
+         (format "zathura -P %s \"%s\"" current-page current-file))))
+    (message "Sent to zathura"))
 #+end_src
 **** PDF view restore
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
@@ -1623,26 +1612,14 @@ enhanced PDF viewer on emacs
 #+end_src
 **** Openwith
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package openwith
-    :defer t
-    :config
-    (openwith-mode t)
-    (setq larget-file-warning-threshold nil)
-    (setq openwith-associations
-          (list (list (openwith-make-extension-regexp
-                       '("mpg" "mpeg" "mp3" "mp4" "m4v"
-                         "avi" "wmv" "wav" "mov" "flv"
-                         "ogm" "ogg" "mkv"))
-                      "mpv"
-                      '(file)))
-          (list (openwith-make-extension-regexp
-                 '("pdf"))
-                "zathura"
-                '(file))))
-  ;;(list (openwith-make-extension-regexp
-  ;;       '("html" "htm"))
-  ;;      "qutebrowser"
-  ;;      '(file))))
+  (defun my/html-file-open-in-qutebrowser ()
+    (interactive)
+    (save-window-excursion
+      (let ((current-file (buffer-file-name)))
+        (async-shell-command
+         (format "qutebrowser \"%s\"" current-file))))
+    (message "Sent to qutebrowser"))
+
 #+end_src
 **** Calfw
 calendar
