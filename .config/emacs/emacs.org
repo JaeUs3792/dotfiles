@@ -450,19 +450,17 @@ emacs built-in package config
           doom-modeline-display-default-persp-name t
           doom-modeline-indent-info t))
 #+end_src
-**** Visual Fill Column
+**** Writeroom mode
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
-  (defun write-room-enable ()
-    "Write Room Enable"
-    (interactive)
-    (setq visual-fill-column-width 100
-          visual-fill-column-center-text t)
-    (visual-line-mode t)
-    (visual-fill-column-mode t))
-
-  (use-package visual-fill-column
+  (use-package writeroom-mode
     :defer t
-    :hook ((org-mode markdown-mode nov-mode) . write-room-enable))
+    :init (global-writeroom-mode 1)
+    :config
+    (setq writeroom-width 100
+          writeroom-fullscreen-effect nil
+          writeroom-maximize-window nil
+          write-mode-line t
+          writeroom-major-modes '(org-mode markdown-mode nov-mode)))
 #+end_src
 **** All The Icons
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
