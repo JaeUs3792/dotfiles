@@ -1262,48 +1262,6 @@ latex export code block
   (my/org-roam-refresh-agenda-list)
 #+end_src
 
-***** Org Super Agenda
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
-  (use-package org-super-agenda
-    :defer t
-    :init
-    (org-super-agenda-mode 1)
-    :config
-    (setq org-agenda-custom-commands
-          '(("z" "Org mode super agenda"
-             ((alltodo "" ((org-agenda-overriding-header "")
-                           (org-super-agenda-groups
-                            '((:name "Important"
-                                     :tag "Important"
-                                     :priority "A"
-                                     :order 6)
-                              (:name "Due Today"
-                                     :deadline today
-                                     :order 2)
-                              (:name "Due Soon"
-                                     :deadline future
-                                     :order 8)
-                              (:name "Overdue"
-                                     :deadline past
-                                     :order 7)
-                              (:name "Projects"
-                                     :tag "Project"
-                                     :order 14)
-                              (:name "To read"
-                                     :tag "Read"
-                                     :order 30)
-                              (:name "Waiting"
-                                     :todo "WAIT"
-                                     :order 20)
-                              (:name "Holding"
-                                     :todo "HOLD"
-                                     :order 21)
-                              (:name "trivial"
-                                     :priority<= "C"
-                                     :tag ("Trivial" "Unimportant")
-                                     :order 90)
-                              (:discard (:tag ("Chore" "Routine" "Daily"))))))))))))
-#+end_src
 **** Tools
 ***** ob-async
 asynchronous execution of org-babel src blocks
