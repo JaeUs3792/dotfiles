@@ -1118,6 +1118,10 @@ download image link
         (user-error
          "Error pasting the image, make sure you have an image in the clipboard!"))
       ))
+  (defun org-time-stamp-with-time()
+        "Insert org mode timestamp at point with current date and time"
+        (interactive)
+        (org-insert-time-stamp (current-time) t))
 #+end_src
 **** Exporter
 ***** Hugo
