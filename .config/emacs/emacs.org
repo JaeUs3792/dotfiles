@@ -459,7 +459,7 @@ emacs built-in package config
     (setq writeroom-width 100
           writeroom-fullscreen-effect nil
           writeroom-maximize-window nil
-          write-mode-line t
+          writeroom-mode-line t
           writeroom-major-modes '(org-mode markdown-mode nov-mode)))
 #+end_src
 **** All The Icons
@@ -1202,7 +1202,6 @@ latex export code block
   (setq org-agenda-files (list my/org-agenda-default-file))
 #+end_src
 ***** Org Roam
-+ TODO: Project todos
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (use-package org-roam
     ;;:demand t ;; ensure org-roam is loaded by default
@@ -1211,7 +1210,12 @@ latex export code block
     (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
     ;;(org-roam-completion-everywhere t)
     :config
-    (setq org-roam-capture-templates '(("p" "project" plain "* TODO %?"
+    (setq org-roam-capture-templates '(("d" "default" plain "%?"
+                                        :target (file+head
+                                                 "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                 "#+title: ${title}\n")
+                                        :unnarrowed t)
+                                       ("p" "project" plain "* TODO %?"
                                         :target (file+head+olp
                                                  "%<%Y%m%d%H%M%S>-${slug}.org"
                                                  "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
