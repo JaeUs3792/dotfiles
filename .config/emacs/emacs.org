@@ -1146,7 +1146,8 @@ latex export code block
                                    ("autogobble")
                                    ("breakanywhere" "true")
                                    ("bgcolor" "gray!40")
-                                   ("frame" "lines")))
+                                   ("frame" "single")
+                                   ("numbers" "left")))
   (setq org-latex-listings 'minted
         org-latex-packages-alist '(("" "minted"))
         org-latex-pdf-process
