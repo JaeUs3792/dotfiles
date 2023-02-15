@@ -1,3 +1,5 @@
 # generated from emacs.org
 *
 !*.org
+!modules/*
+!custom-themes/*

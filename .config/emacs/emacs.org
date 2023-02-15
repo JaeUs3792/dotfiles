@@ -112,7 +112,8 @@ Emacs Configuration for emacs 29.50
 #+end_src
 *** Add other modules
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-(add-to-list 'load-path (expand-file-name "modules/" user-emacs-directory))
+  (add-to-list 'load-path (expand-file-name "modules/" user-emacs-directory))
+  (setq custom-theme-directory (expand-file-name "custom-themes/" user-emacs-directory))
 #+end_src
 *** Edit options
 **** Whitespace clean
@@ -1564,7 +1565,7 @@ enhanced PDF viewer on emacs
     :defer t
     :hook (pdf-view-mode . pdf-view-restore-mode)
     :config
-    (setq pdf-view-restore-filename (expand-file-name ".tmp/pdf-view-restore"
+    (setq pdf-view-restore-filename (expand-file-name "backups/pdf-view-restore"
                                                       user-emacs-directory)))
 #+end_src
 **** Nov
