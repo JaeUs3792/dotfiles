@@ -393,7 +393,8 @@ emacs built-in package config
     :init
     (disable-theme 'deeper-blue)
     (if (display-graphic-p)
-        (load-theme 'doom-palenight t)
+        ;;(load-theme 'doom-palenight t)
+        (load-theme 'doom-one t)
       (load-theme 'doom-gruvbox t)))
 #+end_src
 **** Rainbow Delimiters
@@ -837,7 +838,7 @@ Quick Action in minibuffer
     ;; Add useful defaults completion sources from cape
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-ispell)
+    ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
     ;; Silence the pcomplete capf, no errors or messages!
     ;; Important for corfu
     (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
