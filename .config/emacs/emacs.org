@@ -880,6 +880,7 @@ Quick Action in minibuffer
     :config
     (add-hook 'org-mode-hook #'org-indent-mode)
     (add-hook 'org-mode-hook #'org-fold-hide-drawer-all)
+    (add-hook 'org-mode-hook #'visual-line-mode)
     (setq org-todo-keywords
           '((sequence
              "TODO(t)"  ; A task that needs doing & is ready to do
