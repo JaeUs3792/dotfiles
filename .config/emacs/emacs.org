@@ -1203,8 +1203,8 @@ latex export code block
   (use-package org-journal
     :defer t
     :config
-    (setq org-journal-dir (expand-file-name "journal/" org-directory)))
-    ;;(setq org-journal-file-type 'weekly))
+    (setq org-journal-dir (expand-file-name "journal/" org-directory))
+    (setq org-journal-file-type 'weekly))
 #+end_src
 
 ***** Org Agenda
