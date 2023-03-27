@@ -404,7 +404,49 @@ emacs built-in package config
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 **** Setting Transparency
+***** emacs 28
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
+  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+  (add-to-list 'default-frame-alist '(alpha . '(85 . 50)))
+  (defun toggle-transparency ()
+    (interactive)
+    (let ((alpha (frame-parameter nil 'alpha)))
+      (set-frame-parameter
+       nil 'alpha
+       (if (eql (cond ((numberp alpha) alpha)
+                      ((numberp (cdr alpha)) (cdr alpha))
+                      ;; Also handle undocumented (<active> <inactive>) form.
+                      ((numberp (cadr alpha)) (cadr alpha)))
+                100)
+           '(85 . 50) '(100 . 100)))))
+  (defun my/transparency-round (val)
+    "Round VAL to the nearest tenth of an integer."
+    (/ (round (* 10 val)) 10.0))
+
+  (defun my/increase-frame-alpha-background ()
+    "Increase current frame’s alpha background."
+    (interactive)
+    (set-frame-parameter nil
+                         'alpha-background
+                         (my/transparency-round
+                          (min 1.0
+                               (+ (frame-parameter nil 'alpha-background) 0.1))))
+    (message "%s" (frame-parameter nil 'alpha-background)))
+
+  (defun my/decrease-frame-alpha-background ()
+    "Decrease current frame’s alpha background."
+    (interactive)
+    (set-frame-parameter nil
+                         'alpha-background
+                         (my/transparency-round
+                          (max 0.0
+                               (- (frame-parameter nil 'alpha-background) 0.1))))
+    (message "%s" (frame-parameter nil 'alpha-background)))
+  (global-set-key (kbd "C-c t") 'toggle-transparency)
+#+end_src
+***** emacs 29
+#+begin_src emacs-lisp
+  ;;:mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
   (set-frame-parameter nil 'alpha-background 0.9)
   (add-to-list 'default-frame-alist '(alpha-background . 0.9))
   (defun toggle-transparency ()
@@ -1610,6 +1652,16 @@ calendar
     :config
     (elfeed-org)
     (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" user-emacs-directory))))
+#+end_src
+**** Chat-GPT
+https://github.com/xenodium/chatgpt-shell
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
+  (use-package chatgpt-shell
+    :straight (chatgpt-shell :type git
+                             :host github
+                             :repo "xenodium/chatgpt-shell")
+    :config
+    (setq chatgpt-shell-openai-key "my_key"))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
