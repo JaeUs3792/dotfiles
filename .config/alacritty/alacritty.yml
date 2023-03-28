@@ -14,19 +14,19 @@ scrolling:
   history: 10000
 font:
   normal:
-    family: UbuntuMono
+    family: Mononoki Nerd Font
     style: Regular
   bold:
-    family: UbuntuMono
+    family: Mononoki Nerd Font
     style: Bold
   italic:
-    family: UbuntuMono
+    family: Mononoki Nerd Font
     style: Italic
   bold_italic:
-    family: UbuntuMono
+    family: Mononoki Nerd Font
     style: Bold Italic
   # Point size
-  size: 12.0
+  size: 10.0
   offset:
     x: 0
     y: 1
