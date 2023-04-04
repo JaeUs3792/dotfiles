@@ -11,8 +11,9 @@ stow .
 
 
 #ZSH
-paru -S zsh-autosuggestions-git --noconfirm
-/usr/share/oh-my-zsh/tools/install.sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 
 # NUSHELL
@@ -29,7 +30,6 @@ mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 paru -S neovim --noconfirm
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-
 nvim +PlugInstall +q +q
 
 # git config
@@ -40,42 +40,30 @@ git config --global user.autocrlf input
 # tmux
 paru -S tmux --noconfirm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/install_plugins.sh
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
 
-# Dynamic wallpaper
-sudo pip install pywal
-paru -S cronie --noconfirm
-sudo systemctl enable cronie
-crontab - e
-# 0 * * * * /home/jaeus/scripts/random_wallpaper.sh 
-
-
 # font
-paru -S ttf-fira-code ttf-nanum nerd-fonts-mononoki ttf-monaco ttf-d2coding --noconfirm
+paru -S ttf-firacode-nerd ttf-nanum ttf-mononoki-nerd --noconfirm
 
 # hangul
 paru -S fcitx-hangul fcitx-configtool --noconfirm
 
 # enpass
 #paru -S enpass --noconfirm
-paru -S bitwarden --noconfirm
-
+#paru -S bitwarden --noconfirm
 #paru -S green-tunnel --noconfirm
 
 #emacs
 paru -S ripgrep emacs --noconfirm
-paru -S auctex texlive-most texlive-lang --noconfirm
-paru -S jupyter --noconfirm
+paru -S texlive-most texlive-lang --noconfirm
+paru -S jupyterlab --noconfirm
 paru -S zathura zathura-cb zathura-pdf-mupdf
 
 #syncthing
 paru -S syncthing --noconfirm
 mkdir SyncThing
-
 sudo systemctl enable syncthing@jaeus.service
 
 # etc
 paru -S figlet --noconfirm
-
