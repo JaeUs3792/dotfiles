@@ -7,8 +7,7 @@ source $ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 ##WSL2
-#VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
-#export DISPLAY=$VETHER_IP:10.0
+source ~/scripts/wsl_get_display.sh
 
 # emacs
 alias emd="emacs --daemon"
