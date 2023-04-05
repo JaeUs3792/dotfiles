@@ -214,6 +214,7 @@ Emacs Configuration for emacs 29.50
   (require 'custom-keybindings)
   (require 'custom-default)
   (require 'custom-completion)
+  (require 'custom-edit)
   (require 'custom-projects)
   (require 'custom-latex)
   (require 'custom-org)
@@ -405,48 +406,48 @@ emacs built-in package config
 #+end_src
 **** Setting Transparency
 ***** emacs 28
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
-  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
-  (add-to-list 'default-frame-alist '(alpha . '(85 . 50)))
-  (defun toggle-transparency ()
-    (interactive)
-    (let ((alpha (frame-parameter nil 'alpha)))
-      (set-frame-parameter
-       nil 'alpha
-       (if (eql (cond ((numberp alpha) alpha)
-                      ((numberp (cdr alpha)) (cdr alpha))
-                      ;; Also handle undocumented (<active> <inactive>) form.
-                      ((numberp (cadr alpha)) (cadr alpha)))
-                100)
-           '(85 . 50) '(100 . 100)))))
-  (defun my/transparency-round (val)
-    "Round VAL to the nearest tenth of an integer."
-    (/ (round (* 10 val)) 10.0))
+#+begin_src emacs-lisp :mkdirp yes
+;;:tangle ~/.config/emacs/modules/custom-ui.el
+   (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+   (add-to-list 'default-frame-alist '(alpha . '(85 . 50)))
+   (defun toggle-transparency ()
+     (interactive)
+     (let ((alpha (frame-parameter nil 'alpha)))
+       (set-frame-parameter
+        nil 'alpha
+        (if (eql (cond ((numberp alpha) alpha)
+                       ((numberp (cdr alpha)) (cdr alpha))
+                       ;; Also handle undocumented (<active> <inactive>) form.
+                       ((numberp (cadr alpha)) (cadr alpha)))
+                 100)
+            '(85 . 50) '(100 . 100)))))
+   (defun my/transparency-round (val)
+     "Round VAL to the nearest tenth of an integer."
+     (/ (round (* 10 val)) 10.0))
 
-  (defun my/increase-frame-alpha-background ()
-    "Increase current frame’s alpha background."
-    (interactive)
-    (set-frame-parameter nil
-                         'alpha-background
-                         (my/transparency-round
-                          (min 1.0
-                               (+ (frame-parameter nil 'alpha-background) 0.1))))
-    (message "%s" (frame-parameter nil 'alpha-background)))
+   (defun my/increase-frame-alpha-background ()
+     "Increase current frame’s alpha background."
+     (interactive)
+     (set-frame-parameter nil
+                          'alpha-background
+                          (my/transparency-round
+                           (min 1.0
+                                (+ (frame-parameter nil 'alpha-background) 0.1))))
+     (message "%s" (frame-parameter nil 'alpha-background)))
 
-  (defun my/decrease-frame-alpha-background ()
-    "Decrease current frame’s alpha background."
-    (interactive)
-    (set-frame-parameter nil
-                         'alpha-background
-                         (my/transparency-round
-                          (max 0.0
-                               (- (frame-parameter nil 'alpha-background) 0.1))))
-    (message "%s" (frame-parameter nil 'alpha-background)))
-  (global-set-key (kbd "C-c t") 'toggle-transparency)
+   (defun my/decrease-frame-alpha-background ()
+     "Decrease current frame’s alpha background."
+     (interactive)
+     (set-frame-parameter nil
+                          'alpha-background
+                          (my/transparency-round
+                           (max 0.0
+                                (- (frame-parameter nil 'alpha-background) 0.1))))
+     (message "%s" (frame-parameter nil 'alpha-background)))
+   (global-set-key (kbd "C-c t") 'toggle-transparency)
 #+end_src
 ***** emacs 29
-#+begin_src emacs-lisp
-  ;;:mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
   (set-frame-parameter nil 'alpha-background 0.9)
   (add-to-list 'default-frame-alist '(alpha-background . 0.9))
   (defun toggle-transparency ()
@@ -907,6 +908,58 @@ Quick Action in minibuffer
 (provide 'custom-completion)
 ;;; custom-completion.el ends here
 #+end_src
+*** Edit
+**** Helpful
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
+  (use-package helpful
+    :defer t
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable))
+  ;;:commands (helpful-callable helpful-variable helpful-command helpful-key)
+  (global-set-key [remap describe-function] #'describe-function)
+  (global-set-key [remap describe-command] #'helpful-command)
+  (global-set-key [remap describe-variable] #'describe-variable)
+  (global-set-key [remap describe-key] #'helpful-key)
+#+end_src
+**** Avy
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
+  (use-package avy
+    :defer t
+    :config
+    (setq avy-all-windows t))
+  (ju/leader-key-def
+    "v" '(:ignore t :which-key "Avy")
+    "vc" '(avy-goto-char :which-key "Avy Goto Char")
+    "vw" '(avy-goto-word-0 :which-key "Avy Goto Word")
+    "vl" '(avy-goto-line :which-key "Avy Goto Line"))
+#+end_src
+**** Snippet
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
+  (use-package yasnippet
+    :defer t
+    :hook (prog-mode . yas-minor-mode)
+    :config
+  (defvar yas-snippet-dirs nil)
+  (add-to-list 'yas-snippet-dirs "~/.config/emacs/snippets")
+  (yas-global-mode 1))
+  (ju/leader-key-def
+    "i s" '(yas-insert-snippet :which-key "snippet"))
+#+end_src
+**** Emojify
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
+  (use-package emojify
+    :defer t
+    :init (global-emojify-mode 1))
+  (ju/leader-key-def
+    "i e" '(emojify-insert-emoji :which-key "emoji"))
+#+end_src
+**** Provide Modules
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
+(provide 'custom-edit)
+;;; custom-completion.el ends here
+#+end_src
+
 *** Org Mode
 **** Normal Function
 ***** configure org
@@ -1542,51 +1595,6 @@ speed-up insertion of environments and math templates.
   ;;; custom-latex.el ends here
 #+end_src
 *** Extra
-**** Helpful
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package helpful
-    :defer t
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable))
-  ;;:commands (helpful-callable helpful-variable helpful-command helpful-key)
-  (global-set-key [remap describe-function] #'describe-function)
-  (global-set-key [remap describe-command] #'helpful-command)
-  (global-set-key [remap describe-variable] #'describe-variable)
-  (global-set-key [remap describe-key] #'helpful-key)
-#+end_src
-**** Avy
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package avy
-    :defer t
-    :config
-    (setq avy-all-windows t))
-  (ju/leader-key-def
-    "v" '(:ignore t :which-key "Avy")
-    "vc" '(avy-goto-char :which-key "Avy Goto Char")
-    "vw" '(avy-goto-word-0 :which-key "Avy Goto Word")
-    "vl" '(avy-goto-line :which-key "Avy Goto Line"))
-#+end_src
-**** Snippet
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package yasnippet
-    :defer t
-    :hook (prog-mode . yas-minor-mode)
-    :config
-  (defvar yas-snippet-dirs nil)
-  (add-to-list 'yas-snippet-dirs "~/.config/emacs/snippets")
-  (yas-global-mode 1))
-  (ju/leader-key-def
-    "i s" '(yas-insert-snippet :which-key "snippet"))
-#+end_src
-**** Emojify
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
-  (use-package emojify
-    :defer t
-    :init (global-emojify-mode 1))
-  (ju/leader-key-def
-    "i e" '(emojify-insert-emoji :which-key "emoji"))
-#+end_src
 **** PDF Tool
 enhanced PDF viewer on emacs
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
