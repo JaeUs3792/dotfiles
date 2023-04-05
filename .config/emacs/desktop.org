@@ -23,6 +23,11 @@ DesktopNames=exwm
 
 * Configuration
 
+** App Launcher
+#+begin_src emacs-lisp :tangle ~/.config/emacs/desktop.el
+  (straight-use-package
+   '(app-launcher :type git :host github :repo "SebastienWae/app-launcher"))
+#+end_src
 ** EXWM
 #+begin_src emacs-lisp :tangle ~/.config/emacs/desktop.el
 
@@ -38,7 +43,7 @@ DesktopNames=exwm
   (defun efs/exwm-init-hook ()
     ;; Make workspace 1 be the one where we land at startup
     (exwm-workspace-switch-create 1)
-    ;;(efs/start-panel)
+    (efs/start-panel)
     ;; if not wsl
     ;;(efs/run-in-background "xsetroot -cursor_name left_ptr")
     ;;(efs/run-in-background "nm-applet")
@@ -135,7 +140,7 @@ DesktopNames=exwm
 
             ;; App
             (,(kbd "<s-return>") . vifon/exwm-terminal)
-            (,(kbd "<s-SPC>") . app-launcher-run-app)
+            ([?\s-d] . app-launcher-run-app)
             ;; Switch workspace
             ([?\s-w] . exwm-workspace-switch)
             ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
@@ -150,7 +155,7 @@ DesktopNames=exwm
 
     (exwm-enable))
 
-   if not wsl
+  ;; if not wsl
   (use-package desktop-environment
     :after exwm
     :config (desktop-environment-mode)
@@ -190,9 +195,4 @@ DesktopNames=exwm
 
   ;; Update panel indicator when workspace changes
   (add-hook 'exwm-workspace-switch-hook #'efs/send-polybar-exwm-workspace)
-#+end_src
-** App Launcher
-#+begin_src emacs-lisp :tangle ~/.config/emacs/desktop.el
-  (straight-use-package
-   '(app-launcher :type git :host github :repo "SebastienWae/app-launcher"))
 #+end_src
