@@ -2,17 +2,8 @@
 
 killall bspc
 
-# Splashscreen
-pgrep sxhkd || mpv --fullscreen     --no-input-default-bindings     --no-config     --on-all-workspaces     ~/Videos/Renders/splash.mp4 
-
 # Compositor
-picom -b --config $HOME/.xmonad/scripts/picom.conf &
-
-# cursor
-xsetroot -cursor_name left_ptr &
-
-# apply colorscheme to spotify
-#~/.ricing/wal-spotify.sh > /dev/null&
+picom &
 
 # Source the colorscheme
 #echo alpha="ff" >> "${HOME}/.cache/wal/colors.sh"
@@ -47,10 +38,10 @@ eww -c ~/.config/eww/mybar open bar_left
 #killall nm-applet
 #killall flameshot
 #blueman-applet&
-#pa-applet --disable-key-grabbing --disable-notifications& 
+#pa-applet --disable-key-grabbing --disable-notifications&
 #nm-applet&
 #flameshot&
-    
+
 # daemons
 #killall dunst
 #dunst -lf  $foreground \

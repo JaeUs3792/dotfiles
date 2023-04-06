@@ -936,6 +936,7 @@ Quick Action in minibuffer
 #+end_src
 **** Snippet
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
+
   (use-package yasnippet
     :defer t
     :hook (prog-mode . yas-minor-mode)
@@ -946,6 +947,13 @@ Quick Action in minibuffer
   (ju/leader-key-def
     "i s" '(yas-insert-snippet :which-key "snippet"))
 #+end_src
+***** Doom-Snippet
+#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
+  (use-package doom-snippets
+    :after yasnippet
+    :straight (doom-snippets :type git :host github :repo "doomemacs/snippets" :files ("*.el" "*")))
+#+end_src
+
 **** Emojify
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
   (use-package emojify
@@ -1069,7 +1077,7 @@ Quick Action in minibuffer
 ***** Valign
 | 12345678 |   |
 |----------+---|
-|   일이삼사 |   |
+|    일이삼사 |   |
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (use-package valign
     :defer t
@@ -1669,7 +1677,7 @@ https://github.com/xenodium/chatgpt-shell
                              :host github
                              :repo "xenodium/chatgpt-shell")
     :config
-    (setq chatgpt-shell-openai-key "my_key"))
+    (setq chatgpt-shell-openai-key "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"))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el

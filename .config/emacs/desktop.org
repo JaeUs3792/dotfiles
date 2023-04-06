@@ -25,8 +25,8 @@ DesktopNames=exwm
 
 ** App Launcher
 #+begin_src emacs-lisp :tangle ~/.config/emacs/desktop.el
-  (straight-use-package
-   '(app-launcher :type git :host github :repo "SebastienWae/app-launcher"))
+  (use-package app-launcher
+    :straight (app-launcher :type git :host github :repo "SebastienWae/app-launcher"))
 #+end_src
 ** EXWM
 #+begin_src emacs-lisp :tangle ~/.config/emacs/desktop.el
@@ -158,12 +158,12 @@ DesktopNames=exwm
   ;; if not wsl
   (use-package desktop-environment
     :after exwm
-    :config (desktop-environment-mode)
-    :custom
-    (desktop-environment-brightness-small-increment "2%+")
-    (desktop-environment-brightness-small-decrement "2%-")
-    (desktop-environment-brightness-normal-increment "5%+")
-    (desktop-environment-brightness-normal-decrement "5%-"))
+    :config (desktop-environment-mode))
+    ;;:custom
+    ;;(desktop-environment-brightness-small-increment "2%+")
+    ;;(desktop-environment-brightness-small-decrement "2%-")
+    ;;(desktop-environment-brightness-normal-increment "5%+")
+    ;;(desktop-environment-brightness-normal-decrement "5%-"))
 
   ;; Make sure the server is started (better to do this in your main Emacs config!)
   (server-start)
