@@ -16,7 +16,7 @@ DesktopNames=exwm
   #!/bin/sh
   # Fire it up for WSL
   #source ~/scripts/wsl_get_display.sh
-  picom -b --config $HOME/.xmonad/scripts/picom.conf &
+  picom &
   exec dbus-launch --exit-with-session emacs -mm --debug-init -l ~/.config/emacs/desktop.el
 #+end_src
 
