@@ -30,7 +30,7 @@ source ~/scripts/wsl_get_display.sh
 #run lxsession &
 
 #fcitx &
-picom -b --config $HOME/.xmonad/scripts/picom.conf &
+picom &
 #/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 #/usr/lib/xfce4/notifyd/xfce4-notifyd &
 #seadrive-gui &

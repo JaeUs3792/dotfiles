@@ -168,7 +168,7 @@ client.focused          #4545a8 #4545a8 #ffffff #752b30   #4545a8
 client.focused_inactive #617d9e #617d9e #ffffff #424f5f   #617d9e
 client.unfocused        #424f5f #424f5f #83a5bc #424f5f   #424f5f
 
-exec_always picom -b --config $HOME/.xmonad/scripts/picom.conf
+exec_always picom
 exec_always feh --bg-fill /home/jaeus/wallpaper/colony.jpg
 
 #exec_always --no-startup-id $HOME/.config/polybar/launch.sh
