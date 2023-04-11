@@ -38,11 +38,11 @@ Emacs Configuration for emacs 29.50
 ** Init
 *** Startup hook
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-;;; init.el -*- lexical-binding: t; -*-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "Emacs loaded in %s"
-                     (emacs-init-time))))
+  ;;; init.el -*- lexical-binding: t; -*-
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (message "Emacs loaded in %s"
+                       (emacs-init-time))))
 #+end_src
 *** Package Function
 **** Use-package
@@ -148,16 +148,36 @@ Emacs Configuration for emacs 29.50
 
 *** Backup options
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-    (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory))))
-    (setq-default custom-file (expand-file-name ".custom.el" user-emacs-directory))
-    (when (file-exists-p custom-file)
-      (load custom-file))
-    (setq delete-by-moving-to-trash t
-          trash-directory "~/.local/share/Trash/files/")
-    (setq undo-limit 100000000
-          auto-save-default t)
-    (setq auto-save-file-name-transforms
-          `((".*" ,(expand-file-name "backups/" user-emacs-directory) t)))
+  (use-package no-littering
+    :config
+    (setq no-littering-etc-directory
+          (expand-file-name "config/" user-emacs-directory))
+    (setq no-littering-var-directory
+          (expand-file-name "data/" user-emacs-directory)))
+  (require 'recentf)
+  (add-to-list 'recentf-exclude no-littering-var-directory)
+  (add-to-list 'recentf-exclude no-littering-etc-directory)
+
+  ;; interlocking file name
+  (setq lock-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "lock/") t)))
+
+  ;; Auto save
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  ;;(when (fboundp 'startup-redirect-eln-cache)
+  ;;  (startup-redirect-eln-cache
+  ;;   (convert-standard-filename
+  ;;    (expand-file-name "var/eln-cache/" user-emacs-directory))))
+
+  (setq backup-directory-alist `(("." . ,(no-litter "auto-save/"))))
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
+  (when (file-exists-p custom-file)
+    (load custom-file))
+  (setq delete-by-moving-to-trash t
+        trash-directory "~/.local/share/Trash/files/")
+  (setq undo-limit 100000000
+        auto-save-default t)
 #+end_src
 
 
@@ -1590,12 +1610,12 @@ writing and formatting tex file in Emacs.
 **** Cdlatex
 speed-up insertion of environments and math templates.
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
-  (use-package cdlatex
-    :hook
-    ((org-mode . org-cdlatex-mode)
-     (LaTex-mode . cdlatex-mode))
-    :config
-    (setq cdlatex-use-dollar-to-ensure-math nil))
+  ;;(use-package cdlatex
+  ;;  :hook
+  ;;  ;(org-mode . org-cdlatex-mode)
+  ;;  (LaTex-mode . cdlatex-mode)
+  ;;  :config
+  ;;  (setq cdlatex-use-dollar-to-ensure-math nil))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-latex.el
@@ -1629,8 +1649,7 @@ enhanced PDF viewer on emacs
     :defer t
     :hook (pdf-view-mode . pdf-view-restore-mode)
     :config
-    (setq pdf-view-restore-filename (expand-file-name "backups/pdf-view-restore"
-                                                      user-emacs-directory)))
+    (setq pdf-view-restore-filename (no-littering-expand-var-file-name "pdf-view-restore")))
 #+end_src
 **** Nov
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
