@@ -1,7 +1,7 @@
 #+TITLE: Desktop
 
 * Exwm Desktop
-#+begin_src config
+#+begin_src config :mkdirp yes :tangle ~/.config/emacs/exwm/EXWM.desktop
 [Desktop Entry]
 Name=EXWM
 Comment=Emacs Window Manager
@@ -12,7 +12,7 @@ X-LightDM-DesktopName=exwm
 DesktopNames=exwm
 #+end_src
 
-#+begin_src shell
+#+begin_src shell :mkdirp yes :tangle ~/.config/emacs/exwm/start-exwm.sh
   #!/bin/sh
   # Fire it up for WSL
   #source ~/scripts/wsl_get_display.sh
@@ -157,6 +157,7 @@ DesktopNames=exwm
 
   ;; if not wsl
   (use-package desktop-environment
+    :disabled
     :after exwm
     :config (desktop-environment-mode))
     ;;:custom

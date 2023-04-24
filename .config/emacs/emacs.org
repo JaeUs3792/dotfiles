@@ -170,7 +170,7 @@ Emacs Configuration for emacs 29.50
   ;;   (convert-standard-filename
   ;;    (expand-file-name "var/eln-cache/" user-emacs-directory))))
 
-  (setq backup-directory-alist `(("." . ,(no-litter "auto-save/"))))
+  ;;(setq backup-directory-alist `(("." . ,(no-litter "auto-save/"))))
   (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
   (when (file-exists-p custom-file)
     (load custom-file))
@@ -539,6 +539,8 @@ emacs built-in package config
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
     ;;(setq dashboard-banner-logo-title "Emacs is more than a text editor!")
+    ;; logo from github.com/egstatsml/emacs_fancy_logos
+    (setq dashboard-startup-banner "~/.config/emacs/logos/xemacs_color.svg")
     ;;(setq dashboard-startup-banner 'logo)
     (setq dashboard-center-content t)
     (setq dashboard-week-agenda t)
@@ -1692,9 +1694,11 @@ calendar
 https://github.com/xenodium/chatgpt-shell
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
   (use-package chatgpt-shell
-    :straight (chatgpt-shell :type git
-                             :host github
-                             :repo "xenodium/chatgpt-shell")
+    :disabled
+    :straight
+    (chatgpt-shell :type git
+                   :host github
+                   :repo "xenodium/chatgpt-shell")
     :config
     (setq chatgpt-shell-openai-key "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"))
 #+end_src
