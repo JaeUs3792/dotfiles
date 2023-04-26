@@ -26,9 +26,9 @@ picom &
 
 # Statusbar
 #eww -c ~/.config/eww/eww-bar open bar
-eww -c ~/.config/eww/mybar open bar_right
-eww -c ~/.config/eww/mybar open bar_center
-eww -c ~/.config/eww/mybar open bar_left
+#eww -c ~/.config/eww/mybar open bar_right
+#eww -c ~/.config/eww/mybar open bar_center
+#eww -c ~/.config/eww/mybar open bar_left
 #killall polybar
 #polybar -c ~/.config/eww/mybar/polybar_tray.ini tray&
 
@@ -73,8 +73,8 @@ eww -c ~/.config/eww/mybar open bar_left
 #.bscripts/borders.sh&
 
 # Emacs Daemon
-emacs --daemon
+#emacs --daemon
 
 # Launch keybinding daemon
 killall sxhkd
-sxhkd -c ~/.config/bspwm/sxhkdrc > /dev/null 2> /dev/null&
+sxhkd -c ~/.config/sxhkd/sxhkdrc > /dev/null 2> /dev/null&

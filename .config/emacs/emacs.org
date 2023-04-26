@@ -1694,11 +1694,6 @@ calendar
 https://github.com/xenodium/chatgpt-shell
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
   (use-package chatgpt-shell
-    :disabled
-    :straight
-    (chatgpt-shell :type git
-                   :host github
-                   :repo "xenodium/chatgpt-shell")
     :config
     (setq chatgpt-shell-openai-key "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"))
 #+end_src
