@@ -22,10 +22,11 @@ super + shift + {1-5}
 #	kitty
 ##control+alt+g  
 ##	lutris
-#control+alt+f 
-#	thunar 
-#super+shift+c
-#	/home/kz87/.bscripts/wc.sh
+super+t 
+	thunar 
+# close & kill
+super+shift+c
+	bspc node -c
 #
 ##rofi things
 ##Launch apps
@@ -97,7 +98,9 @@ super + shift + {1-5}
 #
 ## Toggle picom
 super+p
-    [[ `pgrep -c picom` -eq 0 ]] && picom -b --config $HOME/.xmonad/scripts/picom.conf || killall picom
+    [[ `pgrep -c picom` -eq 0 ]] && picom || killall picom
+super+w
+	~/scripts/random_wallpaper.sh
     
 ##Keyboard layouts
 #super+space 
@@ -161,42 +164,12 @@ super+p
 #	bspc node focused -z top 0 -15
 #super+alt+j
 #	bspc node focused -z bottom 0 15
-#super+{d,a}
-#	play -v 0.4 ~/Documents/Sounds/tile.wav& bspc node @/ -C {forward,backward}
-#alt+{d,a}
-#	play -v 0.4 ~/Documents/Sounds/tile.wav& bspc node first_ancestor -R {90,270}
-#super+e
-#	play -v 0.4 ~/Documents/Sounds/tile.wav& bspc node first_ancestor --balance 
-#
-#control+shift+h
-#	bspc node focused -z right -15 0
-#control+shift+l
-#	bspc node focused -z left 15 0
-#control+shift+j
-#	bspc node focused -z top 0 15
-#control+shift+k
-#	bspc node focused -z bottom 0 -15
-#	
+super + {_,shift +} + {h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
 super+space
-   if [ -z "$(bspc query -N -n focused.fullscreen)" ]; then \
-        bspc node focused -t fullscreen; \
-    else \
-        bspc node focused -t tiled; \
- fi;
-#super+KP_Add
-#	bspc config window_gap $(( 5 + `bspc config window_gap` ))
-#super+KP_Subtract
-#	bspc config window_gap $(( -5 + `bspc config window_gap` ))
-#
-#control+alt+{k,j,h,l}
-#	bspc node --presel-dir ~{north,south,west,east}
-#
-#control+alt+a
-#	if [[ ! -z "$(bspc query -N -n focused.normal)" ]]; then \
-#		bspc node focused -l above; \
-#	elif [[ ! -z "$(bspc query -N -n focused.above)" ]]; then \
-#		bspc node focused -l below; \
-#	else \
-#		bspc node focused -l normal; \
-#	fi;
-#
+	bspc node focused -t ~fullscreen
+super+KP_Add
+	bspc config window_gap $(( 5 + `bspc config window_gap` ))
+super+KP_Subtract
+	bspc config window_gap $(( -5 + `bspc config window_gap` ))
+
