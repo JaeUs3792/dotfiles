@@ -4,7 +4,8 @@ end
 
 set fish_greeting
 
-oh-my-posh init fish --config ~/.poshthemes/craver.omp.json | source
+set VETHER_IP $(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
+export DISPLAY=$VETHER_IP:10.0
 
 # emacs
 alias emupgrade="~/.emacs.d/bin/doom upgrade"
@@ -34,5 +35,14 @@ alias startsv="ssh odroid startsv"
 alias stopsv="ssh odroid stopsv"
 alias gpulls="pushd ~/.config/emacs && git pull && pushd ~/org && git pull && popd && popd"
 
+# Changing "ls" to "exa"
+alias ls='exa -al --color=always --group-directories-first' # my preferred listing
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias l.='exa -a | egrep "^\."'
+
 figlet -w 100 "$hostname"
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
+
+starship init fish | source
