@@ -42,7 +42,8 @@ alias ll='exa -l --color=always --group-directories-first'  # long format
 alias lt='exa -aT --color=always --group-directories-first' # tree listing
 alias l.='exa -a | egrep "^\."'
 
-figlet -w 100 "$hostname"
+#figlet -w 100 "$hostname"
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
 
 starship init fish | source
+atuin init fish | source

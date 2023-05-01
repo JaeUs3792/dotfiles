@@ -225,10 +225,10 @@ Emacs Configuration for emacs 29.50
   (add-hook 'emacs-startup-hook
             (lambda ()
               (custom-set-faces
-               `(default ((t (:font "Fira Code 11"))))
+               `(default ((t (:font "Fira Code 16"))))
                `(fixed-pitch ((t (:inherit (default)))))
                `(fixed-pitch-serif ((t (:inherit (default)))))
-               `(variable-pitch ((t (:font "Ubuntu 11")))))))
+               `(variable-pitch ((t (:font "Ubuntu 16")))))))
 
   (require 'custom-ui)
   (require 'custom-keybindings)
@@ -540,7 +540,7 @@ emacs built-in package config
     (setq dashboard-set-file-icons t)
     ;;(setq dashboard-banner-logo-title "Emacs is more than a text editor!")
     ;; logo from github.com/egstatsml/emacs_fancy_logos
-    (setq dashboard-startup-banner "~/.config/emacs/logos/xemacs_color.svg")
+    (setq dashboard-startup-banner "~/.config/emacs/logos/xemacs_color.png")
     ;;(setq dashboard-startup-banner 'logo)
     (setq dashboard-center-content t)
     (setq dashboard-week-agenda t)
@@ -1099,7 +1099,7 @@ Quick Action in minibuffer
 ***** Valign
 | 12345678 |   |
 |----------+---|
-|    일이삼사 |   |
+|   일이삼사 |   |
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (use-package valign
     :defer t
@@ -1695,7 +1695,7 @@ https://github.com/xenodium/chatgpt-shell
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
   (use-package chatgpt-shell
     :config
-    (setq chatgpt-shell-openai-key "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"))
+    (setq chatgpt-shell-openai-key "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"))
 #+end_src
 **** Provide Modules
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-extra.el
@@ -1736,11 +1736,6 @@ https://github.com/xenodium/chatgpt-shell
   ;;  :defer t)
 #+end_src
 
-**** Haskell
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
-  (use-package haskell-mode
-    :defer t)
-#+end_src
 **** Markdown
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
   (use-package markdown-mode
@@ -1768,6 +1763,13 @@ https://github.com/xenodium/chatgpt-shell
     :config
     (add-to-list 'auto-mode-alist '("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . toml-mode)))
 #+end_src
+**** Nu
+#+begin_src emacs-lisp
+  (use-package nushell-mode
+    :straight (nushell-mode :type git :host github :repo "azzamsa/emacs-nushell"))
+#+end_src
+
+#+RESULTS:
 
 **** Gnuplot
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el

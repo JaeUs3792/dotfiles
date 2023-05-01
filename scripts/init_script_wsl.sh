@@ -1,40 +1,42 @@
+#!/bin/sh
+###############################################################################
+#                               Initial Settings                               #
+###############################################################################
 # Locale
 echo ko_KR.UTF-8 UTF-8 >> /etc/locale.gen
 locale-gen
 echo LANG=ko_KR.UTF-8 > /etc/locale.conf
 echo [network] > /etc/wsl.conf
 echo generateHosts = false >> /etc/wsl.conf
-
 # User addition
 EDITOR=vim visudo	# uncomment %wheel ALL=(ALL) ALL
 useradd -m -g users -G wheel -s /bin/bash jaeus
 passwd jaeus
-
 # Change User
 su jaeus
-
 sudo pacman-key --init
 sudo pacman-key --populate archlinux
-
-# AUR Manager
-sudo pacman -S base-devel rust --noconfirm
-cd ~
-git clone https://aur.archlinux.org/paru.git
-cd paru
-makepkg -si
-
 # Configuration Copy
-paru -S git stow --noconfirm
+sudo pacman -S git stow --noconfirm
 git clone https://github.com/JaeYoo-Im/dotfiles ~/.dotfiles
 cd ~/.dotfiles
 stow .
+# AUR Manager
+git clone https://aur.archlinux.org/paru-bin.git
+cd paru-bin
+makepkg -si
+###############################################################################
+#                                    Shell                                     #
+###############################################################################
+paru -S fish starship atuin --noconfirm
 
-# ZSH
-paru -S zsh oh-my-zsh-git zsh-syntax-highlighting zsh-autosuggestions figlet --noconfirm
-/usr/share/oh-my-zsh/tools/install.sh
-mv ~/.zshrc.* ~/.zshrc # overwrite configuration
+# Nushell
+#paru -S nushell starship atuin --noconfirm
+#mkdir ~/.local/share/atuin/
+#atuin init nu | save ~/.local/share/atuin/init.nu
+#chsh -s /bin/nu   # change shell
 
-# TMUX
+# TMUX (session maanger)
 paru -S tmux --noconfirm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/install_plugins.sh
@@ -50,19 +52,20 @@ paru -S ripgrep emacs ttf-fira-code ttf-d2coding auctex texlive-most texlive-lan
 paru -S python python-pip jupyter openssh inetutils --noconfirm
 pip install matplotlib numpy pandas tabulate
 
-# verilog lsp
+# verilator for lsp
 paru -S verilator --noconfirm
-npm install -g @imc-trading/svlangserver
 
-# docx
-paru -S zip unzip libreoffice --noconfirm
+# nov
+paru -S zip unzip --noconfirm
 
 ##################################################
 # EXWM
 ##################################################
 paru -S picom --noconfirm
-
 paru -S xorg-xrandr feh cronie --noconfirm
-git clone https://github.com/adi1090x/dynamic-wallpaper.git
-cd dynamic-wallpaper
-./install.sh
+
+##################################################
+# Extra
+##################################################
+paru -S bat
+

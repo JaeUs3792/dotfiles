@@ -98,7 +98,10 @@ super+shift+c
 #
 ## Toggle picom
 super+p
-    [[ `pgrep -c picom` -eq 0 ]] && picom || killall picom
+# nushell
+#	if ((pgrep -c picom) == "0") \{ picom \} else \{ killall picom \}
+# fish	
+	if test (pgrep -c picom) -eq 0; picom ; else; killall picom; end
 super+w
 	~/scripts/random_wallpaper.sh
     
@@ -167,7 +170,7 @@ super+w
 super + {_,shift +} + {h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 super+space
-	bspc node focused -t ~fullscreen
+	bspc node focused -t "~fullscreen"
 super+KP_Add
 	bspc config window_gap $(( 5 + `bspc config window_gap` ))
 super+KP_Subtract
