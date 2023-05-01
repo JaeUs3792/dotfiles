@@ -26,7 +26,7 @@ font:
     family: Mononoki Nerd Font
     style: Bold Italic
   # Point size
-  size: 10.0
+  size: 16.0
   offset:
     x: 0
     y: 1
