@@ -390,7 +390,7 @@ let-env config = {
     external: {
       enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up my be very slow
       max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
-      completer: $fish_completer # check 'carapace_completer' above as an example
+      completer: null # check 'carapace_completer' above as an example
     }
   }
   filesize: {
@@ -652,8 +652,11 @@ alias emd = emacs --daemon
 alias emdk = emacsclient --eval '(kill-emacs)'
 alias em = emacsclient -c -a 'emacs'
 alias emt = emacsclient -c -a 'emacs -nw'
+alias emtangle = emacs --batch -eval "(require 'org)" --eval '(org-babel-tangle-file "~/.config/emacs/emacs.org")'
 alias startsv = ssh odroid startsv
 alias stopsv = ssh odroid stopsv
+alias cat = bat
+#alias gpulls = enter ~/.config/emacs; git pull; enter ~/org; git pull; exit; exit
 
 alias vi = nvim
 
@@ -664,7 +667,6 @@ let-env PYTHONSTARTUP = $env.HOME + "/scripts/my_imports.py"
 
 
 source ~/.cache/starship/init.nu
+source ~/.local/share/atuin/init.nu
 #let hostname = (cat /etc/hostname)
 #figlet -w 100 $hostname
-
-
