@@ -17,6 +17,7 @@ alias emt="emacsclient -c -a 'emacs -nw'"
 alias emtangle="emacs --batch -eval \"(require 'org)\" --eval '(org-babel-tangle-file \"~/.config/emacs/emacs.org\")'"
 #neovim to vi
 alias vi=nvim
+alias cat=bat
 #pacman unlock
 alias paruunlock="sudo rm /var/lib/pacman/db.lck"
 #grub update
