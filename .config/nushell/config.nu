@@ -173,7 +173,7 @@ let dark_theme = {
     record: white
     list: white
     block: white
-    hints: dark_gray
+    hints: gray
 
     shape_and: purple_bold
     shape_binary: purple_bold
