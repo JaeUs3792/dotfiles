@@ -43,6 +43,12 @@ TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
 
 ##################################################
+# Wallpaper
+##################################################
+paru -S python-pywal --noconfirm
+git clone https://git.jaeus.net/walls
+
+##################################################
 # EMACS Related
 ##################################################
 # base

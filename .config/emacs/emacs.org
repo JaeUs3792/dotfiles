@@ -46,9 +46,8 @@ Emacs Configuration for emacs 29.50
 #+end_src
 *** Package Function
 **** Use-package
-#+begin_src emacs-lisp
-;;#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-  ;;(require 'package)
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+  (require 'package)
   (when (version< emacs-version "28")
     (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
@@ -85,7 +84,8 @@ Emacs Configuration for emacs 29.50
     (auto-package-update-at-time "09:00"))
 #+end_src
 **** Straight
-#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+#+begin_src emacs-lisp
+;;#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (defvar bootstrap-version)
   (defvar comp-deferred-compilation-deny-list ()) ; workaround, otherwise straight shits itself
   (let ((bootstrap-file
@@ -233,13 +233,13 @@ Emacs Configuration for emacs 29.50
   (require 'custom-ui)
   (require 'custom-keybindings)
   (require 'custom-default)
-  (require 'custom-completion)
-  (require 'custom-edit)
-  (require 'custom-projects)
-  (require 'custom-latex)
-  (require 'custom-org)
-  (require 'custom-languages)
-  (require 'custom-extra)
+  ;;(require 'custom-completion)
+  ;;(require 'custom-edit)
+  ;;(require 'custom-projects)
+  ;;(require 'custom-latex)
+  ;;(require 'custom-org)
+  ;;(require 'custom-languages)
+  ;;(require 'custom-extra)
 
   ;;(require 'custom-workspaces)
 
@@ -316,7 +316,6 @@ emacs built-in package config
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
   (use-package dired
     :ensure nil
-    :straight nil
     :commands (dired dired-jump)
     :bind (("C-x C-j" . dired-jump))
     :custom ((dired-listing-switches "-agho --group-directories-first"))
@@ -534,13 +533,14 @@ emacs built-in package config
 **** Dashboard
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
   (use-package dashboard
+    :disabled
     :after all-the-icons
     :config
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
     ;;(setq dashboard-banner-logo-title "Emacs is more than a text editor!")
     ;; logo from github.com/egstatsml/emacs_fancy_logos
-    (setq dashboard-startup-banner "~/.config/emacs/logos/xemacs_color.png")
+    ;;(setq dashboard-startup-banner "~/.config/emacs/logos/xemacs_color.png")
     ;;(setq dashboard-startup-banner 'logo)
     (setq dashboard-center-content t)
     (setq dashboard-week-agenda t)
@@ -553,7 +553,7 @@ emacs built-in package config
                             (agenda . 5)
                             (bookmarks . 5)
                             ;;(if (version< emacs-version "29")
-                            (projects . 5)
+                            ;;(projects . 5)
                             (registers . 5)))
     (setq dashboard-set-navigator t)
 
@@ -1099,7 +1099,7 @@ Quick Action in minibuffer
 ***** Valign
 | 12345678 |   |
 |----------+---|
-|   일이삼사 |   |
+|    일이삼사 |   |
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (use-package valign
     :defer t
