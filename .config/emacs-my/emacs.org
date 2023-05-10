@@ -64,51 +64,11 @@ Emacs Configuration for emacs 29.50
   (customize-set-variable 'package-user-dir
             (expand-file-name "elpa/" user-emacs-directory))
 
-  ;; TODO
-  ;;(package-initialize)
-  ;;(unless package-archive-contents
-  ;;  (package-refresh-contents))
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
 
   (require 'use-package)
   (setq use-package-always-ensure t)
-
-  (use-package auto-package-update
-    :custom
-    (auto-package-update-interval 7)
-    (auto-package-update-prompt-before-update t)
-    (auto-package-update-hide-results t)
-    :config
-    (auto-package-update-maybe)
-    (auto-package-update-at-time "09:00"))
-#+end_src
-**** Straight
-#+begin_src emacs-lisp
-;;#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-  (defvar bootstrap-version)
-  (defvar comp-deferred-compilation-deny-list ()) ; workaround, otherwise straight shits itself
-  (let ((bootstrap-file
-     (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-    (bootstrap-version 5))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-       'silent 'inhibit-cookies)
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-  (package-initialize)
-  (unless package-archive-contents
-    (package-refresh-contents))
-  (setq straight-use-package-by-default t)
-  (straight-use-package 'use-package)
-  (setq use-package-always-ensure t)
-
-  (unless (file-exists-p package-user-dir)
-    (mkdir package-user-dir t))
-  ;;; init.el ends here
 #+end_src
 *** Add other modules
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -207,6 +167,10 @@ Emacs Configuration for emacs 29.50
   (unless (display-graphic-p)
     (xterm-mouse-mode))
 #+end_src
+* Define some unused variable.
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+  (setq global-linum-mode nil)
+#+end_src
 * Modules Selection module
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
   ;;; config.el -*- lexical-binding: t; -*-
@@ -225,15 +189,15 @@ Emacs Configuration for emacs 29.50
   (add-hook 'emacs-startup-hook
             (lambda ()
               (custom-set-faces
-               `(default ((t (:font "Fira Code 16"))))
+               `(default ((t (:font "Fira Code Nerd Font 13"))))
                `(fixed-pitch ((t (:inherit (default)))))
                `(fixed-pitch-serif ((t (:inherit (default)))))
-               `(variable-pitch ((t (:font "Ubuntu 16")))))))
+               `(variable-pitch ((t (:font "Ubuntu 13")))))))
 
   (require 'custom-ui)
   (require 'custom-keybindings)
   (require 'custom-default)
-  ;;(require 'custom-completion)
+  (require 'custom-completion)
   ;;(require 'custom-edit)
   ;;(require 'custom-projects)
   ;;(require 'custom-latex)
@@ -316,6 +280,7 @@ emacs built-in package config
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-default.el
   (use-package dired
     :ensure nil
+    :straight (:type built-in)
     :commands (dired dired-jump)
     :bind (("C-x C-j" . dired-jump))
     :custom ((dired-listing-switches "-agho --group-directories-first"))
@@ -533,7 +498,6 @@ emacs built-in package config
 **** Dashboard
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-ui.el
   (use-package dashboard
-    :disabled
     :after all-the-icons
     :config
     (setq dashboard-set-heading-icons t)
@@ -888,7 +852,6 @@ Quick Action in minibuffer
     ;; (corfu-scroll-margin 5)        ;; Use scroll margin
     :init
     (global-corfu-mode))
-
   ;; load extension
   (add-to-list 'load-path
                (expand-file-name "straight/build/corfu/extensions"
@@ -958,7 +921,6 @@ Quick Action in minibuffer
 #+end_src
 **** Snippet
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
-
   (use-package yasnippet
     :defer t
     :hook (prog-mode . yas-minor-mode)
@@ -972,8 +934,8 @@ Quick Action in minibuffer
 ***** Doom-Snippet
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-edit.el
   (use-package doom-snippets
-    :after yasnippet
-    :straight (doom-snippets :type git :host github :repo "doomemacs/snippets" :files ("*.el" "*")))
+    :straight (doom-snippets :type git :host github :repo "doomemacs/snippets" :files ("*.el" "*"))
+    :after yasnippet)
 #+end_src
 
 **** Emojify
@@ -1099,7 +1061,7 @@ Quick Action in minibuffer
 ***** Valign
 | 12345678 |   |
 |----------+---|
-|    일이삼사 |   |
+|   일이삼사 |   |
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (use-package valign
     :defer t
@@ -1341,6 +1303,7 @@ latex export code block
 ***** Org Roam
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-org.el
   (use-package org-roam
+    :ensure t
     ;;:demand t ;; ensure org-roam is loaded by default
     :custom
     (org-roam-directory "~/org/roam")
@@ -1474,12 +1437,9 @@ get link from pdf,
   (use-package git-gutter
     :defer t
     :init (global-git-gutter-mode)
-    :config
-    (setq git-gutter:update-interval 2))
-#+end_src
-**** Forge
-Git forge
-#+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-projects.el
+    :custom
+    (git-gutter:update-interval 2)
+    (git-gutter:linum-enabled nil))
 #+end_src
 **** Highlight TODOs
 ***** TODO: test
@@ -1728,7 +1688,7 @@ https://github.com/xenodium/chatgpt-shell
 **** Python
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
   (use-package jupyter
-    :defer t)
+    :ensure t)
 #+end_src
 **** CMAKE
 #+begin_src emacs-lisp :mkdirp yes :tangle ~/.config/emacs/modules/custom-languages.el
@@ -1803,10 +1763,10 @@ LSP -> veriloter
      'org-babel-load-languages
      '((emacs-lisp . t)
        (python . t)
-       (jupyter . t)
+       ;;(jupyter . t)
        (dot . t)
        (latex . t)))
-    (org-babel-jupyter-override-src-block "python")
+    ;;(org-babel-jupyter-override-src-block "python")
     (push '("conf-unix" . conf-unix) org-src-lang-modes)
     ;; This is needed as of Org 9.2
     (require 'org-tempo)
