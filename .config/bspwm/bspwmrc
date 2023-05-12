@@ -48,6 +48,7 @@ bspc rule --add Pavucontrol					state=floating rectangle=610x610+650+235
 bspc rule --add Yad                         state=floating
 bspc rule --add Thunar 					    rectangle=650x500+635+290
 bspc rule --add flameshot                   state=floating border=off
+bspc rule --add Emacs						state=tiled
 
 
 # Colors
