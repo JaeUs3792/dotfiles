@@ -168,7 +168,7 @@ super+shift+r
 #super+alt+j
 #	bspc node focused -z bottom 0 15
 super + shift + f
-	bspc node -t "~floating"
+	bspc node focused -t "~floating"
 super + {_,shift +} + {h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 #super + {_,shift + }n

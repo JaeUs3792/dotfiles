@@ -45,7 +45,8 @@ TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/upda
 ##################################################
 # Wallpaper
 ##################################################
-paru -S python-pywal --noconfirm
+paru -S python-pywal xorg-xrdb --noconfirm
+
 git clone https://git.jaeus.net/walls
 
 ##################################################
