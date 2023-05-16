@@ -5,14 +5,15 @@ super+Return
 	st
 #Apps and programs
 super+e
-	emacsclient -c -a 'emacs'
+	emacs --debug-init
+#emacsclient -c -a 'emacs'
 super+b
 	qutebrowser
 super+f
 	firefox
 # workspace
 super + {1,2,3,4,5}
-	bspc desktop -f {1,2,3,4,5}
+	bspc desktop -f {1,2,3,4,5}; bspc query -N -n .local.window.hidden | xargs -I\{\} bspc node \{\} -g hidden; bspc query -N -n .local.window.fullscreen | xargs -I\{\} bspc node \{\} -t tiled; polybar-msg cmd show;
 super + shift + {1-5}
 	bspc node -d '^{1-5}'
 
@@ -169,15 +170,21 @@ super+shift+r
 #	bspc node focused -z bottom 0 15
 super + shift + f
 	bspc node focused -t "~floating"
-super + {_,shift +} + {h,j,k,l}
-	bspc node -{f,s} {west,south,north,east}
+super + {_,shift +} + {h,l}
+	bspc node -{f,s} {west,east}
+super + shift + {j,k}
+	bspc node -s {south,north}
+super + j
+	if set test (bspc query -N -n focused.fullscreen); bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; bspc node next.leaf.local -f -t fullscreen; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f south; end
+super + k
+	if set test (bspc query -N -n focused.fullscreen); bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; bspc node prev.leaf.local -f -t fullscreen; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f north; end
 #super + {_,shift + }n
 #	bspc node -f {next,prev}.local super + {t,shift + t,s,f}
 #super + {t,shift + t,s,f}
 #	bspc node -t {\~tiled,\~pseudo_tiled, \~floating,\~fullscreen} 
 
 super+space
-	bspc node focused -t "~fullscreen"
+	if set test (bspc query -N -n focused.fullscreen); bspc node -f -t tiled; polybar-msg cmd show; bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f -t fullscreen; polybar-msg cmd hide; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; end
 super+KP_Add
 	bspc config window_gap $(( 5 + `bspc config window_gap` ))
 super+KP_Subtract
