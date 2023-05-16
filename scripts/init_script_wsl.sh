@@ -49,11 +49,17 @@ paru -S python-pywal xorg-xrdb --noconfirm
 
 git clone https://git.jaeus.net/walls
 
+
+##################################################
+# Fonts
+##################################################
+paru -S ttf-firacode-nerd ttf-nanum noto-fonts-emoji ttf-symbola noto-font-cjk --noconfirm
+
 ##################################################
 # EMACS Related
 ##################################################
 # base
-paru -S ripgrep emacs ttf-fira-code ttf-d2coding auctex texlive-most texlive-lang --noconfirm
+paru -S ripgrep emacs texlive-most texlive-lang --noconfirm
 
 # Python
 paru -S python python-pip jupyter openssh inetutils --noconfirm
