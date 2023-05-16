@@ -47,6 +47,7 @@ bspc config focused_private_border_color    "$color1"
 bspc config active_private_border_color     "$color1"
 bspc config normal_private_border_color     "$color1"
 
+bspc rule -a \* state=tiled
 # Load session
 # shellcheck source=/dev/null
 #. "$BSPWM_CONFIG/restore.cfg"
