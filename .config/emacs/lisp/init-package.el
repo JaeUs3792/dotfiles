@@ -52,9 +52,9 @@
 			 :custom-face
 			 (paradox-archive-face ((t (:inherit font-lock-doc-face))))
 			 (paradox-description-face ((t (:inherit completions-annotations))))
-			 :hook 
+			 :hook
 			 (emacs-startup . paradox-enable)
-			 :init 
+			 :init
 			 (setq paradox-execute-asynchronously t
 				   paradox-github-token nil
 				   paradox-display-star-count nil
@@ -88,4 +88,3 @@
 (provide 'init-package)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-package.el ends here
-

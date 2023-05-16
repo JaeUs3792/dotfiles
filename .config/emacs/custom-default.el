@@ -1,3 +1,6 @@
+(setq user-full-name "JaeYoo-Im"
+	  user-mail-address "cpu3792@gmail.com")
+(setq default-input-method "korean-hangul")
 
 (defun custom-setup-fonts ()
   "setup fonts..."
