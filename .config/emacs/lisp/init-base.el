@@ -8,16 +8,16 @@
   ;;
   (setq ffap-machine-p-known 'reject))
 
-;; 
+;;
 (use-package gcmh
-			 :diminish
-			 :hook
-			 (emacs-startup . gcmh-mode)
-			 :init
-			 (setq gcmh-idle-delay 'auto
-				   gcmh-auto-idle-delay-factor 10
-				   gcmh-high-cons-threshold (* 16 1024 1024)))
-			 
+  :diminish
+  :hook
+  (emacs-startup . gcmh-mode)
+  :init
+  (setq gcmh-idle-delay 'auto
+		gcmh-auto-idle-delay-factor 10
+		gcmh-high-cons-threshold (* 16 1024 1024)))
+
 (when (fboundp 'set-charset-priority)
   (set-charset-priority 'unicode))
 (prefer-coding-system 'utf-8)
@@ -28,7 +28,7 @@
   (set-selection-coding-system 'utf-8))
 (when ON-LINUX
   (use-package exec-path-from-shell
-			   :init (exec-path-from-shell-initialize)))
+	:init (exec-path-from-shell-initialize)))
 
 ;; open file point at where last saved place.
 (use-package saveplace
@@ -37,7 +37,7 @@
 
 (use-package recentf
   :ensure nil
-  :bind 
+  :bind
   (("C-x C-r" . recentf-open-files))
   :hook
   (after-init . recentf-mode)
@@ -50,22 +50,22 @@
 		  "^/tmp/" "^/var/folders/.+$" "^/ssh:" "/persp-confs/"
 		  (lambda (file) (file-in-directory-p file package-user-dir))))
   :config
-	(push (expand-file-name recentf-save-file) recentf-exclude)
-	(add-to-list 'recentf-filename-handlers #'abbreviate-file-name))
+  (push (expand-file-name recentf-save-file) recentf-exclude)
+  (add-to-list 'recentf-filename-handlers #'abbreviate-file-name))
 
 (use-package savehist
-			 :ensure nil
-			 :hook
-			 (after-init . savehist-mode)
-			 :init
-			 (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
-				   history-length 25
-				   savehist-additional-variables '(mark-ring
-													global-mark-ring
-													search-ring
-													regexp-search-ring
-													extended-command-history)
-				   savehist-autosave-interval 300))
+  :ensure nil
+  :hook
+  (after-init . savehist-mode)
+  :init
+  (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
+		history-length 25
+		savehist-additional-variables '(mark-ring
+										global-mark-ring
+										search-ring
+										regexp-search-ring
+										extended-command-history)
+		savehist-autosave-interval 300))
 
 (use-package simple
   :ensure nil

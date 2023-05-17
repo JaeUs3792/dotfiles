@@ -3,7 +3,7 @@
 (require 'init-func)
 
 (when (and (file-exists-p custom-default-file)
-		   (not (file-exists-p custom-file)))
+           (not (file-exists-p custom-file)))
   (copy-file custom-default-file custom-file))
 
 (and (file-readable-p custom-file) (load custom-file))
@@ -22,13 +22,13 @@
 (add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (customize-set-variable 'package-archive-priorities
-          '(("gnu"    . 99)   ; prefer GNU packages
-            ("nongnu" . 80)   ; use non-gnu packages if
-                      ; not found in GNU elpa
-            ("stable" . 70)   ; prefer "released" versions
-                      ; from melpa
-            ("melpa"  . 0)))  ; if all else fails, get it
-                      ; from melpa
+                        '(("gnu"    . 99)   ; prefer GNU packages
+                          ("nongnu" . 80)   ; use non-gnu packages if
+                                        ; not found in GNU elpa
+                          ("stable" . 70)   ; prefer "released" versions
+                                        ; from melpa
+                          ("melpa"  . 0)))  ; if all else fails, get it
+                                        ; from melpa
 (unless (bound-and-true-p package--initialized)
   (setq package-enable-at-startup nil)
   (package-initialize))
@@ -49,38 +49,38 @@
 (use-package bind-key)
 
 (use-package paradox
-			 :custom-face
-			 (paradox-archive-face ((t (:inherit font-lock-doc-face))))
-			 (paradox-description-face ((t (:inherit completions-annotations))))
-			 :hook
-			 (emacs-startup . paradox-enable)
-			 :init
-			 (setq paradox-execute-asynchronously t
-				   paradox-github-token nil
-				   paradox-display-star-count nil
-				   paradox-status-face-alist ;
-				   '(("built-in"   . font-lock-builtin-face)
-					 ("available"  . success)
-					 ("new"        . (success bold))
-					 ("held"       . font-lock-constant-face)
-					 ("disabled"   . font-lock-warning-face)
-					 ("avail-obso" . font-lock-comment-face)
-					 ("installed"  . font-lock-comment-face)
-					 ("dependency" . font-lock-comment-face)
-					 ("incompat"   . font-lock-comment-face)
-					 ("deleted"    . font-lock-comment-face)
-					 ("unsigned"   . font-lock-warning-face)))
-			 :config
-			 (add-hook 'paradox-after-execute-functions
-					   (lambda (_)
-						 "Display `page-break-lines' in \"*Paradox Report*\" buffer."
-						 (when (fboundp 'page-break-lines-mode)
-						   (let ((buf (get-buffer "*Paradox Report*"))
-								 (inhibit-read-only t))
-							 (when (buffer-live-p buf)
-							   (with-current-buffer buf
-													(page-break-lines-mode 1))))))
-					   t))
+  :custom-face
+  (paradox-archive-face ((t (:inherit font-lock-doc-face))))
+  (paradox-description-face ((t (:inherit completions-annotations))))
+  :hook
+  (emacs-startup . paradox-enable)
+  :init
+  (setq paradox-execute-asynchronously t
+        paradox-github-token nil
+        paradox-display-star-count nil
+        paradox-status-face-alist ;
+        '(("built-in"   . font-lock-builtin-face)
+          ("available"  . success)
+          ("new"        . (success bold))
+          ("held"       . font-lock-constant-face)
+          ("disabled"   . font-lock-warning-face)
+          ("avail-obso" . font-lock-comment-face)
+          ("installed"  . font-lock-comment-face)
+          ("dependency" . font-lock-comment-face)
+          ("incompat"   . font-lock-comment-face)
+          ("deleted"    . font-lock-comment-face)
+          ("unsigned"   . font-lock-warning-face)))
+  :config
+  (add-hook 'paradox-after-execute-functions
+            (lambda (_)
+              "Display `page-break-lines' in \"*Paradox Report*\" buffer."
+              (when (fboundp 'page-break-lines-mode)
+                (let ((buf (get-buffer "*Paradox Report*"))
+                      (inhibit-read-only t))
+                  (when (buffer-live-p buf)
+                    (with-current-buffer buf
+                      (page-break-lines-mode 1))))))
+            t))
 
 
 
