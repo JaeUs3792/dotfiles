@@ -38,14 +38,14 @@
         doom-modeline-persp-icon t
         doom-modeline-display-default-persp-name t
         doom-modeline-indent-info t))
-(use-package hide-mode-line
-  :hook (((completion-list-mode
-           completion-in-region-mode
-           eshell-mode shell-mode
-           term-mode vterm-mode
-           treemacs-mode
-           lsp-ui-imenu-mode
-           pdf-annot-list-mode) . hide-mode-line-mode)))
+;;(use-package hide-mode-line
+;;  :hook (((completion-list-mode
+;;           completion-in-region-mode
+;;           eshell-mode shell-mode
+;;           term-mode vterm-mode
+;;           treemacs-mode
+;;           lsp-ui-imenu-mode
+;;           pdf-annot-list-mode) . hide-mode-line-mode)))
 
 ;; A minor-mode menu for mode-line
 (use-package minions

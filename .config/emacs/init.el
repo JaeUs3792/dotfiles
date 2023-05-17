@@ -55,9 +55,12 @@ Otherwise the startup will be very slow. "
 (require 'init-package)
 
 (require 'init-base)
+(require 'init-hydra)
 
 (require 'init-ui)
 (require 'init-edit)
 (require 'init-evil)
+
+(require 'init-vertico)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
