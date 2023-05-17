@@ -12,14 +12,13 @@
         evil-want-C-u-scroll t
         evil-want-C-i-jump nil)
   ;;(setq evil-respect-visual-line-mode nil) ; t : on the screen, nil : by cr characters
-  (require 'evil-vars)
-  (evil-set-undo-system 'undo-tree)
-  ;;(evil-set-undo-system 'undo-redo)
-
   ;; Make evil search more like vim (makes emacs slow)
   ;;(evil-select-search-module 'evil-search-module 'evil-search)
 
   :config
+  (require 'evil-vars)
+  (evil-set-undo-system 'undo-tree)
+  ;;(evil-set-undo-system 'undo-redo)
   (setq evil-want-fine-undo t) ; more granular undo with evil
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'dashboard-mode 'normal)
