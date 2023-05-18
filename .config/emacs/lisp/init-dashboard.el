@@ -1,4 +1,5 @@
 ;;; init-dashboard.el -*- lexical-binding: t -*-
+(require 'init-funcs)
 
 (use-package dashboard
   :diminish dashboard-mode
@@ -14,7 +15,7 @@
   ((:title (pretty-hydra-title "Dashboard" 'mdicon "nf-md-view_dashboard")
            :color pink :quit-key ("q" "C-g"))
    ("Navigator"
-    (("U" update-config-and-packages "update" :exit t)
+    (("U" update-dotfiles-and-packages "update" :exit t)
      ("H" browse-homepage "homepage" :exit t)
      ("R" restore-previous-session "recover session" :exit t)
      ("L" restore-session "list sessions" :exit t)
@@ -42,7 +43,7 @@
          ("R" . restore-previous-session)
          ("L" . restore-session)
          ("S" . find-custom-file)
-         ("U" . update-config-and-packages)
+         ("U" . update-dotfiles-and-packages)
          ("q" . quit-dashboard)
          ("h" . dashboard-hydra/body)
          ("?" . dashboard-hydra/body))
@@ -53,9 +54,10 @@
                             (when (fboundp 'page-break-lines-mode)
                               (page-break-lines-mode 1))))
   :init
-  (setq dashboard-banner-logo-title "CENTAUR EMACS - Enjoy Programming & Writing"
-        ;;dashboard-startup-banner (or centaur-logo 'official)
-        dashboard-page-separator "\n\f\n"
+  (setq dashboard-page-separator "\n\f\n"
+        ;;dashboard-banner-logo-title "Emacs is more than a text editor!"
+        ;; logo from github.com/egstatsml/emacs_fancy_logos
+        dashboard-startup-banner "~/.config/emacs/logos/xemacs_color.svg"
         dashboard-projects-backend 'project-el
         dashboard-path-style 'truncate-middle
         dashboard-path-max-length 60
@@ -87,20 +89,24 @@
         dashboard-navigator-buttons
         `(((,(when (icons-displayable-p)
                (nerd-icons-mdicon "nf-md-github" :height 1.5))
-            "Homepage" "Browse homepage"
-            (lambda (&rest _) (browse-url centaur-homepage)))
+            "Github"
+            "Browse my repository"
+            (lambda (&rest _) (browse-url "https://github.com/JaeUs3792/")))
+           (,(when (icons-displayable-p)
+               (nerd-icons-mdicon "nf-md-home" :height 1.5))
+            "Homepage"
+            "Browse my homepage"
+            (lambda (&rest _) (browse-url "https://jaeus.net")))
            (,(when (icons-displayable-p)
                (nerd-icons-mdicon "nf-md-backup_restore" :height 1.5))
-            "Restore" "Restore previous session"
+            "Restore"
+            "Restore previous session"
             (lambda (&rest _) (restore-previous-session)))
            (,(when (icons-displayable-p)
-               (nerd-icons-mdicon "nf-md-tools" :height 1.5))
-            "Settings" "Open custom file"
-            (lambda (&rest _) (find-file custom-file)))
-           (,(when (icons-displayable-p)
                (nerd-icons-mdicon "nf-md-update" :height 1.5))
-            "Update" "Update Centaur Emacs"
-            (lambda (&rest _) (centaur-update)))
+            "Update"
+            "Update dotfiles and packages"
+            (lambda (&rest _) (update-dotfiles-and-packages)))
            (,(if (icons-displayable-p)
                  (nerd-icons-mdicon "nf-md-help" :height 1.5)
                "?")
@@ -181,56 +187,9 @@
          (setq dashboard-recover-layout-p nil))))
 
 
-;;(use-package dashboard
-;;  :diminish dashboard-mode
-;;  :hook (dashboard-mode . (lambda ()
-;;                            ;; No title
-;;                            (setq-local frame-title-format nil)
-;;                            ;; Enable `page-break-lines-mode'
-;;                            (when (fboundp 'page-break-lines-mode)
-;;                              (page-break-lines-mode 1))))
-;;  :config
-;;  (setq dashboard-set-heading-icons t)
-;;  (setq dashboard-set-file-icons t)
-;;  (setq dashboard-icon-type 'nerd-icons)
-;;
-;;  ;;(setq dashboard-banner-logo-title "Emacs is more than a text editor!")
-;;  ;; logo from github.com/egstatsml/emacs_fancy_logos
-;;  ;;(setq dashboard-startup-banner "~/.config/emacs/logos/xemacs_color.png")
-;;  ;;(setq dashboard-startup-banner 'logo)
-;;  (setq dashboard-center-content t)
 ;;  (setq dashboard-week-agenda t)
-;;  (setq dashboard-set-footer t)
-;;  ;;(setq dashboard-page-separator "\n\n")
-;;  (setq dashboard-page-separator "\n\f\n")
 ;;  (setq dashboard-agenda-time-string-format "%d/%m/%Y %A %H:%M")
-;;  (setq dashboard-projects-backend 'project-el)
-;;  (setq dashboard-items '((recents . 10)
-;;                          (agenda . 5)
-;;                          (bookmarks . 5)
-;;                          ;;(if (version< emacs-version "29")
-;;                          ;;(projects . 5)
-;;                          (registers . 5)))
-;;  (setq dashboard-set-navigator t)
-;;
-;;  ;;(setq dashboard-navigator-buttons
-;;  ;;      `(;; line1
-;;  ;;        ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-;;  ;;          "Github"
-;;  ;;          "Browse my Github"
-;;  ;;          (lambda (&rest _) (browse-url "https://github.com/JaeUs3792/")))
-;;  ;;         (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
-;;  ;;          "Homepage"
-;;  ;;          "Browse my Homepage"
-;;  ;;          (lambda (&rest _) (browse-url "https://jaeus.net")))
-;;  ;;         (,(all-the-icons-octicon "zap" :height 1.1 :v-adjust 0.0)
-;;  ;;          "Refresh"
-;;  ;;          "Refresh Packages"
-;;  ;;          (lambda (&rest _) (package-refresh-contents)) warning))))
-;;
-;;  (dashboard-setup-startup-hook)
-;;  (dashboard-modify-heading-icons '((recents . "file-text")
-;;                                    (bookmarks . "book")))
+
 ;;  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
 
 (provide 'init-dashboard)
