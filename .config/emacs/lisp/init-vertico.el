@@ -1,6 +1,6 @@
 ;;; init-vertico.el -*- lexical-binding: t -*-
 (require 'init-const)
-(require 'init-func)
+(require 'init-funcs)
 
 (use-package vertico
   :bind (:map vertico-map

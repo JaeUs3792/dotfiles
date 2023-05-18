@@ -32,10 +32,13 @@
     (cl-loop for font in '("Noto Sans CJK KR" "Nanum Gothic")
              when (font-installed-p font)
              return (progn
-                      (setq face-font-rescale-alist `((,font . 1.26)))
+                      (setq face-font-rescale-alist `((,font . 1.00)))
                       (set-fontset-font t '(#x1100 . #xffdc) (font-spec :family font))))))
-
-
 (custom-setup-fonts)
 (add-hook 'window-setup-hook #'custom-setup-fonts)
 (add-hook 'server-after-make-frame-hook #'centaur-setup-fonts)
+
+;; select theme
+(setq custom-theme-sel 'doom-one)
+;; default transparency (85 . 50) or (100 . 100)
+(set-frame-parameter (selected-frame) 'alpha '(85 . 50))

@@ -1,6 +1,6 @@
 ;;; init-ui.el -*- lexical-binding: t -*-
 (require 'init-const)
-(require 'init-func)
+(require 'init-funcs)
 
 ;; Optimization
 (setq idle-update-delay 1.0)
@@ -21,8 +21,7 @@
 (use-package doom-themes
   :init
   (if (display-graphic-p)
-      ;;(load-theme 'doom-palenight t)
-      (load-theme 'doom-one t)
+      (load-theme custom-theme-sel t)
     (load-theme 'doom-gruvbox t))
   :config
   (doom-themes-visual-bell-config))
@@ -53,6 +52,7 @@
 
 ;; Icons
 (use-package nerd-icons)
+;;(use-package all-the-icons)
 
 (use-package display-line-numbers
   :ensure nil

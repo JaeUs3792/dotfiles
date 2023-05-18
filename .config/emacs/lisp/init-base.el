@@ -1,7 +1,7 @@
 ;; init-base.el -*- lexical-binding: t -*-
 
 (require 'init-const)
-(require 'init-func)
+(require 'init-funcs)
 
 (with-no-warnings
   (setq read-process-output-max (* 1024 1024)) ;; 1mb (lsp recommendation)
@@ -110,6 +110,7 @@
                                 (concat
                                  " "
                                  (nerd-icons-faicon "nf-fa-bolt" :face 'nerd-icons-lblue))
+                                 ;;(all-the-icons-faicon "nf-fa-bolt" :face 'all-the-icons-lblue))
                               " x"))
                       (name (aref val 0))
                       (pid (aref val 1))

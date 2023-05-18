@@ -1,6 +1,6 @@
 ;;; init-edit.el -*- lexical-binding: t -*-
 (require 'init-const)
-(require 'init-func)
+(require 'init-funcs)
 
 (use-package autorevert
   :ensure nil
@@ -44,32 +44,32 @@
 (use-package hideshow
   :ensure nil
   :diminish hs-minor-mode
-  ;;:pretty-hydra
-  ;;((:title (pretty-hydra-title "HideShow" 'octicon "nf-oct-fold")
-  ;;  :color amaranth :quit-key ("q" "C-g"))
-  ;; ("Fold"
-  ;;  (("t" hs-toggle-all "toggle all")
-  ;;   ("a" hs-show-all "show all")
-  ;;   ("i" hs-hide-all "hide all")
-  ;;   ("g" hs-toggle-hiding "toggle hiding")
-  ;;   ("c" hs-cycle "cycle block")
-  ;;   ("s" hs-show-block "show block")
-  ;;   ("h" hs-hide-block "hide block")
-  ;;   ("l" hs-hide-level "hide level"))
-  ;;  "Move"
-  ;;  (("C-a" mwim-beginning-of-code-or-line "⭰")
-  ;;   ("C-e" mwim-end-of-code-or-line "⭲")
-  ;;   ("C-b" backward-char "←")
-  ;;   ("C-n" next-line "↓")
-  ;;   ("C-p" previous-line "↑")
-  ;;   ("C-f" forward-char "→")
-  ;;   ("C-v" pager-page-down "↘")
-  ;;   ("M-v" pager-page-up "↖")
-  ;;   ("M-<" beginning-of-buffer "⭶")
-  ;;   ("M->" end-of-buffer "⭸"))))
-  ;;:bind (:map hs-minor-mode-map
-  ;;       ("C-~" . hideshow-hydra/body)
-  ;;       ("C-S-<escape>" . hideshow-hydra/body))
+  :pretty-hydra
+  ((:title (pretty-hydra-title "HideShow" 'octicon "nf-oct-fold")
+    :color amaranth :quit-key ("q" "C-g"))
+   ("Fold"
+    (("t" hs-toggle-all "toggle all")
+     ("a" hs-show-all "show all")
+     ("i" hs-hide-all "hide all")
+     ("g" hs-toggle-hiding "toggle hiding")
+     ("c" hs-cycle "cycle block")
+     ("s" hs-show-block "show block")
+     ("h" hs-hide-block "hide block")
+     ("l" hs-hide-level "hide level"))
+    "Move"
+    (("C-a" mwim-beginning-of-code-or-line "⭰")
+     ("C-e" mwim-end-of-code-or-line "⭲")
+     ("C-b" backward-char "←")
+     ("C-n" next-line "↓")
+     ("C-p" previous-line "↑")
+     ("C-f" forward-char "→")
+     ("C-v" pager-page-down "↘")
+     ("M-v" pager-page-up "↖")
+     ("M-<" beginning-of-buffer "⭶")
+     ("M->" end-of-buffer "⭸"))))
+  :bind (:map hs-minor-mode-map
+         ("C-~" . hideshow-hydra/body)
+         ("C-S-<escape>" . hideshow-hydra/body))
   :hook (prog-mode . hs-minor-mode)
   :config
   ;; More functions

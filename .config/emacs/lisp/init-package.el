@@ -1,6 +1,6 @@
 ;;; init-package.el -*- lexical-binding: t -*-
 (require 'init-const)
-(require 'init-func)
+(require 'init-funcs)
 
 (when (and (file-exists-p custom-default-file)
            (not (file-exists-p custom-file)))
