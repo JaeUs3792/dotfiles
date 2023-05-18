@@ -30,6 +30,29 @@
   "Round VAL to the nearest tenth of an integer."
   (/ (round (* 10 val)) 10.0))
 
+(defun my/update-dotfiles ()
+  "update dotfiles & packages"
+  (interactive)
+  (let ((dir (expand-file-name user-emacs-directory)))
+    (unless (file-exists-p dir)
+      (user-error "\"%s\" doesn't exist" dir))
+    (message "pull dotfiles from github")
+    (cd dir)
+    (shell-command "git pull")
+    (message "pull... done")))
+(defun update-packages ()
+  "Refresh package contents and update all packages."
+  (interactive)
+  (message "Updating packages...")
+  (package-upgrade-all)
+  (message "Updating packages...done"))
+(defun update-dotfiles-and-packages()
+  "Update dotfiles and packages."
+  (interactive)
+  (my/update-dotfiles)
+  (update-packages))
+
+
 
 (provide 'init-funcs)
 ;;; init-funcs.el ends here
