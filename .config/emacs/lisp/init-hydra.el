@@ -1,6 +1,6 @@
 ;; init-hydra.el -*- lexical-binding: t -*-
 (require 'init-const)
-(require 'init-func)
+(require 'init-funcs)
 (use-package hydra
   :hook (emacs-lisp-mode . hydra-add-imenu))
 
@@ -23,6 +23,7 @@
       (concat
        (when (and (icons-displayable-p) icon-type icon-name)
          (let ((f (intern (format "nerd-icons-%s" icon-type))))
+         ;;(let ((f (intern (format "all-the-icons-%s" icon-type))))
            (when (fboundp f)
              (concat
               (apply f (list icon-name :face face :height height :v-adjust v-adjust))

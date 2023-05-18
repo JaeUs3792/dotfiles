@@ -1,6 +1,6 @@
 ;;; init-evil.el -*- lexical-binding: t -*-
 (require 'init-const)
-(require 'init-func)
+(require 'init-funcs)
 
 (use-package evil
   :ensure nil
