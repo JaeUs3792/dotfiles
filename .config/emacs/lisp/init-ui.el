@@ -71,8 +71,8 @@
 
 ;; Display dividers between windows
 (setq window-divider-default-places t
-      window-divider-default-bottom-width 1
-      window-divider-default-right-width 1)
+      window-divider-default-bottom-width 5
+      window-divider-default-right-width 5)
 (add-hook 'window-setup-hook #'window-divider-mode)
 
 (use-package time

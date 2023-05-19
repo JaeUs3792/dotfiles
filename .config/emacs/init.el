@@ -65,8 +65,13 @@ Otherwise the startup will be very slow. "
 
 (require 'init-yasnippet)
 
+(require 'init-bookmark)
 (require 'init-dashboard)
 (require 'init-dired)
 (require 'init-highlight)
+(require 'init-ibuffer)
+(require 'init-persp)
+(require 'init-window)
+(require 'init-treemacs)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
