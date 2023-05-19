@@ -62,10 +62,11 @@
         dashboard-path-style 'truncate-middle
         dashboard-path-max-length 60
         dashboard-center-content t
-        dashboard-show-shortcuts nil
+        dashboard-show-shortcuts t
         dashboard-items '((recents  . 10)
                           (bookmarks . 5)
-                          (projects . 5))
+                          (projects . 5)
+                          (registers . 5))
 
         dashboard-set-init-info t
         dashboard-display-icons-p #'icons-displayable-p
@@ -89,22 +90,22 @@
         dashboard-navigator-buttons
         `(((,(when (icons-displayable-p)
                (nerd-icons-mdicon "nf-md-github" :height 1.5))
-            "Github"
+            " Github"
             "Browse my repository"
             (lambda (&rest _) (browse-url "https://github.com/JaeUs3792/")))
            (,(when (icons-displayable-p)
                (nerd-icons-mdicon "nf-md-home" :height 1.5))
-            "Homepage"
+            " Homepage"
             "Browse my homepage"
             (lambda (&rest _) (browse-url "https://jaeus.net")))
            (,(when (icons-displayable-p)
                (nerd-icons-mdicon "nf-md-backup_restore" :height 1.5))
-            "Restore"
+            " Restore"
             "Restore previous session"
             (lambda (&rest _) (restore-previous-session)))
            (,(when (icons-displayable-p)
                (nerd-icons-mdicon "nf-md-update" :height 1.5))
-            "Update"
+            " Update"
             "Update dotfiles and packages"
             (lambda (&rest _) (update-dotfiles-and-packages)))
            (,(if (icons-displayable-p)

@@ -78,20 +78,21 @@
   (eldoc-add-command #'corfu-insert)
   (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
   (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
-  (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle))
+  (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle)
+
+  (use-package kind-icon
+    :defer nil
+    :custom
+    (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+    :config
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
+
 
 (use-package corfu-terminal
   :config
   (unless (display-graphic-p)
     (corfu-terminal-mode)))
 
-(use-package kind-icon
-  :ensure t
-  :after corfu
-  :custom
-  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 ;;; Cape
 ;; Setup Cape for better completion-at-point support and more
