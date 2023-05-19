@@ -28,6 +28,9 @@
     :prefix "SPC"
     :global-prefix "C-SPC"))
 (ju/leader-key-def
+  ;; workspace
+  "TAB" '(persp-key-map :which-key "persp-mode")
+  ;; file
   "." 'find-file
   ;; Buffer
   "b" '(:ignore t :which-key "buffer handling")
@@ -38,6 +41,7 @@
   "b p" '(previous-buffer :which-key "Previous buffer")
   "b B" '(ibuffer-list-buffers :which-key "IBuffer List Buffers")
   "b K" '(kill-buffer :which-key "IBuffer Kill Buffers")
+  "b s" '(consult-buffer :which-key "switch buffer")
   ;; Eshell
   "e" '(:ignore t :which-key "eshell")
   "e h" '(counsel-esh-history :which-key "Kill history")

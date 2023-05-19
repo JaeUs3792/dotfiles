@@ -36,7 +36,6 @@
                       (set-fontset-font t '(#x1100 . #xffdc) (font-spec :family font))))))
 (custom-setup-fonts)
 (add-hook 'window-setup-hook #'custom-setup-fonts)
-(add-hook 'server-after-make-frame-hook #'centaur-setup-fonts)
 
 ;; select theme
 (setq custom-theme-sel 'doom-one)
