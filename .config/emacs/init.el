@@ -56,15 +56,17 @@ Otherwise the startup will be very slow. "
 
 (require 'init-base)
 (require 'init-hydra)
+(require 'init-evil)
 (require 'init-general)
 
 (require 'init-ui)
 (require 'init-edit)
-(require 'init-evil)
 (require 'init-vertico)
 
 (require 'init-yasnippet)
 
 (require 'init-dashboard)
+(require 'init-dired)
+(require 'init-highlight)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here

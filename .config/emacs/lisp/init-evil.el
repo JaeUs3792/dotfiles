@@ -24,29 +24,29 @@
   (evil-set-initial-state 'dashboard-mode 'normal)
   ;; eshell no evil
   (dolist (mode '(eshell-mode))
-    (add-to-list 'evil-emacs-state-modes mode)))
+    (add-to-list 'evil-emacs-state-modes mode))
 
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
+  (use-package evil-collection
+    :defer nil
+    :config
+    (evil-collection-init))
 
-(use-package evil-nerd-commenter
-  :after evil
-  :config
-  ;; evil nerd commenter
-  (define-key evil-normal-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines)
-  (define-key evil-visual-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines))
+  (use-package evil-nerd-commenter
+    :defer nil
+    :config
+    ;; evil nerd commenter
+    (define-key evil-normal-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines)
+    (define-key evil-visual-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines))
 
-(use-package evil-numbers
-  :after evil
-  :config
-  ;; evil numbers
-  ;; unfortunately C-x is emacs common key binding.
-  (define-key evil-normal-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
-  (define-key evil-normal-state-map (kbd "g -") 'evil-numbers/dec-at-pt)
-  (define-key evil-visual-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
-  (define-key evil-visual-state-map (kbd "g -") 'evil-numbers/dec-at-pt))
+  (use-package evil-numbers
+    :defer nil
+    :config
+    ;; evil numbers
+    ;; unfortunately C-x is emacs common key binding.
+    (define-key evil-normal-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
+    (define-key evil-normal-state-map (kbd "g -") 'evil-numbers/dec-at-pt)
+    (define-key evil-visual-state-map (kbd "g =") 'evil-numbers/inc-at-pt)
+    (define-key evil-visual-state-map (kbd "g -") 'evil-numbers/dec-at-pt)))
 
 (provide 'init-evil)
 ;;; init-evil.el ends here.
