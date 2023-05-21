@@ -69,8 +69,8 @@
          ("M-g j" . dumb-jump-go)
          ("M-g i" . dumb-jump-go-prompt)
          ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window)
-         ("C-M-j" . dumb-jump-hydra/body))
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+         ;;("C-M-j" . dumb-jump-hydra/body))
   :init
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq dumb-jump-prefer-searcher 'rg
@@ -176,6 +176,10 @@ Install the doc if it's not installed."
   :hook (fish-mode . (lambda ()
                        (add-hook 'before-save-hook
                                  #'fish_indent-before-save))))
+
+(use-package pkgbuild-mode)
+(use-package systemd)
+
 
 (provide 'init-prog)
 

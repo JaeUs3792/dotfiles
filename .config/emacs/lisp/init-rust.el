@@ -33,6 +33,10 @@
 ;; Rust
 (use-package rustic)
 (use-package rust-playground)
+(use-package toml-mode
+  :defer t
+  :config
+  (add-to-list 'auto-mode-alist '("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . toml-mode)))
 
 (provide 'init-rust)
 

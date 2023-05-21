@@ -102,5 +102,10 @@ Otherwise the startup will be very slow. "
 (require 'init-rust)
 (require 'init-python)
 (require 'init-ruby)
+
+(require 'init-latex)
+(require 'init-verilog)
+
+(require 'init-extra)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here

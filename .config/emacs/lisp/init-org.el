@@ -41,18 +41,7 @@
      ("Y" (hot-expand "<s" "ipython :session :exports both :results raw drawer\n$0") "ipython")
      ("P" (progn
             (insert "#+HEADERS: :results output :exports both :shebang \"#!/usr/bin/env perl\"\n")
-            (hot-expand "<s" "perl")) "Perl tangled")
-     ("<" self-insert-command "ins"))))
-  :bind (("C-c a" . org-agenda)
-         ("C-c b" . org-switchb)
-         ("C-c x" . org-capture)
-         :map org-mode-map
-         ("<" . (lambda ()
-                  "Insert org template."
-                  (interactive)
-                  (if (or (region-active-p) (looking-back "^\s*" 1))
-                      (org-hydra/body)
-                    (self-insert-command 1)))))
+            (hot-expand "<s" "perl")) "Perl tangled"))))
   :hook (((org-babel-after-execute org-mode) . org-redisplay-inline-images) ; display image
          (org-indent-mode . (lambda()
                               (diminish 'org-indent-mode)
@@ -158,6 +147,8 @@ prepended to the element after the #+HEADER: tag."
         org-pretty-entities nil
         org-hide-emphasis-markers t)
 
+
+
   (use-package org-journal
     :defer t
     :config
@@ -208,6 +199,19 @@ prepended to the element after the #+HEADER: tag."
       (rust       . t)
       (C          . t))
     "Alist of org ob languages.")
+
+  (push '("conf-unix" . conf-unix) org-src-lang-modes)
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("cc" . "src c"))
+  (add-to-list 'org-structure-template-alist '("cp" . "src c++"))
+  (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+  (add-to-list 'org-structure-template-alist '("rb" . "src ruby"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
+  (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
+  (add-to-list 'org-structure-template-alist '("vh" . "src vhdl"))
+
   ;; ob-sh renamed to ob-shell since 26.1.
   (cl-pushnew '(shell . t) load-language-alist)
 

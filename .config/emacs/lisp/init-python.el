@@ -54,6 +54,8 @@
   ;; Live Coding in Python
   (use-package live-py-mode))
 
+(use-package jupyter)
+
 (provide 'init-python)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

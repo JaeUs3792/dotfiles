@@ -45,6 +45,7 @@
   ;; Citre
   "c" '(:ignore t :which-key "citre")
   "c j" 'citre-jump+
+  "c J" 'dumb-jump-go-other-window
   "c k" 'citre-jump-back+
   "c p" 'citre-peek
   "c a" 'citre-ace-peek
@@ -65,6 +66,8 @@
   "h t" '(hydra-text-scale/body :which-key "scale text")
   "h w" '(hydra-writeroom-scale/body :which-key "scale whiteroom")
   "h a" '(hydra-modify-alpha/body :which-key "modify alpha background")
+  "h j" '(dumb-jump-hydra/body :which-key "dumb jump hydra")
+  "h o" '(org-hydra/body :which-key "org hydra")
   ;; Insert something
   "i" '(:ignore t :which-key "insert something.")
   "i s" '(yas-insert-snippet :which-key "snippet")
