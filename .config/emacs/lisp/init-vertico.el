@@ -14,6 +14,7 @@
 
 (when (display-graphic-p)
   (use-package vertico-posframe
+    :disabled
     :after vertico
     :hook (vertico-mode . vertico-posframe-mode)
     :config

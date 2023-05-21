@@ -41,6 +41,10 @@ paru -S tmux --noconfirm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/install_plugins.sh
 TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
+##################################################
+# tldr
+##################################################
+paru -S tldr --noconfirm
 
 ##################################################
 # Wallpaper
@@ -53,7 +57,7 @@ git clone https://git.jaeus.net/walls
 ##################################################
 # Fonts
 ##################################################
-paru -S ttf-firacode-nerd ttf-nanum noto-fonts-emoji ttf-symbola noto-font-cjk --noconfirm
+paru -S ttf-firacode-nerd ttf-momonoki-nerd ttf-times-new-roman ttf-nanum noto-fonts-emoji ttf-symbola noto-font-cjk --noconfirm
 
 ##################################################
 # EMACS Related
@@ -65,8 +69,9 @@ paru -S ripgrep emacs texlive-most texlive-lang --noconfirm
 paru -S python python-pip jupyter openssh inetutils --noconfirm
 pip install matplotlib numpy pandas tabulate
 
-# verilator for lsp
+# verilator for syntax checker
 paru -S verilator --noconfirm
+paru -S uctags-git --noconfirm
 
 # nov
 paru -S zip unzip --noconfirm

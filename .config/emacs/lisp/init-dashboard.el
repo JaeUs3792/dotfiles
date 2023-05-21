@@ -64,8 +64,9 @@
         dashboard-center-content t
         dashboard-show-shortcuts t
         dashboard-items '((recents  . 10)
-                          (bookmarks . 5)
                           (projects . 5)
+                          (agenda . 5)
+                          (bookmarks . 5)
                           (registers . 5))
 
         dashboard-set-init-info t
