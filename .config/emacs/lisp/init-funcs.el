@@ -13,8 +13,16 @@
   "Return non-nil if icons are displayable."
   (or (featurep 'nerd-icons)
       (require 'nerd-icons nil t)))
-  ;;(or (featurep 'all-the-icons)
-  ;;    (require 'all-the-icons nil t)))
+;;(or (featurep 'all-the-icons)
+;;    (require 'all-the-icons nil t)))
+(defun childframe-workable-p ()
+  "Whether childframe is workable."
+  (or (not (or noninteractive
+               emacs-basic-display
+               (not (display-graphic-p))))
+      (daemonp)))
+
+
 (defun toggle-transparency ()
   (interactive)
   (let ((alpha (frame-parameter nil 'alpha)))

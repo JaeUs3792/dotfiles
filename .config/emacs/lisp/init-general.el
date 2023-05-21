@@ -42,6 +42,13 @@
   "b B" '(ibuffer-list-buffers :which-key "IBuffer List Buffers")
   "b K" '(kill-buffer :which-key "IBuffer Kill Buffers")
   "b s" '(consult-buffer :which-key "switch buffer")
+  ;; Citre
+  "c" '(:ignore t :which-key "citre")
+  "c j" 'citre-jump+
+  "c k" 'citre-jump-back+
+  "c p" 'citre-peek
+  "c a" 'citre-ace-peek
+  "c u" 'citre-update-tags-file
   ;; Eshell
   "e" '(:ignore t :which-key "eshell")
   "e h" '(counsel-esh-history :which-key "Kill history")
@@ -62,8 +69,11 @@
   "i" '(:ignore t :which-key "insert something.")
   "i s" '(yas-insert-snippet :which-key "snippet")
   "i e" '(emojify-insert-emoji :which-key "emoji")
+  ;; Managements
+  "m" '(:ignore t :which "Managements")
+  "m d" '(docker :which-key "Docker")
   ;; Org Journal / Org Roam
-  "j" '(:ignore t :which-key "Journal / Roam")
+  "n" '(:ignore t :which-key "Journal / Roam")
   "n j" '(:ignore t :which-key "Org Journal")
   "n j j" '(org-journal-new-entry :which-key "new Entry")
   "n j J" '(org-journal-new-scheduled-entry :which-key "New Scheduled entry")
@@ -106,6 +116,7 @@
   "t" '(:ignore t :which-key "extra")
   "t a" '(toggle-transparency :which-key "Toggle Transparency")
   "t t" '(toggle-truncate-lines :which-key "Toggle truncate lines")
+  "t g" '(gts-do-translate :which-key "Goggle Translate")
   ;; Avy
   "v" '(:ignore t :which-key "Avy")
   "vc" '(avy-goto-char :which-key "Avy Goto Char")
