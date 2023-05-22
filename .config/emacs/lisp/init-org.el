@@ -193,12 +193,13 @@ prepended to the element after the #+HEADER: tag."
 
   (defconst load-language-alist
     '((emacs-lisp . t)
-      (latex-as-png . t)
       (python     . t)
       (ruby       . t)
       (rust       . t)
       (C          . t))
     "Alist of org ob languages.")
+  (unless ON-WINDOWS
+    (add-to-list 'load-language-alist '(latex-as-png . t)))
 
   (push '("conf-unix" . conf-unix) org-src-lang-modes)
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
@@ -222,7 +223,6 @@ prepended to the element after the #+HEADER: tag."
     :init (cl-pushnew '(rust . t) load-language-alist))
   (org-babel-do-load-languages 'org-babel-load-languages
                                load-language-alist)
-
   ;; Auto-toggle Org LaTeX fragments
   (use-package org-fragtog
     :diminish
@@ -318,6 +318,7 @@ prepended to the element after the #+HEADER: tag."
 ; org-roam ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package org-roam
     :demand t ;; ensure org-roam is loaded by default
+    :hook (after-init . (my/org-roam-refresh-agenda-list))
     :custom
     (org-roam-directory "~/org/roam")
     (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
@@ -374,7 +375,6 @@ prepended to the element after the #+HEADER: tag."
     (unless org-note-abort
       (with-current-buffer (org-capture-get :buffer)
         (add-to-list 'org-agenda-files (buffer-file-name)))))
-  (my/org-roam-refresh-agenda-list)
 ; Tools   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package ob-async
     :config

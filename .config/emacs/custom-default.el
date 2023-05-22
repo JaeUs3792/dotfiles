@@ -45,3 +45,6 @@
 ;; Org setup
 (setq custom-org-directory "~/org"
       custom-org-agenda-files "~/org/agenda/agenda.org")
+
+;; Chatgpt setup
+(setq custom-chatgpt-my-key "my-key")
