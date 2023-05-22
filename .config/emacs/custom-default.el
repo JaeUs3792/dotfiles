@@ -48,3 +48,6 @@
 
 ;; Chatgpt setup
 (setq custom-chatgpt-my-key "my-key")
+
+;; vertico posframe enable
+(setq custom-vertico-posframe nil)
