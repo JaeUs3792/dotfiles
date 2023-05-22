@@ -118,7 +118,10 @@
   (set-fontset-font "fontset-default"
                     (cons page-break-lines-char page-break-lines-char)
                     (face-attribute 'default :family)))
-
+;; emoji
+(use-package emojify
+  :defer t
+  :init (global-emojify-mode 1))
 
 
 
