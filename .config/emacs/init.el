@@ -107,5 +107,6 @@ Otherwise the startup will be very slow. "
 (require 'init-verilog)
 
 (require 'init-extra)
+(require 'init-chatgpt)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here

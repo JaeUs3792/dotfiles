@@ -76,6 +76,19 @@ paru -S uctags-git --noconfirm
 # nov
 paru -S zip unzip --noconfirm
 
+##
+###############################################################################
+#                               Programming Rust                              #
+###############################################################################
+
+paru -S rustup --noconfirm
+
+rustup default stable
+
+rustup component add rust-analyzer
+rustup component add rls
+rustup component add rust-src
+
 ##################################################
 # EXWM
 ##################################################
@@ -86,4 +99,3 @@ paru -S xorg-xrandr feh cronie --noconfirm
 # Extra
 ##################################################
 paru -S bat
-

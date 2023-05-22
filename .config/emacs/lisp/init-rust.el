@@ -31,7 +31,10 @@
 ;;; Code:
 
 ;; Rust
-(use-package rustic)
+(use-package rustic
+  :init
+  (setq rustic-analyzer-command '("~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
+  (setq rustic-lsp-client 'eglot))
 (use-package rust-playground)
 (use-package toml-mode
   :defer t
