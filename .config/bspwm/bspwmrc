@@ -14,6 +14,9 @@ killall volumeicon && volumeicon &
 #sleep 3 && conky -c ~/.config/conky/conkyrc
 ~/scripts/random_wallpaper.sh
 
+wmname LG3D
+export _JAVA_AWT_WM_NONREPARETING=1
+
 bspc monitor -d 1 2 3 4 5
 
 bspc config border_width        2

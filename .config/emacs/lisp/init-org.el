@@ -115,7 +115,7 @@ prepended to the element after the #+HEADER: tag."
                              (?C . success))
 
         ;; Agenda styling
-        org-agenda-files (list custom-org-agenda-files)
+        org-agenda-files (list custom-org-agenda-file)
         org-agenda-block-separator ?─
         org-agenda-start-with-log-mode t
         org-agenda-time-grid
@@ -318,9 +318,8 @@ prepended to the element after the #+HEADER: tag."
 ; org-roam ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package org-roam
     :demand t ;; ensure org-roam is loaded by default
-    :hook (after-init . (my/org-roam-refresh-agenda-list))
     :custom
-    (org-roam-directory "~/org/roam")
+    (org-roam-directory custom-org-roam-directory)
     (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
     ;;(org-roam-completion-everywhere t)
     :config

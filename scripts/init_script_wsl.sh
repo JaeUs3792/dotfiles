@@ -58,6 +58,13 @@ git clone https://git.jaeus.net/walls
 # Fonts
 ##################################################
 paru -S ttf-firacode-nerd ttf-momonoki-nerd ttf-times-new-roman ttf-nanum noto-fonts-emoji ttf-symbola noto-font-cjk --noconfirm
+##################################################
+# Window Manager
+##################################################
+paru -S bspwm sxhkd polybar --noconfirm
+paru -S wmname --noconfirm
+
+
 
 ##################################################
 # EMACS Related
