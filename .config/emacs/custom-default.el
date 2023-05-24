@@ -44,7 +44,8 @@
 
 ;; Org setup
 (setq custom-org-directory "~/org"
-      custom-org-agenda-files "~/org/agenda/agenda.org")
+      custom-org-roam-directory "~/org/roam"
+      custom-org-agenda-file "~/org/agenda/agenda.org")
 
 ;; Chatgpt setup
 (setq custom-chatgpt-my-key "my-key")
