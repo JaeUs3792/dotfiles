@@ -1,1 +1,6 @@
-custom.el
+*
+*/
+!early-init.el
+!init.el
+!custom-default.el
+!lisp/

@@ -118,6 +118,11 @@
   (set-fontset-font "fontset-default"
                     (cons page-break-lines-char page-break-lines-char)
                     (face-attribute 'default :family)))
+(use-package form-feed
+  :disabled
+  :diminish
+  :hook (after-init . global-form-feed-mode))
+
 ;; emoji
 (use-package emojify
   :defer t

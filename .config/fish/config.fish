@@ -18,7 +18,7 @@ alias emtangle="emacs --batch -eval \"(require 'org)\" --eval '(org-babel-tangle
 #neovim to vi
 alias vi=nvim
 alias vimdiff="nvim -d"
-alias cat=bat
+#alias cat=bat
 #pacman unlock
 alias paruunlock="sudo rm /var/lib/pacman/db.lck"
 #grub update
