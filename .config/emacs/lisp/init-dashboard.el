@@ -54,7 +54,7 @@
                             (when (fboundp 'page-break-lines-mode)
                               (page-break-lines-mode 1))))
   :init
-  (setq dashboard-page-separator "\n\f\n"
+  (setq dashboard-page-separator "\n\f\f\n"
         ;;dashboard-banner-logo-title "Emacs is more than a text editor!"
         ;; logo from github.com/egstatsml/emacs_fancy_logos
         dashboard-startup-banner "~/.config/emacs/logos/xemacs_color.svg"
