@@ -14,16 +14,16 @@ scrolling:
   history: 10000
 font:
   normal:
-    family: Mononoki Nerd Font
+    family: Comic Shanns Mono Nerd Font
     style: Regular
   bold:
-    family: Mononoki Nerd Font
+    family: Comic Shanns Mono Nerd Font
     style: Bold
   italic:
-    family: Mononoki Nerd Font
+    family: Comic Shanns Mono Nerd Font
     style: Italic
   bold_italic:
-    family: Mononoki Nerd Font
+    family: Comic Shanns Mono Nerd Font
     style: Bold Italic
   # Point size
   size: 16.0

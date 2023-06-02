@@ -41,7 +41,7 @@
      ("x" ztree-toggle-expand-subtree "expand/collapse" :exit t)
      ("<backspace>" ztree-move-up-in-tree "go to parent" :exit t))))
   :bind (:map ztreediff-mode-map
-         ("C-<f5>" . ztree-hydra/body))
+         ("<f6>" . ztree-hydra/body))
   :init (setq ztree-draw-unicode-lines t
               ztree-show-number-of-children t))
 

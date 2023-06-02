@@ -363,7 +363,7 @@ prepended to the element after the #+HEADER: tag."
   (defun my/org-roam-refresh-agenda-list ()
     (interactive)
     (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project"))
-    (add-to-list 'org-agenda-files custom-org-agenda-files))
+    (add-to-list 'org-agenda-files custom-org-agenda-file))
   (defun my/org-roam-project-finalize-hook ()
     "Adds the captured project file to `org-agenda-files' if the
       capture was not aborted."

@@ -48,4 +48,6 @@ alias l.='exa -a | egrep "^\."'
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
 
 starship init fish | source
+
+cat ~/.cache/wal/sequences &
 #atuin init fish | source

@@ -2,7 +2,8 @@
 
 #"Pausing" sxhkd
 super+Return
-	st
+#	st
+	alacritty
 #Apps and programs
 super+e
 	emacs --debug-init

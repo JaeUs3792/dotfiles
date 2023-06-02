@@ -57,7 +57,7 @@ git clone https://git.jaeus.net/walls
 ##################################################
 # Fonts
 ##################################################
-paru -S ttf-firacode-nerd ttf-momonoki-nerd ttf-times-new-roman ttf-nanum noto-fonts-emoji ttf-symbola noto-font-cjk --noconfirm
+paru -S ttf-firacode-nerd ttf-momonoki-nerd otf-comicsshanns-nerd ttf-times-new-roman ttf-nanum noto-fonts-emoji ttf-symbola noto-font-cjk --noconfirm
 ##################################################
 # Window Manager
 ##################################################
