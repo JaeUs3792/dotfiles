@@ -21,10 +21,10 @@
 
   ;; Quick sort dired buffers via hydra
   (use-package dired-quick-sort
-    :defer t
+    :hook (after-init . dired-quick-sort-setup)
     :config
     (evil-collection-define-key 'normal 'dired-mode-map
-      "S" 'hydra-dired-quick-sort/body))
+      "s" 'hydra-dired-quick-sort/body))
 
   ;; Show git info in dired
   (use-package dired-git-info)
