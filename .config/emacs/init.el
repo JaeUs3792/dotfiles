@@ -86,7 +86,8 @@ Otherwise the startup will be very slow. "
 (require 'init-dict)
 
 ;; docker
-(require 'init-docker)
+(when ON-LINUX
+  (require 'init-docker))
 ;; utils
 (require 'init-utils)
 

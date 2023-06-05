@@ -22,6 +22,8 @@
   ;; Quick sort dired buffers via hydra
   (use-package dired-quick-sort
     :hook (after-init . dired-quick-sort-setup)
+    :init
+    (setq dired-quick-sort-suppress-setup-warning t)
     :config
     (evil-collection-define-key 'normal 'dired-mode-map
       "s" 'hydra-dired-quick-sort/body))

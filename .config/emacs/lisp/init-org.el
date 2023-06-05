@@ -378,8 +378,9 @@ prepended to the element after the #+HEADER: tag."
   (use-package ob-async
     :config
     (setq ob-async-no-async-languages-alist '("ipython")))
-  (use-package org-pdftools
-    :hook (org-mode . org-pdftools-setup-link))
+  (unless ON-WINDOWS
+    (use-package org-pdftools
+      :hook (org-mode . org-pdftools-setup-link)))
 ; Exporter   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package ox-hugo
     :defer t
