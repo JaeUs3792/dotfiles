@@ -1,5 +1,5 @@
 ;;; init-reader.el -*- lexical-binding: t -*-
-(when (display-graphic-p)
+(when (and ON-LINUX (display-graphic-p))
   (use-package pdf-view
     :ensure pdf-tools
     :diminish (pdf-view-themed-minor-mode
@@ -105,7 +105,6 @@
   :hook (after-init . elfeed-org)
   :config
   (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory))))
-  ;; (elfeed-org))
 
 (provide 'init-reader)
 ;;; init-reader.el ends here

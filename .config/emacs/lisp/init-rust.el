@@ -33,7 +33,9 @@
 ;; Rust
 (use-package rustic
   :init
-  (setq rustic-analyzer-command '("~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
+  (if ON-LINUX
+      (setq rustic-analyzer-command '("~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
+    (setq rustic-analyzer-command '("~/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin/rust-analyzer.exe")))
   (setq rustic-lsp-client 'eglot))
 (use-package rust-playground)
 (use-package toml-mode
