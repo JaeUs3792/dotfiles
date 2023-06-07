@@ -109,18 +109,13 @@
   (dolist (keyword '("DEPRECATED"))
     (add-to-list 'hl-todo-keyword-faces `(,keyword . "#8d9eaf"))))
 
-;;(use-package diff-hl
-;;  :config
-;;  (diff-hl-margin-mode))
-
 (use-package diff-hl
   :hook ((after-init . global-diff-hl-mode)
          (magit-post-refresh . diff-hl-magit-post-refresh)
          (dired-mode . diff-hl-dired-mode-unless-remote))
-         ;;(dired-mode . diff-hl-dired-mode))
   :config
   ;; Highlight on-the-fly
-  (diff-hl-flydiff-mode 1)
+  (diff-hl-flydiff-mode t)
 
   ;; Set fringe style
   (setq-default fringes-outside-margins nil)
@@ -129,7 +124,7 @@
     (defun my-diff-hl-fringe-bmp-function (_type _pos)
       "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
       (define-fringe-bitmap 'my-diff-hl-bmp
-        (vector (if sys/linuxp #b11111100 #b11100000))
+        (vector (if ON-LINUX #b11111100 #b11100000))
         1 8
         '(center t)))
     (setq diff-hl-fringe-bmp-function #'my-diff-hl-fringe-bmp-function)

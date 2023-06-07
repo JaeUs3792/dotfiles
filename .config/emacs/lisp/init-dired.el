@@ -53,11 +53,6 @@
 
   (use-package dired-single
     :commands (dired dired-jump))
-  (use-package diff-hl
-    :hook ((dired-mode . diff-hl-dired-mode-unless-remote)
-           (magit-post-refresh . diff-hl-magit-post-refresh))
-    :config
-    (diff-hl-margin-mode))
   (use-package dired-hide-dotfiles
     :hook (dired-mode) ;; hide default when dired-mode enabled.
     :config
