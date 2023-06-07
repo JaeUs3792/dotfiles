@@ -99,6 +99,7 @@
   "o a r" '(my/org-roam-refresh-agenda-list :which-key "Org agenda refresh list")
   "o a c" '((lambda () (interactive) (find-file (expand-file-name "agenda/agenda.org" org-directory))) :which-key "org agenda file")
   "o c" '(cfw:open-org-calendar :which-key "org calendar")
+  "o t" '(org-insert-structure-template :which-key "org insert structure template")
   ;; Project-el
   "p" '(:ignore t :which-key "project")
   "p ." '(project-switch-project :which-key "switch project")

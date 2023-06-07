@@ -1,41 +1,40 @@
 ;;; init-reader.el -*- lexical-binding: t -*-
-(when (and ON-LINUX (display-graphic-p))
-  (use-package pdf-view
-    :ensure pdf-tools
-    :diminish (pdf-view-themed-minor-mode
-               pdf-view-midnight-minor-mode
-               pdf-view-printer-minor-mode)
-    :defines pdf-annot-activate-created-annotations
-    :hook ((pdf-tools-enabled . pdf-view-auto-slice-minor-mode)
-           (pdf-tools-enabled . pdf-isearch-minor-mode)
-           (pdf-tools-enabled . pdf-view-themed-minor-mode))
-    :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
-    :magic ("%PDF" . pdf-view-mode)
-    :bind (:map pdf-view-mode-map
-                ("C-s" . isearch-forward))
-    :init (setq pdf-view-use-scaling t
-                pdf-view-use-imagemagick nil
-                pdf-annot-activate-created-annotations t
-                pdf-view-display-size 'fit-page)
+(use-package pdf-view
+  :ensure pdf-tools
+  :diminish (pdf-view-themed-minor-mode
+             pdf-view-midnight-minor-mode
+             pdf-view-printer-minor-mode)
+  :defines pdf-annot-activate-created-annotations
+  :hook ((pdf-tools-enabled . pdf-view-auto-slice-minor-mode)
+         (pdf-tools-enabled . pdf-isearch-minor-mode)
+         (pdf-tools-enabled . pdf-view-themed-minor-mode))
+  :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
+  :magic ("%PDF" . pdf-view-mode)
+  :bind (:map pdf-view-mode-map
+         ("C-s" . isearch-forward))
+  :init (setq pdf-view-use-scaling t
+              pdf-view-use-imagemagick nil
+              pdf-annot-activate-created-annotations t
+              pdf-view-display-size 'fit-page)
+  :config
+  ;; install manually
+  ;;(pdf-tools-install t nil t nil)
+  ;; my funtion
+  (defun my/pdf-view-open-in-zathura ()
+    (interactive)
+    (save-window-excursion
+      (let ((current-file (buffer-file-name))
+            (current-page (number-to-string (pdf-view-current-page))))
+        (async-shell-command
+         (format "zathura -P %s \"%s\"" current-page current-file))))
+    (message "Sent to zathura"))
+  ;; Recover last viewed position
+  (use-package pdf-view-restore
+    :defer t
+    :hook (pdf-view-mode . pdf-view-restore-mode)
     :config
-    ;; Activate the package
-    (pdf-tools-install t nil t nil)
-    ;; my funtion
-    (defun my/pdf-view-open-in-zathura ()
-      (interactive)
-      (save-window-excursion
-        (let ((current-file (buffer-file-name))
-              (current-page (number-to-string (pdf-view-current-page))))
-          (async-shell-command
-           (format "zathura -P %s \"%s\"" current-page current-file))))
-      (message "Sent to zathura"))
-    ;; Recover last viewed position
-    (use-package pdf-view-restore
-      :defer t
-      :hook (pdf-view-mode . pdf-view-restore-mode)
-      :config
-      (setq pdf-view-restore-filename
-            (expand-file-name "pdf-view-restore" user-emacs-directory)))))
+    (setq pdf-view-restore-filename
+          (expand-file-name "pdf-view-restore" user-emacs-directory))))
 
 
 ;; Epub reader
