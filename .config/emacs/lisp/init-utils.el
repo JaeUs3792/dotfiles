@@ -4,7 +4,7 @@
 (use-package olivetti
   :diminish
   :bind ("<f7>" . olivetti-mode)
-  :hook (org-mode)
+  :hook (org-mode markdown-mode)
   :init (setq olivetti-body-width 0.62))
 
 ;; text mode directory tree
