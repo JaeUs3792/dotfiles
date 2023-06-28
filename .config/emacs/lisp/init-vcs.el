@@ -36,6 +36,7 @@
     :init
     (setq magit-todos-nice (if (executable-find "nice") t nil))
     (setq magit-todos-scanner #'magit-todos--scan-with-git-grep)
+    (setq magit-todos-exclude-globs '(".git/" "*.json" "*.js"))
     (let ((inhibit-message t))
       (magit-todos-mode 1))))
 
