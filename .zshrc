@@ -1,13 +1,10 @@
 export ZSH="/home/jaeus/.oh-my-zsh"
-ZSH_THEME="agnoster"
+#ZSH_THEME="agnoster"
 #plugins=(git)
 source $ZSH/oh-my-zsh.sh
 prompt_context(){}
 source $ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-##WSL2
-source ~/scripts/wsl_get_display.sh
 
 # emacs
 alias emd="emacs --daemon"
@@ -15,11 +12,10 @@ alias emdk="emacsclient --eval '(kill-emacs)'"
 alias em="emacsclient -c -a 'emacs'"
 alias emt="emacsclient -c -a 'emacs -nw'"
 alias emtangle="emacs --batch -eval \"(require 'org)\" --eval '(org-babel-tangle-file \"~/.config/emacs/emacs.org\")'"
-alias startsv="ssh odroid startsv"
-alias stopsv="ssh odroid stopsv"
-alias gpulls="pushd ~/.config/emacs && git pull && pushd ~/org && git pull && popd && popd"
-#neovim to vi
+# neovim
 alias vi=nvim
+alias vimdiff="nvim -d"
+export EDITOR=nvim
 #pacman unlock
 alias paruunlock="sudo rm /var/lib/pacman/db.lck"
 #grub update
@@ -35,15 +31,21 @@ alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 #alias fix-gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
 #alias fix-key="[ -d ~/.gnupg ] || mkdir ~/.gnupg ; cp /etc/pacman.d/gnupg/gpg.conf ~/.gnupg/ ; echo 'done'"
 
-hostname=$(cat /etc/hostname)
-figlet -w 100 "$hostname"
+# server on/off
+alias startsv="ssh odroid startsv"
+alias stopsv="ssh odroid stopsv"
+
+alias ls="exa -al --color=always --group-directories-first"
+alias la="exa -a --color=always --group-directories-first"
+alias ll="exa -l --color=always --group-directories-first"
+alias lt="exa -aT --color=always --group-directories-first"
+alias l.='exa -a | egrep "^\."'
 
 #cat ~/.cache/wal/sequences &
 
-# Fire it up for WSL2
-#VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
-#export DISPLAY=$VETHER_IP:10.0
-#export DISPLAY=192.168.144.1:10.0
-#export EDITOR=nvim
-
+# WSL2
+source ~/scripts/custom_env.sh
+# python env
 export PYTHONSTARTUP=~/scripts/my_imports.py
+
+eval "$(starship init zsh)"
