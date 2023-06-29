@@ -1,6 +1,5 @@
 #Config file for simple X hotkey daemon
 
-#"Pausing" sxhkd
 super+Return
 #	st
 	alacritty
@@ -17,19 +16,12 @@ super + {1,2,3,4,5}
 	bspc desktop -f {1,2,3,4,5}; bspc query -N -n .local.window.hidden | xargs -I\{\} bspc node \{\} -g hidden; bspc query -N -n .local.window.fullscreen | xargs -I\{\} bspc node \{\} -t tiled; polybar-msg cmd show;
 super + shift + {1-5}
 	bspc node -d '^{1-5}'
-
-#control+alt+w  
-#	brave
-#control+alt+t  
-#	kitty
-##control+alt+g  
-##	lutris
 super+t 
 	thunar 
 # close & kill
 super+shift+c
 	bspc node -c
-#
+
 ##rofi things
 ##Launch apps
 #super+shift+e 
@@ -100,10 +92,7 @@ super+shift+c
 #
 ## Toggle picom
 super+p
-# fish	
-	if test (pgrep -c picom) -eq 0; picom ; else; killall picom; end
-# nushell
-#	if ((pgrep -c picom) == "0") \{ picom \} else \{ killall picom \}
+	if [ "$(pgrep -c picom) -eq 0" ]; then; picom; else; killall picom; fi
 super+w
 	~/scripts/random_wallpaper.sh
     
@@ -176,16 +165,16 @@ super + {_,shift +} + {h,l}
 super + shift + {j,k}
 	bspc node -s {south,north}
 super + j
-	if set test (bspc query -N -n focused.fullscreen); bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; bspc node next.leaf.local -f -t fullscreen; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f south; end
+	if (bspc query -N -n focused.fullscreen); then; bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; bspc node next.leaf.local -f -t fullscreen; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f south; fi
 super + k
-	if set test (bspc query -N -n focused.fullscreen); bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; bspc node prev.leaf.local -f -t fullscreen; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f north; end
+	if (bspc query -N -n focused.fullscreen); then; bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; bspc node prev.leaf.local -f -t fullscreen; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f north; fi
 #super + {_,shift + }n
 #	bspc node -f {next,prev}.local super + {t,shift + t,s,f}
 #super + {t,shift + t,s,f}
 #	bspc node -t {\~tiled,\~pseudo_tiled, \~floating,\~fullscreen} 
 
 super+space
-	if set test (bspc query -N -n focused.fullscreen); bspc node -f -t tiled; polybar-msg cmd show; bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f -t fullscreen; polybar-msg cmd hide; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; end
+	if (bspc query -N -n focused.fullscreen); then; bspc node -f -t tiled; polybar-msg cmd show; bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f -t fullscreen; polybar-msg cmd hide; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; fi
 super+KP_Add
 	bspc config window_gap $(( 5 + `bspc config window_gap` ))
 super+KP_Subtract
