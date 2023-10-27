@@ -9,7 +9,7 @@
 (use-package avy
   :hook (after-init . avy-setup-default)
   :config
-  (setq avy-style 'pre
+  (setq avy-style 'de-bruijn
 		avy-all-windows t
 		avy-all-windows-alt nil
 		avy-background t))
