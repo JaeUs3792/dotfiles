@@ -154,9 +154,6 @@ prepended to the element after the #+HEADER: tag."
     :config
     (setq org-journal-dir (expand-file-name "journal/" org-directory))
     (setq org-journal-file-type 'weekly))
-  (use-package calfw)
-  (use-package calfw-org
-    :after calfw)
 
   ;; Add new template
   (add-to-list 'org-structure-template-alist '("n" . "note"))
@@ -198,8 +195,8 @@ prepended to the element after the #+HEADER: tag."
       (rust       . t)
       (C          . t))
     "Alist of org ob languages.")
-  (unless ON-WINDOWS
-    (add-to-list 'load-language-alist '(latex-as-png . t)))
+  ;;(unless ON-WINDOWS
+  ;;  (add-to-list 'load-language-alist '(latex-as-png . t)))
 
   (push '("conf-unix" . conf-unix) org-src-lang-modes)
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
@@ -428,5 +425,10 @@ prepended to the element after the #+HEADER: tag."
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                    ("\\paragraph{%s}" . "\\paragraph*{%s}")
                    ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
+
+;; support calendar
+(use-package calfw)
+(use-package calfw-org
+  :after calfw)
 (provide 'init-org)
 ;;; init-org.el ends here
