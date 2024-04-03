@@ -33,7 +33,7 @@
                     ;; Also handle undocumented (<active> <inactive>) form.
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
-         '(85 . 50) '(100 . 100)))))
+         '(85 . 85) '(100 . 100)))))
 (defun my/transparency-round (val)
   "Round VAL to the nearest tenth of an integer."
   (/ (round (* 10 val)) 10.0))
