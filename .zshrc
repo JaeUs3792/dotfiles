@@ -44,7 +44,7 @@ alias l.='exa -a | egrep "^\."'
 #cat ~/.cache/wal/sequences &
 
 # WSL2
-source ~/scripts/custom_env.sh
+#source ~/scripts/custom_env.sh
 # python env
 export PYTHONSTARTUP=~/scripts/my_imports.py
 
