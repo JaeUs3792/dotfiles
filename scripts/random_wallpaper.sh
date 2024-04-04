@@ -10,5 +10,11 @@ while IFS=  read -r -d $'\0'; do
 done < <(find $wal_dir -type f -name "*" -print0)
 randomfile=$(printf "%s\n" "${files[RANDOM % ${#files[@]}]}")
 echo $randomfile
-wal -i $randomfile --saturate 1.0
-#feh --bg-fill $randomfile
+
+files=()
+while IFS=  read -r -d $'\0'; do
+    files+=("$REPLY")
+done < <(find $wal_dir -type f -name "*" -print0)
+randomfile2=$(printf "%s\n" "${files[RANDOM % ${#files[@]}]}")
+echo $randomfile2
+feh --bg-max "$randomfile" --bg-max "$randomfile2"

@@ -39,8 +39,8 @@
 
 ;; select theme
 (setq custom-theme-sel 'doom-one)
-;; default transparency (85 . 50) or (100 . 100)
-(set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+;; default transparency (85 . 85) or (100 . 100)
+(set-frame-parameter (selected-frame) 'alpha '(85 . 85))
 
 ;; Org setup
 (setq custom-org-directory "~/org"
