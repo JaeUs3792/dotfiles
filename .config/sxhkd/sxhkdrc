@@ -12,10 +12,12 @@ super+b
 super+f
 	firefox
 # workspace
-super + {1,2,3,4,5}
-	bspc desktop -f {1,2,3,4,5}; bspc query -N -n .local.window.hidden | xargs -I\{\} bspc node \{\} -g hidden; bspc query -N -n .local.window.fullscreen | xargs -I\{\} bspc node \{\} -t tiled; polybar-msg cmd show;
-super + shift + {1-5}
-	bspc node -d '^{1-5}'
+super + {1,2,3,4,5,6,7,8,9,0}
+	bspc desktop -f {1,2,3,4,5,6,7,8,9,0}; bspc query -N -n .local.window.hidden | xargs -I\{\} bspc node \{\} -g hidden; bspc query -N -n .local.window.fullscreen | xargs -I\{\} bspc node \{\} -t tiled; polybar-msg cmd show;
+super + shift + {1-9}
+	bspc node -d '^{1-9}'
+super + shift + 0
+	bspc node -d 0
 super+t 
 	thunar 
 # close & kill

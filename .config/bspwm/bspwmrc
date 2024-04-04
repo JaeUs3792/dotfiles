@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+#xrandr --output DP-4 --primary --mode 2560x1440 --rotate normal --output HDMI-0 --rotate right --right-of DP-4
+
 killall bspc
 
 ##################################################
@@ -12,12 +14,16 @@ killall nm-applet && nm-applet &
 killall volumeicon && volumeicon &
 #killall conky
 #sleep 3 && conky -c ~/.config/conky/conkyrc
+
 ~/scripts/random_wallpaper.sh
 
 wmname LG3D
 export _JAVA_AWT_WM_NONREPARETING=1
 
 bspc monitor -d 1 2 3 4 5
+#bspc monitor DP-4 -d 1 2 3 4 5
+#bspc monitor HDMI-0 -d 6 7 8 9 0
+
 
 bspc config border_width        2
 bspc config window_gap          10
@@ -29,9 +35,9 @@ bspc config gapless_monocle             true
 #bspc config pointer_follows_focus       true
 #bspc config single_monocle              true
 bspc config top_monocle_padding          20
-bspc config left_monocle_padding         20 
-bspc config right_monocle_padding        20 
-bspc config bottom_monocle_padding       20 
+bspc config left_monocle_padding         20
+bspc config right_monocle_padding        20
+bspc config bottom_monocle_padding       20
 #bspc config ignore_ewmh_fullscreen       enter
 
 # Colors
@@ -62,3 +68,4 @@ bspc rule -a \* state=tiled
 
 # TODO heres polybar
 polybar panel-bspwm
+#polybar panel-bspwm-2

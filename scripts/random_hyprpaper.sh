@@ -11,7 +11,7 @@ randomfile=$(printf "%s\n" "${files[RANDOM % ${#files[@]}]}")
 echo $randomfile
 
 hyprctl hyprpaper preload $randomfile
-hyprctl hyprpaper wallpaper "DP-3,$randomfile"
+hyprctl hyprpaper wallpaper "DP-3,contain:$randomfile"
 
 files=()
 while IFS=  read -r -d $'\0'; do
@@ -20,5 +20,6 @@ done < <(find $wal_dir2 -type f -name "*" -print0)
 randomfile=$(printf "%s\n" "${files[RANDOM % ${#files[@]}]}")
 echo $randomfile
 hyprctl hyprpaper preload $randomfile
-hyprctl hyprpaper wallpaper "HDMI-A-1,$randomfile"
+hyprctl hyprpaper wallpaper "HDMI-A-1,contain:$randomfile"
 
+hyprctl hyprpaper unload all
