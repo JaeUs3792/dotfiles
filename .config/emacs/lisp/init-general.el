@@ -8,6 +8,8 @@
 (global-unset-key (kbd "C-j"))
 (global-unset-key (kbd "C-k"))
 (global-unset-key (kbd "S-SPC"))    ;; input method / use only S-\
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
 
 ;; When you begin a keybind, whichkey will show you all keybinds you can follow the first one with in order to form a full keywords.
 (use-package which-key

@@ -6,6 +6,8 @@
 
 (setq auto-mode-case-fold nil)
 
+(setq vc-follow-symlinks t) ;; always follow symlink
+
 (unless (or (daemonp) noninteractive init-file-debug)
   ;; Prevent flashing of messages at startup
   (when (display-graphic-p)
