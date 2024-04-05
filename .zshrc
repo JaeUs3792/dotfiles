@@ -41,10 +41,12 @@ alias ll="exa -l --color=always --group-directories-first"
 alias lt="exa -aT --color=always --group-directories-first"
 alias l.='exa -a | egrep "^\."'
 
-#cat ~/.cache/wal/sequences &
-
 # WSL2
-#source ~/scripts/custom_env.sh
+if [[ $JUPCID == "WSL" ]];then
+	VETHER_IP=$(/bin/grep nameserver /etc/resolv.conf 2> /dev/null | /bin/tr -s ' ' | /bin/cut -d' ' -f2)
+	export DISPLAY=$VETHER_IP:10.0
+fi
+
 # python env
 export PYTHONSTARTUP=~/scripts/my_imports.py
 
