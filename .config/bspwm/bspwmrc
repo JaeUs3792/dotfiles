@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-#xrandr --output DP-4 --primary --mode 2560x1440 --rotate normal --output HDMI-0 --rotate right --right-of DP-4
+
+if [[ $JUPCID == "HOME-DESKTOP" ]]; then
+    xrandr --output DP-4 --primary --mode 2560x1440 --rotate normal --output HDMI-0 --rotate right --right-of DP-4
+fi
 
 killall bspc
 
@@ -20,10 +23,12 @@ killall volumeicon && volumeicon &
 wmname LG3D
 export _JAVA_AWT_WM_NONREPARETING=1
 
-bspc monitor -d 1 2 3 4 5
-#bspc monitor DP-4 -d 1 2 3 4 5
-#bspc monitor HDMI-0 -d 6 7 8 9 0
-
+if [[ $JUPCID == "HOME-DESKTOP" ]]; then
+    bspc monitor DP-4 -d 1 2 3 4 5
+    bspc monitor HDMI-0 -d 6 7 8 9 0
+else
+    bspc monitor -d 1 2 3 4 5 6 7 8 9 0
+fi
 
 bspc config border_width        2
 bspc config window_gap          10
@@ -67,5 +72,9 @@ bspc rule -a \* state=tiled
 #fi
 
 # TODO heres polybar
-polybar panel-bspwm
+if [[ $JUPCID == "HWDEV" ]]; then
+    polybar panel-bspwm --config=~/.config/polybar/config.ini
+else
+    polybar panel-bspwm
+fi
 #polybar panel-bspwm-2

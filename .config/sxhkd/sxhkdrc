@@ -1,7 +1,6 @@
 #Config file for simple X hotkey daemon
 
 super+Return
-#	st
 	alacritty
 #Apps and programs
 super+e
@@ -23,6 +22,12 @@ super+t
 # close & kill
 super+shift+c
 	bspc node -c
+super+shift+q
+    killall picom & killall sxhkd & bspc quit
+super+shift+e
+    rofi -mode drun -theme solarized -font "hack 20" -show combi
+alt+Tab
+    rofi -mode window -theme solarized -font "hack 20" -show
 
 ##rofi things
 ##Launch apps
@@ -94,7 +99,7 @@ super+shift+c
 #
 ## Toggle picom
 super+p
-	if [ "$(pgrep -c picom) -eq 0" ]; then; picom; else; killall picom; fi
+	if (pgrep -c picom); then; killall picom; else; picom; fi
 super+w
 	~/scripts/random_wallpaper.sh
     
