@@ -75,6 +75,5 @@ bspc rule -a \* state=tiled
 if [[ $JUPCID == "HWDEV" ]]; then
     polybar panel-bspwm --config=~/.config/polybar/config.ini
 else
-    polybar panel-bspwm
+    polybar panel-bspwm-1 & polybar panel-bspwm-2
 fi
-#polybar panel-bspwm-2
