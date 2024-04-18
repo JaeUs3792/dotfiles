@@ -128,7 +128,7 @@ prepended to the element after the #+HEADER: tag."
         ;; formula a_{i}
         org-use-sub-superscripts '{}
         ;; scale org-latex
-        org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
+        org-format-latex-options (plist-put org-format-latex-options :scale 1.3)
 
         org-image-actual-width nil
 
@@ -255,6 +255,15 @@ prepended to the element after the #+HEADER: tag."
                 org-tree-slide-skip-done nil
                 org-tree-slide-skip-comments t
                 org-tree-slide-skip-outline-level 3))
+  ;; support drawio
+  (use-package org-drawio
+    :commands (org-drawio-add
+               org-drawio-open)
+    :custom ((org-drawio-input-dir "./draws")
+             (org-drawio-output-dir "./images")
+             (org-drawio-output-page "0")
+             ;; set to t, if you want to crop the image.
+             (org-drawio-crop t)))
 ; attachment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package org-contrib ;; to use org-screenshot-take
     :defer t)
