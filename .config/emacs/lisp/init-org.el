@@ -160,29 +160,14 @@ prepended to the element after the #+HEADER: tag."
 
   (use-package org-modern
     :hook ((org-mode . org-modern-mode)
-           (org-agenda-finalize . org-modern-agenda))
-           (org-modern-mode . (lambda ()
-                                "Adapt `org-modern-mode'."
-                                ;; Disable Prettify Symbols mode
-                                (setq prettify-symbols-alist nil)
-                                (prettify-symbols-mode -1))))
-  (use-package org-superstar
-    :if (and (display-graphic-p) (char-displayable-p ?◉))
-    :hook (org-mode . org-superstar-mode)
-    :init
-    (setq org-superstar-headline-bullets-list '("◉""○""◈""◇""⁕")
-          org-superstar-item-bullet-alist ;; dont work with org-modern
-          '((?+ . ?➢)
-            (?* . ?✰)
-            (?- . ?➸))))
+            (org-agenda-finalize . org-modern-agenda))
+    :config
+    (setq org-modern-table nil))
 
-  (use-package org-fancy-priorities
-    :diminish
-    :hook (org-mode . org-fancy-priorities-mode)
-    :init (setq org-fancy-priorities-list
-                (if (and (display-graphic-p) (char-displayable-p ?🅐))
-                    '("🅐" "🅑" "🅒" "🅓")
-                  '("HIGH" "MEDIUM" "LOW" "OPTIONAL"))))
+  (use-package valign
+    :hook (org-mode . valign-mode)
+    :custom
+    (valign-fancy-bar t))
 
   (setq org-confirm-babel-evaluate nil
         org-src-fontify-natively t
