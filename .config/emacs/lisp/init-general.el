@@ -62,6 +62,8 @@
   ;; Counsel
   "f" '(:ignore t :which-key "file op.")
   "f r" '(consult-recent-file :which-key "Recent files")
+  "f i" '((lambda () (interactive) (find-file "~/.config/emacs/init.el")) :which-key "open emacs init file")
+  "f l" '((lambda () (interactive) (find-file "~/.config/emacs/lisp")) :which-key "open emacs lisp dir")
   ;; Magit
   "g" '(:ignore t :which-key "magit")
   "g g" '(magit :which-key "magit")
