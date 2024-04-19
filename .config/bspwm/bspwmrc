@@ -2,6 +2,8 @@
 
 if [[ $JUPCID == "HOME-DESKTOP" ]]; then
     xrandr --output DP-4 --primary --mode 2560x1440 --rotate normal --output HDMI-0 --rotate right --right-of DP-4
+elif [[ $JUPCID == "HWDEV" ]]; then
+    xrandr --output HDMI-1 --primary --mode 2560x1440 --rotate normal
 fi
 
 killall bspc
@@ -9,6 +11,7 @@ killall bspc
 ##################################################
 # AUTOSTART
 ##################################################
+sleep 1
 killall sxhkd
 killall picom
 sxhkd &
