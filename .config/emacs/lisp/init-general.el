@@ -11,6 +11,8 @@
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
+(global-set-key (kbd "C-<tab>") 'hs-toggle-hiding)
+
 ;; When you begin a keybind, whichkey will show you all keybinds you can follow the first one with in order to form a full keywords.
 (use-package which-key
   :defer t
@@ -66,7 +68,7 @@
   ;; Hydra
   "h" '(:ignore t :which-key "hydra / hideshow")
   "h h" '(:ignore t :which-key "hydra")
-  "h t" '(hs-toggle-all :which-key "hideshow toggle hiding")
+  "h t" '(hs-toggle-hiding :which-key "hideshow toggle hiding")
   "h a" '(hs-hide-all :which-key "hideshow hide all")
   "h s" '(hs-show-all :which-key "hideshow show all")
   ;; "h t" '(hydra-text-scale/body :which-key "scale text")
