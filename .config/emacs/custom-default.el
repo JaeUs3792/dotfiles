@@ -47,6 +47,9 @@
       custom-org-roam-directory "~/org/roam"
       custom-org-agenda-file "~/org/agenda/agenda.org")
 
+;; Line numbers, relative or comment this line
+(setq display-line-numbers-type 'relative)
+
 ;; Chatgpt setup
 (setq custom-chatgpt-my-key "my-key")
 
