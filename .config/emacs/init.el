@@ -114,5 +114,7 @@ Otherwise the startup will be very slow. "
 
 (require 'init-extra)
 (require 'init-chatgpt)
+
+(require 'init-copilot)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
