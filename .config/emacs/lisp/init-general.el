@@ -135,7 +135,9 @@
   ;; Avy
   "v" '(:ignore t :which-key "Avy")
   "vc" '(avy-goto-char :which-key "Avy Goto Char")
-  "vw" '(avy-goto-word-0 :which-key "Avy Goto Word")
+  "ve" '(avy-goto-char-2 :which-key "Avy Goto Char - 2")
+  "vq" '(avy-goto-word-0 :which-key "Avy Goto Word")
+  "vw" '(avy-goto-word-1 :which-key "Avy Goto Word - 1")
   "vl" '(avy-goto-line :which-key "Avy Goto Line"))
 
 (provide 'init-general)
