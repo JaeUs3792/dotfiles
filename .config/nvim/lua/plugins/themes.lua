@@ -42,7 +42,13 @@ return {
 	{
 		"catppuccin/nvim",
 		config = function()
-			vim.cmd.colorscheme "catppuccin"
+			-- vim.cmd.colorscheme "catppuccin"
+		end
+	},
+	{
+		"tomasr/molokai",
+		config = function()
+			vim.cmd.colorscheme "molokai"
 		end
 	},
 }

@@ -6,6 +6,7 @@ vim.cmd("set ai") 	-- auto indent
 vim.cmd("set si")  -- smart indent
 vim.cmd("set cindent") --  c style indent
 
+vim.cmd("set expandtab") -- tab to space
 vim.cmd("set shiftwidth=4") -- shift order 4step
 vim.cmd("set tabstop=4")    -- tab order 4step
 vim.cmd("set hlsearch")	   -- highlight empathize the word.
@@ -49,5 +50,3 @@ vim.keymap.set('n', '<C-k>', '<C-w>k', {})
 --
 vim.keymap.set('n', '<F12>', ':cd %:p:h<cr>:term zsh<cr>', {})
 vim.keymap.set('n', '<F7>', '@a', {})
-
-
