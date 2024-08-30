@@ -43,7 +43,9 @@
       (interactive)
       (when (derived-mode-p 'prog-mode 'yaml-mode)
         (symbol-overlay-mode 1)))
-    (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay)))
+    (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay))
+    (define-key symbol-overlay-map (kbd "h") nil)
+    (define-key symbol-overlay-map (kbd "g") 'symbol-overlay-map-help))
 
 ;; Colorize color names in buffers
 (use-package rainbow-mode
