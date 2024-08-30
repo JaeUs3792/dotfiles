@@ -147,7 +147,7 @@ Install the doc if it's not installed."
 ;;(use-package dart-mode)
 ;;(use-package groovy-mode)
 ;;(use-package julia-mode)
-;;(use-package lua-mode)
+(use-package lua-mode)
 ;;(use-package mermaid-mode)
 ;;(use-package plantuml-mode)
 (use-package rmsbolt)                   ; A compiler output viewer
