@@ -24,7 +24,7 @@
   (setq verilog-ext-feature-list
         '(font-lock
           xref
-          ;; capf
+          capf
           hierarchy
           eglot
           ;; lsp
@@ -32,14 +32,14 @@
           beautify
           navigation
           template
-          formatter
+          ;; formatter
           compilation
           imenu
           which-func
           hideshow
           typedefs
           time-stamp
-          block-end-comments
+          ;; block-end-comments
           ports))
   :config
   (verilog-ext-mode-setup))
