@@ -4,9 +4,9 @@
 (require 'init-funcs)
 
 ;; Tree-sitter support
-(use-package treesit-auto
-  :hook (after-init . global-treesit-auto-mode)
-  :init (setq treesit-auto-install 'prompt))
+;; (use-package treesit-auto
+;;   :hook (after-init . global-treesit-auto-mode)
+;;   :init (setq treesit-auto-install 'prompt))
 
 ;; Search tool
 (use-package grep
