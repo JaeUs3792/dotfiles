@@ -3,10 +3,14 @@
 (require 'init-funcs)
 
 (use-package autorevert
-  :ensure nil
+  :straight t
+  :ensure t
   :diminish
   :hook (after-init . global-auto-revert-mode))
 (use-package avy
+  :straight t
+  :ensure t
+  :defer t
   :hook (after-init . avy-setup-default)
   :config
   (setq avy-style 'de-bruijn
@@ -15,6 +19,8 @@
 		avy-background t))
 ;; Show number of matches in mode-line while searching
 (use-package anzu
+  :straight t
+  :ensure t
   :diminish
   ;;:bind (([remap query-replace] . anzu-query-replace)
   ;;       ([remap query-replace-regexp] . anzu-query-replace-regexp)
@@ -22,10 +28,10 @@
   ;;       ([remap isearch-query-replace] . anzu-isearch-query-replace)
   ;;       ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))
   :hook (after-init . global-anzu-mode))
-(use-package ialign)
-
 
 (use-package undo-tree
+  :straight t
+  :ensure t
   :diminish
   :hook (after-init . global-undo-tree-mode)
   :custom
@@ -42,7 +48,8 @@
         undo-outer-limit  (* 128 1024 1024)))
 
 (use-package hideshow
-  :ensure nil
+  :straight t
+  :ensure t
   :diminish hs-minor-mode
   :pretty-hydra
   ((:title (pretty-hydra-title "HideShow" 'octicon "nf-oct-fold")
@@ -112,6 +119,8 @@
 
 ;; Hanlde minified code
 (use-package so-long
+  :straight t
+  :ensure t
   :hook (after-init . global-so-long-mode))
 
 (provide 'init-edit)

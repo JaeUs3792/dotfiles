@@ -3,6 +3,9 @@
 (require 'init-funcs)
 ;; A tree layout file explorer
 (use-package treemacs
+  :straight t
+  :ensure t
+  :defer t
   :commands (treemacs-follow-mode
              treemacs-filewatch-mode
              treemacs-git-mode)
@@ -26,28 +29,36 @@
     (`(t . t)
      (treemacs-git-mode 'deferred))
     (`(t . _)
-     (treemacs-git-mode 'simple)))
+     (treemacs-git-mode 'simple))))
 
-  (use-package treemacs-nerd-icons
-    :demand
-    :custom-face
-    (treemacs-nerd-icons-root-face ((t (:inherit nerd-icons-green :height 1.3))))
-    (treemacs-nerd-icons-file-face ((t (:inherit nerd-icons-dsilver))))
-    :config (treemacs-load-theme "nerd-icons"))
+(use-package treemacs-nerd-icons
+  :straight t
+  :ensure t
+  :defer t
+  :custom-face
+  (treemacs-nerd-icons-root-face ((t (:inherit nerd-icons-green :height 1.3))))
+  (treemacs-nerd-icons-file-face ((t (:inherit nerd-icons-dsilver))))
+  :config (treemacs-load-theme "nerd-icons"))
 
-  (use-package treemacs-magit
-    :after magit
-    :autoload treemacs-magit--schedule-update
-    :hook ((magit-post-commit
-            git-commit-post-finish
-            magit-post-stage
-            magit-post-unstage)
-           . treemacs-magit--schedule-update))
+(use-package treemacs-magit
+  :straight t
+  :ensure t
+  :defer t
+  :after magit
+  :autoload treemacs-magit--schedule-update
+  :hook ((magit-post-commit
+          git-commit-post-finish
+          magit-post-stage
+          magit-post-unstage)
+         . treemacs-magit--schedule-update))
 
-  (use-package treemacs-persp
-    :after persp-mode
-    :demand t
-    :functions treemacs-set-scope-type
-    :config (treemacs-set-scope-type 'Perspectives)))
+(use-package treemacs-persp
+  :straight t
+  :ensure t
+  :defer t
+  :after persp-mode
+  :demand t
+  :functions treemacs-set-scope-type
+  :config (treemacs-set-scope-type 'Perspectives))
 (provide 'init-treemacs)
 ;;; init-treemacs.el ends here

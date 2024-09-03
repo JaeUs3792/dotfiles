@@ -2,10 +2,15 @@
 (require 'init-const)
 (require 'init-funcs)
 (use-package hydra
+  :straight t
+  :ensure t
+  :defer t
   :hook (emacs-lisp-mode . hydra-add-imenu))
 
-;; TODO
 (use-package pretty-hydra
+  :straight t
+  :ensure t
+  :defer t
   :bind ("<f6>" . toggles-hydra/body)
   :hook (emacs-lisp-mode . (lambda ()
                              (add-to-list
@@ -23,7 +28,7 @@
       (concat
        (when (and (icons-displayable-p) icon-type icon-name)
          (let ((f (intern (format "nerd-icons-%s" icon-type))))
-         ;;(let ((f (intern (format "all-the-icons-%s" icon-type))))
+           ;;(let ((f (intern (format "all-the-icons-%s" icon-type))))
            (when (fboundp f)
              (concat
               (apply f (list icon-name :face face :height height :v-adjust v-adjust))

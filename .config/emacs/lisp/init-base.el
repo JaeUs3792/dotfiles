@@ -1,5 +1,4 @@
 ;; init-base.el -*- lexical-binding: t -*-
-
 (require 'init-const)
 (require 'init-funcs)
 
@@ -10,6 +9,8 @@
 
 ;;
 (use-package gcmh
+  :straight t
+  :ensure t
   :diminish
   :hook
   (emacs-startup . gcmh-mode)
@@ -28,15 +29,20 @@
   (set-selection-coding-system 'utf-8))
 (when ON-LINUX
   (use-package exec-path-from-shell
+    :straight t
+    :ensure t
+    :defer t
 	:init (exec-path-from-shell-initialize)))
 
 ;; open file point at where last saved place.
 (use-package saveplace
-  :ensure nil
+  :straight t
+  :ensure t
   :hook (after-init . save-place-mode))
 
 (use-package recentf
-  :ensure nil
+  :straight t
+  :ensure t
   :bind
   (("C-x C-r" . recentf-open-files))
   :hook
@@ -54,7 +60,8 @@
   (add-to-list 'recentf-filename-handlers #'abbreviate-file-name))
 
 (use-package savehist
-  :ensure nil
+  :straight t
+  :ensure t
   :hook
   (after-init . savehist-mode)
   :init
@@ -68,7 +75,7 @@
 		savehist-autosave-interval 300))
 
 (use-package simple
-  :ensure nil
+  :ensure nil ; emacs base package
   :hook ((after-init . size-indication-mode)
          (text-mode . visual-line-mode)
          ((prog-mode markdown-mode conf-mode) . enable-trailing-whitespace))
@@ -110,7 +117,7 @@
                                 (concat
                                  " "
                                  (nerd-icons-faicon "nf-fa-bolt" :face 'nerd-icons-lblue))
-                                 ;;(all-the-icons-faicon "nf-fa-bolt" :face 'all-the-icons-lblue))
+                              ;;(all-the-icons-faicon "nf-fa-bolt" :face 'all-the-icons-lblue))
                               " x"))
                       (name (aref val 0))
                       (pid (aref val 1))
@@ -149,11 +156,6 @@
       sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
       sentence-end-double-space nil
       word-wrap-by-category t)
-
-;; use for org-roam?
-(when (fboundp 'sqlite-open)
-  (use-package emacsql-sqlite-builtin))
-
 
 (provide 'init-base)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
