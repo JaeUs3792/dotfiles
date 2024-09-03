@@ -16,15 +16,14 @@
   :ensure t
   :hook (vertico-mode . nerd-icons-completion-mode))
 
-(when (display-graphic-p)
-  (use-package vertico-posframe
-    :straight t
-    :ensure t
-    :when custom-vertico-posframe
-    :after vertico
-    :hook (vertico-mode . vertico-posframe-mode)
-    :config
-    (setq vertico-posframe-border-width 5)))
+(use-package vertico-posframe
+  :straight t
+  :ensure t
+  :when (and custom-vertico-posframe 'display-graphic-p)
+  :after vertico
+  :hook (vertico-mode . vertico-posframe-mode)
+  :config
+  (setq vertico-posframe-border-width 5))
     ;; (setq vertico-posframe-parameters
     ;;       '((left-fringe . 20)
     ;;         (right-fringe . 20)))))
@@ -167,13 +166,6 @@
             (variable ,(nerd-icons-codicon "nf-cod-symbol_variable") :face font-lock-variable-name-face)
             (t ,(nerd-icons-codicon "nf-cod-code") :face font-lock-warning-face)))))
 
-
-(use-package corfu-terminal
-  :straight t
-  :ensure t
-  :config
-  (unless (display-graphic-p)
-    (corfu-terminal-mode)))
 
 ;;; Cape
 ;; Setup Cape for better completion-at-point support and more
