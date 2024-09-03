@@ -67,8 +67,8 @@ Otherwise the startup will be very slow. "
 
 (require 'init-yasnippet)
 
-;;(require 'init-bookmark)
-;;(require 'init-dashboard)
+(require 'init-bookmark)
+(require 'init-dashboard)
 ;;(require 'init-dired)
 ;;(require 'init-highlight)
 ;;(require 'init-ibuffer)
@@ -113,7 +113,7 @@ Otherwise the startup will be very slow. "
 ;;(require 'init-debug)
 ;;
 ;;(require 'init-extra)
-;;(require 'init-chatgpt)
+(require 'init-chatgpt)
 ;;
 ;;(require 'init-copilot)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
