@@ -8,6 +8,21 @@
 
 (and (file-readable-p custom-file) (load custom-file))
 
+
+; (when (version< emacs-version "28")
+;   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+; (add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
+; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
+; (customize-set-variable 'package-archive-priorities
+;                         '(("gnu"    . 99)   ; prefer GNU packages
+;                           ("nongnu" . 80)   ; use non-gnu packages if
+;                                         ; not found in GNU elpa
+;                           ("stable" . 70)   ; prefer "released" versions
+;                                         ; from melpa
+;                           ("melpa"  . 0)))  ; if all else fails, get it
+;                                         ; from melpa
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -29,7 +44,8 @@
 
 ; hide info in modeline
 (use-package diminish
-  :straight t)
+  :straight t
+  :ensure t)
 
 (provide 'init-package)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
