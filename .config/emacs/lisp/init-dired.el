@@ -5,9 +5,12 @@
 ;; Directory operations
 (use-package dired
   :ensure nil ; built-in
+  :hook (dired-mode . dired-omit-mode)
   :general
   (:keymaps 'dired-mode-map
-            "C-c C-p" 'wdired-change-to-wdired-mode)
+            "C-c C-p" 'wdired-change-to-wdired-mode
+            "C-c C-r" 'dired-rsync)
+  :custom (dired-omit-files (rx (seq bol ".")))
   :config
   ;; Guess a default target directory
   (setq dired-dwim-target t)
@@ -17,7 +20,13 @@
         dired-recursive-copies 'always)
 
   ;; Show directory first
-  (setq dired-listing-switches "-alh --group-directories-first"))
+  (setq dired-listing-switches "-alh --group-directories-first")
+  (evil-collection-define-key 'normal 'dired-mode-map
+                              "." 'dired-omit-mode
+                              "h" 'dired-single-up-directory
+                              "l" 'dired-single-buffer
+                              ")" 'dired-git-info-mode
+                              "s" 'hydra-dired-quick-sort/body))
 
 ;; Quick sort dired buffers via hydra
 (use-package dired-quick-sort
@@ -26,10 +35,7 @@
   :defer t
   :hook (after-init . dired-quick-sort-setup)
   :init
-  (setq dired-quick-sort-suppress-setup-warning t)
-  :config
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "s" 'hydra-dired-quick-sort/body))
+  (setq dired-quick-sort-suppress-setup-warning t))
 
 ;; Show git info in dired
 (use-package dired-git-info
@@ -41,15 +47,12 @@
 (use-package dired-rsync
   :straight t
   :ensure t
-  :defer t
-  :bind (:map dired-mode-map
-              ("C-c C-r" . dired-rsync)))
+  :defer t)
 
 ;; Colorful dired
 (use-package diredfl
   :straight t
   :ensure t
-  :defer t
   :hook (dired-mode . diredfl-mode))
 
 ;; Shows icons
@@ -63,23 +66,22 @@
   :hook (dired-mode . nerd-icons-dired-mode))
 
 ;; Extra Dired functionality
-(use-package dired-aux :ensure nil)
+(use-package dired-aux ; built-in package
+             :ensure nil)
 
 (use-package dired-single
+             :straight t
+             :ensure t
+             :defer t
   :commands (dired dired-jump))
-(use-package dired-hide-dotfiles
-  :hook (dired-mode) ;; hide default when dired-mode enabled.
-  :config
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "H" 'dired-hide-dotfiles-mode))
-(evil-collection-define-key 'normal 'dired-mode-map
-  "h" 'dired-single-up-directory
-  "l" 'dired-single-buffer
-  ")" 'dired-git-info-mode)
+
 
 ;; `find-dired' alternative using `fd'
-;; (when (executable-find "fd")
-;;   (use-package fd-dired))
+(when (executable-find "fd")
+  (use-package fd-dired
+    :straight t
+    :ensure t
+    :defer t))
 
 (provide 'init-dired)
 ;;; init-dired.el ends here

@@ -46,14 +46,16 @@
         doom-modeline-persp-icon t
         doom-modeline-display-default-persp-name t
         doom-modeline-indent-info t))
-;;(use-package hide-mode-line
-;;  :hook (((completion-list-mode
-;;           completion-in-region-mode
-;;           eshell-mode shell-mode
-;;           term-mode vterm-mode
-;;           treemacs-mode
-;;           lsp-ui-imenu-mode
-;;           pdf-annot-list-mode) . hide-mode-line-mode)))
+(use-package hide-mode-line
+  :straight t
+  :ensure t
+  :hook (((completion-list-mode
+           completion-in-region-mode
+           eshell-mode shell-mode
+           term-mode vterm-mode
+           treemacs-mode
+           lsp-ui-imenu-mode
+           pdf-annot-list-mode) . hide-mode-line-mode)))
 
 ;; A minor-mode menu for mode-line
 (use-package minions
@@ -110,12 +112,12 @@
 ;; Good pixel line scrolling
 (if (fboundp 'pixel-scroll-precision-mode)
     (pixel-scroll-precision-mode t)
-    (use-package good-scroll
-      :straight t
-      :ensure t
-      :hook (after-init . good-scroll-mode)
-      :bind (([remap next] . good-scroll-up-full-screen)
-             ([remap prior] . good-scroll-down-full-screen))))
+  (use-package good-scroll
+    :straight t
+    :ensure t
+    :hook (after-init . good-scroll-mode)
+    :bind (([remap next] . good-scroll-up-full-screen)
+           ([remap prior] . good-scroll-down-full-screen))))
 
 ;; Smooth scrolling over images
 (use-package iscroll
@@ -141,9 +143,6 @@
   (set-fontset-font "fontset-default"
                     (cons page-break-lines-char page-break-lines-char)
                     (face-attribute 'default :family)))
-(use-package form-feed
-  :disabled
-  :hook (after-init . global-form-feed-mode))
 
 ;; emoji
 (use-package emojify

@@ -11,7 +11,7 @@
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
-; TODO move to hideshow
+                                        ; TODO move to hideshow
 (global-set-key (kbd "C-<tab>") 'hs-toggle-hiding)
 
 ;; When you begin a keybind, whichkey will show you all keybinds you can follow the first one with in order to form a full keywords.
