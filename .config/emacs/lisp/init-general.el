@@ -11,10 +11,13 @@
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
+; TODO move to hideshow
 (global-set-key (kbd "C-<tab>") 'hs-toggle-hiding)
 
 ;; When you begin a keybind, whichkey will show you all keybinds you can follow the first one with in order to form a full keywords.
 (use-package which-key
+  :straight t
+  :ensure t
   :defer t
   :init (which-key-mode)
   :diminish which-key-mode
@@ -22,6 +25,9 @@
   (setq which-key-idle-delay 0.5))
 
 (use-package general
+  :straight t
+  :ensure t
+  :defer t
   :init
   (general-auto-unbind-keys)
   :config

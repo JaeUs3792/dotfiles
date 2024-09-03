@@ -17,8 +17,15 @@
 
 ;; Make certain buffers grossly incandescent
 (use-package solaire-mode
-  :hook (after-load-theme . solaire-global-mode))
+  :straight t
+  :ensure t
+  :demand t
+  :config
+  (solaire-global-mode +1))
+
 (use-package doom-themes
+  :straight t
+  :ensure t
   :init
   (if (display-graphic-p)
       (load-theme custom-theme-sel t)
@@ -26,6 +33,8 @@
   :config
   (doom-themes-visual-bell-config))
 (use-package doom-modeline
+  :straight t
+  :ensure t
   :hook (after-init . doom-modeline-mode)
   :init
   (setq doom-modeline-window-width-limit 110
@@ -48,14 +57,19 @@
 
 ;; A minor-mode menu for mode-line
 (use-package minions
+  :straight t
+  :ensure t
   :hook (doom-modeline-mode . minions-mode))
 
 ;; Icons
-(use-package nerd-icons)
+(use-package nerd-icons
+  :straight t
+  :ensure t)
 ;;(use-package all-the-icons)
 
 (use-package display-line-numbers
-  :ensure nil
+  :straight t
+  :ensure t
   :hook ((prog-mode yaml-mode conf-mode) . display-line-numbers-mode)
   :init (setq display-line-numbers-width-start t))
 
@@ -76,7 +90,8 @@
 (add-hook 'window-setup-hook #'window-divider-mode)
 
 (use-package time
-  :ensure nil
+  :straight t
+  :ensure t
   :init (setq display-time-24hr-format t
               display-time-day-and-date t))
 
@@ -96,22 +111,30 @@
 (if (fboundp 'pixel-scroll-precision-mode)
     (pixel-scroll-precision-mode t)
     (use-package good-scroll
-      :diminish
+      :straight t
+      :ensure t
       :hook (after-init . good-scroll-mode)
       :bind (([remap next] . good-scroll-up-full-screen)
              ([remap prior] . good-scroll-down-full-screen))))
 
 ;; Smooth scrolling over images
 (use-package iscroll
-  :diminish
+  :straight t
+  :ensure t
+  :defer t
   :hook (image-mode . iscroll-mode))
 
 ;; Use fixed pitch where it's sensible
 (use-package mixed-pitch
-  :diminish)
+  :straight t
+  :ensure t
+  :defer t)
 
 ;; Display ugly ^L page breaks as tidy horizontal lines
 (use-package page-break-lines
+  :straight t
+  :ensure t
+  :defer t
   :diminish
   :hook (after-init . global-page-break-lines-mode)
   :config ;; display only half fix.
@@ -120,15 +143,14 @@
                     (face-attribute 'default :family)))
 (use-package form-feed
   :disabled
-  :diminish
   :hook (after-init . global-form-feed-mode))
 
 ;; emoji
 (use-package emojify
+  :straight t
+  :ensure t
   :defer t
   :init (global-emojify-mode 1))
-
-
 
 (provide 'init-ui)
 ;;; init-ui.el ends here.
