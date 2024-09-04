@@ -80,21 +80,20 @@ Otherwise the startup will be very slow. "
 (require 'init-eshell)
 
 ;;;; markdown
-;;(require 'init-markdown)
+(require 'init-markdown)
 ;;(require 'init-org)
-;;(require 'init-reader)
-;;
-;;;;
-;;(require 'init-dict)
-;;
-;;;; docker
-;;(when ON-LINUX
-;;  (require 'init-docker))
-;;;; utils
-;;(require 'init-utils)
+(require 'init-reader)
+
 ;;
 ;; (require 'init-dict) ;; will be removed
 
+;; docker
+(when ON-LINUX
+ (require 'init-docker))
+;; utils
+(require 'init-utils)
+
+;; Programming
 ;;(require 'init-vcs)
 ;;(require 'init-flycheck)
 ;;(require 'init-eglot)
