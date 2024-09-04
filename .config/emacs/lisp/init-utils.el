@@ -1,14 +1,14 @@
 ;;; init-utils.el -*- lexical-binding: t -*-
-(use-package rg)
-;; Nice writing
-(use-package olivetti
-  :diminish
-  :bind ("<f7>" . olivetti-mode)
-  :hook (org-mode markdown-mode)
-  :init (setq olivetti-body-width 0.62))
+(use-package rg
+  :straight t
+  :ensure t
+  :defer t)
 
 ;; text mode directory tree
 (use-package ztree
+  :straight t
+  :ensure t
+  :defer t
   :custom-face
   (ztreep-header-face ((t (:inherit diff-header))))
   (ztreep-arrow-face ((t (:inherit font-lock-comment-face))))
@@ -46,6 +46,9 @@
               ztree-show-number-of-children t))
 
 (use-package list-environment
+  :straight t
+  :ensure t
+  :defer t
   :hook (list-environment-mode . (lambda ()
                                    (setq tabulated-list-format
                                          (vconcat `(("" ,(if (icons-displayable-p) 2 0)))
@@ -69,9 +72,9 @@
               process-environment))
     (advice-add #'list-environment-entries :override #'my-list-environment-entries)))
 
-(unless ON-WINDOWS
-  (use-package daemons)                 ; system services/daemons
-  (use-package tldr))
+;; (unless ON-WINDOWS
+;;   (use-package daemons)                 ; system services/daemons
+;;   (use-package tldr))
 
 
 (provide 'init-utils)

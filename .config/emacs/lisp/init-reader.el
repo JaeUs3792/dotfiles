@@ -1,9 +1,20 @@
 ;;; init-reader.el -*- lexical-binding: t -*-
-(use-package pdf-view
-  :ensure pdf-tools
-  :diminish (pdf-view-themed-minor-mode
-             pdf-view-midnight-minor-mode
-             pdf-view-printer-minor-mode)
+
+;; Nice reading / writing
+(use-package olivetti
+  :straight t
+  :ensure t
+  :defer t
+  :diminish
+  :bind ("<f7>" . olivetti-mode)
+  :hook ((markdown-mode . olivetti-mode)
+         (org-mode . olivetti-mode))
+  :init (setq olivetti-body-width 0.62))
+
+(use-package pdf-tools
+  :straight t
+  :ensure t
+  :defer t
   :defines pdf-annot-activate-created-annotations
   :hook ((pdf-tools-enabled . pdf-view-auto-slice-minor-mode)
          (pdf-tools-enabled . pdf-isearch-minor-mode)
@@ -11,15 +22,12 @@
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
   :magic ("%PDF" . pdf-view-mode)
   :bind (:map pdf-view-mode-map
-         ("C-s" . isearch-forward))
-  :init (setq pdf-view-use-scaling t
-              pdf-view-use-imagemagick nil
-              pdf-annot-activate-created-annotations t
-              pdf-view-display-size 'fit-page)
+              ("C-s" . isearch-forward))
+  :init
+  (pdf-tools-install)
   :config
-  ;; install manually
-  ;;(pdf-tools-install t nil t nil)
-  ;; my funtion
+  (setq-default pdf-view-display-size 'fit-page)
+  (setq-default pdf-view-resize-factor 1.1) ;; zoom in/out setting
   (defun my/pdf-view-open-in-zathura ()
     (interactive)
     (save-window-excursion
@@ -27,18 +35,23 @@
             (current-page (number-to-string (pdf-view-current-page))))
         (async-shell-command
          (format "zathura -P %s \"%s\"" current-page current-file))))
-    (message "Sent to zathura"))
-  ;; Recover last viewed position
-  (use-package pdf-view-restore
-    :defer t
-    :hook (pdf-view-mode . pdf-view-restore-mode)
-    :config
-    (setq pdf-view-restore-filename
-          (expand-file-name "pdf-view-restore" user-emacs-directory))))
+    (message "Sent to zathura")))
 
+;; Recover last viewed position
+(use-package pdf-view-restore
+  :straight t
+  :ensure t
+  :defer t
+  :hook (pdf-view-mode . pdf-view-restore-mode)
+  :config
+  (setq pdf-view-restore-filename
+        (expand-file-name "pdf-view-restore" user-emacs-directory)))
 
 ;; Epub reader
 (use-package nov
+  :straight t
+  :ensure t
+  :defer t
   :mode ("\\.epub\\'" . nov-mode)
   :hook (nov-mode . my-nov-setup)
   :init
@@ -66,9 +79,12 @@
                 process-coding-system-alist))))
 ;; Atom/RSS reader
 (use-package elfeed
+  :straight t
+  :ensure t
+  :defer t
   :pretty-hydra
   ((:title (pretty-hydra-title "Elfeed" 'faicon "nf-fa-rss_square" :face 'nerd-icons-orange)
-    :color amaranth :quit-key ("q" "C-g"))
+           :color amaranth :quit-key ("q" "C-g"))
    ("Search"
     (("c" elfeed-db-compact "compact db")
      ("g" elfeed-search-update--force "refresh")
@@ -99,11 +115,17 @@
   (push elfeed-db-directory recentf-exclude))
 
 (use-package elfeed-goodies
+  :straight t
+  :ensure t
+  :defer t
   :hook (after-init . elfeed-goodies/setup))
 (use-package elfeed-org
-  :hook (after-init . elfeed-org)
+  :straight t
+  :ensure t
+  :after elfeed
   :config
-  (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory))))
+  (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory)))
+  (elfeed-org))
 
 (provide 'init-reader)
 ;;; init-reader.el ends here

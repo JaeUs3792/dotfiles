@@ -67,7 +67,7 @@
    :mode-restore-function (lambda (_) (shell))
    :save-vars '(major-mode default-directory)))
 
-;; Project integration
+;; Project.el integration
 (use-package persp-mode-project-bridge
   :straight t
   :ensure t
