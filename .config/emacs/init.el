@@ -75,10 +75,10 @@ Otherwise the startup will be very slow. "
 (require 'init-persp)
 ;; (require 'init-window) ;; will be removed
 (require 'init-treemacs)
-;;
-;;;; shell
-;;(require 'init-eshell)
-;;
+
+;; shell
+(require 'init-eshell)
+
 ;;;; markdown
 ;;(require 'init-markdown)
 ;;(require 'init-org)
