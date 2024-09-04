@@ -4,6 +4,9 @@
 
 ;; Windows/buffers sets shared among frames + save/load.
 (use-package persp-mode
+  :straight t
+  :ensure t
+  :defer t
   :diminish
   :autoload (get-current-persp persp-contain-buffer-p)
   :hook (after-init . persp-mode)
@@ -13,7 +16,6 @@
               persp-kill-foreign-buffer-behaviour 'kill
               persp-auto-resume-time 0)
   :config
-
   (with-no-warnings
     ;; Don't save if the state is not loaded
     (defvar persp-state-loaded nil
@@ -66,43 +68,45 @@
    :save-vars '(major-mode default-directory)))
 
 ;; Project integration
+(use-package persp-mode-project-bridge
+  :straight t
+  :ensure t
+  :defer t
+  :autoload (persp-mode-project-bridge-find-perspectives-for-all-buffers
+             persp-mode-project-bridge-kill-perspectives)
+  :hook
+  (persp-mode-project-bridge-mode . (lambda ()
+                                      (if persp-mode-project-bridge-mode
+                                          (persp-mode-project-bridge-find-perspectives-for-all-buffers)
+                                        (persp-mode-project-bridge-kill-perspectives))))
+  (persp-mode . persp-mode-project-bridge-mode)
+  :init (when (icons-displayable-p)
+          (setq persp-mode-project-bridge-persp-name-prefix ""))
+  :config
+  (with-no-warnings
+    ;; HACK: Allow saving to files
+    (defun my-persp-mode-project-bridge-add-new-persp (name)
+      (let ((persp (persp-get-by-name name *persp-hash* :nil)))
+        (if (eq :nil persp)
+            (prog1
+                (setq persp (persp-add-new name))
+              (when persp
+                (set-persp-parameter 'persp-mode-project-bridge t persp)
+                (persp-add-buffer (cl-remove-if-not #'get-file-buffer (project-files (project-current)))
+                                  persp nil nil)))
+          persp)))
+    (advice-add #'persp-mode-project-bridge-add-new-persp
+                :override #'my-persp-mode-project-bridge-add-new-persp)
 
-  (use-package persp-mode-project-bridge
-    :autoload (persp-mode-project-bridge-find-perspectives-for-all-buffers
-               persp-mode-project-bridge-kill-perspectives)
-    :hook
-    (persp-mode-project-bridge-mode . (lambda ()
-                                        (if persp-mode-project-bridge-mode
-                                            (persp-mode-project-bridge-find-perspectives-for-all-buffers)
-                                          (persp-mode-project-bridge-kill-perspectives))))
-    (persp-mode . persp-mode-project-bridge-mode)
-    :init (when (icons-displayable-p)
-            (setq persp-mode-project-bridge-persp-name-prefix ""))
-    :config
-    (with-no-warnings
-      ;; HACK: Allow saving to files
-      (defun my-persp-mode-project-bridge-add-new-persp (name)
-        (let ((persp (persp-get-by-name name *persp-hash* :nil)))
-          (if (eq :nil persp)
-              (prog1
-                  (setq persp (persp-add-new name))
-                (when persp
-                  (set-persp-parameter 'persp-mode-project-bridge t persp)
-                  (persp-add-buffer (cl-remove-if-not #'get-file-buffer (project-files (project-current)))
-                                    persp nil nil)))
-            persp)))
-      (advice-add #'persp-mode-project-bridge-add-new-persp
-                  :override #'my-persp-mode-project-bridge-add-new-persp)
-
-      ;; HACK: Switch to buffer after switching perspective
-      (defun my-persp-mode-project-bridge-hook-switch (fn &rest _args)
-        "Switch to a perspective when hook is activated."
-        (let ((buf (current-buffer)))
-          (funcall fn)
-          (when (buffer-live-p buf)
-            (switch-to-buffer buf))))
-      (advice-add #'persp-mode-project-bridge-hook-switch
-                  :around #'my-persp-mode-project-bridge-hook-switch)))
+    ;; HACK: Switch to buffer after switching perspective
+    (defun my-persp-mode-project-bridge-hook-switch (fn &rest _args)
+      "Switch to a perspective when hook is activated."
+      (let ((buf (current-buffer)))
+        (funcall fn)
+        (when (buffer-live-p buf)
+          (switch-to-buffer buf))))
+    (advice-add #'persp-mode-project-bridge-hook-switch
+                :around #'my-persp-mode-project-bridge-hook-switch)))
 
 (provide 'init-persp)
 ;;; init-persp.el ends here

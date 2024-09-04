@@ -70,10 +70,10 @@ Otherwise the startup will be very slow. "
 (require 'init-bookmark)
 (require 'init-dashboard)
 (require 'init-dired)
-;;(require 'init-persp)
 (require 'init-highlight)
 (require 'init-ibuffer)
-;;(require 'init-window)
+(require 'init-persp)
+;; (require 'init-window) ;; will be removed
 (require 'init-treemacs)
 ;;
 ;;;; shell
@@ -93,7 +93,8 @@ Otherwise the startup will be very slow. "
 ;;;; utils
 ;;(require 'init-utils)
 ;;
-;;;; Programming
+;; (require 'init-dict) ;; will be removed
+
 ;;(require 'init-vcs)
 ;;(require 'init-flycheck)
 ;;(require 'init-eglot)
