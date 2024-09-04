@@ -94,7 +94,7 @@ Otherwise the startup will be very slow. "
 (require 'init-utils)
 
 ;; Programming
-;;(require 'init-vcs)
+(require 'init-vcs)
 ;;(require 'init-flycheck)
 ;;(require 'init-eglot)
 ;;(require 'init-ctags)
