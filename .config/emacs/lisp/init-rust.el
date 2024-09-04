@@ -32,18 +32,31 @@
 
 ;; Rust
 (use-package rustic
+  :straight t
+  :ensure t
+  :defer t
   :init
   (if ON-LINUX
       (setq rustic-analyzer-command '("~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
     (setq rustic-analyzer-command '("~/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin/rust-analyzer.exe")))
   (setq rustic-lsp-client 'eglot))
-(use-package rust-playground)
+(use-package rust-playground
+  :straight t
+  :ensure t
+  :defer t)
 (use-package toml-mode
+  :straight t
+  :ensure t
   :defer t
   :config
   (add-to-list 'auto-mode-alist '("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . toml-mode)))
 
-(provide 'init-rust)
+; org-babel integration ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package ob-rust
+  :straight t
+  :ensure t
+  :defer t)
 
+(provide 'init-rust)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-rust.el ends here
