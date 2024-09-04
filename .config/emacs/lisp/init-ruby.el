@@ -32,33 +32,54 @@
 
 ;; Integrate rbenv
 (use-package rbenv
+  :straight t
+  :ensure t
+  :defer t
   :hook (after-init . global-rbenv-mode)
   :init (setq rbenv-show-active-ruby-in-modeline nil))
 
 ;; YAML mode
-(use-package yaml-mode)
+(use-package yaml-mode
+  :straight t
+  :ensure t
+  :defer t)
 
 ;; Run a Ruby process in a buffer
 (use-package inf-ruby
+  :straight t
+  :ensure t
+  :defer t
   :hook ((ruby-mode . inf-ruby-minor-mode)
          (compilation-filter . inf-ruby-auto-enter)))
 
 ;; Ruby YARD comments
 (use-package yard-mode
+  :straight t
+  :ensure t
+  :defer t
   :diminish
   :hook (ruby-mode . yard-mode))
 
 ;; Ruby refactoring helpers
 (use-package ruby-refactor
+  :straight t
+  :ensure t
+  :defer t
   :diminish
   :hook (ruby-mode . ruby-refactor-mode-launch))
 
 ;; Yet Another RI interface for Emacs
 (use-package yari
+  :straight t
+  :ensure t
+  :defer t
   :bind (:map ruby-mode-map ([f1] . yari)))
 
 ;; RSpec
 (use-package rspec-mode
+  :straight t
+  :ensure t
+  :defer t
   :diminish
   :autoload rspec-install-snippets
   :hook (dired-mode . rspec-dired-mode)

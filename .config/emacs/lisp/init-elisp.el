@@ -18,9 +18,6 @@
   (when (boundp 'elisp-flymake-byte-compile-load-path)
     (add-to-list 'elisp-flymake-byte-compile-load-path load-path))
 
-  ;; Syntax highlighting of known Elisp symbols
-  (use-package highlight-defined
-    :hook ((emacs-lisp-mode inferior-emacs-lisp-mode) . highlight-defined-mode))
 
   (with-no-warnings
     ;; Align indent keywords
@@ -183,6 +180,13 @@ Lisp function does not specify a special indentation."
                 (revert-buffer nil t)))))))
     (bind-key "r" #'remove-hook-at-point help-mode-map)))
 
+;; Syntax highlighting of known Elisp symbols
+(use-package highlight-defined
+  :straight t
+  :ensure t
+  :defer t
+  :hook ((emacs-lisp-mode inferior-emacs-lisp-mode) . highlight-defined-mode))
+
 ;; Show function arglist or variable docstring
 ;; `global-eldoc-mode' is enabled by default.
 (use-package eldoc
@@ -191,6 +195,9 @@ Lisp function does not specify a special indentation."
 
 ;; A better *Help* buffer
 (use-package helpful
+  :straight t
+  :ensure t
+  :defer t
   :bind (([remap describe-function] . helpful-callable)
          ([remap describe-command]  . helpful-command)
          ([remap describe-variable] . helpful-variable)

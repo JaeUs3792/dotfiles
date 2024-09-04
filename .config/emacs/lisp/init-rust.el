@@ -54,8 +54,7 @@
 ; org-babel integration ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package ob-rust
   :straight t
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (provide 'init-rust)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

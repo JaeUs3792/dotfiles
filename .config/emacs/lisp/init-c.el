@@ -39,9 +39,9 @@
          ("<f12>" . compile))
   :init (setq-default c-basic-offset 4))
 
-(use-package c-ts-mode
-  :ensure nil
-  :init (setq c-ts-mode-indent-offset 4))
+;; (use-package c-ts-mode
+;;   :ensure nil
+;;   :init (setq c-ts-mode-indent-offset 4))
 
 (provide 'init-c)
 
