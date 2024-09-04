@@ -71,7 +71,13 @@
               (forward-line line))
           (eshell-view-file (pop args)))))
     (defalias 'eshell/more #'eshell/less))
-
+  (defun ju/get-prompt-path ()
+    (let* ((current-path (eshell/pwd))
+           (git-output (shell-command-to-string "git rev-parse --show-toplevel"))
+           (has-path (not (string-match "^fatal" git-output))))
+      (if (not has-path)
+          (abbreviate-file-name current-path)
+        (string-remove-prefix (file-name-directory git-output) current-path))))
   (defun ju/eshell-prompt ()
     (let ((current-branch (magit-get-current-branch)))
       (concat
@@ -79,6 +85,7 @@
        (propertize (system-name) 'face `(:foreground "#62aeed"))
        (propertize " ॐ " 'face `(:foreground "white"))
        (propertize (ju/get-prompt-path) 'face `(:foreground "#82cfd3"))
+
        (when current-branch
          (concat
           (propertize " • " 'face `(:foreground "white"))
@@ -88,10 +95,10 @@
        (if (= (user-uid) 0)
            (propertize "\n#" 'face `(:foreground "red2"))
          (propertize "\nλ" 'face `(:foreground "#aece4a")))
-       (propertize " " 'face `(:foreground "white"))))))
+       (propertize " " 'face `(:foreground "white")))))
 
-  ;; (setq eshell-prompt-function      'ju/eshell-prompt
-  ;;       eshell-prompt-regexp        "^λ "))
+  (setq eshell-prompt-function      'ju/eshell-prompt
+        eshell-prompt-regexp        "^λ "))
 
 
 ;;  Display extra information for prompt
