@@ -70,9 +70,9 @@ Otherwise the startup will be very slow. "
 (require 'init-bookmark)
 (require 'init-dashboard)
 (require 'init-dired)
-;;(require 'init-highlight)
-;;(require 'init-ibuffer)
 ;;(require 'init-persp)
+(require 'init-highlight)
+(require 'init-ibuffer)
 ;;(require 'init-window)
 (require 'init-treemacs)
 ;;
