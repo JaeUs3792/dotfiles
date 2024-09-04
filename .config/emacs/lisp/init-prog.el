@@ -10,7 +10,7 @@
 
 ;; Search tool
 (use-package grep
-  :ensure nil
+  :ensure nil ; built-in
   :autoload grep-apply-setting
   :config
   (cond
@@ -35,7 +35,7 @@
 
 ;;;; Cross-referencing commands
 (use-package xref
-  :ensure nil
+  :ensure nil ; built-in
   :config
   (with-no-warnings
     ;; Use faster search tool
@@ -53,6 +53,9 @@
 
 ;;;; Jump to definition
 (use-package dumb-jump
+  :straight t
+  :ensure t
+  :defer t
   :pretty-hydra
   ((:title (pretty-hydra-title "Dump Jump" 'faicon "nf-fa-anchor")
            :color blue :quit-key ("q" "C-g"))
@@ -77,17 +80,26 @@
         dumb-jump-selector 'ivy))
 
 ;; Code styles
-(use-package editorconfig
-  :diminish
-  :hook (after-init . editorconfig-mode))
+;; (use-package editorconfig
+;;   :straight t
+;;   :ensure t
+;;   :defer t
+;;   :diminish
+;;   :hook (after-init . editorconfig-mode))
 
 ;; Run commands quickly
 (use-package quickrun
+  :straight t
+  :ensure t
+  :defer t
   :bind (("C-<f5>" . quickrun)
          ("C-c X"  . quickrun)))
 
 ;; Browse devdocs.io documents using EWW
 (use-package devdocs
+  :straight t
+  :ensure t
+  :defer t
   :autoload (devdocs--installed-docs devdocs--available-docs)
   :bind (:map prog-mode-map
               ("M-<f1>" . devdocs-dwim)
@@ -140,45 +152,41 @@ Install the doc if it's not installed."
     (devdocs-lookup nil (thing-at-point 'symbol t))))
 
 ;;;; Misc. programming modes
-(use-package csv-mode)
-(use-package csharp-mode)
-;;(use-package cask-mode)
-(use-package cmake-mode)
-;;(use-package dart-mode)
-;;(use-package groovy-mode)
-;;(use-package julia-mode)
-(use-package lua-mode)
-;;(use-package mermaid-mode)
-;;(use-package plantuml-mode)
-(use-package rmsbolt)                   ; A compiler output viewer
-;;(use-package scala-mode)
-;;(use-package swift-mode)
-;;(use-package v-mode)
-;;(use-package vimrc-mode)
+(use-package csv-mode
+  :straight t
+  :ensure t
+  :defer t)
+(use-package csharp-mode
+  :straight t
+  :ensure t
+  :defer t)
+(use-package cmake-mode
+  :straight t
+  :ensure t
+  :defer t)
+(use-package lua-mode
+  :straight t
+  :ensure t
+  :defer t)
 
-;;(use-package protobuf-mode
-;;  :hook (protobuf-mode . (lambda ()
-;;                           (setq imenu-generic-expression
-;;                                 '((nil "^[[:space:]]*\\(message\\|service\\|enum\\)[[:space:]]+\\([[:alnum:]]+\\)" 2))))))
-
-;;(use-package nxml-mode
-;;  :ensure nil
-;;  :mode (("\\.xaml$" . xml-mode)))
-
-;; Batch Mode eXtras
+;; Windows Batch Mode eXtras
 (use-package bmx-mode
+  :straight t
+  :ensure t
+  :defer t
   :after company
   :diminish
   :hook (after-init . bmx-mode-setup-defaults))
 
-;; Fish shell
-(use-package fish-mode
-  :hook (fish-mode . (lambda ()
-                       (add-hook 'before-save-hook
-                                 #'fish_indent-before-save))))
-
-(use-package pkgbuild-mode)
-(use-package systemd)
+; arch PKGBUILD
+(use-package pkgbuild-mode
+  :straight t
+  :ensure t
+  :defer t)
+(use-package systemd
+  :straight t
+  :ensure t
+  :defer t)
 
 
 (provide 'init-prog)

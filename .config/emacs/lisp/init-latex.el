@@ -1,5 +1,7 @@
 ;;; init-latex.el -*- lexical-binding: t -*-
 (use-package auctex
+  :straight t
+  :ensure t
   :defer t
   :custom
   (TeX-auto-save t)

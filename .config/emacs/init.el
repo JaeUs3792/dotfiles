@@ -84,9 +84,6 @@ Otherwise the startup will be very slow. "
 (require 'init-org)
 (require 'init-reader)
 
-;;
-;; (require 'init-dict) ;; will be removed
-
 ;; docker
 (when ON-LINUX
  (require 'init-docker))
@@ -95,26 +92,24 @@ Otherwise the startup will be very slow. "
 
 ;; Programming
 (require 'init-vcs)
-;;(require 'init-flycheck)
-;;(require 'init-eglot)
-;;(require 'init-ctags)
-;;(require 'init-prog)
-;;
-;;(require 'init-elisp)
-;;(require 'init-c)
+(require 'init-flycheck)
+(require 'init-ctags)
+(require 'init-prog)
+
+(require 'init-elisp)
+(require 'init-c)
 (require 'init-rust)
-;;(require 'init-python)
-;;(require 'init-ruby)
-;;(require 'init-shell)
-;;
-;;(require 'init-latex)
-;;(require 'init-verilog)
-;;
-;;(require 'init-debug)
-;;
-;;(require 'init-extra)
+(require 'init-python)
+(require 'init-ruby)
+
+(require 'init-latex)
+(require 'init-verilog)
+
+(require 'init-debug)
+
+(require 'init-extra)
 (require 'init-chatgpt)
-;;
-;;(require 'init-copilot)
+
+(require 'init-copilot)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here

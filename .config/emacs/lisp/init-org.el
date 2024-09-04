@@ -155,7 +155,6 @@ prepended to the element after the #+HEADER: tag."
     '((emacs-lisp . t)
       (python     . t)
       (ruby       . t)
-      (rust       . t)
       (C          . t)
       (shell      . t))
     "Alist of org ob languages.")
