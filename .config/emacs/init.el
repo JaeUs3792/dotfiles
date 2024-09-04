@@ -81,7 +81,7 @@ Otherwise the startup will be very slow. "
 
 ;;;; markdown
 (require 'init-markdown)
-;;(require 'init-org)
+(require 'init-org)
 (require 'init-reader)
 
 ;;
@@ -102,7 +102,7 @@ Otherwise the startup will be very slow. "
 ;;
 ;;(require 'init-elisp)
 ;;(require 'init-c)
-;;(require 'init-rust)
+(require 'init-rust)
 ;;(require 'init-python)
 ;;(require 'init-ruby)
 ;;(require 'init-shell)
