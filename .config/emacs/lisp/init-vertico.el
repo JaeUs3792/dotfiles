@@ -57,13 +57,16 @@
   (completion-in-region-function #'consult-completion-in-region)
   :config
   (global-set-key (kbd "C-s") 'consult-line)
-  ;; HACK: https://github.com/Bad-ptr/persp-mode.el/issues/125
-  (with-eval-after-load "persp-mode-autoloads"
-    (defun my/consult-switch-to-buffer ()
-      "`consult-buffer' with buffers provided by persp."
-      (interactive)
-      (with-persp-buffer-list () (consult-buffer)))
-    (global-set-key (kbd "C-M-j") #'my/consult-switch-to-buffer)))
+  (defun my/consult-switch-to-buffer ()
+    "`consult-buffer' with buffers provided by persp."
+    (interactive)
+    (with-persp-buffer-list () (consult-buffer)))
+  (defun my/consult-project-switch-to-buffer ()
+    "`consult-project-buffer' with buffers provided by persp."
+    (interactive)
+    (with-persp-buffer-list () (consult-project-buffer)))
+  (global-set-key (kbd "C-M-j") #'my/consult-switch-to-buffer)
+  (global-set-key (kbd "C-M-h") #'my/consult-project-switch-to-buffer))
 
 (use-package orderless
   :straight t
