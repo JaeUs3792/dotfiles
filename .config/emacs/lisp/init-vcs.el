@@ -5,6 +5,7 @@
 ;; Git
 ;; See `magit-maybe-define-global-key-bindings'
 (use-package magit
+  :ensure nil
   :commands (magit-status magit-get-current-branch)
   :init (setq magit-diff-refine-hunk t)
   :config
@@ -27,50 +28,58 @@
                         (bury-buffer buf)
                       (kill-buffer buf))))
                 buffers))))
-    (setq magit-bury-buffer-function #'my-magit-kill-buffers))
+    (setq magit-bury-buffer-function #'my-magit-kill-buffers)))
 
-  ;; Show TODOs in magit
-  (use-package magit-todos
-    :defines magit-todos-nice
-    :commands magit-todos--scan-with-git-grep
-    :init
-    (setq magit-todos-nice (if (executable-find "nice") t nil))
-    (setq magit-todos-scanner #'magit-todos--scan-with-git-grep)
-    (setq magit-todos-exclude-globs '(".git/" "*.json" "*.js"))
-    (let ((inhibit-message t))
-      (magit-todos-mode 1))))
+;; Show TODOs in magit
+(use-package magit-todos
+  :straight t
+  :ensure t
+  :defines magit-todos-nice
+  :commands magit-todos--scan-with-git-grep
+  :init
+  (setq magit-todos-nice (if (executable-find "nice") t nil))
+  (setq magit-todos-scanner #'magit-todos--scan-with-git-grep)
+  (setq magit-todos-exclude-globs '(".git/" "*.json" "*.js"))
+  (let ((inhibit-message t))
+    (magit-todos-mode 1)))
 
 ;; Walk through git revisions of a file
 (use-package git-timemachine
+  :straight t
+  :ensure t
+  :defer t
   :custom-face
   (git-timemachine-minibuffer-author-face ((t (:inherit success :foreground unspecified))))
   (git-timemachine-minibuffer-detail-face ((t (:inherit warning :foreground unspecified))))
-  :hook ((git-timemachine-mode . (lambda ()
-                                   "Improve `git-timemachine' buffers."
-                                   ;; Display different colors in mode-line
-                                   (if (facep 'mode-line-active)
-                                       (face-remap-add-relative 'mode-line-active 'custom-state)
-                                     (face-remap-add-relative 'mode-line 'custom-state))
+  :hook ((git-timemachine-mode
+          . (lambda ()
+              "Improve `git-timemachine' buffers."
+              ;; Display different colors in mode-line
+              (if (facep 'mode-line-active)
+                  (face-remap-add-relative 'mode-line-active 'custom-state)
+                (face-remap-add-relative 'mode-line 'custom-state))
 
-                                   ;; Highlight symbols in elisp
-                                   (and (derived-mode-p 'emacs-lisp-mode)
-                                        (fboundp 'highlight-defined-mode)
-                                        (highlight-defined-mode t))
+              ;; Highlight symbols in elisp
+              (and (derived-mode-p 'emacs-lisp-mode)
+                   (fboundp 'highlight-defined-mode)
+                   (highlight-defined-mode t))
 
-                                   ;; Display line numbers
-                                   (and (derived-mode-p 'prog-mode 'yaml-mode)
-                                        (fboundp 'display-line-numbers-mode)
-                                        (display-line-numbers-mode t))))
+              ;; Display line numbers
+              (and (derived-mode-p 'prog-mode 'yaml-mode)
+                   (fboundp 'display-line-numbers-mode)
+                   (display-line-numbers-mode t))))
          (before-revert . (lambda ()
                             (when (bound-and-true-p git-timemachine-mode)
                               (user-error "Cannot revert the timemachine buffer"))))))
 ;; Resolve diff3 conflicts
 (use-package smerge-mode
-  :ensure nil
+  :straight t
+  :ensure t
+  :defer t
   :diminish
   :pretty-hydra
   ((:title (pretty-hydra-title "Smerge" 'octicon "nf-oct-diff")
-    :color pink :quit-key ("q" "C-g"))
+           :color pink :quit-key ("q" "C-g"))
    ("Move"
     (("n" smerge-next "next")
      ("p" smerge-prev "previous"))
@@ -97,7 +106,7 @@
              (bury-buffer))
       "Save and bury buffer" :exit t))))
   :bind (:map smerge-mode-map
-         ("C-c m" . smerge-mode-hydra/body))
+              ("C-c m" . smerge-mode-hydra/body))
   :hook ((find-file . (lambda ()
                         (save-excursion
                           (goto-char (point-min))
@@ -108,11 +117,17 @@
                                       (smerge-mode-hydra/body))))))
 ;; Open github/gitlab/bitbucket page
 (use-package browse-at-remote
+  :straight t
+  :ensure t
+  :defer t
   :bind (:map vc-prefix-map
-         ("B" . browse-at-remote)))
+              ("B" . browse-at-remote)))
 
-;; Git configuration modes
-(use-package git-modes)
+;; Git configuration modes (ex: gitignore gitattributes gitconfig)
+(use-package git-modes
+  :straight t
+  :ensure t
+  :defer t)
 
 
 (provide 'init-vcs)
