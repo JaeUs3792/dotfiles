@@ -21,12 +21,17 @@
 
   ;; Show directory first
   (setq dired-listing-switches "-alh --group-directories-first")
+  (if (executable-find "fd")
+      (evil-collection-define-key 'normal 'dired-mode-map
+        "f" 'fd-dired)
+    (evil-collection-define-key 'normal 'dired-mode-map
+      "f" 'find-dired))
   (evil-collection-define-key 'normal 'dired-mode-map
-                              "." 'dired-omit-mode
-                              "h" 'dired-single-up-directory
-                              "l" 'dired-single-buffer
-                              ")" 'dired-git-info-mode
-                              "s" 'hydra-dired-quick-sort/body))
+    "." 'dired-omit-mode
+    "h" 'dired-single-up-directory
+    "l" 'dired-single-buffer
+    ")" 'dired-git-info-mode
+    "s" 'hydra-dired-quick-sort/body))
 
 ;; Quick sort dired buffers via hydra
 (use-package dired-quick-sort
@@ -67,12 +72,12 @@
 
 ;; Extra Dired functionality
 (use-package dired-aux ; built-in package
-             :ensure nil)
+  :ensure nil)
 
 (use-package dired-single
-             :straight t
-             :ensure t
-             :defer t
+  :straight t
+  :ensure t
+  :defer t
   :commands (dired dired-jump))
 
 
