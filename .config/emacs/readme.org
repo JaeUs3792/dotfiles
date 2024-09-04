@@ -1,0 +1,12 @@
+* Need program list
+** DIRED
+*** DIRED-RSYNC
+RSYNC
+*** DIRED-FD
+FD
++ Ubuntu : fd-find
+** Org
+*** OB-RUST
+rust script
++ Cargo install rust-script
+
