@@ -50,7 +50,6 @@
   :straight t
   :ensure t
   :hook (((completion-list-mode
-           completion-in-region-mode
            eshell-mode shell-mode
            term-mode vterm-mode
            treemacs-mode
