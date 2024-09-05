@@ -248,14 +248,14 @@ prepended to the element after the #+HEADER: tag."
   :config
   (setq org-modern-table nil)
   (setq org-modern-todo-faces
-        (quote (("TODO" :background "#E6DA73" :foreground "black")
-                ("PROJ" :background "#50B7D9" :foreground "black")
-                ("STRT" :background "#A1DC2D" :foreground "black")
-                ("WAIT" :background "#9E54FD" :foreground "black")
-                ("HOLD" :background "#9E54FD" :foreground "black")
-                ("IDEA" :background "#FF7F00" :foreground "black")
-                ("DONE" :background "#C7C7C7" :foreground "black")
-                ("KILL" :background "#C7C7C7" :foreground "black")))))
+        (quote (("TODO" :background "#E6DA73" :foreground "#666666")
+                ("PROJ" :background "#50B7D9" :foreground "#666666")
+                ("STRT" :background "#A1DC2D" :foreground "#666666")
+                ("WAIT" :background "#9E54FD" :foreground "#666666")
+                ("HOLD" :background "#9E54FD" :foreground "#666666")
+                ("IDEA" :background "#FF7F00" :foreground "#666666")
+                ("DONE" :background "#C7C7C7" :foreground "#666666")
+                ("KILL" :background "#C7C7C7" :foreground "#666666")))))
 
 (use-package valign
   :straight t
