@@ -246,7 +246,16 @@ prepended to the element after the #+HEADER: tag."
   :hook ((org-mode . org-modern-mode)
          (org-agenda-finalize . org-modern-agenda))
   :config
-  (setq org-modern-table nil))
+  (setq org-modern-table nil)
+  (setq org-modern-todo-faces
+        (quote (("TODO" :background "#E6DA73" :foreground "black")
+                ("PROJ" :background "#50B7D9" :foreground "black")
+                ("STRT" :background "#A1DC2D" :foreground "black")
+                ("WAIT" :background "#9E54FD" :foreground "black")
+                ("HOLD" :background "#9E54FD" :foreground "black")
+                ("IDEA" :background "#FF7F00" :foreground "black")
+                ("DONE" :background "#C7C7C7" :foreground "black")
+                ("KILL" :background "#C7C7C7" :foreground "black")))))
 
 (use-package valign
   :straight t
