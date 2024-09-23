@@ -1,10 +1,12 @@
 ;; init-chatgpt.el -*- lexical-binding: t -*-
-(use-package chatgpt-shell
+(use-package gptel
+  :straight t
+  :ensure t
+  :defer t
   :config
-  (setq chatgpt-shell-openai-key custom-chatgpt-my-key))
-(use-package dall-e-shell
-  :config
-  (setq dall-e-shell-openai-key custom-chatgpt-my-key))
+  (setq gptel-model "gpt-4o-mini")
+  (setq gptel-api-key custom-chatgpt-my-key))
+
 
 (provide 'init-chatgpt)
 ;;; init-chatgpt.el ends here

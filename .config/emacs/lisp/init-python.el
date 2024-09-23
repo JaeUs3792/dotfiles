@@ -49,13 +49,19 @@
 
   ;; Env vars
   (with-eval-after-load 'exec-path-from-shell
-    (exec-path-from-shell-copy-env "PYTHONPATH"))
+    (exec-path-from-shell-copy-env "PYTHONPATH")))
 
-  ;; Live Coding in Python
-  (use-package live-py-mode))
+;; Live Coding in Python
+(use-package live-py-mode
+  :straight t
+  :ensure t
+  :defer t)
 
 (when ON-LINUX
-  (use-package jupyter))
+  (use-package jupyter
+    :straight t
+    :ensure t
+    :defer t))
 
 (provide 'init-python)
 

@@ -4,12 +4,12 @@
 (require 'init-custom)
 
 (use-package org
-  :ensure nil
+  :ensure nil ; built-in
   :custom-face (org-ellipsis ((t (:foreground unspecified))))
   :pretty-hydra
   ;; See `org-structure-template-alist'
   ((:title (pretty-hydra-title "Org Template" 'sucicon "nf-custom-orgmode" :face 'nerd-icons-green)
-    :color blue :quit-key ("q" "C-g"))
+           :color blue :quit-key ("q" "C-g"))
    ("Basic"
     (("a" (hot-expand "<a") "ascii")
      ("c" (hot-expand "<c") "center")
@@ -145,31 +145,9 @@ prepended to the element after the #+HEADER: tag."
         org-startup-indented t
         org-ellipsis (if (char-displayable-p ?⏷) "\t⤵" nil)
         org-pretty-entities nil
-        org-hide-emphasis-markers t)
+        org-hide-emphasis-markers t
 
-
-
-  (use-package org-journal
-    :defer t
-    :config
-    (setq org-journal-dir (expand-file-name "journal/" org-directory))
-    (setq org-journal-file-type 'weekly))
-
-  ;; Add new template
-  (add-to-list 'org-structure-template-alist '("n" . "note"))
-
-  (use-package org-modern
-    :hook ((org-mode . org-modern-mode)
-            (org-agenda-finalize . org-modern-agenda))
-    :config
-    (setq org-modern-table nil))
-
-  (use-package valign
-    :hook (org-mode . valign-mode)
-    :custom
-    (valign-fancy-bar t))
-
-  (setq org-confirm-babel-evaluate nil
+        org-confirm-babel-evaluate nil
         org-src-fontify-natively t
         org-src-tab-acts-natively t)
 
@@ -177,8 +155,8 @@ prepended to the element after the #+HEADER: tag."
     '((emacs-lisp . t)
       (python     . t)
       (ruby       . t)
-      (rust       . t)
-      (C          . t))
+      (C          . t)
+      (shell      . t))
     "Alist of org ob languages.")
   ;;(unless ON-WINDOWS
   ;;  (add-to-list 'load-language-alist '(latex-as-png . t)))
@@ -194,70 +172,13 @@ prepended to the element after the #+HEADER: tag."
   (add-to-list 'org-structure-template-alist '("oc" . "src octave"))
   (add-to-list 'org-structure-template-alist '("vl" . "src verilog"))
   (add-to-list 'org-structure-template-alist '("vh" . "src vhdl"))
+  (add-to-list 'org-structure-template-alist '("n" . "note"))
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               load-language-alist)
 
   ;; ob-sh renamed to ob-shell since 26.1.
   (cl-pushnew '(shell . t) load-language-alist)
-
-  (use-package ob-go
-    :init (cl-pushnew '(go . t) load-language-alist))
-
-  (use-package ob-rust
-    :init (cl-pushnew '(rust . t) load-language-alist))
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               load-language-alist)
-  ;; Auto-toggle Org LaTeX fragments
-  (use-package org-fragtog
-    :diminish
-    :hook (org-mode . org-fragtog-mode))
-  ;; Make invisible parts of Org elements appear visible.
-  (use-package org-appear
-    :hook (org-mode)
-    :config
-    (setq org-appear-autoemphasis   t
-          org-appear-autolinks      t
-          org-appear-autoentities   t
-          org-appear-autosubmarkers t))
-  ;; Presentation
-  (use-package org-tree-slide
-    :diminish
-    :functions (org-display-inline-images
-                org-remove-inline-images)
-    :bind (:map org-mode-map
-                ("s-<f7>" . org-tree-slide-mode))
-    :hook ((org-tree-slide-play . (lambda ()
-                                    (text-scale-increase 4)
-                                    (org-display-inline-images)
-                                    (read-only-mode 1)))
-           (org-tree-slide-stop . (lambda ()
-                                    (text-scale-increase 0)
-                                    (org-remove-inline-images)
-                                    (read-only-mode -1))))
-    :init (setq org-tree-slide-header nil
-                org-tree-slide-slide-in-effect t
-                org-tree-slide-heading-emphasis nil
-                org-tree-slide-cursor-init t
-                org-tree-slide-modeline-display 'outside
-                org-tree-slide-skip-done nil
-                org-tree-slide-skip-comments t
-                org-tree-slide-skip-outline-level 3))
-  ;; support drawio
-  (use-package org-drawio
-    :commands (org-drawio-add
-               org-drawio-open)
-    :custom ((org-drawio-input-dir "./draws")
-             (org-drawio-output-dir "./images")
-             (org-drawio-output-page "0")
-             ;; set to t, if you want to crop the image.
-             (org-drawio-crop t)))
-; attachment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (use-package org-contrib ;; to use org-screenshot-take
-    :defer t)
-  (use-package org-attach-screenshot
-    :defer t)
-  (use-package org-download
-    :defer t)
-  (use-package ob-latex-as-png
-    :ensure t)
+; useful functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (defun my/org-remove-link-and-trash-linked-file ()
     "Remove `org-mode' link at point and trash linked file."
     (interactive)
@@ -303,40 +224,128 @@ prepended to the element after the #+HEADER: tag."
         (user-error
          "Error pasting the image, make sure you have an image in the clipboard!"))))
   (defun org-time-stamp-with-time()
-        "Insert org mode timestamp at point with current date and time"
-        (interactive)
-        (org-insert-time-stamp (current-time) t))
-; org-roam ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (use-package org-roam
-    :demand t ;; ensure org-roam is loaded by default
-    :custom
-    (org-roam-directory custom-org-roam-directory)
-    (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
-    ;;(org-roam-completion-everywhere t)
-    :config
-    (setq org-roam-capture-templates
-          '(("d" "default" plain "%?"
-             :target
-             (file+head
-              "%<%Y%m%d%H%M%S>-${slug}.org"
-              "#+title: ${title}\n")
-             :unnarrowed t)
-            ("p" "project" plain "* TODO %?"
-             :target
-             (file+head+olp
-              "%<%Y%m%d%H%M%S>-${slug}.org"
-              "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
-              ("Tasks"))
-             :unnarrowed t)))
-    (org-roam-db-autosync-mode))
-  ;; Org roam ui
-  (use-package org-roam-ui
-    :defer t
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil))
+    "Insert org mode timestamp at point with current date and time"
+    (interactive)
+    (org-insert-time-stamp (current-time) t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                            Org mode improvement                            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package org-journal
+  :straight t
+  :ensure t
+  :defer t
+  :config
+  (setq org-journal-dir (expand-file-name "journal/" org-directory))
+  (setq org-journal-file-type 'weekly))
+
+(use-package org-modern
+  :straight t
+  :ensure t
+  :defer t
+  :hook ((org-mode . org-modern-mode)
+         (org-agenda-finalize . org-modern-agenda))
+  :config
+  (setq org-modern-table nil)
+  (setq org-modern-todo-faces
+        (quote (("TODO" :background "#E6DA73" :foreground "#666666")
+                ("PROJ" :background "#50B7D9" :foreground "#666666")
+                ("STRT" :background "#A1DC2D" :foreground "#666666")
+                ("WAIT" :background "#9E54FD" :foreground "#666666")
+                ("HOLD" :background "#9E54FD" :foreground "#666666")
+                ("IDEA" :background "#FF7F00" :foreground "#666666")
+                ("DONE" :background "#C7C7C7" :foreground "#666666")
+                ("KILL" :background "#C7C7C7" :foreground "#666666")))))
+
+(use-package valign
+  :straight t
+  :ensure t
+  :defer t
+  :hook (org-mode . valign-mode)
+  :custom
+  (valign-fancy-bar t))
+
+
+;; Auto-toggle Org LaTeX fragments
+(use-package org-fragtog
+  :straight t
+  :ensure t
+  :defer t
+  :diminish
+  :hook (org-mode . org-fragtog-mode))
+;; Make invisible parts of Org elements appear visible.
+(use-package org-appear
+  :straight t
+  :ensure t
+  :defer t
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis   t
+        org-appear-autolinks      t
+        org-appear-autoentities   t
+        org-appear-autosubmarkers t))
+;; support drawio
+(use-package org-drawio
+  :straight t
+  :ensure t
+  :defer t
+  :commands (org-drawio-add
+             org-drawio-open)
+  :custom ((org-drawio-input-dir "./draws")
+           (org-drawio-output-dir "./images")
+           (org-drawio-output-page "0")
+           ;; set to t, if you want to crop the image.
+           (org-drawio-crop t)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                             Org mode attachment                            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package org-contrib ;; to use org-screenshot-take
+  :straight t
+  :ensure t
+  :defer t
+  :defer t)
+(use-package org-attach-screenshot
+  :straight t
+  :ensure t
+  :defer t
+  :defer t)
+(use-package org-download
+  :straight t
+  :ensure t
+  :defer t
+  :defer t)
+(use-package ob-latex-as-png
+  :straight t
+  :ensure t
+  :defer t
+  :ensure t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                  Org roam                                  ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package org-roam
+  :straight t
+  :ensure t
+  :defer t
+  :demand t ;; ensure org-roam is loaded by default
+  :custom
+  (org-roam-directory custom-org-roam-directory)
+  (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
+  ;;(org-roam-completion-everywhere t)
+  :config
+  (setq org-roam-capture-templates
+        '(("d" "default" plain "%?"
+           :target
+           (file+head
+            "%<%Y%m%d%H%M%S>-${slug}.org"
+            "#+title: ${title}\n")
+           :unnarrowed t)
+          ("p" "project" plain "* TODO %?"
+           :target
+           (file+head+olp
+            "%<%Y%m%d%H%M%S>-${slug}.org"
+            "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
+            ("Tasks"))
+           :unnarrowed t)))
   ;; functions
   (defun my/org-roam-rg-search ()
     "Search org-roam directory using consult-ripgrep. With live-preview."
@@ -365,33 +374,45 @@ prepended to the element after the #+HEADER: tag."
     (unless org-note-abort
       (with-current-buffer (org-capture-get :buffer)
         (add-to-list 'org-agenda-files (buffer-file-name)))))
-; Tools   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (use-package ob-async
-    :config
-    (setq ob-async-no-async-languages-alist '("ipython")))
-  (unless ON-WINDOWS
-    (use-package org-pdftools
-      :hook (org-mode . org-pdftools-setup-link)))
-; Exporter   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (use-package ox-hugo
-    :defer t
-    :after ox)
-  (setq org-latex-minted-options '(("breaklines" "true")
-                                   ("tabsize" "4")
-                                   ("autogobble")
-                                   ("breakanywhere" "true")
-                                   ("bgcolor" "gray!40")
-                                   ("frame" "single")
-                                   ("numbers" "left")))
-  (setq org-latex-listings 'minted
-        org-latex-packages-alist '(("" "minted"))
-        org-latex-pdf-process
-        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -interaction nonstopmode -output-directory %o %f"))
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes
-                 '("article"
-                   "\\documentclass[11pt,a4paper]{article}
+
+  ; database sync
+  (org-roam-db-autosync-mode))
+;; Org roam ui
+(use-package org-roam-ui
+  :straight t
+  :ensure t
+  :defer t
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start nil))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                              Org mode exporter                             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package ox-hugo
+  :straight t
+  :ensure t
+  :defer t
+  :after ox)
+
+(setq org-latex-minted-options
+      '(("breaklines" "true")
+        ("tabsize" "4")
+        ("autogobble")
+        ("breakanywhere" "true")
+        ("bgcolor" "gray!40")
+        ("frame" "single")
+        ("numbers" "left")))
+(setq org-latex-listings 'minted
+      org-latex-packages-alist '(("" "minted"))
+      org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -interaction nonstopmode -output-directory %o %f"))
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+               '("article"
+                 "\\documentclass[11pt,a4paper]{article}
     \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
     [DEFAULT-PACKAGES]
     \\usepackage{kotex}
@@ -399,13 +420,13 @@ prepended to the element after the #+HEADER: tag."
     [EXTRA]
     \\linespread{1.1}
     \\hypersetup{pdfborder=0 0 0}"
-                   ("\\section{%s}" . "\\section*{%s}")
-                   ("\\subsection{%s}" . "\\subsection*{%s}")
-                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                   ("\\paragraph{%s}" . "\\paragraph*{%s}")))
-    (add-to-list 'org-latex-classes
-                 '("org-plain-latex"
-                   "\\documentclass[a4paper,11pt,titlepage]{memoir}
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")))
+  (add-to-list 'org-latex-classes
+               '("org-plain-latex"
+                 "\\documentclass[a4paper,11pt,titlepage]{memoir}
   \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
   [DEFAULT-PACKAGES]
   \\usepackage{kotex}
@@ -413,16 +434,29 @@ prepended to the element after the #+HEADER: tag."
   [EXTRA]
   \\linespread{1.1}
   \\hypersetup{pdfborder=0 0 0}"
-                   ("\\chapter{%s}" . "\\chapter*{%s}")
-                   ("\\section{%s}" . "\\section*{%s}")
-                   ("\\subsection{%s}" . "\\subsection*{%s}")
-                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
-;; support calendar
-(use-package calfw)
-(use-package calfw-org
-  :after calfw)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                              Org babel related                             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package ob-async
+  :straight t
+  :ensure t
+  :config
+  (setq ob-async-no-async-languages-alist '("ipython")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                    Tools                                   ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(unless ON-WINDOWS
+  (use-package org-pdftools
+    :straight t
+    :ensure t
+    :defer t
+    :hook (org-mode . org-pdftools-setup-link)))
 (provide 'init-org)
 ;;; init-org.el ends here

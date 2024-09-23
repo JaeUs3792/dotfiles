@@ -3,7 +3,7 @@
 (require 'init-funcs)
 
 (use-package hl-line
-  :ensure nil
+  :ensure nil ;; built-in package
   :hook ((after-init . global-hl-line-mode)
          ((dashboard-mode eshell-mode shell-mode term-mode vterm-mode) .
           (lambda () (setq-local global-hl-line-mode nil))))
@@ -11,6 +11,9 @@
   (set-face-background 'hl-line "gray8"))
 
 (use-package symbol-overlay
+  :straight t
+  :ensure t
+  :defer t
   :diminish
   :custom-face
   ;;(symbol-overlay-default-face ((t (:inherit region :background unspecified :foreground unspecified))))
@@ -43,10 +46,15 @@
       (interactive)
       (when (derived-mode-p 'prog-mode 'yaml-mode)
         (symbol-overlay-mode 1)))
-    (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay)))
+    (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay))
+    (define-key symbol-overlay-map (kbd "h") nil)
+    (define-key symbol-overlay-map (kbd "g") 'symbol-overlay-map-help))
 
 ;; Colorize color names in buffers
 (use-package rainbow-mode
+  :straight t
+  :ensure t
+  :defer t
   :diminish
   :defines helpful-mode-map
   :bind (:map help-mode-map
@@ -74,10 +82,16 @@
 
 ;; Highlight brackets according to their depth
 (use-package rainbow-delimiters
+  :straight t
+  :ensure t
+  :defer t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; keywords from doom-emacs
 (use-package hl-todo
+  :straight t
+  :ensure t
+  :defer t
   :custom-face
   (hl-todo ((t (:inherit default :height 0.9 :width condensed :weight bold :underline nil :inverse-video t))))
   :hook (after-init . global-hl-todo-mode)
@@ -110,6 +124,9 @@
     (add-to-list 'hl-todo-keyword-faces `(,keyword . "#8d9eaf"))))
 
 (use-package diff-hl
+  :straight t
+  :ensure t
+  :defer t
   :hook ((after-init . global-diff-hl-mode)
          (magit-post-refresh . diff-hl-magit-post-refresh)
          (dired-mode . diff-hl-dired-mode-unless-remote))
@@ -143,7 +160,7 @@
       (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))))
 ;; Pulse current line
 (use-package pulse
-  :ensure nil
+  :ensure nil ;; built-in
   :custom-face
   (pulse-highlight-start-face ((t (:inherit region :background unspecified))))
   (pulse-highlight-face ((t (:inherit region :background unspecified :extend t))))

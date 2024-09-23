@@ -1,7 +1,7 @@
 ;; init-verilog.el -*- lexical-binding: t -*-
 
 (use-package verilog-mode
-  :ensure nil
+  :ensure nil ; built-in
   :init
   (setq verilog-indent-level 4)
   (setq verilog-indent-level-module 0)
@@ -13,6 +13,9 @@
   (setq verilog-case-indent 4)
   (setq verilog-auto-newline nil))
 (use-package verilog-ext
+  :straight t
+  :ensure t
+  :defer t
   :hook ((verilog-mode . verilog-ext-mode))
   :init
   ;; Can also be set through `M-x RET customize-group RET verilog-ext':
@@ -24,7 +27,7 @@
   (setq verilog-ext-feature-list
         '(font-lock
           xref
-          ;; capf
+          capf
           hierarchy
           eglot
           ;; lsp
@@ -32,14 +35,14 @@
           beautify
           navigation
           template
-          formatter
+          ;; formatter
           compilation
           imenu
           which-func
           hideshow
           typedefs
           time-stamp
-          block-end-comments
+          ;; block-end-comments
           ports))
   :config
   (verilog-ext-mode-setup))

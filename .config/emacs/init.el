@@ -73,30 +73,26 @@ Otherwise the startup will be very slow. "
 (require 'init-highlight)
 (require 'init-ibuffer)
 (require 'init-persp)
-(require 'init-window)
+;; (require 'init-window) ;; will be removed
 (require 'init-treemacs)
 
 ;; shell
 (require 'init-eshell)
 
-;; markdown
+;;;; markdown
 (require 'init-markdown)
 (require 'init-org)
 (require 'init-reader)
 
-;;
-(require 'init-dict)
-
 ;; docker
 (when ON-LINUX
-  (require 'init-docker))
+ (require 'init-docker))
 ;; utils
 (require 'init-utils)
 
 ;; Programming
 (require 'init-vcs)
 (require 'init-flycheck)
-(require 'init-eglot)
 (require 'init-ctags)
 (require 'init-prog)
 
@@ -105,7 +101,6 @@ Otherwise the startup will be very slow. "
 (require 'init-rust)
 (require 'init-python)
 (require 'init-ruby)
-(require 'init-shell)
 
 (require 'init-latex)
 (require 'init-verilog)
@@ -114,5 +109,7 @@ Otherwise the startup will be very slow. "
 
 (require 'init-extra)
 (require 'init-chatgpt)
+
+(require 'init-copilot)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here

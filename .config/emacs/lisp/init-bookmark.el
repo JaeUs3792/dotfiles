@@ -1,7 +1,7 @@
 ;;; init-bookmark.el -*- lexical-binding: t -*-
 ;; Bookmark
 (use-package bookmark
-  :ensure nil
+  :ensure nil ; emacs built-in
   :config
   (with-no-warnings
     ;; Display icons for bookmarks

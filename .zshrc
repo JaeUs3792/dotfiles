@@ -35,11 +35,9 @@ alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 alias startsv="ssh odroid startsv"
 alias stopsv="ssh odroid stopsv"
 
-alias ls="exa -al --color=always --group-directories-first"
-alias la="exa -a --color=always --group-directories-first"
-alias ll="exa -l --color=always --group-directories-first"
-alias lt="exa -aT --color=always --group-directories-first"
-alias l.='exa -a | egrep "^\."'
+alias ls="eza -a --icons"
+alias ll="eza -al --icons"
+alias lt="eza -a --tree --level=1 --icons"
 
 # WSL2
 if [[ $JUPCID == "WSL" ]];then
