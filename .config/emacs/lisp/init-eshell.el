@@ -1,7 +1,7 @@
 ;;; init-eshell.el -*- lexical-binding: t -*-
 ;; Emacs command shell
 (use-package eshell
-  :ensure nil
+  :ensure nil ; built-in
   :defines eshell-prompt-function
   :bind (:map eshell-mode-map
               ([remap recenter-top-bottom] . eshell/clear))
@@ -71,44 +71,60 @@
               (forward-line line))
           (eshell-view-file (pop args)))))
     (defalias 'eshell/more #'eshell/less))
+  (defun ju/get-prompt-path ()
+    (let* ((current-path (eshell/pwd))
+           (git-output (shell-command-to-string "git rev-parse --show-toplevel"))
+           (has-path (not (string-match "^fatal" git-output))))
+      (if (not has-path)
+          (abbreviate-file-name current-path)
+        (string-remove-prefix (file-name-directory git-output) current-path))))
+  (defun ju/eshell-prompt ()
+    (let ((current-branch (magit-get-current-branch)))
+      (concat
+       "\n"
+       (propertize (system-name) 'face `(:foreground "#62aeed"))
+       (propertize " ॐ " 'face `(:foreground "white"))
+       (propertize (ju/get-prompt-path) 'face `(:foreground "#82cfd3"))
 
-  ;;(defun ju/eshell-prompt ()
-  ;;  (let ((current-branch (magit-get-current-branch)))
-  ;;    (concat
-  ;;     "\n"
-  ;;     (propertize (system-name) 'face `(:foreground "#62aeed"))
-  ;;     (propertize " ॐ " 'face `(:foreground "white"))
-  ;;     (propertize (ju/get-prompt-path) 'face `(:foreground "#82cfd3"))
-  ;;     (when current-branch
-  ;;       (concat
-  ;;        (propertize " • " 'face `(:foreground "white"))
-  ;;        (propertize (concat " " current-branch) 'face `(:foreground "#c475f0"))))
-  ;;     (propertize " • " 'face `(:foreground "white"))
-  ;;     (propertize (format-time-string "%I:%M:%S %p") 'face `(:foreground "#5a5b7f"))
-  ;;     (if (= (user-uid) 0)
-  ;;         (propertize "\n#" 'face `(:foreground "red2"))
-  ;;       (propertize "\nλ" 'face `(:foreground "#aece4a")))
-  ;;     (propertize " " 'face `(:foreground "white")))))
+       (when current-branch
+         (concat
+          (propertize " • " 'face `(:foreground "white"))
+          (propertize (concat " " current-branch) 'face `(:foreground "#c475f0"))))
+       (propertize " • " 'face `(:foreground "white"))
+       (propertize (format-time-string "%I:%M:%S %p") 'face `(:foreground "#5a5b7f"))
+       (if (= (user-uid) 0)
+           (propertize "\n#" 'face `(:foreground "red2"))
+         (propertize "\nλ" 'face `(:foreground "#aece4a")))
+       (propertize " " 'face `(:foreground "white")))))
 
-  ;;(setq eshell-prompt-function      'ju/eshell-prompt
-  ;;      eshell-prompt-regexp        "^λ ")
+  (setq eshell-prompt-function      'ju/eshell-prompt
+        eshell-prompt-regexp        "^λ "))
 
 
-  ;;  Display extra information for prompt
-  (use-package eshell-prompt-extras
-    :after esh-opt
-    :defines eshell-highlight-prompt
-    :autoload (epe-theme-lambda epe-theme-dakrone epe-theme-pipeline)
-    :init (setq eshell-highlight-prompt t
-                eshell-prompt-function #'epe-theme-lambda))
+;;  Display extra information for prompt
+(use-package eshell-prompt-extras
+  :straight t
+  :ensure t
+  :defer t
+  :after esh-opt
+  :defines eshell-highlight-prompt
+  :autoload (epe-theme-lambda epe-theme-dakrone epe-theme-pipeline)
+  :init (setq eshell-highlight-prompt t
+              eshell-prompt-function #'epe-theme-lambda))
 
-  ;; `eldoc' support
-  (use-package esh-help
-    :init (setup-esh-help-eldoc))
+;; `eldoc' support
+(use-package esh-help
+  :straight t
+  :ensure t
+  :defer t
+  :init (setup-esh-help-eldoc))
 
-  ;; `cd' to frequent directory in `eshell'
-  (use-package eshell-z
-    :hook (eshell-mode . (lambda () (require 'eshell-z)))))
+;; `cd' to frequent directory in `eshell'
+(use-package eshell-z
+  :straight t
+  :ensure t
+  :defer t
+  :hook (eshell-mode . (lambda () (require 'eshell-z))))
 
 
 (provide 'init-eshell)

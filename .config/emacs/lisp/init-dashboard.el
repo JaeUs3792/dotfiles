@@ -2,6 +2,8 @@
 (require 'init-funcs)
 
 (use-package dashboard
+  :straight t
+  :ensure t
   :diminish dashboard-mode
   :functions (nerd-icons-faicon
               nerd-icons-mdicon

@@ -28,6 +28,9 @@
 ;;     (dap-auto-configure-mode +1)))
 
 (use-package dap-mode
+  :straight t
+  :ensure t
+  :defer t
   :config
   ;; Enabling only some features
   (setq dap-auto-configure-features '(sessions locals controls tooltip))

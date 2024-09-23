@@ -24,10 +24,14 @@ super+shift+c
 	bspc node -c
 super+shift+q
     killall picom & killall sxhkd & bspc quit
+super+s
+    scrot -e 'xclip -selection clipboard -t image/png -i $f'
+super+shift+s
+    scrot -s -e 'xclip -selection clipboard -t image/png -i $f'
 super+shift+e
-    rofi -mode drun -theme solarized -font "hack 20" -show combi
+    rofi drun,run,filebrowser -show
 alt+Tab
-    rofi -mode window -theme solarized -font "hack 20" -show
+    rofi -show window
 
 ##rofi things
 ##Launch apps

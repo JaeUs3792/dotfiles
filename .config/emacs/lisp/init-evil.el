@@ -3,7 +3,8 @@
 (require 'init-funcs)
 
 (use-package evil
-  :ensure nil
+  :straight t
+  :ensure t
   :diminish
   :hook (after-init . evil-mode)
   :init
@@ -25,24 +26,28 @@
   ;; eshell no evil
   (dolist (mode '(eshell-mode))
     (add-to-list 'evil-emacs-state-modes mode)))
+
 (with-eval-after-load 'evil
-    (defalias #'forward-evil-word #'forward-evil-symbol)
-    ;; make evil-search-word look for symbol rather than word boundaries
-    (setq-default evil-symbol-word-search t))
+  (defalias #'forward-evil-word #'forward-evil-symbol)
+  ;; make evil-search-word look for symbol rather than word boundaries
+  (setq-default evil-symbol-word-search t))
 (use-package evil-collection
-  :defer nil
+  :straight t
+  :ensure t
   :config
   (evil-collection-init))
 
 (use-package evil-nerd-commenter
-  :defer nil
+  :straight t
+  :ensure t
   :config
   ;; evil nerd commenter
   (define-key evil-normal-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines)
   (define-key evil-visual-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines))
 
 (use-package evil-numbers
-  :defer nil
+  :straight t
+  :ensure t
   :config
   ;; evil numbers
   ;; unfortunately C-x is emacs common key binding.
