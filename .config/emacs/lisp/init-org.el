@@ -156,6 +156,7 @@ prepended to the element after the #+HEADER: tag."
       (python     . t)
       (ruby       . t)
       (C          . t)
+      (dot        . t)
       (shell      . t))
     "Alist of org ob languages.")
   ;;(unless ON-WINDOWS
