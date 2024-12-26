@@ -21,9 +21,9 @@ return {
 	{
 		'morhetz/gruvbox',
 		config = function()
-			-- vim.g.gruvbox_contrast_dark='soft'
-			-- vim.cmd("set background=dark")
-			-- vim.cmd.colorscheme "gruvbox"
+			vim.g.gruvbox_contrast_dark='soft'
+			vim.cmd("set background=dark")
+			vim.cmd.colorscheme "gruvbox"
 		end
 	},
 	{
@@ -48,7 +48,7 @@ return {
 	{
 		"tomasr/molokai",
 		config = function()
-			vim.cmd.colorscheme "molokai"
+			-- vim.cmd.colorscheme "molokai"
 		end
 	},
 }
