@@ -66,15 +66,8 @@ bspc config focused_private_border_color    "$color1"
 bspc config active_private_border_color     "$color1"
 bspc config normal_private_border_color     "$color1"
 
-bspc rule -a \* state=tiled
-# Load session
-# shellcheck source=/dev/null
-#. "$BSPWM_CONFIG/restore.cfg"
-#if [ -e "$BSPWM_STATE" ] ; then
-#	bspc wm --load-state "$BSPWM_STATE"
-#	bspc wm --adopt-orphans
-#	rm "$BSPWM_STATE"
-#fi
+bspc rule -a Emacs state=tiled
+# bspc rule -a \* state=tiled
 
 # TODO heres polybar
 if [[ $JUPCID == "HOME-DESKTOP" ]]; then
