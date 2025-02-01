@@ -81,7 +81,10 @@
   :straight t
   :ensure t
   :defer t
-  :bind (("C-." . embark-act))
+  :bind (("C-," . embark-act)
+         :map minibuffer-local-map
+         ("C-c C-c" . embark-collect)
+         ("C-c C-e" . embark-export))
   :config
   (with-eval-after-load 'embark-consult
     (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))
