@@ -29,146 +29,30 @@ super+s
 super+shift+s
     scrot -s -e 'xclip -selection clipboard -t image/png -i $f'
 super+shift+e
-    rofi drun,run,filebrowser -show
+    rofi -show drun
 alt+Tab
     rofi -show window
 
-##rofi things
-##Launch apps
-#super+shift+e 
-#	~/.bscripts/rofi.sh drun
-#	
-##Window switcher
-#alt+Tab
-#	~/.bscripts/rofi.sh window
-#
-##Configuration launcher
-#super+shift+s
-#	~/.bscripts/rofi.sh config
-#
-##Resolution switcher
-##control+shift+p
-#	#bash -c "~/.bscripts/rofi.sh resolution" 
-#
-##Screenshot
-#Print  
-#	~/.bscripts/ss.sh
-##Delayed screenshot
-#super+Print
-#    sleep 3 && ~/.bscripts/ss.sh
-#
-##Color picker
-#control+alt+c
-#	colorpicker --short --one-shot | xclip -selection "clipboard"
-#
-##Suspend the pc
-#super+o
-#	~/.bscripts/lock.sh
-#
-##Osu stuff
-#control+alt+o 
-#    xsetwacom --set "HUION 420 Pen stylus" Area 1000 0 5000 3700
-#shift+control+o 
-#	xsetwacom set "HUION 420 Pen stylus" ResetArea
-##super+x 
-##	~/.osuthings/surfdirect.sh raise
-##super+z
-##	~/.osuthings/surfdirect.sh lower
-#
-##Window and workspace shenanigans
-#super+c 
-#	wmctrl -c `xdotool getwindowfocus` -i 
-#alt+F4 
-#	xdotool getwindowfocus windowclose
-#control+period
-#	~/.bscripts/wpm_reports.sh move +1
-#control+comma
-#	~/.bscripts/wpm_reports.sh move -1
-#control+alt+period
-#	~/.bscripts/wpm_reports.sh select +1
-#control+alt+comma
-#	~/.bscripts/wpm_reports.sh select -1
-#super+{1,2,3,4,5}
-#	~/.bscripts/wpm_reports.sh jump {0,1,2,3,4}
-#
-##Weeb
-#control+alt+b
-#	~/.mangaread
-#
-##Display stuff
-#super+control+p 
-#	xrandr --output HDMI1 --auto --left-of eDP1
-#super+shift+p
-#	xrandr -s 0
-#
 ## Toggle picom
 super+p
 	if (pgrep -c picom); then; killall picom; else; picom; fi
 super+w
 	~/scripts/random_wallpaper.sh
     
-##Keyboard layouts
-#super+space 
-#	  ~/.config/eww/mybar/scripts/kb_layouts cycle es us
-#
-##Media controls
-#alt+period
-#	~/.bscripts/volume.sh up #&& pkill -RTMIN+2 i3blocks 
-#alt+comma 
-#	~/.bscripts/volume.sh down #&& pkill -RTMIN+2 i3blocks 
-#alt+m
-#	~/.bscripts/volume.sh mute 
-#XF86AudioRaiseVolume 
-#    ~/.bscripts/volume.sh up #&& pkill -RTMIN+2 i3blocks 
-#XF86AudioLowerVolume 
-#    ~/.bscripts/volume.sh down#&& pkill -RTMIN+2 i3blocks 
-#XF86AudioMute
-#    ~/.bscripts/volume.sh mute #&& pkill -RTMIN+2 i3blocks 
-#alt+shift+period
-#	~/.bscripts/brightness.sh up
-#alt+shift+comma
-#	~/.bscripts/brightness.sh down
-#Pause
-#	playerctl play-pause
-#XF86AudioPlay
-#	playerctl play-pause
-#XF86AudioPause 
-#	playerctl play-pause
-#XF86AudioNext
-#	playerctl next
-#XF86AudioPrev
-#	playerctl previous
-#	
-##Open-close eww
-#control+alt+e
-#	~/.config/eww/dashboard/launch_dashboard
-#super+m 
-#	~/.config/eww/mybar/scripts/popup_music
-#
-##bspwm stuff
-#super+s
-#    bspc desktop focused --layout next && polybar-msg hook layout 1 
-#super+shift+q
-#    ~/.bscripts/rofi.sh outopts
-#XF86PowerOff
-#    ~/.bscripts/rofi.sh outopts
+# reset window manager & SXHKD
 super+shift+r
 	bspc wm -r
-#control+alt+space
-#	~/.bscripts/toggle_float.sh
-#super+shift+{k,j,h,l}
-#	play -v 0.4 ~/Documents/Sounds/tile.wav& ~/.bscripts/bsmove.sh {north,south,west,east}
-#super+{k,j,h,l}
-#	~/.bscripts/bselect.sh {north,south,west,east}
-#	
-#super+alt+l
-#	bspc node focused -z right 15 0
-#super+alt+h
-#	bspc node focused -z left -15 0
-#super+alt+k
-#	bspc node focused -z top 0 -15
-#super+alt+j
-#	bspc node focused -z bottom 0 15
+
+# resize
+super+alt+l
+	bspc node focused -z right 15 0
+super+alt+h
+	bspc node focused -z right -15 0
+super+alt+k
+	bspc node focused -z bottom 0 -15
+super+alt+j
+	bspc node focused -z bottom 0 15
+
 super + shift + f
 	bspc node focused -t "~floating"
 super + {_,shift +} + {h,l}
@@ -179,10 +63,6 @@ super + j
 	if (bspc query -N -n focused.fullscreen); then; bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; bspc node next.leaf.local -f -t fullscreen; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f south; fi
 super + k
 	if (bspc query -N -n focused.fullscreen); then; bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; bspc node prev.leaf.local -f -t fullscreen; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f north; fi
-#super + {_,shift + }n
-#	bspc node -f {next,prev}.local super + {t,shift + t,s,f}
-#super + {t,shift + t,s,f}
-#	bspc node -t {\~tiled,\~pseudo_tiled, \~floating,\~fullscreen} 
 
 super+space
 	if (bspc query -N -n focused.fullscreen); then; bspc node -f -t tiled; polybar-msg cmd show; bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; else; bspc node -f -t fullscreen; polybar-msg cmd hide; bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; fi
