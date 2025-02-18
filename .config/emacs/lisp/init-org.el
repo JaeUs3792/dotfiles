@@ -239,6 +239,16 @@ prepended to the element after the #+HEADER: tag."
   :config
   (setq org-journal-dir (expand-file-name "journal/" org-directory))
   (setq org-journal-file-type 'weekly))
+(use-package org-noter
+  :straight t
+  :ensure t
+  :defer t
+  :config
+  (setq org-noter-always-create-frame nil
+        org-noter-hide-other nil
+        org-noter-notes-search-path '("~/org/notes")
+        org-noter-separate-notes-from-heading t
+        org-noter-highlight-selected-text t))
 
 (use-package org-modern
   :straight t

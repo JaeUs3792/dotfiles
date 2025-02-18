@@ -17,8 +17,8 @@
   :defer t
   :defines pdf-annot-activate-created-annotations
   :hook ((pdf-tools-enabled . pdf-view-auto-slice-minor-mode)
-         (pdf-tools-enabled . pdf-isearch-minor-mode)
-         (pdf-tools-enabled . pdf-view-themed-minor-mode))
+         (pdf-tools-enabled . pdf-isearch-minor-mode))
+         ;; (pdf-tools-enabled . pdf-view-themed-minor-mode))
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
   :magic ("%PDF" . pdf-view-mode)
   :bind (:map pdf-view-mode-map
