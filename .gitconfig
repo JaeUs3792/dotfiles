@@ -6,3 +6,11 @@
 	defaultBranch = master
 [core]
 	editor = vim
+[protocol "file"]
+	allow = always
+[commit]
+	gpgsign = false
+[tag]
+	gpgsign = false
+[gpg]
+	format = openpgp
