@@ -27,9 +27,7 @@
   :straight t
   :ensure t
   :init
-  (if (display-graphic-p)
-      (load-theme custom-theme-sel t)
-    (load-theme 'doom-gruvbox t))
+    (load-theme custom-theme-sel t)
   :config
   (doom-themes-visual-bell-config))
 (use-package doom-modeline
