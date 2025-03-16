@@ -42,15 +42,15 @@
               (lambda (frame)
                 ;; (setq doom-modeline-icon t)
                 (with-selected-frame frame
-                  (custom-setup-fonts))))
+                  (custom-setup-fonts)
+                  ;; default transparency (85 . 85) or (100 . 100)
+                  (set-frame-parameter (selected-frame) 'alpha '(85 . 85)))))
   (custom-setup-fonts))
 
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
 ;; select theme
 (setq custom-theme-sel 'doom-one)
-;; default transparency (85 . 85) or (100 . 100)
-(set-frame-parameter (selected-frame) 'alpha '(85 . 85))
 
 ;; Org setup
 (setq custom-org-directory "~/org"
