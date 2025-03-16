@@ -248,7 +248,8 @@ prepended to the element after the #+HEADER: tag."
         org-noter-hide-other nil
         org-noter-notes-search-path '("~/org/notes")
         org-noter-separate-notes-from-heading t
-        org-noter-highlight-selected-text t))
+        org-noter-highlight-selected-text t)
+  (org-noter-enable-org-roam-integration))
 
 (use-package org-modern
   :straight t
