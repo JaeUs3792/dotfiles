@@ -4,7 +4,6 @@
 
 (defun custom-setup-fonts ()
   "setup fonts..."
-  (when (display-graphic-p)
     ;; default font
     (cl-loop for font in '("FiraCode Nerd Font Mono" "Jetbrains Mono"
                            "Source Code Pro" "DejaVu Sans Mono")
@@ -33,9 +32,20 @@
              when (font-installed-p font)
              return (progn
                       (setq face-font-rescale-alist `((,font . 1.00)))
-                      (set-fontset-font t '(#x1100 . #xffdc) (font-spec :family font))))))
-(custom-setup-fonts)
+                      (set-fontset-font t '(#x1100 . #xffdc) (font-spec :family font)))))
+(when (display-graphic-p)
+  (custom-setup-fonts))
 (add-hook 'window-setup-hook #'custom-setup-fonts)
+
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                ;; (setq doom-modeline-icon t)
+                (with-selected-frame frame
+                  (custom-setup-fonts))))
+  (custom-setup-fonts))
+
+(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
 ;; select theme
 (setq custom-theme-sel 'doom-one)
