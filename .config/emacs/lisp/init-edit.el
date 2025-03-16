@@ -123,5 +123,12 @@
   :ensure t
   :hook (after-init . global-so-long-mode))
 
+;; remote edit
+(use-package tramp
+  :ensure nil
+  :custom
+  (tramp-default-method "ssh")
+  (tramp-connection-timeout 5))
+
 (provide 'init-edit)
 ;;; init-edit.el ends here.
