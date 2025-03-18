@@ -11,31 +11,32 @@
          (org-mode . olivetti-mode))
   :init (setq olivetti-body-width 0.62))
 
-(use-package pdf-tools
-  :straight t
-  :ensure t
-  :defer t
-  :defines pdf-annot-activate-created-annotations
-  :hook ((pdf-tools-enabled . pdf-view-auto-slice-minor-mode)
-         (pdf-tools-enabled . pdf-isearch-minor-mode))
-         ;; (pdf-tools-enabled . pdf-view-themed-minor-mode))
-  :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
-  :magic ("%PDF" . pdf-view-mode)
-  :bind (:map pdf-view-mode-map
-              ("C-s" . isearch-forward))
-  :init
-  (pdf-tools-install)
-  :config
-  (setq-default pdf-view-display-size 'fit-page)
-  (setq-default pdf-view-resize-factor 1.1) ;; zoom in/out setting
-  (defun my/pdf-view-open-in-zathura ()
-    (interactive)
-    (save-window-excursion
-      (let ((current-file (buffer-file-name))
-            (current-page (number-to-string (pdf-view-current-page))))
-        (async-shell-command
-         (format "zathura -P %s \"%s\"" current-page current-file))))
-    (message "Sent to zathura")))
+(unless ON-WINDOWS
+  (use-package pdf-tools
+			   :straight t
+			   :ensure t
+			   :defer t
+			   :defines pdf-annot-activate-created-annotations
+			   :hook ((pdf-tools-enabled . pdf-view-auto-slice-minor-mode)
+					  (pdf-tools-enabled . pdf-isearch-minor-mode))
+					  ;;(pdf-tools-enabled . pdf-view-themed-minor-mode))
+			   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
+			   :magic ("%PDF" . pdf-view-mode)
+			   :bind (:map pdf-view-mode-map
+						   ("C-s" . isearch-forward))
+			   :init
+			   (pdf-tools-install)
+			   :config
+			   (setq-default pdf-view-display-size 'fit-page)
+			   (setq-default pdf-view-resize-factor 1.1) ;; zoom in/out setting
+			   (defun my/pdf-view-open-in-zathura ()
+				 (interactive)
+				 (save-window-excursion
+				   (let ((current-file (buffer-file-name))
+						 (current-page (number-to-string (pdf-view-current-page))))
+					 (async-shell-command
+					   (format "zathura -P %s \"%s\"" current-page current-file))))
+				 (message "Sent to zathura"))))
 
 ;; Recover last viewed position
 (use-package pdf-view-restore
