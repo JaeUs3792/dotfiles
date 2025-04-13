@@ -269,13 +269,13 @@ prepended to the element after the #+HEADER: tag."
                 ("DONE" :background "#C7C7C7" :foreground "#666666")
                 ("KILL" :background "#C7C7C7" :foreground "#666666")))))
 
-(use-package valign
-  :straight t
-  :ensure t
-  :defer t
-  :hook (org-mode . valign-mode)
-  :custom
-  (valign-fancy-bar t))
+;; (use-package valign
+;;   :straight t
+;;   :ensure t
+;;   :defer t
+;;   :hook (org-mode . valign-mode)
+;;   :custom
+;;   (valign-fancy-bar t))
 
 
 ;; Auto-toggle Org LaTeX fragments
