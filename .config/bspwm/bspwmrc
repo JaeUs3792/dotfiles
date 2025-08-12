@@ -70,7 +70,8 @@ bspc config normal_private_border_color     "$color1"
 
 bspc rule -a Emacs state=tiled
 # bspc rule -a \* state=tiled
-bspc rule -a scpad sticky=on state=floating rectangle=1400x600+660+40
+bspc rule -a scpad sticky=on state=floating rectangle=1400x700+660+40
+bspc rule -a pythonpad sticky=on state=floating rectangle=1400x700+660+40
 
 # TODO heres polybar
 if [[ $JUPCID == "HOME-DESKTOP" ]]; then

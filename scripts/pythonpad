@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+PYTHONSTARTUP=~/scripts/my_imports.py
+
+winclass="$(xdotool search --class pythonpad)";
+
+if [ -z "$winclass" ]; then
+    alacritty --class pythonpad -e python
+else
+    if [ ! -f /tmp/pythonpad ]; then
+        touch /tmp/pythonpad && xdo hide "$winclass"
+    elif [ -f /tmp/pythonpad ]; then
+        rm /tmp/pythonpad && xdo show "$winclass"
+    fi
+fi
+
+
+
+
+
