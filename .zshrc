@@ -46,6 +46,12 @@ if [[ $JUPCID == "WSL" ]];then
 fi
 
 # python env
-export PYTHONSTARTUP=~/scripts/my_imports.py
+export PYTHONSTARTUPSCRIPT=~/scripts/my_imports.py
 
 eval "$(starship init zsh)"
+
+# pokemon-colorscripts --no-title -s -r
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
