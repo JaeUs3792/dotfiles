@@ -314,23 +314,25 @@ prepended to the element after the #+HEADER: tag."
 (use-package org-contrib ;; to use org-screenshot-take
   :straight t
   :ensure t
-  :defer t
   :defer t)
 (use-package org-attach-screenshot
   :straight t
   :ensure t
-  :defer t
   :defer t)
 (use-package org-download
+  :after org
   :straight t
   :ensure t
-  :defer t
-  :defer t)
+  :demand t
+  :init
+  (setq org-download-image-dir "./images")
+  (setq org-download-heading-lvl nil)
+  :config
+  (org-download-enable))
 (use-package ob-latex-as-png
   :straight t
   :ensure t
-  :defer t
-  :ensure t)
+  :defer t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                  Org roam                                  ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
