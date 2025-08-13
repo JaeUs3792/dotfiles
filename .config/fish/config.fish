@@ -87,7 +87,7 @@ alias emt="emacsclient -c -a 'emacs -nw'"
 #neovim to vi
 alias vi=nvim
 alias vimdiff="nvim -d"
-alias cat=bat
+#alias cat=bat
 
 #grub update
 alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
@@ -104,5 +104,3 @@ alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
 
 starship init fish | source
-
-atuin init fish | source
