@@ -4,7 +4,7 @@
 (require 'init-custom)
 
 (use-package org
-  :ensure nil ; built-in
+  :straight (:type built-in)
   :custom-face (org-ellipsis ((t (:foreground unspecified))))
   :pretty-hydra
   ;; See `org-structure-template-alist'
