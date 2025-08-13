@@ -21,14 +21,11 @@ git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/cust
 mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
 
 # fish
-paru -S fish starship autin bat --noconfirm
+paru -S fish starship bat --noconfirm
 
 
 # neovim
-paru -S neovim --noconfirm
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-nvim +PlugInstall +q +q
+paru -S neovim nvim-lazy --noconfirm
 
 # git config
 git config --global user.name "JaeYoo-Im"
