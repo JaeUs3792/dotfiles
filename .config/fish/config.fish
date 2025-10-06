@@ -25,6 +25,14 @@ if test -d ~/.local/bin
     end
 end
 
+
+# Add depot_tools to PATH
+if test -d ~/Applications/depot_tools
+    if not contains -- ~/Applications/depot_tools $PATH
+        set -p PATH ~/Applications/depot_tools
+    end
+end
+
 ## Functions
 # Functions needed for !! and !$ https://github.com/oh-my-fish/plugin-bang-bang
 function __history_previous_command
@@ -59,6 +67,12 @@ function history
     builtin history --show-time='%F %T '
 end
 
+function backup --argument filename
+    cp $filename $filename.bak
+end
+
+
+
 ## Aliases
 alias ls='eza -al --color=always --group-directories-first --icons' # preferred listing
 alias la='eza -a --color=always --group-directories-first --icons'  # all files and dirs
@@ -70,6 +84,12 @@ alias big="expac -H M '%m\t%n' | sort -h | nl"              # Sort installed pac
 alias gitpkg='pacman -Q | grep -i "\-git" | wc -l'          # List amount of -git packages
 #pacman unlock
 alias fixpacman="sudo rm /var/lib/pacman/db.lck"
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
 
 # Get fastest mirrors
 alias mirror="sudo cachyos-rate-mirrors"
@@ -87,20 +107,9 @@ alias emt="emacsclient -c -a 'emacs -nw'"
 #neovim to vi
 alias vi=nvim
 alias vimdiff="nvim -d"
-#alias cat=bat
 
-#grub update
-alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
-#gpg for future uses
-#verify signature for isos
-#alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
-#alias fix-gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
-#receive the key of a developer
-#alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
-#alias fix-gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
-#alias fix-key="[ -d ~/.gnupg ] || mkdir ~/.gnupg ; cp /etc/pacman.d/gnupg/gpg.conf ~/.gnupg/ ; echo 'done'"
+alias jctl="journalctl -p 3 -xb"
 
-#figlet -w 100 "$hostname"
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
 
 starship init fish | source
