@@ -24,8 +24,8 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-
 (straight-use-package 'use-package)
+(setq straight-package--warning-displayed t)
 (setq use-package-always-ensure t)
 
 ; hide info in modeline
