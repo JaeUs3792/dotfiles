@@ -51,6 +51,8 @@
                               (setq show-paren-mode nil)))
          (org-mode . org-fold-hide-drawer-all)
          (org-mode . visual-line-mode))
+  :custom
+  (org-preview-latex-default-process 'dvisvgm)
   :config
   ;; For hydra
   (defun hot-expand (str &optional mod)
@@ -455,6 +457,9 @@ prepended to the element after the #+HEADER: tag."
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
+(use-package cdlatex
+  :ensure t
+  :hook (org-mode . org-cdlatex-mode))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              Org babel related                             ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
