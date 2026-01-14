@@ -457,9 +457,9 @@ prepended to the element after the #+HEADER: tag."
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
-(use-package cdlatex
-  :ensure t
-  :hook (org-mode . org-cdlatex-mode))
+; (use-package cdlatex
+;   :ensure t
+;   :hook (org-mode . org-cdlatex-mode))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              Org babel related                             ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

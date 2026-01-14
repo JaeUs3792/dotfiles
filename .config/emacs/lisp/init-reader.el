@@ -79,54 +79,54 @@
           (cons `(,nov-unzip-program . (gbk . gbk))
                 process-coding-system-alist))))
 ;; Atom/RSS reader
-(use-package elfeed
-  :straight t
-  :ensure t
-  :defer t
-  :pretty-hydra
-  ((:title (pretty-hydra-title "Elfeed" 'faicon "nf-fa-rss_square" :face 'nerd-icons-orange)
-           :color amaranth :quit-key ("q" "C-g"))
-   ("Search"
-    (("c" elfeed-db-compact "compact db")
-     ("g" elfeed-search-update--force "refresh")
-     ("G" elfeed-search-fetch "update")
-     ("y" elfeed-search-yank "copy URL")
-     ("+" elfeed-search-tag-all "tag all")
-     ("-" elfeed-search-untag-all "untag all"))
-    "Filter"
-    (("l" elfeed-search-live-filter "live filter")
-     ("s" elfeed-search-set-filter "set filter")
-     ("*" (elfeed-search-set-filter "@6-months-ago +star") "starred")
-     ("a" (elfeed-search-set-filter "@6-months-ago") "all")
-     ("t" (elfeed-search-set-filter "@1-day-ago") "today"))
-    "Article"
-    (("b" elfeed-search-browse-url "browse")
-     ("n" next-line "next")
-     ("p" previous-line "previous")
-     ("u" elfeed-search-tag-all-unread "mark unread")
-     ("r" elfeed-search-untag-all-unread "mark read")
-     ("RET" elfeed-search-show-entry "show"))))
-  ;;:init (setq url-queue-timeout 30
-  ;;            elfeed-show-entry-switch #'pop-to-buffer
-  ;;            elfeed-show-entry-delete #'delete-window)
-  :config
-  (evil-collection-define-key 'normal 'elfeed-search-mode-map "?" 'elfeed-hydra/body)
-  (evil-collection-define-key 'normal 'elfeed-show-mode-map "q" 'delete-window)
-  ;; Ignore db directory in recentf
-  (push elfeed-db-directory recentf-exclude))
-
-(use-package elfeed-goodies
-  :straight t
-  :ensure t
-  :defer t
-  :hook (after-init . elfeed-goodies/setup))
-(use-package elfeed-org
-  :straight t
-  :ensure t
-  :after elfeed
-  :config
-  (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory)))
-  (elfeed-org))
+; (use-package elfeed
+;   :straight t
+;   :ensure t
+;   :defer t
+;   :pretty-hydra
+;   ((:title (pretty-hydra-title "Elfeed" 'faicon "nf-fa-rss_square" :face 'nerd-icons-orange)
+;            :color amaranth :quit-key ("q" "C-g"))
+;    ("Search"
+;     (("c" elfeed-db-compact "compact db")
+;      ("g" elfeed-search-update--force "refresh")
+;      ("G" elfeed-search-fetch "update")
+;      ("y" elfeed-search-yank "copy URL")
+;      ("+" elfeed-search-tag-all "tag all")
+;      ("-" elfeed-search-untag-all "untag all"))
+;     "Filter"
+;     (("l" elfeed-search-live-filter "live filter")
+;      ("s" elfeed-search-set-filter "set filter")
+;      ("*" (elfeed-search-set-filter "@6-months-ago +star") "starred")
+;      ("a" (elfeed-search-set-filter "@6-months-ago") "all")
+;      ("t" (elfeed-search-set-filter "@1-day-ago") "today"))
+;     "Article"
+;     (("b" elfeed-search-browse-url "browse")
+;      ("n" next-line "next")
+;      ("p" previous-line "previous")
+;      ("u" elfeed-search-tag-all-unread "mark unread")
+;      ("r" elfeed-search-untag-all-unread "mark read")
+;      ("RET" elfeed-search-show-entry "show"))))
+;   ;;:init (setq url-queue-timeout 30
+;   ;;            elfeed-show-entry-switch #'pop-to-buffer
+;   ;;            elfeed-show-entry-delete #'delete-window)
+;   :config
+;   (evil-collection-define-key 'normal 'elfeed-search-mode-map "?" 'elfeed-hydra/body)
+;   (evil-collection-define-key 'normal 'elfeed-show-mode-map "q" 'delete-window)
+;   ;; Ignore db directory in recentf
+;   (push elfeed-db-directory recentf-exclude))
+;
+; (use-package elfeed-goodies
+;   :straight t
+;   :ensure t
+;   :defer t
+;   :hook (after-init . elfeed-goodies/setup))
+; (use-package elfeed-org
+;   :straight t
+;   :ensure t
+;   :after elfeed
+;   :config
+;   (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory)))
+;   (elfeed-org))
 
 (provide 'init-reader)
 ;;; init-reader.el ends here
