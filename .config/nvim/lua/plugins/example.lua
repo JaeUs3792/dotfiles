@@ -32,6 +32,9 @@ if true then
                 },
             },
         },
+        {
+            "lambdalisue/suda.vim"
+        },
     } end
 -- if true then return {} end
 
