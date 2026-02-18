@@ -1,11 +1,10 @@
 #!/bin/bash
 
-# essential packages
-paru -S eza --noconfirm
+paru -S vivaldi neovim --noconfirm
 
 # clone config
 git clone https://github.com/JaeUs3792/dotfiles ~/.dotfiles
-
+rm ~/.config/fish/config.fish
 paru -S stow --noconfirm
 cd ~/.dotfiles
 stow .
@@ -17,14 +16,8 @@ sudo cp keyd.default /etc/keyd
 
 sudo systemctl enable --now keyd
 
-# fish
-paru -S starship --noconfirm
-
-# file manager
-paru -S nemo
-
-# neovim
-paru -S neovim nvim-lazy --noconfirm
+# add ntfs support
+paru -S ntfs-3g --noconfirm
 
 # git config
 git config --global user.name "JaeYoo-Im"
@@ -51,6 +44,8 @@ sudo systemctl start expressvpn
 
 #emacs
 paru -S emacs --noconfirm
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+~/.config/emacs/bin/doom install
 paru -S texlive-basic texlive-langkorean --noconfirm
 paru -S jupyterlab --noconfirm
 paru -S zathura-pdf-mupdf
@@ -58,11 +53,10 @@ paru -S zathura-pdf-mupdf
 #verilator
 paru -S verilator
 
-# trilium
-paru -S trilium-bin
-
 # sourcegit
 paru -S sourcegit-bin
 
 # bspwm
-paru -S picom polybar bspwm sxhkd xdotool scrot xclip
+paru -S picom polybar bspwm sxhkd xdotool scrot xclip rofi
+# theme
+paru -S arc-gtk-theme papirus-icon-theme
