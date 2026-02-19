@@ -113,3 +113,4 @@ alias jctl="journalctl -p 3 -xb"
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
 
 starship init fish | source
+export PATH="$HOME/.cargo/bin:$PATH"

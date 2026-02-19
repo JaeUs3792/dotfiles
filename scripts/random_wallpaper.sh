@@ -1,7 +1,7 @@
 #!/bin/bash
 #wal_dir=~/walls/idol/landscape/karina
 #wal_dir=~/ShareDirectory/wallpaper/idol/portrait/karina
-wal_dir=~/walls-19
+wal_dir=~/walls
 
 # random wallpaper
 files=()
