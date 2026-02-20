@@ -1,4 +1,11 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+export JUPCID=HSCDEV
+# Set environment variables
+export PATH="$HOME/scripts:$PATH"
+export XDG_CURRENT_DESKTOP='bspwm'
+## Fix java applications
+export _JAVA_AWT_WM_NONREPARENTING=1
 
 if [[ $JUPCID == "HOME-DESKTOP" ]]; then
     xrandr --output DP-0 --primary --mode 3840x2160 --rotate normal --output HDMI-0 --mode 1920x1080 --rotate right --right-of DP-0 --output DP-2 --mode 2560x1440 --left-of DP-0
@@ -14,6 +21,7 @@ killall picom
 killall fcitx5
 killall nm-applet
 killall volumeicon
+killall xsettingsd
 sxhkd &
 picom &
 fcitx5 -d &
@@ -23,11 +31,11 @@ volumeicon &
 #sleep 3 && conky -c ~/.config/conky/conkyrc
 emacsclient --eval '(kill-emacs)'
 emacs --daemon
+xsettingsd --config="$HOME/.config/bspwm/xsettingsd" &
 
 ~/scripts/random_wallpaper.sh
 
 wmname LG3D
-export _JAVA_AWT_WM_NONREPARENTING=1
 
 if [[ $JUPCID == "HOME-DESKTOP" ]]; then
     bspc monitor DP-0 -d 1 2 3 4 5
@@ -87,4 +95,3 @@ elif [[ $JUPCID == "HSCDEV" ]]; then
 fi
 
 # Theme
-#xsettingsd --config="$HOME/.config/bspwm/xsettingsd" &

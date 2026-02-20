@@ -201,7 +201,7 @@
         (gptel-make-ollama "Ollama"
           :host "localhost:11434"
           :stream t
-          :models '(qwen2.5-coder:14b gemma3:27b))
+          :models '(qwen3-coder:30b gemma3:27b))
         gptel-model 'gemma3:27b))
 
 ;; Org-roam-ui

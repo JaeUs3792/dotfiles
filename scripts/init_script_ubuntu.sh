@@ -66,6 +66,20 @@ cmake ..
 make -j4
 sudo make install
 
+# eww
+sudo apt install libdbusmenu-gtk3-dev
+git clone https://github.com/elkowar/eww ~/works/eww
+cd ~/works/eww
+cargo build --release --no-default-features --features x11
+
+# imagemagick
+git clone https://github.com/ImageMagick/ImageMagick.git ~/works/ImageMagick
+cd ~/works/ImageMagick
+./configure --with-modules --enable-hdri --with-quantum-depth=16
+make -j$(nproc)
+sudo make install
+sudo ldconfig
+
 # terminal
 sudo apt install rustup
 rustup toolchain install stable
