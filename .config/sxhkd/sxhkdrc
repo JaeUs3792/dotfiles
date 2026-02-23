@@ -10,7 +10,7 @@ super+shift+p
 super+e
     emacsclient -c -a 'emacs'
 super+f
-	firefox
+	vivaldi-stable --password-store=kwallet6
 # workspace
 super + {1,2,3,4,5,6,7,8,9,0}
 	bspc desktop -f {1,2,3,4,5,6,7,8,9,0}; \
@@ -25,6 +25,8 @@ super+t
 # close & kill
 super+shift+c
 	bspc node -c
+super+ctrl+c
+	bspc node -k
 super+shift+q
     killall picom & killall sxhkd & bspc quit
 super+s
@@ -45,6 +47,8 @@ super+w
 # reset window manager & SXHKD
 super+shift+r
 	bspc wm -r
+super+ctrl+r
+	pkill -USR1 sxhkd
 
 # lock screen
 super+ctrl+l

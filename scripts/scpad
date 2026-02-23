@@ -1,18 +1,36 @@
 #!/usr/bin/env bash
 
-winclass="$(xdotool search --class scpad)";
+winid="$(xdotool search --class scpad 2>/dev/null | head -1)"
 
-if [ -z "$winclass" ]; then
-    alacritty --class scpad
+get_monitor_rect() {
+    bspc query -T -m focused | python3 -c "
+import sys, json
+r = json.load(sys.stdin)['rectangle']
+print(r['x'], r['y'], r['width'], r['height'])
+"
+}
+
+if [ -z "$winid" ]; then
+    read -r mx my mw mh < <(get_monitor_rect)
+    w=$((mw * 60 / 100))
+    h=$((mh * 55 / 100))
+    x=$((mx + (mw - w) / 2))
+    y=$((my + (mh - h) / 2))
+    bspc rule -a scpad -o sticky=on state=floating rectangle=${w}x${h}+${x}+${y}
+    wezterm start --class scpad
 else
     if [ ! -f /tmp/scpad ]; then
-        touch /tmp/scpad && xdo hide "$winclass"
-    elif [ -f /tmp/scpad ]; then
-        rm /tmp/scpad && xdo show "$winclass"
+        touch /tmp/scpad && xdo hide "$winid"
+    else
+        rm /tmp/scpad
+        read -r mx my mw mh < <(get_monitor_rect)
+        w=$((mw * 60 / 100))
+        h=$((mh * 55 / 100))
+        x=$((mx + (mw - w) / 2))
+        y=$((my + (mh - h) / 2))
+        xdo show "$winid"
+        sleep 0.05
+        xdotool windowmove "$winid" $x $y
+        xdotool windowsize "$winid" $w $h
     fi
 fi
-
-
-
-
-

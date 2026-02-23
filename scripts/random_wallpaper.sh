@@ -10,4 +10,5 @@ while IFS= read -r -d $'\0'; do
 done < <(find $wal_dir -type f -name "*" -print0)
 randomfile=$(printf "%s\n" "${files[RANDOM % ${#files[@]}]}")
 echo $randomfile
+wal -i "$randomfile" -n
 feh --bg-max "$randomfile"

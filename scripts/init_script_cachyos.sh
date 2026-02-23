@@ -10,7 +10,7 @@ cd ~/.dotfiles
 stow .
 
 # korean input
-paru -S fcitx5-hangul fcitx5-configtool keyd --noconfirm
+paru -S fcitx5-hangul fcitx5-configtool fcitx5-gtk keyd --noconfirm
 sudo mkdir /etc/keyd
 sudo cp keyd.default /etc/keyd
 
@@ -59,4 +59,4 @@ paru -S sourcegit-bin
 # bspwm
 paru -S picom polybar bspwm sxhkd xdotool scrot xclip rofi
 # theme
-paru -S arc-gtk-theme papirus-icon-theme
+paru -S arc-gtk-theme papirus-icon-theme python-pywal

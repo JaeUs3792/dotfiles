@@ -1,18 +1,36 @@
 #!/usr/bin/env bash
 
-winclass="$(xdotool search --class pythonpad)";
+winid="$(xdotool search --class pythonpad 2>/dev/null | head -1)"
 
-if [ -z "$winclass" ]; then
-    PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py alacritty --class pythonpad -e python
+get_monitor_rect() {
+    bspc query -T -m focused | python3 -c "
+import sys, json
+r = json.load(sys.stdin)['rectangle']
+print(r['x'], r['y'], r['width'], r['height'])
+"
+}
+
+if [ -z "$winid" ]; then
+    read -r mx my mw mh < <(get_monitor_rect)
+    w=$((mw * 60 / 100))
+    h=$((mh * 55 / 100))
+    x=$((mx + (mw - w) / 2))
+    y=$((my + (mh - h) / 2))
+    bspc rule -a pythonpad -o sticky=on state=floating rectangle=${w}x${h}+${x}+${y}
+    PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py wezterm start --class pythonpad -- python
 else
     if [ ! -f /tmp/pythonpad ]; then
-        touch /tmp/pythonpad && xdo hide "$winclass"
-    elif [ -f /tmp/pythonpad ]; then
-        rm /tmp/pythonpad && xdo show "$winclass"
+        touch /tmp/pythonpad && xdo hide "$winid"
+    else
+        rm /tmp/pythonpad
+        read -r mx my mw mh < <(get_monitor_rect)
+        w=$((mw * 60 / 100))
+        h=$((mh * 55 / 100))
+        x=$((mx + (mw - w) / 2))
+        y=$((my + (mh - h) / 2))
+        xdo show "$winid"
+        sleep 0.05
+        xdotool windowmove "$winid" $x $y
+        xdotool windowsize "$winid" $w $h
     fi
 fi
-
-
-
-
-

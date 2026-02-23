@@ -110,6 +110,8 @@ alias vimdiff="nvim -d"
 
 alias jctl="journalctl -p 3 -xb"
 
+export EDITOR=nvim
+export VISUAL=nvim
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
 
 starship init fish | source
