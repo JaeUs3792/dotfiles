@@ -68,3 +68,20 @@ paru -S i3lock-color
 # scratchpad (wezterm, xdo) & lock screen blur (imagemagick)
 paru -S wezterm xdo imagemagick --noconfirm
 
+# file manager
+paru -S thunar gvfs gvfs-smb tumbler --noconfirm
+
+# yazi (terminal file manager)
+paru -S yazi ffmpegthumbnailer unar jq poppler fd ripgrep fzf zoxide plocate chafa --noconfirm
+sudo systemctl enable --now plocate-updatedb.timer
+
+# plocate: /home(btrfs 서브볼륨) 인덱싱 허용, USB(/run/media) 제외
+sudo sed -i 's/PRUNE_BIND_MOUNTS = "yes"/PRUNE_BIND_MOUNTS = "no"/' /etc/updatedb.conf
+sudo sed -i 's|PRUNEPATHS = "\(.*\)"|PRUNEPATHS = "\1 /run/media"|' /etc/updatedb.conf
+sudo updatedb
+# bspwm utils
+paru -S wmname xsettingsd volumeicon --noconfirm
+cp /usr/share/applications/vivaldi-stable.desktop ~/.local/share/applications/
+sed -i 's|Exec=/usr/bin/vivaldi-stable|Exec=/usr/bin/vivaldi-stable --password-store=kwallet6|g' ~/
+.local/share/applications/vivaldi-stable.desktop
+update-desktop-database ~/.local/share/applications/

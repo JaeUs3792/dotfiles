@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+MEDIA_DIR="/run/media/$USER"
+
+if [ ! -d "$MEDIA_DIR" ] || [ -z "$(ls -A "$MEDIA_DIR" 2>/dev/null)" ]; then
+    echo "No mounted drives found." >&2
+    exit 0
+fi
+
+DRIVE=$(ls "$MEDIA_DIR" | fzf \
+    --prompt="  Drive: " \
+    --preview="eza --tree --level=2 --icons $MEDIA_DIR/{}" \
+    --preview-window=right:50%)
+
+if [ -n "$DRIVE" ]; then
+    ya emit cd --str "$MEDIA_DIR/$DRIVE"
+fi
+exit 0

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+FILE="$1"
+[ -z "$FILE" ] && echo "  Type to search..." && exit 0
+[ ! -e "$FILE" ] && echo "  File not found: $FILE" && exit 1
+
+MIME=$(file -b --mime-type "$FILE")
+
+case "$MIME" in
+    image/*)
+        chafa --size="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}" "$FILE"
+        ;;
+    inode/directory)
+        eza --color=always --tree --level=2 --icons "$FILE"
+        ;;
+    text/*|application/json|application/xml|application/javascript)
+        bat --color=always --style=numbers,header "$FILE"
+        ;;
+    application/pdf)
+        pdftotext "$FILE" - 2>/dev/null | bat --color=always --style=plain -l markdown
+        ;;
+    *)
+        echo "  $(file -b "$FILE")"
+        echo "  Size: $(du -sh "$FILE" | cut -f1)"
+        echo "  Modified: $(date -r "$FILE" '+%Y-%m-%d %H:%M')"
+        ;;
+esac

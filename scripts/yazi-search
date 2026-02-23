@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+FILE=$(FZF_DEFAULT_COMMAND="" FZF_DEFAULT_OPTS="" fzf --disabled < /dev/null \
+           --ansi \
+           --prompt="  Search: " \
+           --bind "change:reload:$HOME/scripts/_yazi-search-filter {q}" \
+           --preview "$HOME/scripts/_yazi-search-preview {}" \
+           --preview-window=right:40%)
+
+if [ -n "$FILE" ]; then
+    if [ -d "$FILE" ]; then
+        ya emit cd --str "$FILE"
+    else
+        ya emit reveal --str "$FILE"
+        ya emit open
+    fi
+fi
+exit 0

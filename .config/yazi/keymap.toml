@@ -1,0 +1,40 @@
+[mgr]
+prepend_keymap = [
+    # Mount (마운트하고 해당 위치로 이동)
+    { on = [ "M", "m" ], run = "plugin gvfs -- select-then-mount --jump", desc = "Mount device and jump to it" },
+
+    # Unmount
+    { on = [ "M", "u" ], run = "plugin gvfs -- select-then-unmount --eject", desc = "Unmount/eject device" },
+
+    # Force unmount
+    { on = [ "M", "U" ], run = "plugin gvfs -- select-then-unmount --eject --force", desc = "Force unmount/eject device" },
+
+    # SMB URI 추가 (smb://user@host/share 형식)
+    { on = [ "M", "a" ], run = "plugin gvfs -- add-mount", desc = "Add mount URI (smb/ftp/sftp...)" },
+
+    # URI 수정/삭제
+    { on = [ "M", "e" ], run = "plugin gvfs -- edit-mount", desc = "Edit mount URI" },
+    { on = [ "M", "r" ], run = "plugin gvfs -- remove-mount", desc = "Remove mount URI" },
+
+    # 마운트된 위치로 이동
+    { on = [ "g", "m" ], run = "plugin gvfs -- jump-to-device", desc = "Jump to mounted device" },
+
+    # 이전 위치로 돌아가기
+    { on = [ "g", "b" ], run = "plugin gvfs -- jump-back-prev-cwd", desc = "Jump back to previous location" },
+
+    # jump-to-char (vim의 f처럼 파일명 첫 글자로 점프)
+    { on = "f", run = "plugin jump-to-char", desc = "Jump to char" },
+
+    # 전역 파일 검색 (plocate + fzf)
+    { on = "F", run = "shell '~/scripts/yazi-search' --block", desc = "Global file search" },
+
+    # 마운트된 로컬 드라이브 목록 (fzf)
+    { on = [ "g", "d" ], run = "shell '~/scripts/yazi-drives' --block", desc = "Jump to mounted drive" },
+
+    # yamb 북마크
+    { on = [ "u", "a" ], run = "plugin yamb -- save",         desc = "Add bookmark" },
+    { on = [ "u", "g" ], run = "plugin yamb -- jump_by_key",  desc = "Jump bookmark by key" },
+    { on = [ "u", "G" ], run = "plugin yamb -- jump_by_fzf",  desc = "Jump bookmark by fzf" },
+    { on = [ "u", "d" ], run = "plugin yamb -- delete_by_key", desc = "Delete bookmark by key" },
+    { on = [ "u", "D" ], run = "plugin yamb -- delete_by_fzf", desc = "Delete bookmark by fzf" },
+]

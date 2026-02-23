@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+query="$1"
+words=($query)
+[ ${#words[@]} -eq 0 ] && exit 0
+
+result=$(plocate "${words[0]}" 2>/dev/null)
+for word in "${words[@]:1}"; do
+    result=$(echo "$result" | grep -i "$word")
+done
+echo "$result"
