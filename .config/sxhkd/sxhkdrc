@@ -22,6 +22,8 @@ super + shift + {1-9,0}
 	bspc node -d '{1-9,0}'
 super+t
 	thunar
+super+y
+	wezterm start -- yazi
 # close & kill
 super+shift+c
 	bspc node -c

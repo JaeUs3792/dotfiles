@@ -65,3 +65,6 @@ paru -S arc-gtk-theme papirus-icon-theme python-pywal
 paru -S network-manager-applet
 paru -S i3lock-color
 
+# scratchpad (wezterm, xdo) & lock screen blur (imagemagick)
+paru -S wezterm xdo imagemagick --noconfirm
+
