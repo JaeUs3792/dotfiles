@@ -1,9 +1,0 @@
-*
-*/
-!readme.org
-!early-init.el
-!init.el
-!custom-default.el
-!lisp/
-!lisp/*
-!.gitignore
