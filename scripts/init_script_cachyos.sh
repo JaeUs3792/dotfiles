@@ -60,3 +60,8 @@ paru -S sourcegit-bin
 paru -S picom polybar bspwm sxhkd xdotool scrot xclip rofi
 # theme
 paru -S arc-gtk-theme papirus-icon-theme python-pywal
+
+# related applet
+paru -S network-manager-applet
+paru -S i3lock-color
+
