@@ -52,7 +52,7 @@ super+ctrl+r
 
 # lock screen
 super+ctrl+l
-    i3lock -c 000000
+    ~/scripts/lock
 
 # resize
 super+alt+l

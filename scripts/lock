@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# Take screenshot and blur
+scrot /tmp/lock_screen.png
+convert /tmp/lock_screen.png -scale 10% -scale 1000% /tmp/lock_screen_blur.png
+
+# Scale sizes based on focused monitor height (1440p = base)
+height=$(bspc query -T -m focused | python3 -c "
+import sys, json
+print(json.load(sys.stdin)['rectangle']['height'])
+")
+radius=$((height * 120 / 1440))
+time_size=$((radius / 2))
+date_size=$((radius / 5))
+
+LC_ALL=C i3lock \
+    --image=/tmp/lock_screen_blur.png \
+    --clock \
+    --indicator \
+    --radius=$radius \
+    --ring-width=8 \
+    --time-str="%H:%M" \
+    --date-str="%A, %Y-%m-%d" \
+    --time-font="Comic Shanns Mono Nerd Font" \
+    --date-font="Comic Shanns Mono Nerd Font" \
+    --time-size=$time_size \
+    --date-size=$date_size \
+    --time-color=ECEFF4FF \
+    --date-color=D8DEE9FF \
+    --inside-color=2E344088 \
+    --insidever-color=5E81AC88 \
+    --insidewrong-color=BF616A88 \
+    --ring-color=5E81ACFF \
+    --ringver-color=88C0D0FF \
+    --ringwrong-color=BF616AFF \
+    --line-color=00000000 \
+    --separator-color=00000000 \
+    --keyhl-color=88C0D0FF \
+    --bshl-color=BF616AFF \
+    --verif-color=ECEFF4FF \
+    --wrong-color=BF616AFF \
+    --verif-text="Verifying..." \
+    --wrong-text="Wrong!" \
+    --noinput-text=""
