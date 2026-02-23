@@ -1,7 +1,7 @@
 #Config file for simple X hotkey daemon
 
 super+Return
-	alacritty
+	wezterm
 super+shift+Return
     ~/scripts/scpad
 super+shift+p
