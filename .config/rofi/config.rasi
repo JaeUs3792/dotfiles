@@ -1,0 +1,15 @@
+configuration {
+    modi:                   "drun,window";
+    font:                   "Comic Shanns Mono Nerd Font 12";
+    show-icons:             true;
+    icon-theme:             "Papirus-Dark";
+    drun-display-format:    "{name}";
+    window-format:          "{w} · {c} · {t}";
+    display-drun:           " Apps";
+    display-window:         " Windows";
+    hover-select:           true;
+    me-select-entry:        "";
+    me-accept-entry:        "MousePrimary";
+}
+
+@theme "~/.config/rofi/nord.rasi"

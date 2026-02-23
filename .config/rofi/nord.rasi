@@ -1,0 +1,97 @@
+* {
+    /* Nord Palette */
+    nord0:  #2E3440;
+    nord1:  #3B4252;
+    nord2:  #434C5E;
+    nord3:  #4C566A;
+    nord4:  #D8DEE9;
+    nord5:  #E5E9F0;
+    nord6:  #ECEFF4;
+    nord7:  #8FBCBB;
+    nord8:  #88C0D0;
+    nord9:  #81A1C1;
+    nord10: #5E81AC;
+    nord11: #BF616A;
+    nord13: #EBCB8B;
+    nord14: #A3BE8C;
+
+    background-color:   transparent;
+    text-color:         @nord4;
+}
+
+window {
+    background-color:   @nord0;
+    border:             2px;
+    border-color:       @nord10;
+    border-radius:      8px;
+    width:              600px;
+    padding:            16px;
+}
+
+mainbox {
+    background-color:   transparent;
+    children:           [ inputbar, listview ];
+    spacing:            12px;
+}
+
+inputbar {
+    background-color:   @nord1;
+    border-radius:      6px;
+    padding:            10px 14px;
+    children:           [ prompt, entry ];
+    spacing:            8px;
+}
+
+prompt {
+    background-color:   transparent;
+    text-color:         @nord8;
+}
+
+entry {
+    background-color:   transparent;
+    text-color:         @nord6;
+    placeholder:        "검색...";
+    placeholder-color:  @nord3;
+}
+
+listview {
+    background-color:   transparent;
+    lines:              8;
+    columns:            1;
+    spacing:            4px;
+    scrollbar:          false;
+}
+
+element {
+    background-color:   transparent;
+    border-radius:      6px;
+    padding:            8px 12px;
+    spacing:            10px;
+    orientation:        horizontal;
+}
+
+element normal.normal {
+    background-color:   transparent;
+    text-color:         @nord4;
+}
+
+element selected.normal {
+    background-color:   @nord10;
+    text-color:         @nord6;
+}
+
+element alternate.normal {
+    background-color:   transparent;
+    text-color:         @nord4;
+}
+
+element-icon {
+    size:               24px;
+    vertical-align:     0.5;
+}
+
+element-text {
+    background-color:   transparent;
+    text-color:         inherit;
+    vertical-align:     0.5;
+}
