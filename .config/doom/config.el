@@ -54,6 +54,9 @@
 ;; General
 (setq which-key-idle-delay 0.5)
 
+(map! "C-=" #'text-scale-increase
+      "C--" #'text-scale-decrease)
+
 (map! "C-s" #'consult-line
       "C-j" nil
       "C-k" nil)
