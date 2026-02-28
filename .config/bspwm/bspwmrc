@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export JUPCID=HSCDEV
+export JUPCID=HOME-DESKTOP
 # Set environment variables
 export PATH="$HOME/scripts:$PATH"
 export XDG_CURRENT_DESKTOP='bspwm'
@@ -21,7 +21,6 @@ killall sxhkd
 killall picom
 killall fcitx5
 killall polybar
-killall volumeicon
 killall xsettingsd
 sxhkd &
 picom &
@@ -30,6 +29,7 @@ export KDE_FULL_SESSION=true
 export KDE_SESSION_VERSION=6
 dbus-update-activation-environment --systemd KDE_FULL_SESSION KDE_SESSION_VERSION 2>/dev/null
 kwalletd6 &
+/usr/lib/pam_kwallet_init &
 /usr/lib/polkit-kde-authentication-agent-1 &
 #killall conky
 #sleep 3 && conky -c ~/.config/conky/conkyrc
@@ -51,7 +51,7 @@ fi
 
 bspc config border_width 2
 bspc config window_gap 10
-bspc config top_padding 20
+bspc config top_padding 23
 bspc config border_radius 2
 bspc config focus_follows_pointer true
 #bspc config click_to_focus				true
@@ -83,14 +83,23 @@ bspc config active_private_border_color  "$color8"
 bspc config normal_private_border_color  "$color0"
 
 bspc rule -a Emacs state=tiled
+bspc rule -a pavucontrol state=floating
 # bspc rule -a \* state=tiled
 
-if [[ $JUPCID == "HOME-DESKTOP" ]]; then
-    polybar panel-bspwm-1 &
-    polybar panel-bspwm-2 &
-    polybar panel-bspwm-3 &
-elif [[ $JUPCID == "HSCDEV" ]]; then
-    polybar panel-bspwm &
-fi
+for mon in $(polybar --list-monitors | cut -d":" -f1); do
+    dims=$(xrandr | grep "^$mon connected" | grep -oP '\d+x\d+(?=\+)' | head -1)
+    w=$(echo "$dims" | cut -dx -f1)
+    h=$(echo "$dims" | cut -dx -f2)
+    size=$(( w > h ? w : h ))
+    if [[ $size -ge 3840 ]]; then
+        bar="marisol-4k"; pad=47
+    elif [[ $size -ge 2560 ]]; then
+        bar="marisol-qhd"; pad=31
+    else
+        bar="marisol-fhd"; pad=23
+    fi
+    bspc config -m "$mon" top_padding $pad
+    MONITOR=$mon polybar -q $bar -c "$HOME/.config/polybar/config.ini" &
+done
 
 # Theme

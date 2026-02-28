@@ -37,6 +37,8 @@ super+shift+s
     scrot -s -e 'xclip -selection clipboard -t image/png -i $f'
 super+shift+e
     rofi -show drun
+super+shift+n
+    networkmanager_dmenu
 alt+Tab
     rofi -show window
 
@@ -93,11 +95,10 @@ super + k
 
 super + space
     if set test (bspc query -N -n focused.fullscreen); \
-        bspc node -f -t tiled; polybar-msg cmd show; \
+        bspc node -f -t tiled; \
         bspc query -N -n .local.window.hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; \
     else; \
         bspc node -f -t fullscreen; \
-        polybar-msg cmd hide; \
         bspc query -N -n .local.window.!hidden.!focused | xargs -I\{\} bspc node \{\} -g hidden; \
     end
 
