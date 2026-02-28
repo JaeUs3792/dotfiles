@@ -24,14 +24,14 @@ git config --global user.name "JaeYoo-Im"
 git config --global user.email "cpu3792@gmail.com"
 git config --global user.autocrlf input
 
-# tmux
-paru -S tmux --noconfirm
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/install_plugins.sh
-TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
+# zellij
+paru -S zellij --noconfirm
+mkdir -p ~/.config/zellij/plugins
+curl -L https://github.com/fresh2dev/zellij-autolock/releases/download/0.2.2/zellij-autolock.wasm \
+    -o ~/.config/zellij/plugins/zellij-autolock.wasm
 
 # font
-paru -S ttf-firacode-nerd ttf-mononoki-nerd otf-comicshanns-nerd ttf-times-new-roman ttf-nanum noto-fonts-emoji ttf-symbola noto-fonts-cjk --noconfirm
+paru -S ttf-firacode-nerd ttf-mononoki-nerd otf-comicshanns-nerd ttf-times-new-roman ttf-nanum noto-fonts-emoji ttf-symbola noto-fonts-cjk otf-bebas-neue-git --noconfirm
 
 #syncthing
 paru -S syncthing --noconfirm
@@ -58,6 +58,8 @@ paru -S sourcegit-bin
 
 # bspwm
 paru -S picom polybar bspwm sxhkd xdotool scrot xclip rofi
+# bar + tray (eww replaces polybar; stalonetray provides system tray)
+paru -S eww stalonetray
 # theme
 paru -S arc-gtk-theme papirus-icon-theme python-pywal
 
@@ -65,8 +67,8 @@ paru -S arc-gtk-theme papirus-icon-theme python-pywal
 paru -S network-manager-applet
 paru -S i3lock-color
 
-# scratchpad (wezterm, xdo) & lock screen blur (imagemagick)
-paru -S wezterm xdo imagemagick --noconfirm
+# scratchpad (ghostty, xdo) & lock screen blur (imagemagick)
+paru -S ghostty xdo imagemagick --noconfirm
 
 # file manager
 paru -S thunar gvfs gvfs-smb tumbler --noconfirm
