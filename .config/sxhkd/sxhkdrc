@@ -26,6 +26,8 @@ super+y
 	ghostty -e yazi
 ctrl+shift+Escape
 	ghostty -e btop
+super+F1
+	~/.config/eww/scripts/csheet-toggle
 # close & kill
 super+shift+c
 	bspc node -c

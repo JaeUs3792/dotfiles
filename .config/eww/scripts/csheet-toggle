@@ -1,0 +1,20 @@
+#!/bin/bash
+# Detect primary monitor resolution and open the appropriate cheatsheet window
+
+res=$(xrandr | grep " connected primary" | grep -oP '\d+x\d+' | head -1)
+w=$(echo "$res" | cut -dx -f1)
+
+if [[ $w -ge 3840 ]]; then
+    win="csheet-4k"
+elif [[ $w -ge 2560 ]]; then
+    win="csheet-qhd"
+else
+    win="csheet-fhd"
+fi
+
+eww open --toggle "$win"
+
+# Close the other two in case they were left open
+for other in csheet-fhd csheet-qhd csheet-4k; do
+    [[ $other != "$win" ]] && eww close "$other" 2>/dev/null
+done

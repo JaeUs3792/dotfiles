@@ -1,0 +1,162 @@
+;;; ─── Cheatsheet ─────────────────────────────────────────────────────────────
+
+(defwidget csheet-top []
+  (box :orientation "v" :spacing 4 :space-evenly false
+    (label :class "csheet-title" :xalign 0.5 :text "CHEAT SHEET")
+    (label :class "csheet-title-info" :xalign 0.5 :text "Super + F1 to close")))
+
+(defwidget csheet-content []
+  (box :class "csheet-content" :orientation "h" :spacing 20 :space-evenly true
+
+    ;; Column 1: Apps + System
+    (box :orientation "v" :space-evenly false :spacing 1
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-cat-apps" :xalign 0.5 :text "Apps")
+        (label :text ""))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Terminal")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Enter"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Scratchpad")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + Enter"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Python Pad")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + P"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Browser")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + F"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "File Manager")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + T"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Yazi")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Y"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Emacs")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + E"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Btop")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Ctrl + Shift + Esc"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-cat-system" :xalign 0.5 :text "System")
+        (label :text ""))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "App Launcher")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + E"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Network Manager")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + N"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Screenshot")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + S"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Screenshot Region")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + S"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Wallpaper")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + W"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Lock Screen")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Ctrl + L"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Toggle Picom")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + P")))
+
+    ;; Column 2: BSPWM
+    (box :orientation "v" :space-evenly false :spacing 1
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-cat-bspwm" :xalign 0.5 :text "BSPWM")
+        (label :text ""))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Close Window")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + C"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Kill Window")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Ctrl + C"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Toggle Float")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + F"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Toggle Fullscreen")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Space"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-cat-nodes" :xalign 0.5 :text "Focus / Swap")
+        (label :text ""))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Focus West / East")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + H / L"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Focus North / South")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + K / J"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Swap West / East")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + H / L"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Swap North / South")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + K / J"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-cat-misc" :xalign 0.5 :text "WM Control")
+        (label :text ""))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Restart BSPWM")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + R"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Reload sxhkd")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Ctrl + R"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Quit BSPWM")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + Q")))
+
+    ;; Column 3: Workspaces + Resize
+    (box :orientation "v" :space-evenly false :spacing 1
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-cat-ws" :xalign 0.5 :text "Workspaces")
+        (label :text ""))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Switch Workspace")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + 1-9, 0"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Move to Workspace")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Shift + 1-9, 0"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-cat-resize" :xalign 0.5 :text "Resize")
+        (label :text ""))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Expand Right")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Alt + L"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Shrink Right")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Alt + H"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Expand Down")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Alt + J"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Shrink Down")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + Alt + K"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Increase Gap")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + KP +"))
+      (box :orientation "h" :space-evenly true
+        (label :class "csheet-keys"     :xalign 0 :text "Decrease Gap")
+        (label :class "csheet-keys-alt" :xalign 1 :text "Super + KP -")))))
+
+(defwidget cheatsheet [size-class]
+  (scroll :hscroll true :vscroll true
+    (box :class "csheet ${size-class}" :orientation "v" :space-evenly false
+      (csheet-top)
+      (csheet-content))))
+
+(defwindow csheet-fhd
+  :geometry (geometry :x "0%" :y "0%" :width "80%" :height "70%" :anchor "center")
+  :wm-ignore false
+  (cheatsheet :size-class "csheet-fhd"))
+
+(defwindow csheet-qhd
+  :geometry (geometry :x "0%" :y "0%" :width "80%" :height "70%" :anchor "center")
+  :wm-ignore false
+  (cheatsheet :size-class "csheet-qhd"))
+
+(defwindow csheet-4k
+  :geometry (geometry :x "0%" :y "0%" :width "80%" :height "70%" :anchor "center")
+  :wm-ignore false
+  (cheatsheet :size-class "csheet-4k"))

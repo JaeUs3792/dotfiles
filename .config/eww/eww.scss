@@ -1,0 +1,110 @@
+// eww.scss — Nord
+// Polar Night : nord0 #2E3440  nord1 #3B4252  nord2 #434C5E  nord3 #4C566A
+// Snow Storm  : nord4 #D8DEE9  nord5 #E5E9F0  nord6 #ECEFF4
+// Frost       : nord7 #8FBCBB  nord8 #88C0D0  nord9 #81A1C1  nord10 #5E81AC
+// Aurora      : nord11 #BF616A  nord12 #D08770  nord13 #EBCB8B  nord14 #A3BE8C  nord15 #B48EAD
+
+* {
+  all: unset;
+  font-family: "ComicShannsMono Nerd Font", "Ubuntu";
+  font-size: 10px;
+}
+
+// ── Cheatsheet ───────────────────────────────────────────────
+
+.csheet {
+  background-color: #2E3440;
+  border-radius: 12px;
+  border: 1px solid #3B4252;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+}
+
+.csheet-title {
+  font-family: "Bebas Neue";
+  font-size: 32px;
+  color: #B48EAD;
+  margin: 1.2rem 1.2rem 0 1.2rem;
+}
+
+.csheet-title-info {
+  font-family: "JetBrainsMono Nerd Font";
+  font-style: italic;
+  font-size: 8px;
+  color: #4C566A;
+  margin: 4px 0 8px 0;
+}
+
+.csheet-content {
+  margin: 0.6rem 1rem 1rem 1rem;
+}
+
+.csheet-cat-bspwm,
+.csheet-cat-apps,
+.csheet-cat-system,
+.csheet-cat-nodes,
+.csheet-cat-ws,
+.csheet-cat-resize,
+.csheet-cat-misc {
+  font-family: "JetBrainsMono Nerd Font";
+  font-weight: bold;
+  font-size: 8px;
+  margin: 6px 0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: #2E3440;
+}
+
+.csheet-cat-bspwm   { background-color: #A3BE8C; }
+.csheet-cat-apps    { background-color: #88C0D0; }
+.csheet-cat-system  { background-color: #81A1C1; }
+.csheet-cat-nodes   { background-color: #EBCB8B; }
+.csheet-cat-ws      { background-color: #B48EAD; }
+.csheet-cat-resize  { background-color: #D08770; }
+.csheet-cat-misc    { background-color: #BF616A; }
+
+.csheet-keys {
+  font-family: "Bebas Neue";
+  font-size: 11px;
+  color: #D8DEE9;
+}
+
+.csheet-keys-alt {
+  font-family: "JetBrainsMono Nerd Font";
+  font-weight: bold;
+  font-size: 10px;
+  color: #88C0D0;
+}
+
+// FHD (1920x1080) — base, no override needed
+
+// QHD (2560x1440)
+.csheet-qhd {
+  .csheet-title      { font-size: 12px; }
+  .csheet-title-info { font-size: 11px; }
+  .csheet-keys       { font-size: 14px; }
+  .csheet-keys-alt   { font-size: 13px; }
+
+  .csheet-cat-bspwm,
+  .csheet-cat-apps,
+  .csheet-cat-system,
+  .csheet-cat-nodes,
+  .csheet-cat-ws,
+  .csheet-cat-resize,
+  .csheet-cat-misc   { font-size: 11px; }
+}
+
+// 4K (3840x2160)
+.csheet-4k {
+  .csheet-title      { font-size: 64px; }
+  .csheet-title-info { font-size: 22px; }
+  .csheet-keys       { font-size: 28px; }
+  .csheet-keys-alt   { font-size: 24px; }
+
+  .csheet-cat-bspwm,
+  .csheet-cat-apps,
+  .csheet-cat-system,
+  .csheet-cat-nodes,
+  .csheet-cat-ws,
+  .csheet-cat-resize,
+  .csheet-cat-misc   { font-size: 22px; }
+}
