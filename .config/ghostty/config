@@ -1,0 +1,51 @@
+# Font
+font-family = Comic Shanns Mono Nerd Font
+font-family = Noto Color Emoji
+font-size = 12
+
+# Nord theme
+foreground = #D8DEE9
+background = #2E3440
+cursor-color = #D8DEE9
+selection-background = #4C566A
+selection-foreground = #ECEFF4
+
+# Nord palette
+palette = 0=#3B4252
+palette = 1=#BF616A
+palette = 2=#A3BE8C
+palette = 3=#EBCB8B
+palette = 4=#81A1C1
+palette = 5=#B48EAD
+palette = 6=#88C0D0
+palette = 7=#E5E9F0
+palette = 8=#4C566A
+palette = 9=#BF616A
+palette = 10=#A3BE8C
+palette = 11=#EBCB8B
+palette = 12=#81A1C1
+palette = 13=#B48EAD
+palette = 14=#8FBCBB
+palette = 15=#ECEFF4
+
+# Window
+background-opacity = 0.8
+window-padding-x = 6
+window-padding-y = 6
+window-decoration = false
+confirm-close-surface = false
+
+# Scrollback
+scrollback-limit = 10000
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+# Mouse
+mouse-hide-while-typing = true
+
+# Keybindings
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+keybind = ctrl+zero=reset_font_size

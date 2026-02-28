@@ -17,7 +17,7 @@ if [ -z "$winid" ]; then
     x=$((mx + (mw - w) / 2))
     y=$((my + (mh - h) / 2))
     bspc rule -a scpad -o sticky=on state=floating rectangle=${w}x${h}+${x}+${y}
-    wezterm start --class scpad
+    ghostty --class=scpad
 else
     if [ ! -f /tmp/scpad ]; then
         touch /tmp/scpad && xdo hide "$winid"
