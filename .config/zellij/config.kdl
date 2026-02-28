@@ -1,0 +1,22 @@
+theme "nord"
+
+plugins {
+    autolock location="file:~/.config/zellij/plugins/zellij-autolock.wasm" {
+        is_enabled true
+        triggers "nvim|vim|fzf|zoxide"
+        reaction_seconds "0.3"
+    }
+}
+
+load_plugins {
+    autolock
+}
+
+keybinds {
+    normal {
+        bind "Enter" {
+            WriteChars "\u{000D}";
+            MessagePlugin "autolock" {};
+        }
+    }
+}

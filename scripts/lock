@@ -1,44 +1,62 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-# Take screenshot and blur
-scrot /tmp/lock_screen.png
-convert /tmp/lock_screen.png -scale 10% -scale 1000% /tmp/lock_screen_blur.png
+TEMP_IMAGE="/tmp/i3lock.png"
 
-# Scale sizes based on focused monitor height (1440p = base)
-height=$(bspc query -T -m focused | python3 -c "
-import sys, json
-print(json.load(sys.stdin)['rectangle']['height'])
-")
-radius=$((height * 120 / 1440))
-time_size=$((radius / 2))
-date_size=$((radius / 5))
+# Nord colors (RRGGBBAA)
+bg=2E344088
+fg=D8DEE9FF
+ring=5E81ACFF
+wrong=BF616AFF
+date=ECEFF4FF
+verify=88C0D0FF
+ringver=88C0D0FF
+ringwrong=BF616AFF
+insidever=5E81AC88
+insidewrong=BF616A88
 
-LC_ALL=C i3lock \
-    --image=/tmp/lock_screen_blur.png \
-    --clock \
-    --indicator \
-    --radius=$radius \
-    --ring-width=8 \
-    --time-str="%H:%M" \
-    --date-str="%A, %Y-%m-%d" \
+# 크기는 primary 모니터 기준으로 계산
+primary_geo=$(xrandr | grep ' connected primary' | grep -oP '\d+x\d+\+\d+\+\d+' | head -1)
+[ -z "$primary_geo" ] && primary_geo=$(xrandr | grep ' connected' | grep -oP '\d+x\d+\+\d+\+\d+' | head -1)
+PW=$(echo "$primary_geo" | cut -dx -f1)
+PH=$(echo "$primary_geo" | cut -dx -f2 | cut -d+ -f1)
+SCALE=$(echo "scale=2; sqrt($PW * $PH / (1920 * 1080))" | bc 2>/dev/null)
+[ -z "$SCALE" ] && SCALE=1.0
+TIME_SIZE=$(echo "$SCALE * 140" | bc | cut -d. -f1)
+DATE_SIZE=$(echo "$SCALE * 45"  | bc | cut -d. -f1)
+TEXT_SIZE=$(echo "$SCALE * 23"  | bc | cut -d. -f1)
+RADIUS=$(echo    "$SCALE * 30"  | bc | cut -d. -f1)
+RING_WIDTH=$(echo "$SCALE * 60" | bc | cut -d. -f1)
+: "${TIME_SIZE:=140}" "${DATE_SIZE:=45}" "${TEXT_SIZE:=23}" "${RADIUS:=30}" "${RING_WIDTH:=60}"
+
+rm -f ${TEMP_IMAGE}
+scrot ${TEMP_IMAGE}
+magick ${TEMP_IMAGE} -blur 5x4 ${TEMP_IMAGE}
+
+# x, y, w, h 는 i3lock이 모니터별로 자동 계산하는 변수
+LC_ALL=C i3lock -n --force-clock -i ${TEMP_IMAGE} -e --indicator \
+    --radius=$RADIUS --ring-width=$RING_WIDTH \
+    --inside-color=$bg --ring-color=$ring \
+    --insidever-color=$insidever --ringver-color=$ringver \
+    --insidewrong-color=$insidewrong --ringwrong-color=$ringwrong \
+    --line-uses-inside \
+    --keyhl-color=$verify --separator-color=00000000 --bshl-color=$wrong \
+    --time-str="%H:%M" --time-size=$TIME_SIZE \
+    --date-str="%A, %Y-%m-%d" --date-size=$DATE_SIZE \
+    --verif-text="Verifying..." --wrong-text="Wrong!" --noinput-text="" \
+    --greeter-text="Type password to unlock" \
+    --ind-pos="x+w/2:y+h*0.56" \
+    --time-pos="x+w/2:y+h*0.36" \
+    --date-pos="x+w/2:y+h*0.42" \
+    --greeter-pos="x+w/2:y+h*0.72" \
+    --wrong-pos="x+w/2:y+h*0.76" \
+    --verif-pos="x+w/2:y+h*0.76" \
     --time-font="Comic Shanns Mono Nerd Font" \
     --date-font="Comic Shanns Mono Nerd Font" \
-    --time-size=$time_size \
-    --date-size=$date_size \
-    --time-color=ECEFF4FF \
-    --date-color=D8DEE9FF \
-    --inside-color=2E344088 \
-    --insidever-color=5E81AC88 \
-    --insidewrong-color=BF616A88 \
-    --ring-color=5E81ACFF \
-    --ringver-color=88C0D0FF \
-    --ringwrong-color=BF616AFF \
-    --line-color=00000000 \
-    --separator-color=00000000 \
-    --keyhl-color=88C0D0FF \
-    --bshl-color=BF616AFF \
-    --verif-color=ECEFF4FF \
-    --wrong-color=BF616AFF \
-    --verif-text="Verifying..." \
-    --wrong-text="Wrong!" \
-    --noinput-text=""
+    --verif-font="Comic Shanns Mono Nerd Font" \
+    --greeter-font="Comic Shanns Mono Nerd Font" \
+    --wrong-font="Comic Shanns Mono Nerd Font" \
+    --verif-size=$TEXT_SIZE --greeter-size=$TEXT_SIZE --wrong-size=$TEXT_SIZE \
+    --date-color=$date --time-color=$date \
+    --greeter-color=$fg --wrong-color=$wrong --verif-color=$verify \
+    --pointer=default --refresh-rate=0 \
+    --pass-media-keys --pass-volume-keys
