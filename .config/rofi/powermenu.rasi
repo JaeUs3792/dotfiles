@@ -1,0 +1,105 @@
+* {
+    background:         #2E3440;
+    background-alt:     #3B4252;
+    foreground:         #D8DEE9;
+    selected:           #5E81AC;
+    active:             #81A1C1;
+    urgent:             #BF616A;
+
+    background-color:   transparent;
+    text-color:         @foreground;
+}
+
+configuration {
+    hover-select:       true;
+    me-select-entry:    "";
+    me-accept-entry:    "MousePrimary";
+}
+
+window {
+    transparency:       "real";
+    location:           center;
+    anchor:             center;
+    fullscreen:         false;
+    width:              50%;
+    background-color:   @background;
+}
+
+mainbox {
+    enabled:            true;
+    spacing:            15px;
+    padding:            30px;
+    background-color:   @background;
+    children:           [ "inputbar", "message", "listview" ];
+}
+
+inputbar {
+    enabled:            true;
+    spacing:            15px;
+    background-color:   transparent;
+    text-color:         @foreground;
+    children:           [ "textbox-prompt-colon", "prompt" ];
+}
+
+textbox-prompt-colon {
+    enabled:            true;
+    expand:             false;
+    font:               "JetBrainsMono Nerd Font Bold 11";
+    str:                "  ";
+    padding:            12px 16px 12px 12px;
+    background-color:   @urgent;
+    text-color:         @background;
+}
+
+prompt {
+    font:               "JetBrainsMono Nerd Font Bold 11";
+    enabled:            true;
+    padding:            12px;
+    background-color:   @active;
+    text-color:         @background;
+}
+
+message {
+    enabled:            true;
+    padding:            12px;
+    background-color:   @background-alt;
+    text-color:         @foreground;
+}
+
+listview {
+    enabled:            true;
+    columns:            5;
+    lines:              1;
+    cycle:              true;
+    dynamic:            true;
+    scrollbar:          false;
+    layout:             vertical;
+    spacing:            15px;
+    background-color:   transparent;
+    text-color:         @foreground;
+    cursor:             "default";
+}
+
+element {
+    enabled:            true;
+    padding:            40px 10px;
+    border:             0px solid;
+    border-radius:      4px;
+    background-color:   @background-alt;
+    text-color:         @foreground;
+    cursor:             pointer;
+}
+
+element-text {
+    font:               "Material Design Icons Desktop 36";
+    background-color:   transparent;
+    text-color:         inherit;
+    cursor:             inherit;
+    vertical-align:     0.5;
+    horizontal-align:   0.5;
+}
+
+element selected.normal {
+    background-color:   @selected;
+    text-color:         @background;
+}

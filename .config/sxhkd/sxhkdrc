@@ -1,7 +1,7 @@
 #Config file for simple X hotkey daemon
 
 super+Return
-	wezterm
+	ghostty
 super+shift+Return
     ~/scripts/scpad
 super+shift+p
@@ -23,7 +23,9 @@ super + shift + {1-9,0}
 super+t
 	thunar
 super+y
-	wezterm start -- yazi
+	ghostty -e yazi
+ctrl+shift+Escape
+	ghostty -e btop
 # close & kill
 super+shift+c
 	bspc node -c
