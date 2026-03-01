@@ -16,3 +16,4 @@
 /.config/vimb/
 /.config/Code - OSS/
 /.config/Electron/
+*.wasm

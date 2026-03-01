@@ -13,6 +13,8 @@ if [[ $JUPCID == "HOME-DESKTOP" ]]; then
 elif [[ $JUPCID == "HSCDEV" ]]; then
     xrandr --output HDMI-1 --primary --mode 2560x1440 --rotate normal
 fi
+xsetroot -cursor_name left_ptr
+
 ##################################################
 # AUTOSTART
 ##################################################

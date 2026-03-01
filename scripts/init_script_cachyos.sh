@@ -19,6 +19,9 @@ sudo systemctl enable --now keyd
 # add ntfs support
 paru -S ntfs-3g --noconfirm
 
+# fix dual-boot time (Windows uses localtime, Linux uses UTC by default)
+timedatectl set-local-rtc 1
+
 # git config
 git config --global user.name "JaeYoo-Im"
 git config --global user.email "cpu3792@gmail.com"
