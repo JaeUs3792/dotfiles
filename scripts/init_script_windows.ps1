@@ -199,6 +199,28 @@ if (Test-Path (Join-Path $FontDir "Symbola.ttf")) {
 }
 
 # ---------------------------------------------------------------------------
+# RTC: Set hardware clock to UTC (for dual-boot with Linux)
+# ---------------------------------------------------------------------------
+Write-Step "RTC: Setting hardware clock to UTC"
+
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+    [Security.Principal.WindowsBuiltInRole]::Administrator
+)
+
+if (-not $isAdmin) {
+    Write-Host "  [SKIP] Requires administrator privileges (re-run as admin)" -ForegroundColor Yellow
+} else {
+    $rtcKey = "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
+    $current = (Get-ItemProperty -Path $rtcKey -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue).RealTimeIsUniversal
+    if ($current -eq 1) {
+        Write-Host "  [SKIP] Already set to UTC" -ForegroundColor DarkGray
+    } else {
+        Set-ItemProperty -Path $rtcKey -Name "RealTimeIsUniversal" -Value 1 -Type DWord -Force
+        Write-Ok "Hardware clock set to UTC (takes effect after reboot)"
+    }
+}
+
+# ---------------------------------------------------------------------------
 # Cleanup
 # ---------------------------------------------------------------------------
 Write-Step "Cleaning up temp files"
