@@ -49,6 +49,29 @@
 (setq display-line-numbers-type 'relative)
 (setq org-directory "~/org/")
 (setq org-agenda-files '("~/org/agenda/agenda.org"))
+(setq org-log-done 'time)
+(setq org-log-into-drawer t)
+
+;; Org super agenda
+(use-package! org-super-agenda
+  :after org-agenda
+  :config
+  (org-super-agenda-mode)
+  (setq org-super-agenda-groups
+        '((:name "오늘 할 일"
+           :time-grid t
+           :scheduled today
+           :deadline today)
+          (:name "중요"
+           :priority "A")
+          (:name "지난 일정"
+           :scheduled past
+           :deadline past)
+          (:name "예정"
+           :scheduled future
+           :deadline future)
+          (:name "기타"
+           :anything t))))
 
 
 ;; General
