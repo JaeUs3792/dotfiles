@@ -19,9 +19,6 @@ sudo systemctl enable --now keyd
 # add ntfs support
 paru -S ntfs-3g --noconfirm
 
-# fix dual-boot time (Windows uses localtime, Linux uses UTC by default)
-timedatectl set-local-rtc 1
-
 # git config
 git config --global user.name "JaeYoo-Im"
 git config --global user.email "cpu3792@gmail.com"
@@ -61,8 +58,7 @@ paru -S sourcegit-bin
 
 # bspwm
 paru -S picom polybar bspwm sxhkd xdotool scrot xclip rofi
-# bar + tray (eww replaces polybar; stalonetray provides system tray)
-paru -S eww stalonetray
+paru -S eww
 # theme
 paru -S arc-gtk-theme papirus-icon-theme python-pywal
 
