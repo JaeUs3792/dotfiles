@@ -4,6 +4,7 @@ configuration {
     show-icons:             true;
     icon-theme:             "Papirus-Dark";
     drun-display-format:    "{name}";
+    drun-match-fields:      "name";
     window-format:          "{w} · {c} · {t}";
     display-drun:           " Apps";
     display-window:         " Windows";

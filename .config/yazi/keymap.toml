@@ -31,6 +31,9 @@ prepend_keymap = [
     # 마운트된 로컬 드라이브 목록 (fzf)
     { on = [ "g", "d" ], run = "shell '~/scripts/yazi-drives' --block", desc = "Jump to mounted drive" },
 
+    # 프리뷰 최대화 토글
+    { on = "T", run = "plugin toggle-pane max-preview", desc = "Toggle max preview" },
+
     # yamb 북마크
     { on = [ "u", "a" ], run = "plugin yamb -- save",         desc = "Add bookmark" },
     { on = [ "u", "g" ], run = "plugin yamb -- jump_by_key",  desc = "Jump bookmark by key" },
