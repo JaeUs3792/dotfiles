@@ -240,6 +240,16 @@
 (map! :leader
       :desc "Open org-roam UI" "n r u" #'org-roam-ui-open)
 
+;; Eat
+(use-package! eat
+  :hook (eshell-mode . eat-eshell-mode))
+
+;; Claude Code
+(use-package! claude-code
+  :config
+  (claude-code-mode)
+  :bind-keymap ("C-c c" . claude-code-command-map))
+
 ;; Avy
 (map! :leader
       :prefix ("v" . "avy")
