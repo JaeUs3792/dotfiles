@@ -50,6 +50,10 @@ paru -S texlive-basic texlive-langkorean --noconfirm
 paru -S jupyterlab --noconfirm
 paru -S zathura-pdf-mupdf
 
+# distrobox (podman 설치 시 OCI runtime: crun 선택)
+paru -S distrobox podman
+echo 'container_default_shell="/bin/bash"' >> ~/.distroboxrc
+
 #verilator
 paru -S verilator
 
