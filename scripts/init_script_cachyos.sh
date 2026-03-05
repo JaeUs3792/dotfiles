@@ -57,6 +57,9 @@ echo 'container_default_shell="/bin/bash"' >> ~/.distroboxrc
 #verilator
 paru -S verilator
 
+# verilog lsp
+paru -S verible-bin
+
 # sourcegit
 paru -S sourcegit-bin
 
