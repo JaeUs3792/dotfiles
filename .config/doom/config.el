@@ -240,4 +240,11 @@
 (map! :leader
       :desc "Open org-roam UI" "n r u" #'org-roam-ui-open)
 
-
+;; Avy
+(map! :leader
+      :prefix ("v" . "avy")
+      :desc "Goto char"     "c" #'avy-goto-char
+      :desc "Goto char 2"   "e" #'avy-goto-char-2
+      :desc "Goto word 0"   "q" #'avy-goto-word-0
+      :desc "Goto word 1"   "w" #'avy-goto-word-1
+      :desc "Goto line"     "l" #'avy-goto-line)
