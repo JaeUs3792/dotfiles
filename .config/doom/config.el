@@ -242,13 +242,55 @@
 
 ;; Eat
 (use-package! eat
-  :hook (eshell-mode . eat-eshell-mode))
+  :hook (eshell-mode . eat-eshell-mode)
+  :config
+  (defun +eat/close-on-finish (proc)
+    (when (memq (process-status proc) '(exit signal))
+      (when-let* ((buf (process-buffer proc))
+                  (win (get-buffer-window buf)))
+        (delete-window win))
+      (ignore-errors (kill-buffer (process-buffer proc)))))
+  (add-hook 'eat-exit-hook #'+eat/close-on-finish))
+
+(defun +eat/toggle ()
+  "Toggle eat terminal popup."
+  (interactive)
+  (let ((buf (get-buffer-create
+              (format "*doom:eat-popup:%s*"
+                      (if (bound-and-true-p persp-mode)
+                          (safe-persp-name (get-current-persp))
+                        "main")))))
+    (if-let* ((win (get-buffer-window buf)))
+        (progn (delete-window win)
+               (ignore-errors (kill-buffer buf)))
+      (with-current-buffer buf
+        (unless (eq major-mode 'eat-mode)
+          (eat-mode)
+          (eat-exec buf "eat" (or explicit-shell-file-name shell-file-name) nil nil))
+        (doom-mark-buffer-as-real-h))
+      (pop-to-buffer buf))))
+
+(map! :leader
+      :prefix ("o" . "open")
+      :desc "Toggle eat terminal" "t" #'+eat/toggle)
 
 ;; Claude Code
 (use-package! claude-code
   :config
   (claude-code-mode)
-  :bind-keymap ("C-c c" . claude-code-command-map))
+  (setq claude-code-toggle-auto-select t))
+
+(map! :leader
+      :prefix ("l" . "claude")
+      :desc "Start Claude"        "l" #'claude-code
+      :desc "Continue session"    "c" #'claude-code-continue
+      :desc "Send command"        "s" #'claude-code-send-command
+      :desc "Send region"         "r" #'claude-code-send-region
+      :desc "Send buffer file"    "o" #'claude-code-send-buffer-file
+      :desc "Fix error at point"  "e" #'claude-code-fix-error-at-point
+      :desc "Toggle window"       "t" #'claude-code-toggle
+      :desc "Switch to buffer"    "b" #'claude-code-switch-to-buffer
+      :desc "Kill session"        "k" #'claude-code-kill)
 
 ;; Avy
 (map! :leader
