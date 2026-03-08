@@ -46,7 +46,7 @@ sudo systemctl start expressvpn
 paru -S emacs --noconfirm
 git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 ~/.config/emacs/bin/doom install
-paru -S texlive-basic texlive-langkorean --noconfirm
+paru -S texlive-basic texlive-langkorean texlive-latex texlive-latexextra texlive-latexrecommended texlive-pictures texlive-binextra texlive-plaingeneric texlive-langcjk texlive-xetex --noconfirm
 paru -S jupyterlab --noconfirm
 paru -S zathura-pdf-mupdf
 

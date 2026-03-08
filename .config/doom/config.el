@@ -48,6 +48,12 @@
 (setq doom-theme 'doom-tomorrow-night)
 (setq display-line-numbers-type 'relative)
 (setq org-directory "~/org/")
+
+;; Org LaTeX export settings
+(after! ox-latex
+  (add-to-list 'org-latex-packages-alist '("" "kotex" t))
+  (setq org-export-with-toc nil
+        org-export-with-sub-superscripts nil))
 (setq org-agenda-files '("~/org/agenda/agenda.org"))
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
