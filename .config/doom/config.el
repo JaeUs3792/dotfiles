@@ -301,8 +301,7 @@
                           (safe-persp-name (get-current-persp))
                         "main")))))
     (if-let* ((win (get-buffer-window buf)))
-        (progn (delete-window win)
-               (ignore-errors (kill-buffer buf)))
+        (delete-window win)
       (with-current-buffer buf
         (unless (eq major-mode 'eat-mode)
           (eat-mode)
@@ -312,7 +311,15 @@
 
 (map! :leader
       :prefix ("o" . "open")
-      :desc "Toggle eat terminal" "t" #'+eat/toggle)
+      :desc "Toggle eat terminal" "t" #'+eat/toggle
+      :desc "Yazi" "/" (cmd!
+                        (let ((buf (get-buffer-create "*yazi*")))
+                          (with-current-buffer buf
+                            (unless (eq major-mode 'eat-mode)
+                              (eat-mode)
+                              (eat-exec buf "yazi" "yazi" nil nil))
+                            (doom-mark-buffer-as-real-h))
+                          (pop-to-buffer buf))))
 
 ;; Claude Code
 (use-package! claude-code
