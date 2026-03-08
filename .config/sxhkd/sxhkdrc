@@ -1,7 +1,7 @@
 #Config file for simple X hotkey daemon
 
 super+Return
-	ghostty
+	ghostty --working-directory=/home/jaeus
 super+shift+Return
     ~/scripts/scpad
 super+shift+p

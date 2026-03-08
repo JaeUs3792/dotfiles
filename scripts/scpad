@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-winid="$(xdotool search --class scpad 2>/dev/null | head -1)"
+winid="$(xdotool search --class com.scpad 2>/dev/null | head -1)"
 
 get_monitor_rect() {
     bspc query -T -m focused | python3 -c "
@@ -16,8 +16,8 @@ if [ -z "$winid" ]; then
     h=$((mh * 55 / 100))
     x=$((mx + (mw - w) / 2))
     y=$((my + (mh - h) / 2))
-    bspc rule -a scpad -o sticky=on state=floating rectangle=${w}x${h}+${x}+${y}
-    ghostty --class=scpad
+    bspc rule -a com.scpad -o sticky=on state=floating rectangle=${w}x${h}+${x}+${y}
+    ghostty --class=com.scpad
 else
     if [ ! -f /tmp/scpad ]; then
         touch /tmp/scpad && xdo hide "$winid"
@@ -28,6 +28,7 @@ else
         h=$((mh * 55 / 100))
         x=$((mx + (mw - w) / 2))
         y=$((my + (mh - h) / 2))
+        bspc rule -a com.scpad -o sticky=on state=floating rectangle=${w}x${h}+${x}+${y}
         xdo show "$winid"
         sleep 0.05
         xdotool windowmove "$winid" $x $y

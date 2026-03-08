@@ -17,3 +17,4 @@
 /.config/Code - OSS/
 /.config/Electron/
 *.wasm
+_ide/

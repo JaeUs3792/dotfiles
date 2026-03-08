@@ -93,3 +93,8 @@ cp /usr/share/applications/vivaldi-stable.desktop ~/.local/share/applications/
 sed -i 's|Exec=/usr/bin/vivaldi-stable|Exec=/usr/bin/vivaldi-stable --password-store=kwallet6|g' ~/
 .local/share/applications/vivaldi-stable.desktop
 update-desktop-database ~/.local/share/applications/
+
+# Thunar: ghostty terminal with working directory support
+mkdir -p ~/.config/xfce4
+echo -e "[Default]\nTerminalEmulator=ghostty" > ~/.config/xfce4/helpers.rc
+sed -i 's|<command>exo-open --working-directory %f --launch TerminalEmulator</command>|<command>ghostty --working-directory=%f -e fish</command>|' ~/.config/Thunar/uca.xml
