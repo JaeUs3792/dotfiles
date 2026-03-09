@@ -1,0 +1,14 @@
+*
+*/
+!readme.org
+!early-init.el
+!init.el
+!custom-default.el
+!lisp/
+!lisp/*
+!site-lisp/
+site-lisp/*
+!site-lisp/.gitkeep
+!logos/
+!logos/*
+!.gitignore
