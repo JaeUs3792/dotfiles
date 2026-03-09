@@ -182,7 +182,6 @@ Lisp function does not specify a special indentation."
 
 ;; Syntax highlighting of known Elisp symbols
 (use-package highlight-defined
-  :straight t
   :ensure t
   :defer t
   :hook ((emacs-lisp-mode inferior-emacs-lisp-mode) . highlight-defined-mode))
@@ -195,7 +194,6 @@ Lisp function does not specify a special indentation."
 
 ;; A better *Help* buffer
 (use-package helpful
-  :straight t
   :ensure t
   :defer t
   :bind (([remap describe-function] . helpful-callable)

@@ -1,7 +1,6 @@
 ;;; init-markdown.el -*- lexical-binding: t -*-
 ;; using multimarkdown compiler, could be found at AUR
 (use-package markdown-mode
-  :straight t
   :ensure t
   :defer t
   :mode ("README\\.md\\'" . gfm-mode)
@@ -14,7 +13,6 @@
         markdown-fontify-code-blocks-natively t))
 
 (use-package grip-mode
-  :straight t
   :ensure t
   :defer t
   ;; :config (setq grip-use-mdopen t) ;; to use `mdopen` instead of `grip`

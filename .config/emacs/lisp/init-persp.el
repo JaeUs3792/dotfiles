@@ -4,7 +4,6 @@
 
 ;; Windows/buffers sets shared among frames + save/load.
 (use-package persp-mode
-  :straight t
   :ensure t
   :defer t
   :diminish
@@ -69,7 +68,6 @@
 
 ;; Project.el integration
 (use-package persp-mode-project-bridge
-  :straight t
   :ensure t
   :defer t
   :autoload (persp-mode-project-bridge-find-perspectives-for-all-buffers

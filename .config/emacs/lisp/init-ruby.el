@@ -32,7 +32,6 @@
 
 ;; Integrate rbenv
 (use-package rbenv
-  :straight t
   :ensure t
   :defer t
   :hook (after-init . global-rbenv-mode)
@@ -40,13 +39,11 @@
 
 ;; YAML mode
 (use-package yaml-mode
-  :straight t
   :ensure t
   :defer t)
 
 ;; Run a Ruby process in a buffer
 (use-package inf-ruby
-  :straight t
   :ensure t
   :defer t
   :hook ((ruby-mode . inf-ruby-minor-mode)
@@ -54,7 +51,6 @@
 
 ;; Ruby YARD comments
 (use-package yard-mode
-  :straight t
   :ensure t
   :defer t
   :diminish
@@ -62,7 +58,6 @@
 
 ;; Ruby refactoring helpers
 (use-package ruby-refactor
-  :straight t
   :ensure t
   :defer t
   :diminish
@@ -70,14 +65,12 @@
 
 ;; Yet Another RI interface for Emacs
 (use-package yari
-  :straight t
   :ensure t
   :defer t
   :bind (:map ruby-mode-map ([f1] . yari)))
 
 ;; RSpec
 (use-package rspec-mode
-  :straight t
   :ensure t
   :defer t
   :diminish

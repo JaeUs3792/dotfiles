@@ -9,7 +9,6 @@
 
 ;;
 (use-package gcmh
-  :straight t
   :ensure t
   :diminish
   :hook
@@ -29,20 +28,17 @@
   (set-selection-coding-system 'utf-8))
 (when ON-LINUX
   (use-package exec-path-from-shell
-    :straight t
     :ensure t
     :defer t
 	:init (exec-path-from-shell-initialize)))
 
 ;; open file point at where last saved place.
 (use-package saveplace
-  :straight t
-  :ensure t
+  :ensure nil
   :hook (after-init . save-place-mode))
 
 (use-package recentf
-  :straight t
-  :ensure t
+  :ensure nil
   :bind
   (("C-x C-r" . recentf-open-files))
   :hook
@@ -60,8 +56,7 @@
   (add-to-list 'recentf-filename-handlers #'abbreviate-file-name))
 
 (use-package savehist
-  :straight t
-  :ensure t
+  :ensure nil
   :hook
   (after-init . savehist-mode)
   :init

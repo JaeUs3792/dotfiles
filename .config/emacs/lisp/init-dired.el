@@ -28,14 +28,13 @@
       "f" 'find-dired))
   (evil-collection-define-key 'normal 'dired-mode-map
     "." 'dired-omit-mode
-    "h" 'dired-single-up-directory
-    "l" 'dired-single-buffer
+    "h" 'dired-up-directory
+    "l" 'dired-find-file
     ")" 'dired-git-info-mode
     "s" 'hydra-dired-quick-sort/body))
 
 ;; Quick sort dired buffers via hydra
 (use-package dired-quick-sort
-  :straight t
   :ensure t
   :defer t
   :hook (after-init . dired-quick-sort-setup)
@@ -44,25 +43,21 @@
 
 ;; Show git info in dired
 (use-package dired-git-info
-  :straight t
   :ensure t
   :defer t)
 
 ;; Allow rsync from dired buffers
 (use-package dired-rsync
-  :straight t
   :ensure t
   :defer t)
 
 ;; Colorful dired
 (use-package diredfl
-  :straight t
   :ensure t
   :hook (dired-mode . diredfl-mode))
 
 ;; Shows icons
 (use-package nerd-icons-dired
-  :straight t
   :ensure t
   :diminish
   :commands nerd-icons-dired-mode
@@ -74,17 +69,9 @@
 (use-package dired-aux ; built-in package
   :ensure nil)
 
-(use-package dired-single
-  :straight t
-  :ensure t
-  :defer t
-  :commands (dired dired-jump))
-
-
 ;; `find-dired' alternative using `fd'
 (when (executable-find "fd")
   (use-package fd-dired
-    :straight t
     :ensure t
     :defer t))
 

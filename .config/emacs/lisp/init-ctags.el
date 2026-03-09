@@ -5,7 +5,6 @@
 ;; Ctags IDE on the True Editor
 ;; @see https://github.com/universal-ctags/citre#quick-start
 (use-package citre
-  :straight t
   :ensure t
   :defer t
   :diminish

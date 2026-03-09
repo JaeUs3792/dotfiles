@@ -16,7 +16,6 @@
 
 ;; When you begin a keybind, whichkey will show you all keybinds you can follow the first one with in order to form a full keywords.
 (use-package which-key
-  :straight t
   :ensure t
   :defer t
   :init (which-key-mode)
@@ -25,9 +24,8 @@
   (setq which-key-idle-delay 0.5))
 
 (use-package general
-  :straight t
-  :ensure t
-  :defer t
+  :ensure (:wait t)
+  :demand t
   :init
   (general-auto-unbind-keys)
   :config

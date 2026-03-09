@@ -1,6 +1,5 @@
 ;; init-chatgpt.el -*- lexical-binding: t -*-
 (use-package gptel
-  :straight t
   :ensure t
   :defer t
   :config
@@ -8,7 +7,6 @@
   (setq gptel-api-key custom-chatgpt-my-key))
 
 (use-package org-ai
-  :straight t
   :ensure t
   :commands (org-ai-mode
              org-ai-global-mode)

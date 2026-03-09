@@ -3,8 +3,7 @@
 (require 'init-funcs)
 ;; A tree layout file explorer
 (use-package treemacs
-  :straight t
-  :ensure t
+  :ensure (:wait t)
   :defer t
   :commands (treemacs-follow-mode
              treemacs-filewatch-mode
@@ -32,7 +31,6 @@
      (treemacs-git-mode 'simple))))
 
 (use-package treemacs-nerd-icons
-  :straight t
   :ensure t
   :defer t
   :custom-face
@@ -41,7 +39,6 @@
   :config (treemacs-load-theme "nerd-icons"))
 
 (use-package treemacs-magit
-  :straight t
   :ensure t
   :defer t
   :after magit
@@ -53,7 +50,6 @@
          . treemacs-magit--schedule-update))
 
 (use-package treemacs-persp
-  :straight t
   :ensure t
   :defer t
   :after persp-mode

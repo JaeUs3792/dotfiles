@@ -3,7 +3,6 @@
 (require 'init-funcs)
 
 (use-package vertico
-  :straight t
   :ensure t
   :bind (:map vertico-map
               ("C-j" . vertico-next)
@@ -12,12 +11,10 @@
   :custom
   (vertico-cycle t))
 (use-package nerd-icons-completion
-  :straight t
   :ensure t
   :hook (vertico-mode . nerd-icons-completion-mode))
 
 (use-package vertico-posframe
-  :straight t
   :ensure t
   :when (and custom-vertico-posframe 'display-graphic-p)
   :after vertico
@@ -30,7 +27,6 @@
 
 ;; simple, but effective sorting and filtering for emacs.
 (use-package vertico-prescient
-  :straight t
   :ensure t
   :defer t
   :config
@@ -38,7 +34,6 @@
 
 ;; annotations placed at the margin of the minibuffer
 (use-package marginalia
-  :straight t
   :ensure t
   :after vertico
   :defer t
@@ -48,7 +43,6 @@
 
 
 (use-package consult
-  :straight t
   :ensure t
   :demand t
   :bind (:map minibuffer-local-map
@@ -69,7 +63,6 @@
   (global-set-key (kbd "C-M-h") #'my/consult-project-switch-to-buffer))
 
 (use-package orderless
-  :straight t
   :ensure t
   :defer t
   :custom
@@ -78,7 +71,6 @@
 
 ;; Quick action in minibuffer
 (use-package embark
-  :straight t
   :ensure t
   :defer t
   :bind (("C-," . embark-act)
@@ -93,14 +85,12 @@
   (setq prefix-help-command #'embark-prefix-help-command))
 
 (use-package embark-consult
-  :straight t
   :ensure t
   :defer t
   :after embark)
 
 ;;; Corfu
 (use-package corfu
-  :straight t
   :ensure t
   :custom
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
@@ -125,7 +115,6 @@
   (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle))
 
 (use-package kind-icon
-  :straight t
   :ensure t
   :custom
   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
@@ -176,7 +165,6 @@
 ;;; Cape
 ;; Setup Cape for better completion-at-point support and more
 (use-package cape
-  :straight t
   :ensure t
   :config
   ;; Add useful defaults completion sources from cape

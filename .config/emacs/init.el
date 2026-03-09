@@ -72,44 +72,37 @@ Otherwise the startup will be very slow. "
 (require 'init-dired)
 (require 'init-highlight)
 (require 'init-ibuffer)
-(require 'init-persp)
-;; (require 'init-window) ;; will be removed
+(require 'init-perspective)
 (require 'init-treemacs)
 
-;; shell
 (require 'init-eshell)
 
-;;;; markdown
 (require 'init-markdown)
 (require 'init-org)
-(require 'init-reader)
+;; (require 'init-reader)
 
-;; docker
-(when ON-LINUX
- (require 'init-docker))
-;; utils
-(require 'init-utils)
+;; (when ON-LINUX
+;;  (require 'init-docker))
+;; (require 'init-utils)
 
-;; Programming
 (require 'init-vcs)
-(require 'init-flycheck)
-(require 'init-ctags)
-(require 'init-prog)
+;; (require 'init-flycheck)
+;; (require 'init-ctags)
+;; (require 'init-prog)
 
-(require 'init-elisp)
-(require 'init-c)
-(require 'init-rust)
-(require 'init-python)
-(require 'init-ruby)
+;; (require 'init-elisp)
+;; (require 'init-c)
+;; (require 'init-rust)
+;; (require 'init-python)
+;; (require 'init-ruby)
 
-(require 'init-latex)
+;; (require 'init-latex)
 (require 'init-verilog)
 
-(require 'init-debug)
+;; (require 'init-debug)
 
-(require 'init-extra)
-(require 'init-chatgpt)
+;; (require 'init-extra)
+;; (require 'init-chatgpt)
 
-(require 'init-copilot)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here

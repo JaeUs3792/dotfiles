@@ -53,7 +53,6 @@
 
 ;;;; Jump to definition
 (use-package dumb-jump
-  :straight t
   :ensure t
   :defer t
   :pretty-hydra
@@ -89,7 +88,6 @@
 
 ;; Run commands quickly
 (use-package quickrun
-  :straight t
   :ensure t
   :defer t
   :bind (("C-<f5>" . quickrun)
@@ -97,7 +95,6 @@
 
 ;; Browse devdocs.io documents using EWW
 (use-package devdocs
-  :straight t
   :ensure t
   :defer t
   :autoload (devdocs--installed-docs devdocs--available-docs)
@@ -153,25 +150,20 @@ Install the doc if it's not installed."
 
 ;;;; Misc. programming modes
 (use-package csv-mode
-  :straight t
   :ensure t
   :defer t)
 (use-package csharp-mode
-  :straight t
   :ensure t
   :defer t)
 (use-package cmake-mode
-  :straight t
   :ensure t
   :defer t)
 (use-package lua-mode
-  :straight t
   :ensure t
   :defer t)
 
 ;; Windows Batch Mode eXtras
 (use-package bmx-mode
-  :straight t
   :ensure t
   :defer t
   :after company
@@ -180,11 +172,9 @@ Install the doc if it's not installed."
 
 ; arch PKGBUILD
 (use-package pkgbuild-mode
-  :straight t
   :ensure t
   :defer t)
 (use-package systemd
-  :straight t
   :ensure t
   :defer t)
 

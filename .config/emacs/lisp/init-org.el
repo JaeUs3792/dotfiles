@@ -4,7 +4,7 @@
 (require 'init-custom)
 
 (use-package org
-  :straight (:type built-in)
+  :ensure nil
   :custom-face (org-ellipsis ((t (:foreground unspecified))))
   :pretty-hydra
   ;; See `org-structure-template-alist'
@@ -235,14 +235,12 @@ prepended to the element after the #+HEADER: tag."
 ;;                            Org mode improvement                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package org-journal
-  :straight t
   :ensure t
   :defer t
   :config
   (setq org-journal-dir (expand-file-name "journal/" org-directory))
   (setq org-journal-file-type 'weekly))
 (use-package org-noter
-  :straight t
   :ensure t
   :defer t
   :config
@@ -254,7 +252,6 @@ prepended to the element after the #+HEADER: tag."
   (org-noter-enable-org-roam-integration))
 
 (use-package org-modern
-  :straight t
   :ensure t
   :defer t
   :hook ((org-mode . org-modern-mode)
@@ -271,25 +268,22 @@ prepended to the element after the #+HEADER: tag."
                 ("DONE" :background "#C7C7C7" :foreground "#666666")
                 ("KILL" :background "#C7C7C7" :foreground "#666666")))))
 
-;; (use-package valign
-;;   :straight t
-;;   :ensure t
-;;   :defer t
-;;   :hook (org-mode . valign-mode)
-;;   :custom
-;;   (valign-fancy-bar t))
+(use-package valign
+  :ensure (:host github :repo "casouri/valign")
+  :defer t
+  :hook (org-mode . valign-mode)
+  :custom
+  (valign-fancy-bar t))
 
 
 ;; Auto-toggle Org LaTeX fragments
 (use-package org-fragtog
-  :straight t
   :ensure t
   :defer t
   :diminish
   :hook (org-mode . org-fragtog-mode))
 ;; Make invisible parts of Org elements appear visible.
 (use-package org-appear
-  :straight t
   :ensure t
   :defer t
   :hook (org-mode . org-appear-mode)
@@ -300,7 +294,6 @@ prepended to the element after the #+HEADER: tag."
         org-appear-autosubmarkers t))
 ;; support drawio
 (use-package org-drawio
-  :straight t
   :ensure t
   :defer t
   :commands (org-drawio-add
@@ -314,16 +307,13 @@ prepended to the element after the #+HEADER: tag."
 ;;                             Org mode attachment                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package org-contrib ;; to use org-screenshot-take
-  :straight t
   :ensure t
   :defer t)
 (use-package org-attach-screenshot
-  :straight t
   :ensure t
   :defer t)
 (use-package org-download
   :after org
-  :straight t
   :ensure t
   :demand t
   :init
@@ -332,14 +322,12 @@ prepended to the element after the #+HEADER: tag."
   :config
   (org-download-enable))
 (use-package ob-latex-as-png
-  :straight t
   :ensure t
   :defer t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                  Org roam                                  ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package org-roam
-  :straight t
   :ensure t
   :defer t
   :demand t ;; ensure org-roam is loaded by default
@@ -395,7 +383,6 @@ prepended to the element after the #+HEADER: tag."
   (org-roam-db-autosync-mode))
 ;; Org roam ui
 (use-package org-roam-ui
-  :straight t
   :ensure t
   :defer t
   :config
@@ -407,7 +394,6 @@ prepended to the element after the #+HEADER: tag."
 ;;                              Org mode exporter                             ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package ox-hugo
-  :straight t
   :ensure t
   :defer t
   :after ox)
@@ -464,7 +450,6 @@ prepended to the element after the #+HEADER: tag."
 ;;                              Org babel related                             ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package ob-async
-  :straight t
   :ensure t
   :config
   (setq ob-async-no-async-languages-alist '("ipython")))
@@ -473,7 +458,6 @@ prepended to the element after the #+HEADER: tag."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (unless ON-WINDOWS
   (use-package org-pdftools
-    :straight t
     :ensure t
     :defer t
     :hook (org-mode . org-pdftools-setup-link)))

@@ -2,15 +2,13 @@
 (require 'init-const)
 (require 'init-funcs)
 (use-package hydra
-  :straight t
   :ensure t
   :defer t
   :hook (emacs-lisp-mode . hydra-add-imenu))
 
 (use-package pretty-hydra
-  :straight t
-  :ensure t
-  :defer t
+  :ensure (:wait t)
+  :demand t
   :bind ("<f6>" . toggles-hydra/body)
   :hook (emacs-lisp-mode . (lambda ()
                              (add-to-list

@@ -2,7 +2,6 @@
 
 ;; Nice reading / writing
 (use-package olivetti
-  :straight t
   :ensure t
   :defer t
   :diminish
@@ -13,7 +12,6 @@
 
 (unless ON-WINDOWS
   (use-package pdf-tools
-			   :straight t
 			   :ensure t
 			   :defer t
 			   :defines pdf-annot-activate-created-annotations
@@ -40,7 +38,6 @@
 
 ;; Recover last viewed position
 (use-package pdf-view-restore
-  :straight t
   :ensure t
   :defer t
   :hook (pdf-view-mode . pdf-view-restore-mode)
@@ -50,7 +47,6 @@
 
 ;; Epub reader
 (use-package nov
-  :straight t
   :ensure t
   :defer t
   :mode ("\\.epub\\'" . nov-mode)

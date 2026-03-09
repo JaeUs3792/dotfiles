@@ -53,13 +53,11 @@
 
 ;; Live Coding in Python
 (use-package live-py-mode
-  :straight t
   :ensure t
   :defer t)
 
 (when ON-LINUX
   (use-package jupyter
-    :straight t
     :ensure t
     :defer t))
 

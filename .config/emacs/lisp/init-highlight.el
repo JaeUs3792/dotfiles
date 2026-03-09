@@ -11,7 +11,6 @@
   (set-face-background 'hl-line "gray8"))
 
 (use-package symbol-overlay
-  :straight t
   :ensure t
   :defer t
   :diminish
@@ -55,7 +54,6 @@
 
 ;; Colorize color names in buffers
 (use-package rainbow-mode
-  :straight t
   :ensure t
   :defer t
   :diminish
@@ -85,14 +83,12 @@
 
 ;; Highlight brackets according to their depth
 (use-package rainbow-delimiters
-  :straight t
   :ensure t
   :defer t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; keywords from doom-emacs
 (use-package hl-todo
-  :straight t
   :ensure t
   :defer t
   :custom-face
@@ -127,7 +123,6 @@
     (add-to-list 'hl-todo-keyword-faces `(,keyword . "#8d9eaf"))))
 
 (use-package diff-hl
-  :straight t
   :ensure t
   :defer t
   :hook ((after-init . global-diff-hl-mode)

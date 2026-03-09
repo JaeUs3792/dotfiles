@@ -3,7 +3,6 @@
 (require 'init-funcs)
 
 (use-package flycheck
-  :straight t
   :ensure t
   :defer t
   :diminish
@@ -28,7 +27,6 @@
 ;; Display Flycheck errors
 (if (childframe-workable-p)
     (use-package flycheck-posframe
-      :straight t
       :ensure t
       :defer t
       :custom-face
@@ -69,7 +67,6 @@
                :hidehandler #'flycheck-posframe-hidehandler))))
         (advice-add #'flycheck-posframe-show-posframe :override #'my-flycheck-posframe-show-posframe)))
   (use-package flycheck-popup-tip
-    :straight t
     :ensure t
     :defer t
     :hook (flycheck-mode . flycheck-popup-tip-mode)))

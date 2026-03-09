@@ -79,14 +79,14 @@
           (abbreviate-file-name current-path)
         (string-remove-prefix (file-name-directory git-output) current-path))))
   (defun ju/eshell-prompt ()
-    (let ((current-branch (magit-get-current-branch)))
+    (let ((current-branch (string-trim (shell-command-to-string "git symbolic-ref --short HEAD 2>/dev/null"))))
       (concat
        "\n"
        (propertize (system-name) 'face `(:foreground "#62aeed"))
        (propertize " ॐ " 'face `(:foreground "white"))
        (propertize (ju/get-prompt-path) 'face `(:foreground "#82cfd3"))
 
-       (when current-branch
+       (when (not (string-empty-p current-branch))
          (concat
           (propertize " • " 'face `(:foreground "white"))
           (propertize (concat " " current-branch) 'face `(:foreground "#c475f0"))))
@@ -103,7 +103,6 @@
 
 ;;  Display extra information for prompt
 (use-package eshell-prompt-extras
-  :straight t
   :ensure t
   :defer t
   :after esh-opt
@@ -114,14 +113,12 @@
 
 ;; `eldoc' support
 (use-package esh-help
-  :straight t
   :ensure t
   :defer t
   :init (setup-esh-help-eldoc))
 
 ;; `cd' to frequent directory in `eshell'
 (use-package eshell-z
-  :straight t
   :ensure t
   :defer t
   :hook (eshell-mode . (lambda () (require 'eshell-z))))

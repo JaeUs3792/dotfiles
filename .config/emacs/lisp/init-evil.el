@@ -3,7 +3,6 @@
 (require 'init-funcs)
 
 (use-package evil
-  :straight t
   :ensure t
   :diminish
   :hook (after-init . evil-mode)
@@ -32,13 +31,11 @@
   ;; make evil-search-word look for symbol rather than word boundaries
   (setq-default evil-symbol-word-search t))
 (use-package evil-collection
-  :straight t
   :ensure t
   :config
   (evil-collection-init))
 
 (use-package evil-nerd-commenter
-  :straight t
   :ensure t
   :config
   ;; evil nerd commenter
@@ -46,7 +43,6 @@
   (define-key evil-visual-state-map (kbd "g c") 'evilnc-comment-or-uncomment-lines))
 
 (use-package evil-numbers
-  :straight t
   :ensure t
   :config
   ;; evil numbers

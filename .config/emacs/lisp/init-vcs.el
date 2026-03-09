@@ -5,7 +5,7 @@
 ;; Git
 ;; See `magit-maybe-define-global-key-bindings'
 (use-package magit
-  :ensure nil
+  :ensure t
   :commands (magit-status magit-get-current-branch)
   :init (setq magit-diff-refine-hunk t)
   :config
@@ -32,7 +32,6 @@
 
 ;; Show TODOs in magit
 (use-package magit-todos
-  :straight t
   :ensure t
   :defines magit-todos-nice
   :commands magit-todos--scan-with-git-grep
@@ -45,7 +44,6 @@
 
 ;; Walk through git revisions of a file
 (use-package git-timemachine
-  :straight t
   :ensure t
   :defer t
   :custom-face
@@ -73,8 +71,7 @@
                               (user-error "Cannot revert the timemachine buffer"))))))
 ;; Resolve diff3 conflicts
 (use-package smerge-mode
-  :straight t
-  :ensure t
+  :ensure nil
   :defer t
   :diminish
   :pretty-hydra
@@ -117,7 +114,6 @@
                                       (smerge-mode-hydra/body))))))
 ;; Open github/gitlab/bitbucket page
 (use-package browse-at-remote
-  :straight t
   :ensure t
   :defer t
   :bind (:map vc-prefix-map
@@ -125,7 +121,6 @@
 
 ;; Git configuration modes (ex: gitignore gitattributes gitconfig)
 (use-package git-modes
-  :straight t
   :ensure t
   :defer t)
 

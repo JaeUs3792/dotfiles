@@ -8,7 +8,6 @@
   (setq ibuffer-filter-group-name-face
         '(:inherit (font-lock-string-face bold))))
 (use-package nerd-icons-ibuffer
-  :straight t
   :ensure t
   :defer t
   :hook
@@ -17,7 +16,6 @@
   (setq nerd-icons-ibuffer-icon t))
 ;; Group ibuffer's list by project
 (use-package ibuffer-project
-  :straight t
   :ensure t
   :defer t
   :hook

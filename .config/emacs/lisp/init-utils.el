@@ -1,12 +1,10 @@
 ;;; init-utils.el -*- lexical-binding: t -*-
 (use-package rg
-  :straight t
   :ensure t
   :defer t)
 
 ;; text mode directory tree
 (use-package ztree
-  :straight t
   :ensure t
   :defer t
   :custom-face
@@ -46,7 +44,6 @@
               ztree-show-number-of-children t))
 
 (use-package list-environment
-  :straight t
   :ensure t
   :defer t
   :hook (list-environment-mode . (lambda ()
