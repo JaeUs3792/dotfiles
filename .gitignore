@@ -16,5 +16,7 @@
 /.config/vimb/
 /.config/Code - OSS/
 /.config/Electron/
+/.config/yazi/plugins/
 *.wasm
 _ide/
+.config/fcitx5/conf/cached_layouts

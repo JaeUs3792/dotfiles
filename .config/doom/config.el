@@ -27,7 +27,7 @@
       :desc "Toggle transparency" "t a" #'toggle-transparency)
 
 ;; Fonts
-(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 20)
+(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 15)
       doom-symbol-font (font-spec :family "Symbola"))
 
 (defun my/setup-fontsets ()
@@ -106,6 +106,12 @@
            (id (car (esxml-node-children (esxml-query selector content)))))
       (and id (intern id))))
   (advice-add #'nov-content-unique-identifier :override #'my-nov-content-unique-identifier))
+
+;; Valign (pixel-perfect table alignment for CJK)
+(use-package! valign
+  :hook (org-mode . valign-mode)
+  :config
+  (setq valign-fancy-bar nil))
 
 ;; Olivetti
 (after! olivetti

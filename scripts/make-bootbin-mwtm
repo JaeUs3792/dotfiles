@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cp ~/works/mwtm-rtl/vivado/2024.2/cspb_4ch/cspb.runs/impl_1/*.{ltx,pdi} ~/works/mwtm_bootgen/
+distrobox enter vivado-ubuntu -- bash -c "source ~/.bashrc && cd ~/works/mwtm_bootgen && ./make_bootbin.sh"
+
+DATE=$(date +%y%m%d)
+BASE_DIR=~/works/mwtm_bootgen/bin_history
+IDX=1
+while [ -d "$BASE_DIR/${DATE}_${IDX}" ]; do
+    IDX=$((IDX + 1))
+done
+HIST_DIR="$BASE_DIR/${DATE}_${IDX}"
+mkdir -p "$HIST_DIR"
+cp ~/works/mwtm_bootgen/{BOOT.BIN,*.ltx,*.pdi} "$HIST_DIR/"
+echo "Copied to $HIST_DIR"
+echo "Enter memo for readme.txt (Ctrl+D to finish):"
+cat >"$HIST_DIR/readme.txt"
