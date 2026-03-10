@@ -100,7 +100,7 @@ Otherwise the startup will be very slow. "
 
 (require 'init-eshell)
 (require 'init-markdown)
-;; (require 'init-org)
+(require 'init-org)
 (require 'init-reader)
 
 ;; (when ON-LINUX

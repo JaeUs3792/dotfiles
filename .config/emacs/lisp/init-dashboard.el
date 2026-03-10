@@ -238,7 +238,7 @@
                 (list
                  (enlight-menu
                   '(("Files"
-                     ("Recent Files"     recentf-open-files           "r")
+                     ("Recent Files"     consult-recent-file          "r")
                      ("Find File"        find-file                    "f")
                      ("Open Dired"       dired-jump                   "d"))
                     ("Projects"
@@ -269,6 +269,17 @@
   :init
   (advice-add 'enlight :before (lambda (&rest _)
                                  (enlight--update 'enlight-content (my/enlight-make-content))))
+  :config
+  (evil-define-key 'normal enlight-mode-map
+    "r" #'consult-recent-file
+    "f" #'find-file
+    "d" #'dired-jump
+    "p" #'project-switch-project
+    "F" #'project-find-file
+    "R" #'restore-previous-session
+    "L" #'restore-session
+    "U" #'update-dotfiles-and-packages
+    "s" (lambda () (interactive) (find-file custom-file)))
   :custom
   (enlight-center-vertically t)
   (enlight-center-horizontally t)

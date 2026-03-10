@@ -6,45 +6,9 @@
 (use-package org
   :ensure nil
   :custom-face (org-ellipsis ((t (:foreground unspecified))))
-  :pretty-hydra
-  ;; See `org-structure-template-alist'
-  ((:title (pretty-hydra-title "Org Template" 'sucicon "nf-custom-orgmode" :face 'nerd-icons-green)
-           :color blue :quit-key ("q" "C-g"))
-   ("Basic"
-    (("a" (hot-expand "<a") "ascii")
-     ("c" (hot-expand "<c") "center")
-     ("C" (hot-expand "<C") "comment")
-     ("e" (hot-expand "<e") "example")
-     ("E" (hot-expand "<E") "export")
-     ("h" (hot-expand "<h") "html")
-     ("l" (hot-expand "<l") "latex")
-     ("n" (hot-expand "<n") "note")
-     ("o" (hot-expand "<q") "quote")
-     ("v" (hot-expand "<v") "verse"))
-    "Head"
-    (("i" (hot-expand "<i") "index")
-     ("A" (hot-expand "<A") "ASCII")
-     ("I" (hot-expand "<I") "INCLUDE")
-     ("H" (hot-expand "<H") "HTML")
-     ("L" (hot-expand "<L") "LaTeX"))
-    "Source"
-    (("s" (hot-expand "<s") "src")
-     ("m" (hot-expand "<s" "emacs-lisp") "emacs-lisp")
-     ("y" (hot-expand "<s" "python :results output") "python")
-     ("p" (hot-expand "<s" "perl") "perl")
-     ("w" (hot-expand "<s" "powershell") "powershell")
-     ("r" (hot-expand "<s" "ruby") "ruby")
-     ("S" (hot-expand "<s" "sh") "sh")
-     ("g" (hot-expand "<s" "go :imports '\(\"fmt\"\)") "golang"))
-    "Misc"
-    (("u" (hot-expand "<s" "plantuml :file CHANGE.png") "plantuml")
-     ("Y" (hot-expand "<s" "ipython :session :exports both :results raw drawer\n$0") "ipython")
-     ("P" (progn
-            (insert "#+HEADERS: :results output :exports both :shebang \"#!/usr/bin/env perl\"\n")
-            (hot-expand "<s" "perl")) "Perl tangled"))))
   :hook (((org-babel-after-execute org-mode) . org-redisplay-inline-images) ; display image
          (org-indent-mode . (lambda()
-                              (diminish 'org-indent-mode)
+                              (when (fboundp 'diminish) (diminish 'org-indent-mode))
                               ;; HACK: Prevent text moving around while using brackets
                               ;; @see https://github.com/seagle0128/.emacs.d/issues/88
                               (make-variable-buffer-local 'show-paren-mode)
@@ -75,6 +39,40 @@ prepended to the element after the #+HEADER: tag."
           (org-tempo-complete-tag)))
       (when mod (insert mod) (forward-line))
       (when text (insert text))))
+
+  (transient-define-prefix my/org-template-menu ()
+    "Org Template"
+    ["Basic"
+     ("a" "ascii"    (lambda () (interactive) (hot-expand "<a")))
+     ("c" "center"   (lambda () (interactive) (hot-expand "<c")))
+     ("C" "comment"  (lambda () (interactive) (hot-expand "<C")))
+     ("e" "example"  (lambda () (interactive) (hot-expand "<e")))
+     ("E" "export"   (lambda () (interactive) (hot-expand "<E")))
+     ("h" "html"     (lambda () (interactive) (hot-expand "<h")))
+     ("l" "latex"    (lambda () (interactive) (hot-expand "<l")))
+     ("n" "note"     (lambda () (interactive) (hot-expand "<n")))
+     ("o" "quote"    (lambda () (interactive) (hot-expand "<q")))
+     ("v" "verse"    (lambda () (interactive) (hot-expand "<v")))]
+    ["Head"
+     ("i" "index"   (lambda () (interactive) (hot-expand "<i")))
+     ("A" "ASCII"   (lambda () (interactive) (hot-expand "<A")))
+     ("I" "INCLUDE" (lambda () (interactive) (hot-expand "<I")))
+     ("H" "HTML"    (lambda () (interactive) (hot-expand "<H")))
+     ("L" "LaTeX"   (lambda () (interactive) (hot-expand "<L")))]
+    ["Source"
+     ("s" "src"        (lambda () (interactive) (hot-expand "<s")))
+     ("m" "emacs-lisp" (lambda () (interactive) (hot-expand "<s" "emacs-lisp")))
+     ("y" "python"     (lambda () (interactive) (hot-expand "<s" "python :results output")))
+     ("p" "perl"       (lambda () (interactive) (hot-expand "<s" "perl")))
+     ("w" "powershell" (lambda () (interactive) (hot-expand "<s" "powershell")))
+     ("r" "ruby"       (lambda () (interactive) (hot-expand "<s" "ruby")))
+     ("S" "sh"         (lambda () (interactive) (hot-expand "<s" "sh")))
+     ("g" "golang"     (lambda () (interactive) (hot-expand "<s" "go :imports '(\"fmt\")")))
+     ("u" "plantuml"   (lambda () (interactive) (hot-expand "<s" "plantuml :file CHANGE.png")))
+     ("Y" "ipython"    (lambda () (interactive) (hot-expand "<s" "ipython :session :exports both :results raw drawer\n$0")))
+     ("P" "Perl tangled" (lambda () (interactive)
+                           (insert "#+HEADERS: :results output :exports both :shebang \"#!/usr/bin/env perl\"\n")
+                           (hot-expand "<s" "perl")))])
 
   ;; To speed up startup, don't put to init section
   (setq org-modules nil                 ; Faster loading
@@ -137,7 +135,8 @@ prepended to the element after the #+HEADER: tag."
         ;; export options
         org-odt-preferred-output-format "docx" ;; opt -> docx
         org-export-with-sub-superscripts '{}   ;; ODT export to docx
-        org-latex-compiler "xelatex"
+        org-export-with-toc nil                ;; TOC 기본 비활성화
+        org-latex-compiler "pdflatex"
 
         org-tags-column -80
         org-log-done 'time
@@ -153,13 +152,19 @@ prepended to the element after the #+HEADER: tag."
         org-src-fontify-natively t
         org-src-tab-acts-natively t)
 
+  ;; fontspec은 xelatex/lualatex 전용 → pdflatex 사용 시 제거
+  (setq org-latex-default-packages-alist
+        (seq-remove (lambda (x) (equal (cadr x) "fontspec"))
+                    org-latex-default-packages-alist))
+
   (defconst load-language-alist
     '((emacs-lisp . t)
       (python     . t)
       (ruby       . t)
       (C          . t)
       (dot        . t)
-      (shell      . t))
+      (shell      . t)
+      (latex      . t))
     "Alist of org ob languages.")
   ;;(unless ON-WINDOWS
   ;;  (add-to-list 'load-language-alist '(latex-as-png . t)))
@@ -259,21 +264,15 @@ prepended to the element after the #+HEADER: tag."
   :config
   (setq org-modern-table nil)
   (setq org-modern-todo-faces
-        (quote (("TODO" :background "#E6DA73" :foreground "#666666")
-                ("PROJ" :background "#50B7D9" :foreground "#666666")
-                ("STRT" :background "#A1DC2D" :foreground "#666666")
-                ("WAIT" :background "#9E54FD" :foreground "#666666")
-                ("HOLD" :background "#9E54FD" :foreground "#666666")
-                ("IDEA" :background "#FF7F00" :foreground "#666666")
-                ("DONE" :background "#C7C7C7" :foreground "#666666")
-                ("KILL" :background "#C7C7C7" :foreground "#666666")))))
+        '(("TODO" :background "#f1fa8c" :foreground "#282a36" :weight bold)  ; 옐로우 — 할 일 대기중
+          ("PROJ" :background "#bd93f9" :foreground "#282a36" :weight bold)  ; 퍼플  — 프로젝트
+          ("STRT" :background "#50fa7b" :foreground "#282a36" :weight bold)  ; 그린  — 진행중
+          ("WAIT" :background "#8be9fd" :foreground "#282a36" :weight bold)  ; 파랑  — 대기/보류
+          ("HOLD" :background "#ffb86c" :foreground "#282a36" :weight bold)  ; 오렌지 — 일시정지
+          ("IDEA" :background "#ff79c6" :foreground "#282a36" :weight bold)  ; 핑크  — 아이디어
+          ("DONE" :background "#44475a" :foreground "#6272a4" :weight bold)  ; 흐린회색 — 완료
+          ("KILL" :background "#ff5555" :foreground "#282a36" :weight bold)))) ; 다크그레이
 
-(use-package valign
-  :ensure (:host github :repo "casouri/valign")
-  :defer t
-  :hook (org-mode . valign-mode)
-  :custom
-  (valign-fancy-bar t))
 
 
 ;; Auto-toggle Org LaTeX fragments
@@ -407,41 +406,10 @@ prepended to the element after the #+HEADER: tag."
         ("frame" "single")
         ("numbers" "left")))
 (setq org-latex-listings 'minted
-      org-latex-packages-alist '(("" "minted"))
+      org-latex-packages-alist '(("" "minted") ("" "kotex"))
       org-latex-pdf-process
       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
         "pdflatex -interaction nonstopmode -output-directory %o %f"))
-(with-eval-after-load 'ox-latex
-  (add-to-list 'org-latex-classes
-               '("article"
-                 "\\documentclass[11pt,a4paper]{article}
-    \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
-    [DEFAULT-PACKAGES]
-    \\usepackage{kotex}
-    [PACKAGES]
-    [EXTRA]
-    \\linespread{1.1}
-    \\hypersetup{pdfborder=0 0 0}"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")))
-  (add-to-list 'org-latex-classes
-               '("org-plain-latex"
-                 "\\documentclass[a4paper,11pt,titlepage]{memoir}
-  \\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm,a4paper]{geometry}
-  [DEFAULT-PACKAGES]
-  \\usepackage{kotex}
-  [PACKAGES]
-  [EXTRA]
-  \\linespread{1.1}
-  \\hypersetup{pdfborder=0 0 0}"
-                 ("\\chapter{%s}" . "\\chapter*{%s}")
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 ; (use-package cdlatex
 ;   :ensure t
