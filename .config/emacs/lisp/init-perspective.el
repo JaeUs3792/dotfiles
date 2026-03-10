@@ -17,9 +17,10 @@
 
 ;; project.el integration
 (use-package perspective-project-bridge
-  :ensure t
-  :hook
-  (persp-mode . perspective-project-bridge-mode))
+  :ensure (:wait t)
+  :after perspective
+  :config
+  (perspective-project-bridge-mode))
 
 ;; Consult integration — show only current perspective buffers
 (with-eval-after-load 'consult

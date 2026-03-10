@@ -15,19 +15,9 @@
 		avy-all-windows t
 		avy-all-windows-alt nil
 		avy-background t))
-;; Show number of matches in mode-line while searching
-(use-package anzu
-  :ensure t
-  :diminish
-  ;;:bind (([remap query-replace] . anzu-query-replace)
-  ;;       ([remap query-replace-regexp] . anzu-query-replace-regexp)
-  ;;       :map isearch-mode-map
-  ;;       ([remap isearch-query-replace] . anzu-isearch-query-replace)
-  ;;       ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))
-  :hook (after-init . global-anzu-mode))
-
 (use-package undo-tree
   :ensure t
+  :demand t
   :diminish
   :hook (after-init . global-undo-tree-mode)
   :custom
@@ -46,19 +36,7 @@
 (use-package hideshow
   :ensure nil
   :diminish hs-minor-mode
-  :pretty-hydra
-  ((:title (pretty-hydra-title "HideShow" 'octicon "nf-oct-fold")
-           :color amaranth :quit-key ("q" "C-g"))
-   ("Fold"
-    (("t" hs-toggle-all "toggle all")
-     ("a" hs-show-all "show all")
-     ("i" hs-hide-all "hide all")
-     ("g" hs-toggle-hiding "toggle hiding")
-     ("c" hs-cycle "cycle block")
-     ("s" hs-show-block "show block")
-     ("h" hs-hide-block "hide block")
-     ("l" hs-hide-level "hide level"))))
-  :bind ("C-~" . hideshow-hydra/body)
+  :bind ("C-~" . my/hideshow-menu)
   :hook (prog-mode . hs-minor-mode)
   :config
   ;; More functions
@@ -110,7 +88,20 @@
                                           (overlay-end ov)))
                      'face '(:inherit shadow :height 0.8))
                     " "))))
-  (setq hs-set-up-overlay #'hs-display-code-line-counts))
+  (setq hs-set-up-overlay #'hs-display-code-line-counts)
+
+  (require 'transient)
+  (transient-define-prefix my/hideshow-menu ()
+    "HideShow fold menu."
+    [["Fold"
+      ("t" "toggle all" hs-toggle-all :transient t)
+      ("a" "show all" hs-show-all :transient t)
+      ("i" "hide all" hs-hide-all :transient t)
+      ("g" "toggle hiding" hs-toggle-hiding :transient t)
+      ("c" "cycle block" hs-cycle :transient t)
+      ("s" "show block" hs-show-block :transient t)
+      ("h" "hide block" hs-hide-block :transient t)
+      ("l" "hide level" hs-hide-level :transient t)]]))
 
 ;; Hanlde minified code
 (use-package so-long
@@ -122,7 +113,31 @@
   :ensure nil
   :custom
   (tramp-default-method "ssh")
-  (tramp-connection-timeout 5))
+  (tramp-connection-timeout 10)
+  ;; Performance
+  (tramp-verbose 1)                        ; 로그 최소화로 속도 향상
+  (tramp-completion-reread-directory-timeout nil) ; 원격 디렉토리 캐시 유지
+  (remote-file-name-inhibit-cache nil)     ; 원격 파일 캐시 활성화
+  (vc-ignore-dir-regexp                    ; 원격에서 vc 비활성화 (속도)
+   (format "%s\\|%s" vc-ignore-dir-regexp tramp-file-name-regexp))
+  ;; Auto-save to local tmp
+  (tramp-auto-save-directory
+   (expand-file-name "tramp-autosave/" user-emacs-directory))
+  ;; Backup files locally
+  (tramp-backup-directory-alist backup-directory-alist)
+  :config
+  ;; Use ssh ControlMaster for persistent connections
+  (setq tramp-ssh-controlmaster-options
+        (concat "-o ControlMaster=auto "
+                "-o ControlPath=~/.ssh/sockets/%%r@%%h:%%p "
+                "-o ControlPersist=600"))
+  ;; Exclude remote files from recentf
+  (with-eval-after-load 'recentf
+    (add-to-list 'recentf-exclude tramp-file-name-regexp))
+  ;; Projectile: don't search remote dirs
+  (with-eval-after-load 'projectile
+    (advice-add 'projectile-project-root :before-while
+                (lambda (&rest _) (not (file-remote-p default-directory))))))
 
 (provide 'init-edit)
 ;;; init-edit.el ends here.

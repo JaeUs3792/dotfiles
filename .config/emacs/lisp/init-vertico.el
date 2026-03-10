@@ -3,43 +3,53 @@
 (require 'init-funcs)
 
 (use-package vertico
-  :ensure t
+  :ensure (:wait t)
+  :demand t
   :bind (:map vertico-map
               ("C-j" . vertico-next)
               ("C-k" . vertico-previous))
-  :hook (after-init . vertico-mode)
   :custom
-  (vertico-cycle t))
+  (vertico-cycle t)
+  :config
+  (vertico-mode))
 (use-package nerd-icons-completion
   :ensure t
-  :hook (vertico-mode . nerd-icons-completion-mode))
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode))
 
 (use-package vertico-posframe
   :ensure t
   :when (and custom-vertico-posframe 'display-graphic-p)
   :after vertico
-  :hook (vertico-mode . vertico-posframe-mode)
   :config
-  (setq vertico-posframe-border-width 5))
+  (setq vertico-posframe-border-width 5)
+  (vertico-posframe-mode))
     ;; (setq vertico-posframe-parameters
     ;;       '((left-fringe . 20)
     ;;         (right-fringe . 20)))))
 
+(use-package prescient
+  :ensure t
+  :after vertico
+  :config
+  (prescient-persist-mode))
+
 ;; simple, but effective sorting and filtering for emacs.
 (use-package vertico-prescient
   :ensure t
-  :defer t
+  :after prescient
+  :custom
+  (vertico-prescient-enable-filtering nil)
   :config
   (vertico-prescient-mode))
 
 ;; annotations placed at the margin of the minibuffer
 (use-package marginalia
   :ensure t
-  :after vertico
-  :defer t
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  :init (marginalia-mode))
+  :demand t
+  :config
+  (marginalia-mode))
 
 
 (use-package consult
@@ -64,7 +74,7 @@
 
 (use-package orderless
   :ensure t
-  :defer t
+  :after vertico
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (style basic partial-completion)))))

@@ -3,11 +3,10 @@
 (require 'init-funcs)
 
 (use-package flycheck
-  :ensure t
-  :defer t
+  :ensure (:wait t)
+  :demand t
   :diminish
   :autoload flycheck-redefine-standard-error-levels
-  :hook (after-init . global-flycheck-mode)
   :init (setq flycheck-global-modes
               '(not text-mode outline-mode fundamental-mode lisp-interaction-mode
                     org-mode diff-mode shell-mode eshell-mode term-mode vterm-mode)
@@ -22,19 +21,19 @@
   (when (fboundp 'define-fringe-bitmap)
     (define-fringe-bitmap 'flycheck-fringe-bitmap-arrow
       [16 48 112 240 112 48 16] nil nil 'center))
-  (flycheck-redefine-standard-error-levels "⏴" 'flycheck-fringe-bitmap-arrow))
+  (flycheck-redefine-standard-error-levels "⏴" 'flycheck-fringe-bitmap-arrow)
+  (global-flycheck-mode))
 
 ;; Display Flycheck errors
 (if (childframe-workable-p)
     (use-package flycheck-posframe
-      :ensure t
-      :defer t
+      :ensure (:wait t)
+      :after flycheck
       :custom-face
       (flycheck-posframe-face ((t (:foreground ,(face-foreground 'success)))))
       (flycheck-posframe-info-face ((t (:foreground ,(face-foreground 'success)))))
       (flycheck-posframe-background-face ((t (:inherit tooltip))))
       (flycheck-posframe-border-face ((t (:inherit posframe-border))))
-      :hook (flycheck-mode . flycheck-posframe-mode)
       :init
       (setq flycheck-posframe-border-width 1)
       (add-hook 'flycheck-posframe-inhibit-functions
@@ -65,11 +64,13 @@
                :internal-border-color (face-background 'flycheck-posframe-border-face nil t)
                :poshandler poshandler
                :hidehandler #'flycheck-posframe-hidehandler))))
-        (advice-add #'flycheck-posframe-show-posframe :override #'my-flycheck-posframe-show-posframe)))
+        (advice-add #'flycheck-posframe-show-posframe :override #'my-flycheck-posframe-show-posframe))
+      (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode))
   (use-package flycheck-popup-tip
-    :ensure t
-    :defer t
-    :hook (flycheck-mode . flycheck-popup-tip-mode)))
+    :ensure (:wait t)
+    :after flycheck
+    :config
+    (add-hook 'flycheck-mode-hook #'flycheck-popup-tip-mode)))
 
 (provide 'init-flycheck)
 ;;; init-flycheck.el ends here

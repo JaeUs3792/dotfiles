@@ -4,9 +4,13 @@
 (require 'init-funcs)
 
 ;; Tree-sitter support
-;; (use-package treesit-auto
-;;   :hook (after-init . global-treesit-auto-mode)
-;;   :init (setq treesit-auto-install 'prompt))
+(use-package treesit-auto
+  :ensure t
+  :demand t
+  :config
+  (setq treesit-auto-install 'prompt)
+  (setq treesit-auto-langs (delq 'verilog treesit-auto-langs))
+  (global-treesit-auto-mode))
 
 ;; Search tool
 (use-package grep
@@ -55,28 +59,10 @@
 (use-package dumb-jump
   :ensure t
   :defer t
-  :pretty-hydra
-  ((:title (pretty-hydra-title "Dump Jump" 'faicon "nf-fa-anchor")
-           :color blue :quit-key ("q" "C-g"))
-   ("Jump"
-    (("j" dumb-jump-go "Go")
-     ("o" dumb-jump-go-other-window "Go other window")
-     ("e" dumb-jump-go-prefer-external "Go external")
-     ("x" dumb-jump-go-prefer-external-other-window "Go external other window"))
-    "Other"
-    (("i" dumb-jump-go-prompt "Prompt")
-     ("l" dumb-jump-quick-look "Quick look")
-     ("b" dumb-jump-back "Back"))))
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
-         ;;("C-M-j" . dumb-jump-hydra/body))
   :init
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq dumb-jump-prefer-searcher 'rg
-        dumb-jump-selector 'ivy))
+        dumb-jump-selector 'completing-read))
 
 ;; Code styles
 ;; (use-package editorconfig
@@ -105,15 +91,11 @@
   (defconst devdocs-major-mode-docs-alist
     '((c-mode          . ("c"))
       (c++-mode        . ("cpp"))
-      (python-mode     . ("python~3.10" "python~2.7"))
+      (python-mode     . ("python~3.10"))
       (ruby-mode       . ("ruby~3.1"))
       (go-mode         . ("go"))
       (rustic-mode     . ("rust"))
-      (css-mode        . ("css"))
-      (html-mode       . ("html"))
       (julia-mode      . ("julia~1.8"))
-      (js-mode         . ("javascript" "jquery"))
-      (js2-mode        . ("javascript" "jquery"))
       (emacs-lisp-mode . ("elisp")))
     "Alist of major-mode and docs.")
 
@@ -149,35 +131,33 @@ Install the doc if it's not installed."
     (devdocs-lookup nil (thing-at-point 'symbol t))))
 
 ;;;; Misc. programming modes
-(use-package csv-mode
-  :ensure t
-  :defer t)
-(use-package csharp-mode
-  :ensure t
-  :defer t)
-(use-package cmake-mode
-  :ensure t
-  :defer t)
-(use-package lua-mode
-  :ensure t
-  :defer t)
+;; (use-package csv-mode
+;;   :ensure t
+;;   :defer t)
+;; (use-package csharp-mode
+;;   :ensure t
+;;   :defer t)
+;; (use-package cmake-mode
+;;   :ensure t
+;;   :defer t)
+;; (use-package lua-mode
+;;   :ensure t
+;;   :defer t)
 
 ;; Windows Batch Mode eXtras
-(use-package bmx-mode
-  :ensure t
-  :defer t
-  :after company
-  :diminish
-  :hook (after-init . bmx-mode-setup-defaults))
+;; (use-package bmx-mode
+;;   :ensure t
+;;   :defer t
+;;   :diminish
+;;   :hook (after-init . bmx-mode-setup-defaults))
 
 ; arch PKGBUILD
-(use-package pkgbuild-mode
-  :ensure t
-  :defer t)
-(use-package systemd
-  :ensure t
-  :defer t)
-
+;; (use-package pkgbuild-mode
+;;   :ensure t
+;;   :defer t)
+;; (use-package systemd
+;;   :ensure t
+;;   :defer t)
 
 (provide 'init-prog)
 

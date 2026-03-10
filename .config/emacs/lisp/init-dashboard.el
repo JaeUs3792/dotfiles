@@ -12,42 +12,7 @@
   (dashboard-heading ((t (:inherit (font-lock-string-face bold)))))
   (dashboard-items-face ((t (:weight normal))))
   (dashboard-no-items-face ((t (:weight normal))))
-  :pretty-hydra
-  ((:title (pretty-hydra-title "Dashboard" 'mdicon "nf-md-view_dashboard")
-           :color pink :quit-key ("q" "C-g"))
-   ("Navigator"
-    (("U" update-dotfiles-and-packages "update" :exit t)
-     ("H" browse-homepage "homepage" :exit t)
-     ("R" restore-previous-session "recover session" :exit t)
-     ("L" restore-session "list sessions" :exit t)
-     ("S" find-custom-file "settings" :exit t))
-    "Section"
-    (("}" dashboard-next-section "next")
-     ("{" dashboard-previous-section "previous")
-     ("r" dashboard-goto-recent-files "recent files")
-     ("m" dashboard-goto-bookmarks "bookmarks")
-     ("p" dashboard-goto-projects "projects"))
-    "Item"
-    (("RET" widget-button-press "open" :exit t)
-     ("<tab>" widget-forward "next")
-     ("C-i" widget-forward "next")
-     ("<backtab>" widget-backward "previous")
-     ("C-n" next-line "next line")
-     ("C-p" previous-line "previous  line"))
-    "Misc"
-    (("<f2>" open-dashboard "open" :exit t)
-     ("g" dashboard-refresh-buffer "refresh" :exit t)
-     ("Q" quit-dashboard "quit" :exit t))))
-  :bind (("<f2>" . open-dashboard)
-         :map dashboard-mode-map
-         ("H" . browse-homepage)
-         ("R" . restore-previous-session)
-         ("L" . restore-session)
-         ("S" . find-custom-file)
-         ("U" . update-dotfiles-and-packages)
-         ("q" . quit-dashboard)
-         ("h" . dashboard-hydra/body)
-         ("?" . dashboard-hydra/body))
+  :bind ("<f2>" . open-dashboard)
   :hook (dashboard-mode . (lambda ()
                             ;; No title
                             (setq-local frame-title-format nil)
@@ -114,11 +79,35 @@
                  (nerd-icons-mdicon "nf-md-help" :height 1.5)
                "?")
             "" "Help (?/h)"
-            (lambda (&rest _) (dashboard-hydra/body))
+            (lambda (&rest _) (my/dashboard-menu))
             font-lock-string-face))))
 
   (dashboard-setup-startup-hook)
   :config
+  (require 'transient)
+  (transient-define-prefix my/dashboard-menu ()
+    "Dashboard menu."
+    [["Navigator"
+      ("U" "update" update-dotfiles-and-packages)
+      ("H" "homepage" browse-homepage)
+      ("R" "recover session" restore-previous-session)
+      ("L" "list sessions" restore-session)
+      ("S" "settings" find-custom-file)]
+     ["Section"
+      ("}" "next" dashboard-next-section :transient t)
+      ("{" "previous" dashboard-previous-section :transient t)
+      ("r" "recent files" dashboard-goto-recent-files :transient t)
+      ("m" "bookmarks" dashboard-goto-bookmarks :transient t)
+      ("p" "projects" dashboard-goto-projects :transient t)]
+     ["Item"
+      ("RET" "open" widget-button-press)
+      ("<tab>" "next" widget-forward :transient t)
+      ("<backtab>" "previous" widget-backward :transient t)]
+     ["Misc"
+      ("<f2>" "open" open-dashboard)
+      ("g" "refresh" dashboard-refresh-buffer)
+      ("Q" "quit" quit-dashboard)]])
+
   ;; Insert copyright
   ;; @see https://github.com/emacs-dashboard/emacs-dashboard/issues/219
   (defun restore-previous-session ()

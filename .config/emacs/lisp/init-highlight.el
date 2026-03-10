@@ -52,35 +52,6 @@
     (define-key symbol-overlay-map (kbd "y") nil)
     (define-key symbol-overlay-map (kbd "g") 'symbol-overlay-map-help))
 
-;; Colorize color names in buffers
-(use-package rainbow-mode
-  :ensure t
-  :defer t
-  :diminish
-  :defines helpful-mode-map
-  :bind (:map help-mode-map
-         ("w" . rainbow-mode))
-  :hook ((html-mode php-mode helpful-mode) . rainbow-mode)
-  :init (with-eval-after-load 'helpful
-          (bind-key "w" #'rainbow-mode helpful-mode-map))
-  :config
-  (with-no-warnings
-    ;; HACK: Use overlay instead of text properties to override `hl-line' faces.
-    ;; @see https://emacs.stackexchange.com/questions/36420
-    (defun my-rainbow-colorize-match (color &optional match)
-      (let* ((match (or match 0))
-             (ov (make-overlay (match-beginning match) (match-end match))))
-        (overlay-put ov 'ovrainbow t)
-        (overlay-put ov 'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
-                                                  "white" "black"))
-                                (:background ,color)))))
-    (advice-add #'rainbow-colorize-match :override #'my-rainbow-colorize-match)
-
-    (defun my-rainbow-clear-overlays ()
-      "Clear all rainbow overlays."
-      (remove-overlays (point-min) (point-max) 'ovrainbow t))
-    (advice-add #'rainbow-turn-off :after #'my-rainbow-clear-overlays)))
-
 ;; Highlight brackets according to their depth
 (use-package rainbow-delimiters
   :ensure t
@@ -89,46 +60,31 @@
 
 ;; keywords from doom-emacs
 (use-package hl-todo
-  :ensure t
-  :defer t
+  :ensure (:wait t)
+  :demand t
   :custom-face
   (hl-todo ((t (:inherit default :height 0.9 :width condensed :weight bold :underline nil :inverse-video t))))
-  :hook (after-init . global-hl-todo-mode)
   :init
   (setq hl-todo-require-punctuation t
-        hl-todo-highlight-punctuation ":")
+        hl-todo-highlight-punctuation ":"
+        hl-todo-keyword-faces
+        '(("TODO"       . "#ffcb6b")    ;; TODO:
+          ("FIXME"      . "#ff5370")    ;; FIXME:
+          ("BUG"        . "#ff5370")    ;; BUG:
+          ("HACK"       . "#f78b69")    ;; HACK:
+          ("XXX"        . "#f78b69")    ;; XXX:
+          ("REVIEW"     . "#89ddff")    ;; REVIEW:
+          ("NOTE"       . "#c2e88b")    ;; NOTE:
+          ("DEPRECATED" . "#8d9eaf")))  ;; DEPRECATED:
   :config
-  ;; TODO: For things that need to be done, just not today.
-  (dolist (keyword '("TODO"))
-    (add-to-list 'hl-todo-keyword-faces `(,keyword . "#ffcb6b")))
-  ;; FIXME: For problems that will become bigger problems later if not fixed ASAP.
-  ;; BUG: For a known bug that needs a workaround
-  (dolist (keyword '("FIXME" "BUG"))
-    (add-to-list 'hl-todo-keyword-faces `(,keyword . "#ff5370")))
-  ;; HACK: For tidbits that are unconventional and not intended
-  ;;       uses of the constituent parts, and may break in a future update.
-  ;; XXX: For warning about a problematic or misguiding code
-  (dolist (keyword '("HACK" "XXX"))
-    (add-to-list 'hl-todo-keyword-faces `(,keyword . "#f78b69")))
-  ;; REVIEW: For things that were done hastily and/or hasn't been thoroughly
-  ;;         tested. It may not even be necessary!
-  (dolist (keyword '("REVIEW"))
-    (add-to-list 'hl-todo-keyword-faces `(,keyword . "#89ddff")))
-  ;; NOTE: For especially important gotchas with a given implementation,
-  ;;       directed at another user other than the author.
-  (dolist (keyword '("NOTE"))
-    (add-to-list 'hl-todo-keyword-faces `(,keyword . "#c2e88b")))
-  ;; DEPRECATED: For things that just gotta go and will soon be gone.
-  (dolist (keyword '("DEPRECATED"))
-    (add-to-list 'hl-todo-keyword-faces `(,keyword . "#8d9eaf"))))
+  (global-hl-todo-mode))
 
 (use-package diff-hl
-  :ensure t
-  :defer t
-  :hook ((after-init . global-diff-hl-mode)
-         (magit-post-refresh . diff-hl-magit-post-refresh)
-         (dired-mode . diff-hl-dired-mode-unless-remote))
+  :ensure (:wait t)
+  :demand t
+  :hook ((dired-mode . diff-hl-dired-mode-unless-remote))
   :config
+  (global-diff-hl-mode)
   ;; Highlight on-the-fly
   (diff-hl-flydiff-mode t)
 
@@ -164,6 +120,9 @@
   (pulse-highlight-face ((t (:inherit region :background unspecified :extend t))))
   :hook (((dumb-jump-after-jump imenu-after-jump) . my-recenter-and-pulse)
          ((bookmark-after-jump magit-diff-visit-file next-error) . my-recenter-and-pulse-line))
+  :custom
+  (pulse-delay 0.04)
+  (pulse-iterations 15)
   :init
   (with-no-warnings
     (defun my-pulse-momentary-line (&rest _)

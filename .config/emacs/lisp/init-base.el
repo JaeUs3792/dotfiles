@@ -48,7 +48,7 @@
 		recentf-exclude
 		'("\\.?cache" ".cask" "url" "COMMIT_EDITMSG\\'" "bookmarks"
 		  "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
-		  "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$" 
+		  "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$"
 		  "^/tmp/" "^/var/folders/.+$" "^/ssh:" "/persp-confs/"
 		  (lambda (file) (file-in-directory-p file package-user-dir))))
   :config

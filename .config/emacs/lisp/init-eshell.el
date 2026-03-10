@@ -112,10 +112,10 @@
               eshell-prompt-function #'epe-theme-lambda))
 
 ;; `eldoc' support
-(use-package esh-help
-  :ensure t
-  :defer t
-  :init (setup-esh-help-eldoc))
+;; (use-package esh-help
+;;   :ensure t
+;;   :defer t
+;;   :init (setup-esh-help-eldoc))
 
 ;; `cd' to frequent directory in `eshell'
 (use-package eshell-z

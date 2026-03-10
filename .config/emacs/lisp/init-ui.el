@@ -99,24 +99,7 @@
       scroll-preserve-screen-position t)
 
 ;; Good pixel line scrolling
-(if (fboundp 'pixel-scroll-precision-mode)
-    (pixel-scroll-precision-mode t)
-  (use-package good-scroll
-    :ensure t
-    :hook (after-init . good-scroll-mode)
-    :bind (([remap next] . good-scroll-up-full-screen)
-           ([remap prior] . good-scroll-down-full-screen))))
-
-;; Smooth scrolling over images
-(use-package iscroll
-  :ensure t
-  :defer t
-  :hook (image-mode . iscroll-mode))
-
-;; Use fixed pitch where it's sensible
-(use-package mixed-pitch
-  :ensure t
-  :defer t)
+(pixel-scroll-precision-mode)
 
 ;; Display ugly ^L page breaks as tidy horizontal lines
 (use-package page-break-lines
@@ -134,6 +117,5 @@
   :ensure t
   :defer t
   :init (global-emojify-mode 1))
-
 (provide 'init-ui)
 ;;; init-ui.el ends here.

@@ -1,0 +1,60 @@
+#+TITLE: Emacs Configuration Notes
+
+* Elpaca + use-package 주의사항
+
+** 비동기 설치 타이밍 문제
+- Elpaca는 패키지를 비동기로 설치하므로, ~:hook (after-init . ...)~ 패턴이 동작하지 않을 수 있다.
+- 시작 시 바로 필요한 핵심 패키지는 ~:ensure (:wait t)~ 로 동기 설치.
+- 나중에 트리거되는 패키지는 ~:ensure t~ (비동기)로 충분.
+
+** :defer t 주의
+- ~:defer t~ 만 있고 로드 트리거(:bind, :hook, :after 등)가 없으면 ~:config~ 블록이 영원히 실행되지 않는다.
+- ~:after 패키지명~ 을 사용하면 해당 패키지 로드 후 자동으로 트리거된다.
+
+** :hook 대신 :after + :config
+- Elpaca 환경에서는 ~:hook (some-mode . another-mode)~ 가 타이밍 문제로 실패할 수 있다.
+- ~:after~ + ~:config~ 에서 직접 모드를 켜는 것이 안전하다.
+
+* Vertico Stack (completion 표준 조합)
+
+| 패키지     | 역할                                 |
+|------------+--------------------------------------|
+| vertico    | 미니버퍼 completion UI               |
+| consult    | 검색/탐색 명령 (line, ripgrep, etc.) |
+| marginalia | 후보에 annotation 표시               |
+| orderless  | 유연한 필터링 (스페이스로 분리 매칭) |
+| embark     | 후보에 대한 컨텍스트 액션            |
+
+** prescient + orderless 공존
+- 둘 다 쓰려면 prescient의 필터링을 끄고 정렬만 사용:
+  #+begin_src elisp
+  (setq vertico-prescient-enable-filtering nil)
+  #+end_src
+- 필터링은 orderless, 정렬(최근/자주 사용 순)은 prescient가 담당.
+- ~prescient.el~ 기반 패키지를 먼저 로드하고 ~prescient-persist-mode~ 활성화 필요.
+
+** nerd-icons-completion
+- marginalia에 의존하므로 ~:after marginalia~ 로 설정해야 한다.
+- ~:after vertico~ 로 하면 marginalia보다 먼저 로드되어 아이콘이 안 붙는다.
+
+** marginalia
+- vertico에 의존하지 않는 독립 패키지 (~:after vertico~ 불필요).
+- ~marginalia-annotators~ 변수는 최신 버전에서 폐기됨.
+
+** embark
+- minibuffer 후보에 대한 컨텍스트 액션 실행 ("우클릭 메뉴").
+- ~embark-act~ (C-,): 대상 타입에 맞는 액션 목록 표시.
+- ~embark-export~ (C-c C-e): 후보를 적절한 모드 버퍼로 내보내기 (grep 결과 → grep-mode 등).
+- ~embark-consult~: consult 명령 결과에 embark 액션 연동.
+
+* TODO: 나중에 설정할 것들
+
+** mixed-pitch (org-mode용)
+- org-mode에서 가변폭 폰트(variable-pitch) 사용 시 코드 블록만 고정폭으로 유지해주는 패키지.
+- init-ui.el에는 `:defer t`만 있어서 현재 미사용 상태.
+- init-org.el 작성 시 org-mode hook에 추가할 것:
+  #+begin_src elisp
+  (use-package mixed-pitch
+    :ensure t
+    :hook (org-mode . mixed-pitch-mode))
+  #+end_src

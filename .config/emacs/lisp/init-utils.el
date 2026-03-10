@@ -19,27 +19,28 @@
   (ztreep-diff-model-ignored-face ((t (:inherit font-lock-doc-face :strike-through t))))
   (ztreep-diff-model-diff-face ((t (:inherit diff-removed))))
   (ztreep-diff-model-add-face ((t (:inherit diff-nonexistent))))
-  :pretty-hydra
-  ((:title (pretty-hydra-title "Ztree" 'octicon "nf-oct-diff" :face 'nerd-icons-green)
-    :color pink :quit-key ("q" "C-g"))
-   ("Diff"
-    (("C" ztree-diff-copy "copy" :exit t)
-     ("h" ztree-diff-toggle-show-equal-files "show/hide equals" :exit t)
-     ("H" ztree-diff-toggle-show-filtered-files "show/hide ignores" :exit t)
-     ("D" ztree-diff-delete-file "delete" :exit t)
-     ("v" ztree-diff-view-file "view" :exit t)
-     ("d" ztree-diff-simple-diff-files "simple diff" :exit t)
-     ("r" ztree-diff-partial-rescan "partial rescan" :exit t)
-     ("R" ztree-diff-full-rescan "full rescan" :exit t))
-    "View"
-    (("RET" ztree-perform-action "expand/collapse or view" :exit t)
-     ("SPC" ztree-perform-soft-action "expand/collapse or view in other" :exit t)
-     ("TAB" ztree-jump-side "jump side" :exit t)
-     ("g" ztree-refresh-buffer "refresh" :exit t)
-     ("x" ztree-toggle-expand-subtree "expand/collapse" :exit t)
-     ("<backspace>" ztree-move-up-in-tree "go to parent" :exit t))))
   :bind (:map ztreediff-mode-map
-         ("<f6>" . ztree-hydra/body))
+         ("<f6>" . my/ztree-menu))
+  :config
+  (require 'transient)
+  (transient-define-prefix my/ztree-menu ()
+    "Ztree menu."
+    [["Diff"
+      ("C" "copy" ztree-diff-copy)
+      ("h" "show/hide equals" ztree-diff-toggle-show-equal-files :transient t)
+      ("H" "show/hide ignores" ztree-diff-toggle-show-filtered-files :transient t)
+      ("D" "delete" ztree-diff-delete-file)
+      ("v" "view" ztree-diff-view-file)
+      ("d" "simple diff" ztree-diff-simple-diff-files)
+      ("r" "partial rescan" ztree-diff-partial-rescan :transient t)
+      ("R" "full rescan" ztree-diff-full-rescan :transient t)]
+     ["View"
+      ("RET" "expand/collapse or view" ztree-perform-action)
+      ("SPC" "view in other" ztree-perform-soft-action)
+      ("TAB" "jump side" ztree-jump-side :transient t)
+      ("g" "refresh" ztree-refresh-buffer :transient t)
+      ("x" "expand/collapse" ztree-toggle-expand-subtree :transient t)
+      ("<backspace>" "go to parent" ztree-move-up-in-tree :transient t)]])
   :init (setq ztree-draw-unicode-lines t
               ztree-show-number-of-children t))
 
@@ -69,9 +70,9 @@
               process-environment))
     (advice-add #'list-environment-entries :override #'my-list-environment-entries)))
 
-;; (unless ON-WINDOWS
-;;   (use-package daemons)                 ; system services/daemons
-;;   (use-package tldr))
+(unless ON-WINDOWS
+  (use-package daemons :ensure t :defer t)
+  (use-package tldr :ensure t :defer t))
 
 
 (provide 'init-utils)

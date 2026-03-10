@@ -1,16 +1,17 @@
 ;;; init-yasnippet.el -*- lexical-binding: t -*-
 ;; Yet another snippet extension
 (use-package yasnippet
-  :ensure t
-  :defer t
+  :ensure (:wait t)
+  :demand t
   :diminish yas-minor-mode
-  :hook (after-init . yas-global-mode)
   :config
-  (setq yas-indent-line nil)) ;; indent does not work properly.
+  (setq yas-indent-line nil)
+  (yas-global-mode)) ;; indent does not work properly.
 
 ;; Collection of yasnippet snippets
 (use-package yasnippet-snippets
-  :ensure t)
+  :ensure t
+  :after yasnippet)
 
 (provide 'init-yasnippet)
 ;;; init-yasnippet.el ends here

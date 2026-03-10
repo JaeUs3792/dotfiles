@@ -8,8 +8,7 @@
   :hook (dired-mode . dired-omit-mode)
   :general
   (:keymaps 'dired-mode-map
-            "C-c C-p" 'wdired-change-to-wdired-mode
-            "C-c C-r" 'dired-rsync)
+            "C-c C-p" 'wdired-change-to-wdired-mode)
   :custom (dired-omit-files (rx (seq bol ".")))
   :config
   ;; Guess a default target directory
@@ -31,15 +30,28 @@
     "h" 'dired-up-directory
     "l" 'dired-find-file
     ")" 'dired-git-info-mode
-    "s" 'hydra-dired-quick-sort/body))
+    "s" 'my/dired-sort-menu
+    "C" 'dired-rsync))
 
-;; Quick sort dired buffers via hydra
-(use-package dired-quick-sort
-  :ensure t
-  :defer t
-  :hook (after-init . dired-quick-sort-setup)
-  :init
-  (setq dired-quick-sort-suppress-setup-warning t))
+(defun my/dired-sort-by (flags)
+  "Sort dired buffer by FLAGS."
+  (setq dired-listing-switches (concat "-alh --group-directories-first " flags))
+  (dired-sort-other dired-listing-switches))
+
+(require 'transient)
+(transient-define-prefix my/dired-sort-menu ()
+  "Dired sort menu."
+  [["Sort by"
+    ("n" "name"          (lambda () (interactive) (my/dired-sort-by ""))          :transient t)
+    ("e" "extension"     (lambda () (interactive) (my/dired-sort-by "-X"))        :transient t)
+    ("s" "size"          (lambda () (interactive) (my/dired-sort-by "-S"))        :transient t)
+    ("t" "time modified" (lambda () (interactive) (my/dired-sort-by "-t"))        :transient t)
+    ("c" "time created"  (lambda () (interactive) (my/dired-sort-by "-tc"))       :transient t)
+    ("a" "time accessed" (lambda () (interactive) (my/dired-sort-by "-tu"))       :transient t)]
+   ["Order"
+    ("r" "reverse"       (lambda () (interactive) (my/dired-sort-by "-r"))        :transient t)]
+   ["Quit"
+    ("q" "quit" transient-quit-all)]])
 
 ;; Show git info in dired
 (use-package dired-git-info

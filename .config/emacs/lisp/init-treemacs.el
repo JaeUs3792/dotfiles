@@ -38,23 +38,20 @@
   (treemacs-nerd-icons-file-face ((t (:inherit nerd-icons-dsilver))))
   :config (treemacs-load-theme "nerd-icons"))
 
-(use-package treemacs-magit
-  :ensure t
-  :defer t
-  :after magit
-  :autoload treemacs-magit--schedule-update
-  :hook ((magit-post-commit
-          git-commit-post-finish
-          magit-post-stage
-          magit-post-unstage)
-         . treemacs-magit--schedule-update))
+(with-eval-after-load 'magit
+  (use-package treemacs-magit
+    :ensure t
+    :defer t
+    :config
+    (add-hook 'magit-post-commit-hook #'treemacs-magit--schedule-update)
+    (add-hook 'git-commit-post-finish-hook #'treemacs-magit--schedule-update)
+    (add-hook 'magit-post-stage-hook #'treemacs-magit--schedule-update)
+    (add-hook 'magit-post-unstage-hook #'treemacs-magit--schedule-update)))
 
-(use-package treemacs-persp
-  :ensure t
-  :defer t
-  :after persp-mode
-  :demand t
-  :functions treemacs-set-scope-type
-  :config (treemacs-set-scope-type 'Perspectives))
+(with-eval-after-load 'perspective
+  (use-package treemacs-perspective
+    :ensure t
+    :demand t
+    :config (treemacs-set-scope-type 'Perspectives)))
 (provide 'init-treemacs)
 ;;; init-treemacs.el ends here

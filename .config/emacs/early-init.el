@@ -1,5 +1,7 @@
-;;; early-init.el -*- lexical-binding: t -*-
-;; do not garbage collection during startup
+;; Example Elpaca early-init.el -*- lexical-binding: t; -*-
+
+(setq package-enable-at-startup nil)
+
 (setq gc-cons-threshold most-positive-fixnum)
 
 ;;; Native compilation settings
@@ -7,11 +9,6 @@
   ;; Silence compiler warnings as they can be pretty disruptive
   (setq native-comp-async-report-warnings-errors nil)
   (setq native-comp-deferred-compilation nil))
-
-
-(setq package-enable-at-startup nil)
-;; built-in use-package, set before loading
-(setq use-package-enable-imenu-support t)
 
 ;;
 (setq load-prefer-newer noninteractive)
@@ -24,11 +21,11 @@
   (push '(ns-transparent-titlebar . t) default-frame-alist))
 (setq-default mode-line-format nil)
 
-;;(setq inhibit-startup-message nil) ; TODO check.
-
 ;; initial load with blue theme
-;(load-theme 'deeper-blue)
+(load-theme 'deeper-blue)
 
-(setq package-enable-at-startup nil)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; early-init.el ends here
+;; Local Variables:
+;; no-byte-compile: t
+;; no-native-compile: t
+;; no-update-autoloads: t
+;; End:

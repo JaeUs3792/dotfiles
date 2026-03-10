@@ -14,8 +14,8 @@
         verilog-auto-newline             nil))
 
 (use-package verilog-ext
-  :ensure t
-  :defer t
+  :ensure (:wait t)
+  :demand t
   :hook ((verilog-mode . verilog-ext-mode)
          (verilog-mode . eglot-ensure))
   :init

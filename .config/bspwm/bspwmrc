@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export JUPCID=HOME-DESKTOP
+export JUPCID=HSCDEV
 # Set environment variables
 export PATH="$HOME/scripts:$PATH"
 export XDG_CURRENT_DESKTOP='bspwm'

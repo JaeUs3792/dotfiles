@@ -74,36 +74,8 @@
   :ensure nil
   :defer t
   :diminish
-  :pretty-hydra
-  ((:title (pretty-hydra-title "Smerge" 'octicon "nf-oct-diff")
-           :color pink :quit-key ("q" "C-g"))
-   ("Move"
-    (("n" smerge-next "next")
-     ("p" smerge-prev "previous"))
-    "Keep"
-    (("b" smerge-keep-base "base")
-     ("u" smerge-keep-upper "upper")
-     ("l" smerge-keep-lower "lower")
-     ("a" smerge-keep-all "all")
-     ("RET" smerge-keep-current "current")
-     ("C-m" smerge-keep-current "current"))
-    "Diff"
-    (("<" smerge-diff-base-upper "upper/base")
-     ("=" smerge-diff-upper-lower "upper/lower")
-     (">" smerge-diff-base-lower "upper/lower")
-     ("R" smerge-refine "refine")
-     ("E" smerge-ediff "ediff"))
-    "Other"
-    (("C" smerge-combine-with-next "combine")
-     ("r" smerge-resolve "resolve")
-     ("k" smerge-kill-current "kill")
-     ("ZZ" (lambda ()
-             (interactive)
-             (save-buffer)
-             (bury-buffer))
-      "Save and bury buffer" :exit t))))
   :bind (:map smerge-mode-map
-              ("C-c m" . smerge-mode-hydra/body))
+              ("C-c m" . my/smerge-menu))
   :hook ((find-file . (lambda ()
                         (save-excursion
                           (goto-char (point-min))
@@ -111,7 +83,34 @@
                             (smerge-mode 1)))))
          (magit-diff-visit-file . (lambda ()
                                     (when smerge-mode
-                                      (smerge-mode-hydra/body))))))
+                                      (my/smerge-menu)))))
+  :config
+  (require 'transient)
+  (transient-define-prefix my/smerge-menu ()
+    "Smerge menu."
+    [["Move"
+      ("n" "next" smerge-next :transient t)
+      ("p" "previous" smerge-prev :transient t)]
+     ["Keep"
+      ("b" "base" smerge-keep-base :transient t)
+      ("u" "upper" smerge-keep-upper :transient t)
+      ("l" "lower" smerge-keep-lower :transient t)
+      ("a" "all" smerge-keep-all :transient t)
+      ("RET" "current" smerge-keep-current :transient t)]
+     ["Diff"
+      ("<" "upper/base" smerge-diff-base-upper :transient t)
+      ("=" "upper/lower" smerge-diff-upper-lower :transient t)
+      (">" "base/lower" smerge-diff-base-lower :transient t)
+      ("R" "refine" smerge-refine :transient t)
+      ("E" "ediff" smerge-ediff)]
+     ["Other"
+      ("C" "combine" smerge-combine-with-next :transient t)
+      ("r" "resolve" smerge-resolve :transient t)
+      ("k" "kill" smerge-kill-current :transient t)
+      ("ZZ" "save and bury" (lambda ()
+                              (interactive)
+                              (save-buffer)
+                              (bury-buffer)))]]))
 ;; Open github/gitlab/bitbucket page
 (use-package browse-at-remote
   :ensure t
