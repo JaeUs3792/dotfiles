@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Questasim (on vivado-ubuntu)
+Comment=Questasim
+Icon=/home/jaeus/.local/share/icons/questasim.png
+Exec=/usr/bin/distrobox-enter  -n vivado-ubuntu  -- LM_LICENSE_FLIE=/tools/questasim/license.dat /tools/questasim/questasim/bin/vsim
+StartupWMClass=questasim

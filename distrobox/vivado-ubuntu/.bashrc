@@ -6,6 +6,9 @@ if [ -f /tools/Xilinx/Vivado/2024.2/settings64.sh ]; then
 fi
 
 # Source PetaLinux settings
-if [ -f /opt/petalinux/settings.sh ]; then
-    source /opt/petalinux/settings.sh
+if [ -f /tools/petalinux/2024.2/settings.sh ]; then
+    source /tools/petalinux/2024.2/settings.sh
 fi
+
+export LM_LICENSE_FILE=/tools/questasim/license.dat
+export PATH=$PATH:/tools/questasim/questasim/bin
