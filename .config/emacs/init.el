@@ -96,7 +96,7 @@ Otherwise the startup will be very slow. "
 (require 'init-highlight)
 (require 'init-ibuffer)
 (require 'init-perspective)
-(require 'init-treemacs)
+;(require 'init-treemacs)
 
 (require 'init-eshell)
 (require 'init-markdown)
