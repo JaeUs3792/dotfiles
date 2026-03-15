@@ -50,6 +50,13 @@ paru -S texlive-basic texlive-langkorean texlive-latex texlive-latexextra texliv
 paru -S jupyterlab --noconfirm
 paru -S zathura-pdf-mupdf
 
+# gnuplot (org-plot 지원)
+paru -S gnuplot --noconfirm
+
+# wavedrom-cli (ob-wavedrom org-babel 지원)
+paru -S nodejs --noconfirm
+npm install -g wavedrom-cli
+
 # distrobox (podman 설치 시 OCI runtime: crun 선택)
 paru -S distrobox podman
 echo 'container_default_shell="/bin/bash"' >> ~/.distroboxrc

@@ -14,7 +14,7 @@ window-decoration = false
 confirm-close-surface = false
 
 # Scrollback
-scrollback-limit = 100000
+scrollback-limit = 10000000
 
 # Cursor
 cursor-style = block

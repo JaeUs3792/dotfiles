@@ -136,6 +136,7 @@ prepended to the element after the #+HEADER: tag."
         org-odt-preferred-output-format "docx" ;; opt -> docx
         org-export-with-sub-superscripts '{}   ;; ODT export to docx
         org-export-with-toc nil                ;; TOC 기본 비활성화
+        org-export-headline-levels 5           ;; 기본 3 → 5 (paragraph/subparagraph까지)
         org-latex-compiler "pdflatex"
 
         org-tags-column -80
@@ -397,30 +398,141 @@ prepended to the element after the #+HEADER: tag."
   :defer t
   :after ox)
 
-(setq org-latex-minted-options
-      '(("breaklines" "true")
-        ("tabsize" "4")
-        ("autogobble")
-        ("breakanywhere" "true")
-        ("bgcolor" "gray!40")
-        ("frame" "single")
-        ("numbers" "left")))
-(setq org-latex-listings 'minted
-      org-latex-packages-alist '(("" "minted") ("" "kotex"))
+;; engrave-faces: Emacs font-lock 기반 코드 하이라이팅 (minted 대체)
+;; minted 대비 8배 빠름, Python/pygments 의존성 없음, -shell-escape 불필요
+(use-package engrave-faces
+  :ensure t
+  :after ox-latex)
+
+(with-eval-after-load 'ox-latex
+  ;; example 블록도 engraved 스타일로 통일
+  (advice-add 'org-latex-example-block :around
+              (lambda (orig-fn example-block contents info)
+                (let ((output-block (funcall orig-fn example-block contents info)))
+                  (if (eq 'engraved (plist-get info :latex-listings))
+                      (format "\\begin{Code}[alt]\n%s\n\\end{Code}" output-block)
+                    output-block))))
+
+  ;; KOMA-script 클래스 설정
+  ;; scrartcl/scrbook: 표준 article/book 대체, 여백/헤더/캡션 등 내장 커스터마이징 지원
+  (let* ((article-sections '(("\\section{%s}" . "\\section*{%s}")
+                             ("\\subsection{%s}" . "\\subsection*{%s}")
+                             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                             ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+         (book-sections (append '(("\\chapter{%s}" . "\\chapter*{%s}"))
+                                article-sections))
+         ;; 섹션 번호를 마진에 내어쓰기 (KOMA 전용)
+         (hanging-secnum
+          "
+\\renewcommand\\sectionformat{\\llap{\\thesection\\autodot\\enskip}}
+\\renewcommand\\subsectionformat{\\llap{\\thesubsection\\autodot\\enskip}}
+\\renewcommand\\subsubsectionformat{\\llap{\\thesubsubsection\\autodot\\enskip}}")
+         ;; 큼직한 챕터 헤딩 (scrbook 전용)
+         (big-chapter
+          "
+\\RedeclareSectionCommand[afterindent=false, beforeskip=0pt, afterskip=0pt, innerskip=0pt]{chapter}
+\\setkomafont{chapter}{\\normalfont\\Huge}
+\\renewcommand*{\\chapterheadstartvskip}{\\vspace*{0\\baselineskip}}
+\\renewcommand*{\\chapterheadendvskip}{\\vspace*{0\\baselineskip}}
+\\renewcommand*{\\chapterformat}{%
+  \\fontsize{60}{30}\\selectfont\\rlap{\\hspace{6pt}\\thechapter}}
+\\renewcommand*\\chapterlinesformat[3]{%
+  \\parbox[b]{\\dimexpr\\textwidth-0.5em\\relax}{%
+    \\raggedleft{{\\large\\scshape\\bfseries\\chapapp}\\vspace{-0.5ex}\\par\\Huge#3}}%
+    \\hfill\\makebox[0pt][l]{#2}}"))
+    (setcdr (assoc "article" org-latex-classes)
+            `(,(concat "\\documentclass{scrartcl}" hanging-secnum)
+              ,@article-sections))
+    (add-to-list 'org-latex-classes
+                 `("report" ,(concat "\\documentclass{scrartcl}" hanging-secnum)
+                   ,@article-sections))
+    (add-to-list 'org-latex-classes
+                 `("book" ,(concat "\\documentclass[twoside=false]{scrbook}"
+                                   big-chapter hanging-secnum)
+                   ,@book-sections))
+    (add-to-list 'org-latex-classes
+                 `("blank" "[NO-DEFAULT-PACKAGES]\n[NO-PACKAGES]\n[EXTRA]"
+                   ,@article-sections)))
+
+  ;; KOMA와 capt-of 충돌 방지: KOMA가 \captionof를 이미 제공함
+  (setq org-latex-default-packages-alist
+        (seq-remove (lambda (x) (equal (cadr x) "capt-of"))
+                    org-latex-default-packages-alist))
+
+  ;; 컬러 hyperref 설정
+  ;; \providecolor 대신 인라인 xcolor HTML 문법 사용 (xcolor 로드 순서 무관)
+  (setq org-latex-hyperref-template
+        "\\hypersetup{
+  pdfauthor={%a},
+  pdftitle={%t},
+  pdfkeywords={%k},
+  pdfsubject={%d},
+  pdfcreator={%c},
+  pdflang={%L},
+  breaklinks=true,
+  colorlinks=true,
+  linkcolor={[HTML]{882255}},
+  urlcolor={[HTML]{0077bb}},
+  citecolor={[HTML]{999933}}}
+\\urlstyle{same}\n"))
+
+(setq org-latex-listings 'engraved
+      ;org-latex-engraved-theme 'modus-operandi   ; 밝은 배경 테마 (PDF 출력에 적합)
+      org-latex-packages-alist '(("" "kotex"))
+      org-latex-tables-booktabs t
       org-latex-pdf-process
-      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-        "pdflatex -interaction nonstopmode -output-directory %o %f"))
+      '("LC_ALL=en_US.UTF-8 latexmk -f -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"))
+(add-to-list 'org-latex-packages-alist '("" "booktabs"))
+(add-to-list 'org-latex-packages-alist '("" "tabularx"))
 
 ; (use-package cdlatex
 ;   :ensure t
 ;   :hook (org-mode . org-cdlatex-mode))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                              Org babel related                             ;
+;; org-babel-process-params 가 :file 을 expand-file-name 으로 절대경로 변환함
+;; 결과 링크를 버퍼 디렉토리 기준 상대경로로 되돌림
+(defun my/org-babel-result-use-relative-path (result)
+  (when (and (stringp result) buffer-file-name)
+    (let ((buf-dir (file-name-directory (buffer-file-name))))
+      (setq result
+            (replace-regexp-in-string
+             "file:\\(/[^][\n]+\\)"
+             (lambda (m)
+               ;; m = "file:/abs/path" → substring 5 = "/abs/path"
+               (concat "file:" (file-relative-name (substring m 5) buf-dir)))
+             result))))
+  result)
+(advice-add 'org-babel-result-to-file :filter-return
+            #'my/org-babel-result-use-relative-path)
+;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package gnuplot
+  :ensure t
+  :defer t)
+
 (use-package ob-async
   :ensure t
   :config
   (setq ob-async-no-async-languages-alist '("ipython")))
+
+;; ob-wavedrom: wavedrom-cli 사용 (npm install -g wavedrom-cli)
+(defvar org-babel-default-header-args:wavedrom
+  '((:results . "raw") (:exports . "results"))
+  "Default header args for wavedrom babel blocks.")
+
+(defun org-babel-execute:wavedrom (body params)
+  "Execute a wavedrom block using wavedrom-cli."
+  (let* ((file (cdr (assq :file params)))
+         (in-file (org-babel-temp-file "wavedrom-" ".json")))
+    (with-temp-file in-file (insert body))
+    (org-babel-eval
+     (format "wavedrom-cli -i %s -s %s"
+             (shell-quote-argument in-file)
+             (shell-quote-argument file))
+     "")
+    (format "[[file:%s]]" file)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                    Tools                                   ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
