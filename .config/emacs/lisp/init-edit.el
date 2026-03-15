@@ -127,6 +127,7 @@
   (tramp-backup-directory-alist backup-directory-alist)
   :config
   ;; Use ssh ControlMaster for persistent connections
+  (make-directory "~/.ssh/sockets" t)
   (setq tramp-ssh-controlmaster-options
         (concat "-o ControlMaster=auto "
                 "-o ControlPath=~/.ssh/sockets/%%r@%%h:%%p "
