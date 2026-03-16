@@ -115,4 +115,5 @@ export VISUAL=nvim
 export PYTHONSTARTUP=/home/jaeus/scripts/my_imports.py
 
 starship init fish | source
+zoxide init fish | source
 export PATH="$HOME/.cargo/bin:$PATH"
