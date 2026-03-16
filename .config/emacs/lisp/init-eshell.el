@@ -124,5 +124,26 @@
   :hook (eshell-mode . (lambda () (require 'eshell-z))))
 
 
+(defun ju/eshell-toggle ()
+  "Toggle eshell popup at the bottom."
+  (interactive)
+  (let ((buf-name (format "*eshell-popup:%s*"
+                          (if (bound-and-true-p persp-mode)
+                              (persp-current-name)
+                            "main"))))
+    (if-let* ((buf (get-buffer buf-name))
+              (win (get-buffer-window buf)))
+        (delete-window win)
+      (let ((buf (get-buffer-create buf-name)))
+        (with-current-buffer buf
+          (unless (eq major-mode 'eshell-mode)
+            (eshell-mode)))
+        (display-buffer buf
+                        '((display-buffer-in-side-window)
+                          (side . bottom)
+                          (slot . 1)
+                          (window-height . 0.3)))
+        (select-window (get-buffer-window buf))))))
+
 (provide 'init-eshell)
 ;;; init-eshell.el ends here

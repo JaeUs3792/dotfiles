@@ -62,8 +62,8 @@
   "e" '(:ignore t :which-key "eshell")
   "e h" '(counsel-esh-history :which-key "Kill history")
   "e s" '(eshell :which-key "run eshell")
-  "e e" '(elfeed :which-key "elfeed")
-  ;; Counsel
+  "e E" '(ju/eshell-toggle :which-key "toggle eshell")
+;; Counsel
   "f" '(:ignore t :which-key "file op.")
   "f r" '(consult-recent-file :which-key "Recent files")
   "f i" '((lambda () (interactive) (find-file "~/.config/emacs/init.el")) :which-key "open emacs init file")
