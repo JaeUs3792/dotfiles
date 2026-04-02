@@ -119,12 +119,13 @@ Otherwise the startup will be very slow. "
 (require 'init-python)
 (require 'init-ruby)
 
-;;(require 'init-latex)
+(require 'init-latex)
 (require 'init-verilog)
 
 ;; (require 'init-debug)
 
 ;; (require 'init-extra)
 ;; (require 'init-chatgpt)
+(require 'init-ai)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
