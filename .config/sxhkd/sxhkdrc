@@ -10,7 +10,7 @@ super+shift+p
 super+e
     emacsclient -c -a 'emacs'
 super+f
-	vivaldi-stable --password-store=kwallet6
+    zen-browser
 # workspace
 super + {1,2,3,4,5,6,7,8,9,0}
 	bspc desktop -f {1,2,3,4,5,6,7,8,9,0}; \
