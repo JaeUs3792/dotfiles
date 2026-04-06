@@ -11,14 +11,14 @@
                            :stream t
                           ;; :models '(qwen3-coder:30b gemma3:27b)) ;; 5080
         ;; gptel-model 'gemma3:27b))
-                           :models '(qwen2.5-coder:7b qwen3:8b))   ;; 4060
-        gptel-model 'qwen3:8b))
-
-(use-package claude-code
-  :ensure (:host github :repo "stevemolitor/claude-code.el")
+                           :models '(qwen2.5-coder:7b qwen3.5:9b))   ;; 4060
+        gptel-model 'qwen3.5:9b))
+(use-package claude-code-ide
+  :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el")
+  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
   :config
-  (claude-code-mode)
-  (setq claude-code-toggle-auto-select t))
+  (setq claude-code-ide-terminal-backend 'vterm)
+  (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
 
 (ju/leader-key-def
   "a" '(:ignore t :which-key "AI")

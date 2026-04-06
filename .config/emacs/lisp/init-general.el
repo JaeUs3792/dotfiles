@@ -63,6 +63,7 @@
   "e h" '(counsel-esh-history :which-key "Kill history")
   "e s" '(eshell :which-key "run eshell")
   "e E" '(ju/eshell-toggle :which-key "toggle eshell")
+  "e t" '(ju/vterm-toggle :which-key "toggle vterm")
 ;; Counsel
   "f" '(:ignore t :which-key "file op.")
   "f r" '(consult-recent-file :which-key "Recent files")

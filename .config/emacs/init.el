@@ -99,7 +99,8 @@ Otherwise the startup will be very slow. "
 ;(require 'init-treemacs)
 
 (require 'init-eshell)
-(require 'init-eat)
+;; (require 'init-eat)
+(require 'init-vterm)
 (require 'init-markdown)
 (require 'init-org)
 (require 'init-reader)
