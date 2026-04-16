@@ -10,6 +10,7 @@
   :config
   (setq treesit-auto-install 'prompt)
   (setq treesit-auto-langs (delq 'verilog treesit-auto-langs))
+  (setq treesit-auto-langs (delq 'rust treesit-auto-langs))
   (global-treesit-auto-mode))
 
 ;; Search tool

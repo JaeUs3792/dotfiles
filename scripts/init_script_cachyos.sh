@@ -67,6 +67,13 @@ paru -S verilator
 # verilog lsp
 paru -S verible-bin
 
+# rust
+paru -S rustup
+source "$HOME/.cargo/env"
+rustup default stable
+rustup component add rust-analyzer
+rustup component add rust-src
+
 # sourcegit
 paru -S sourcegit-bin
 
