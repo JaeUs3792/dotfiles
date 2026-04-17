@@ -124,5 +124,13 @@
   :defer t)
 
 
+;; Ediff
+(use-package ediff
+  :ensure nil
+  :defer t
+  :config
+  (setq ediff-split-window-function 'split-window-horizontally) ; 좌우 분할
+  (add-hook 'ediff-mode-hook 'evil-emacs-state))               ; evil 키 충돌 방지
+
 (provide 'init-vcs)
 ;;; init-vcs.el ends here
