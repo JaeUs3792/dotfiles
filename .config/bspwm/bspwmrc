@@ -36,7 +36,7 @@ kwalletd6 &
 #killall conky
 #sleep 3 && conky -c ~/.config/conky/conkyrc
 emacsclient --eval '(kill-emacs)'
-emacs --daemon
+XMODIFIERS=@im=none emacs --daemon
 xsettingsd --config="$HOME/.config/bspwm/xsettingsd" &
 
 ~/scripts/random_wallpaper.sh

@@ -51,7 +51,6 @@
   :config
   (marginalia-mode))
 
-
 (use-package consult
   :ensure t
   :demand t
@@ -61,16 +60,7 @@
   (completion-in-region-function #'consult-completion-in-region)
   :config
   (global-set-key (kbd "C-s") 'consult-line)
-  (defun my/consult-switch-to-buffer ()
-    "`consult-buffer' with buffers provided by persp."
-    (interactive)
-    (with-persp-buffer-list () (consult-buffer)))
-  (defun my/consult-project-switch-to-buffer ()
-    "`consult-project-buffer' with buffers provided by persp."
-    (interactive)
-    (with-persp-buffer-list () (consult-project-buffer)))
-  (global-set-key (kbd "C-M-j") #'my/consult-switch-to-buffer)
-  (global-set-key (kbd "C-M-h") #'my/consult-project-switch-to-buffer))
+  (global-set-key (kbd "C-M-j") 'consult-project-buffer))
 
 (use-package orderless
   :ensure t

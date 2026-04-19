@@ -1,6 +1,6 @@
 #!/bin/bash
 
-paru -S vivaldi neovim starship --noconfirm
+paru -S vivaldi qutebrowser neovim starship --noconfirm
 
 # clone config
 git clone https://github.com/JaeUs3792/dotfiles ~/.dotfiles
