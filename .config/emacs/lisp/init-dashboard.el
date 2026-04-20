@@ -64,6 +64,18 @@
      (number-sequence 0 (1- nrows))
      "\n")))
 
+(defun my/enlight-image-banner ()
+  "Display logos/xemacs_color.svg as the dashboard banner.
+Falls back to the rainbow text banner in terminal mode."
+  (if (display-graphic-p)
+      (let* ((image-path (expand-file-name "logos/xemacs_color.svg" user-emacs-directory))
+             (img-width 300)
+             (img (create-image image-path 'svg nil :width img-width))
+             (half-chars (/ img-width (* 2.0 (frame-char-width))))
+             (spacer (propertize " " 'display `(space :align-to (- center ,half-chars)))))
+        (concat spacer (propertize " " 'display img)))
+    (my/enlight-rainbow-banner)))
+
 (use-package grid
   :ensure (:host github :repo "ichernyshovvv/grid.el"))
 
@@ -255,7 +267,7 @@
                  (my/enlight-recent-files))))
          (git (my/enlight-git-log)))
     (concat
-     (my/enlight-rainbow-banner)
+     (my/enlight-image-banner)
      "\n\n\n"
      (my/enlight-quote)
      "\n\n\n"
