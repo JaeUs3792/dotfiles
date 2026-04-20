@@ -31,7 +31,14 @@
     "l" 'dired-find-file
     ")" 'dired-git-info-mode
     "s" 'my/dired-sort-menu
-    "C" 'dired-rsync))
+    "C" 'dired-rsync
+    "z" 'my/dired-open-yazi))
+
+(defun my/dired-open-yazi ()
+  "Open yazi in the current dired directory using ghostty."
+  (interactive)
+  (let ((dir (dired-current-directory)))
+    (start-process "yazi" nil "ghostty" "-e" "yazi" dir)))
 
 (defun my/dired-sort-by (flags)
   "Sort dired buffer by FLAGS."

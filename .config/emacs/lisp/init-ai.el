@@ -18,7 +18,11 @@
   :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
   :config
   (setq claude-code-ide-terminal-backend 'vterm)
-  (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+  (claude-code-ide-emacs-tools-setup)
+  (add-to-list 'display-buffer-alist
+               '("\\*claude" (display-buffer-reuse-window display-buffer-below-selected)
+                 (inhibit-switch-frame . t)
+                 (reusable-frames . nil))))
 
 (ju/leader-key-def
   "a" '(:ignore t :which-key "AI")
