@@ -12,6 +12,10 @@ if [[ $JUPCID == "HOME-DESKTOP" ]]; then
     xrandr --output DP-0 --primary --mode 3840x2160 --rotate normal --output HDMI-0 --mode 1920x1080 --rotate right --right-of DP-0 --output DP-2 --mode 2560x1440 --left-of DP-0
 elif [[ $JUPCID == "HSCDEV" ]]; then
     xrandr --output HDMI-1 --primary --mode 2560x1440 --rotate normal
+elif [[ $JUPCID == "LAPTOP" ]]; then
+    xrandr --output eDP-1 --primary --mode 2880x1800 --rotate normal
+    #xrdb -merge - <<< "Xft.dpi: 100"
+    #export QT_SCALE_FACTOR=1.5
 fi
 xsetroot -cursor_name left_ptr
 
@@ -49,6 +53,8 @@ if [[ $JUPCID == "HOME-DESKTOP" ]]; then
     bspc monitor HDMI-0 -d 0
 elif [[ $JUPCID == "HSCDEV" ]]; then
     bspc monitor HDMI-1 -d 1 2 3 4 5 6 7 8 9 0
+elif [[ $JUPCID == "LAPTOP" ]]; then
+    bspc monitor eDP-1 -d 1 2 3 4 5 6 7 8 9 0
 fi
 
 bspc config border_width 2
@@ -93,7 +99,10 @@ for mon in $(polybar --list-monitors | cut -d":" -f1); do
     w=$(echo "$dims" | cut -dx -f1)
     h=$(echo "$dims" | cut -dx -f2)
     size=$(( w > h ? w : h ))
-    if [[ $size -ge 3840 ]]; then
+    if [[ $JUPCID == "LAPTOP" ]]; then
+        bar="marisol-4k"
+        pad=47
+    elif [[ $size -ge 3840 ]]; then
         bar="marisol-4k"; pad=47
     elif [[ $size -ge 2560 ]]; then
         bar="marisol-qhd"; pad=31
