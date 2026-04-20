@@ -12,7 +12,7 @@ stow .
 # korean input
 paru -S fcitx5-hangul fcitx5-configtool fcitx5-gtk keyd --noconfirm
 sudo mkdir /etc/keyd
-sudo cp keyd.default /etc/keyd
+sudo cp keyd.default /etc/keyd/keyd.default
 
 sudo systemctl enable --now keyd
 
@@ -78,7 +78,7 @@ rustup component add rust-src
 paru -S sourcegit-bin
 
 # bspwm
-paru -S picom polybar bspwm sxhkd xdotool scrot xclip rofi wmname
+paru -S picom polybar bspwm sxhkd xdotool scrot xclip rofi wmname brightnessctl
 paru -S eww
 # theme
 paru -S arc-gtk-theme papirus-icon-theme python-pywal
@@ -127,6 +127,9 @@ sudo systemctl enable --now plocate-updatedb.timer
 sudo sed -i 's/PRUNE_BIND_MOUNTS = "yes"/PRUNE_BIND_MOUNTS = "no"/' /etc/updatedb.conf
 sudo sed -i 's|PRUNEPATHS = "\(.*\)"|PRUNEPATHS = "\1 /run/media"|' /etc/updatedb.conf
 sudo updatedb
+# xbox controller (xpadneo)
+paru -S xpadneo-dkms --noconfirm
+
 # bspwm utils
 cp /usr/share/applications/vivaldi-stable.desktop ~/.local/share/applications/
 sed -i 's|Exec=/usr/bin/vivaldi-stable|Exec=/usr/bin/vivaldi-stable --password-store=kwallet6|g' ~/
