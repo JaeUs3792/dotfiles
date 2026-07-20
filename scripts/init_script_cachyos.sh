@@ -52,6 +52,8 @@ paru -S enchant hunspell-en_us --noconfirm
 paru -S texlive-basic texlive-langkorean texlive-latex texlive-latexextra texlive-latexrecommended texlive-pictures texlive-binextra texlive-plaingeneric texlive-langcjk texlive-xetex --noconfirm
 paru -S jupyterlab --noconfirm
 paru -S zathura-pdf-mupdf
+# debugpy (Python DAP adapter for Emacs dape)
+paru -S python-debugpy --noconfirm
 
 # gnuplot (org-plot 지원)
 paru -S gnuplot --noconfirm
