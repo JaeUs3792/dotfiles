@@ -11,6 +11,8 @@ stow .
 
 # korean input
 paru -S fcitx5-hangul fcitx5-configtool fcitx5-gtk keyd --noconfirm
+# drop grp:alt_shift_toggle (X server steals Alt+Shift shortcuts; fcitx5 handles kr/en switching)
+sudo localectl set-x11-keymap us,kr pc105 '' ''
 sudo mkdir /etc/keyd
 sudo cp keyd.default /etc/keyd/keyd.default
 
