@@ -8,7 +8,8 @@
   :hook (dired-mode . dired-omit-mode)
   :general
   (:keymaps 'dired-mode-map
-            "C-c C-p" 'wdired-change-to-wdired-mode)
+            "C-c C-p" 'wdired-change-to-wdired-mode
+            "C-o" 'casual-dired-tmenu)
   :custom (dired-omit-files (rx (seq bol ".")))
   :config
   ;; Guess a default target directory
@@ -30,35 +31,20 @@
     "h" 'dired-up-directory
     "l" 'dired-find-file
     ")" 'dired-git-info-mode
-    "s" 'my/dired-sort-menu
+    "s" 'casual-dired-sort-by-tmenu
     "C" 'dired-rsync
     "z" 'my/dired-open-yazi))
+
+;; Casual: transient menu suite for built-in modes (dired here)
+(use-package casual
+  :ensure t
+  :after dired)
 
 (defun my/dired-open-yazi ()
   "Open yazi in the current dired directory using ghostty."
   (interactive)
   (let ((dir (dired-current-directory)))
     (start-process "yazi" nil "ghostty" "-e" "yazi" dir)))
-
-(defun my/dired-sort-by (flags)
-  "Sort dired buffer by FLAGS."
-  (setq dired-listing-switches (concat "-alh --group-directories-first " flags))
-  (dired-sort-other dired-listing-switches))
-
-(require 'transient)
-(transient-define-prefix my/dired-sort-menu ()
-  "Dired sort menu."
-  [["Sort by"
-    ("n" "name"          (lambda () (interactive) (my/dired-sort-by ""))          :transient t)
-    ("e" "extension"     (lambda () (interactive) (my/dired-sort-by "-X"))        :transient t)
-    ("s" "size"          (lambda () (interactive) (my/dired-sort-by "-S"))        :transient t)
-    ("t" "time modified" (lambda () (interactive) (my/dired-sort-by "-t"))        :transient t)
-    ("c" "time created"  (lambda () (interactive) (my/dired-sort-by "-tc"))       :transient t)
-    ("a" "time accessed" (lambda () (interactive) (my/dired-sort-by "-tu"))       :transient t)]
-   ["Order"
-    ("r" "reverse"       (lambda () (interactive) (my/dired-sort-by "-r"))        :transient t)]
-   ["Quit"
-    ("q" "quit" transient-quit-all)]])
 
 ;; Show git info in dired
 (use-package dired-git-info
