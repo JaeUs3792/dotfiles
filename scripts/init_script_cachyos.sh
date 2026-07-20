@@ -44,8 +44,9 @@ sudo systemctl start expressvpn
 
 #emacs
 paru -S emacs --noconfirm
-git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-~/.config/emacs/bin/doom install
+# For jinx spell checking (enchant backend + English dictionary)
+paru -S enchant hunspell-en_us --noconfirm
+# emacs config is stowed (see `stow .` above); elpaca bootstraps packages on first run
 paru -S texlive-basic texlive-langkorean texlive-latex texlive-latexextra texlive-latexrecommended texlive-pictures texlive-binextra texlive-plaingeneric texlive-langcjk texlive-xetex --noconfirm
 paru -S jupyterlab --noconfirm
 paru -S zathura-pdf-mupdf
