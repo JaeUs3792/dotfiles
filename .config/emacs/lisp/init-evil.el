@@ -17,8 +17,7 @@
 
   :config
   (require 'evil-vars)
-  (evil-set-undo-system 'undo-tree)
-  ;;(evil-set-undo-system 'undo-redo)
+  (evil-set-undo-system 'undo-redo)
   (setq evil-want-fine-undo t) ; more granular undo with evil
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'dashboard-mode 'normal)

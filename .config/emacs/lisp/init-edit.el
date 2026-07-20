@@ -15,23 +15,21 @@
 		avy-all-windows t
 		avy-all-windows-alt nil
 		avy-background t))
-(use-package undo-tree
+(use-package vundo
   :ensure t
-  :demand t
-  :diminish
-  :hook (after-init . global-undo-tree-mode)
-  :custom
-  (undo-tree-history-directory-alist
-   `(("." . ,(expand-file-name (file-name-as-directory "undo-tree-hist")
-                               user-emacs-directory))))
+  :bind ("C-x u" . vundo)
   :config
-  (setq undo-tree-visualizer-diff       t
-        undo-tree-visualizer-timestamps t
-        undo-tree-auto-save-history     t
-        undo-tree-enable-undo-in-region t
+  (setq vundo-glyph-alist vundo-unicode-symbols
         undo-limit        (* 800 1024)
         undo-strong-limit (* 12 1024 1024)
         undo-outer-limit  (* 128 1024 1024)))
+;; Persist undo history across sessions (replaces undo-tree-auto-save-history)
+(use-package undo-fu-session
+  :ensure t
+  :hook (after-init . undo-fu-session-global-mode)
+  :config
+  (setq undo-fu-session-directory
+        (expand-file-name "undo-fu-session" user-emacs-directory)))
 
 (use-package hideshow
   :ensure nil
