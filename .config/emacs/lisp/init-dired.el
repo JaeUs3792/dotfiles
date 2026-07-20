@@ -8,8 +8,7 @@
   :hook (dired-mode . dired-omit-mode)
   :general
   (:keymaps 'dired-mode-map
-            "C-c C-p" 'wdired-change-to-wdired-mode
-            "C-o" 'casual-dired-tmenu)
+            "C-c C-p" 'wdired-change-to-wdired-mode)
   :custom (dired-omit-files (rx (seq bol ".")))
   :config
   ;; Guess a default target directory
@@ -27,18 +26,14 @@
     (evil-collection-define-key 'normal 'dired-mode-map
       "f" 'find-dired))
   (evil-collection-define-key 'normal 'dired-mode-map
-    "." 'dired-omit-mode
-    "h" 'dired-up-directory
-    "l" 'dired-find-file
-    ")" 'dired-git-info-mode
-    "s" 'casual-dired-sort-by-tmenu
-    "C" 'dired-rsync
-    "z" 'my/dired-open-yazi))
-
-;; Casual: transient menu suite for built-in modes (dired here)
-(use-package casual
-  :ensure t
-  :after dired)
+    "."         'dired-omit-mode
+    "h"         'dired-up-directory
+    "l"         'dired-find-file
+    ")"         'dired-git-info-mode
+    "s"         'casual-dired-sort-by-tmenu
+    "C"         'dired-rsync
+    "z"         'my/dired-open-yazi
+    (kbd "C-o") 'casual-dired-tmenu))
 
 (defun my/dired-open-yazi ()
   "Open yazi in the current dired directory using ghostty."

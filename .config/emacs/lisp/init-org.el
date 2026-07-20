@@ -40,6 +40,7 @@ prepended to the element after the #+HEADER: tag."
       (when mod (insert mod) (forward-line))
       (when text (insert text))))
 
+  (require 'transient)
   (transient-define-prefix my/org-template-menu ()
     "Org Template"
     ["Basic"

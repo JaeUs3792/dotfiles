@@ -6,7 +6,17 @@
   :ensure nil ; built-in
   :init
   (setq ibuffer-filter-group-name-face
-        '(:inherit (font-lock-string-face bold))))
+        '(:inherit (font-lock-string-face bold)))
+  :config
+  ;; Use evil-collection-define-key, not :general, so these win over evil's
+  ;; own default normal-state bindings for C-o/F/s (jump-backward,
+  ;; find-char-backward, substitute), which take priority over the raw
+  ;; major-mode keymap under evil.
+  (evil-collection-define-key 'normal 'ibuffer-mode-map
+    (kbd "C-o") 'casual-ibuffer-tmenu
+    "F"         'casual-ibuffer-filter-tmenu
+    "s"         'casual-ibuffer-sortby-tmenu))
+
 (use-package nerd-icons-ibuffer
   :ensure t
   :defer t
