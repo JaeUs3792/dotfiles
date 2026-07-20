@@ -92,6 +92,8 @@
   (setq mouse-wheel-scroll-amount '(1 ((shift) . hscroll))
         mouse-wheel-scroll-amount-horizontal 1
         mouse-wheel-progressive-speed nil))
+;; scroll-conservatively >=101 and scroll-margin 0 are required by ultra-scroll
+;; for smooth, non-jumping scrolling.
 (setq scroll-step 1
       scroll-margin 0
       scroll-conservatively 100000
@@ -99,7 +101,13 @@
       scroll-preserve-screen-position t)
 
 ;; Good pixel line scrolling
-(pixel-scroll-precision-mode)
+;; ultra-scroll replaces `pixel-scroll-precision-mode' with a smoother engine.
+;; Needs Emacs 29.1+.
+(use-package ultra-scroll
+  :ensure (:host github :repo "jdtsmith/ultra-scroll")
+  :demand t
+  :config
+  (ultra-scroll-mode 1))
 
 ;; Display ugly ^L page breaks as tidy horizontal lines
 (use-package page-break-lines

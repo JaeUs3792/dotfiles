@@ -274,6 +274,15 @@ prepended to the element after the #+HEADER: tag."
           ("DONE" :background "#44475a" :foreground "#6272a4" :weight bold)  ; 흐린회색 — 완료
           ("KILL" :background "#ff5555" :foreground "#282a36" :weight bold)))) ; 다크그레이
 
+;; Pixel-precise table alignment (CJK/변수폭 폰트/인라인 이미지 대응).
+;; org-modern-table 은 위에서 nil 로 꺼둬서 구분선은 valign-fancy-bar 가 담당.
+(use-package valign
+  :ensure t
+  :defer t
+  :hook ((org-mode markdown-mode) . valign-mode)
+  :custom
+  (valign-fancy-bar t))
+
 
 
 ;; Auto-toggle Org LaTeX fragments
