@@ -5,7 +5,7 @@
 (use-package hl-line
   :ensure nil ;; built-in package
   :hook ((after-init . global-hl-line-mode)
-         ((dashboard-mode eshell-mode shell-mode term-mode vterm-mode) .
+         ((dashboard-mode eshell-mode shell-mode term-mode ghostel-mode) .
           (lambda () (setq-local global-hl-line-mode nil))))
   :config
   (set-face-background 'hl-line "gray8"))

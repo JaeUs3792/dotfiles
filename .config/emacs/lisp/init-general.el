@@ -30,9 +30,12 @@
   (general-auto-unbind-keys)
   :config
   (general-evil-setup t)
+  ;; `emacs' state is excluded: it's used for buffers (eshell, dashboard,
+  ;; *Messages*) that want plain self-insert-command behavior, so SPC there
+  ;; must type a literal space, not trigger the leader.
   (general-create-definer
     ju/leader-key-def
-    :keymaps '(normal insert visual emacs)
+    :keymaps '(normal insert visual)
     :prefix "SPC"
     :global-prefix "C-SPC"))
 (ju/leader-key-def
@@ -63,7 +66,9 @@
   "e h" '(counsel-esh-history :which-key "Kill history")
   "e s" '(eshell :which-key "run eshell")
   "e E" '(ju/eshell-toggle :which-key "toggle eshell")
-  "e t" '(ju/vterm-toggle :which-key "toggle vterm")
+  "e t" '(popterm-toggle :which-key "toggle terminal")
+  "e T" '(popterm-toggle-cd :which-key "toggle terminal (cd)")
+  "e p" '(popterm-posframe-toggle :which-key "toggle terminal (posframe)")
 ;; Counsel
   "f" '(:ignore t :which-key "file op.")
   "f r" '(consult-recent-file :which-key "Recent files")

@@ -45,7 +45,7 @@
   :ensure t
   :hook (((completion-list-mode
            eshell-mode shell-mode
-           term-mode vterm-mode
+           term-mode ghostel-mode
            treemacs-mode
            lsp-ui-imenu-mode
            pdf-annot-list-mode) . hide-mode-line-mode)))

@@ -17,7 +17,7 @@
   :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el")
   :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
   :config
-  (setq claude-code-ide-terminal-backend 'vterm)
+  (setq claude-code-ide-terminal-backend 'ghostel)
   (claude-code-ide-emacs-tools-setup)
   (add-to-list 'display-buffer-alist
                '("\\*claude" (display-buffer-reuse-window display-buffer-below-selected)
