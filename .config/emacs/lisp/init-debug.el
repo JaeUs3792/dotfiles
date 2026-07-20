@@ -1,43 +1,22 @@
 ;; init-debug -*- lexical-binding: t -*-
-;; (use-package dap-mode
-;;   :config
-;;   (setq dap-cpptools-extension-version "1.5.1")
-
-;;   (with-eval-after-load 'lsp-rust
-;;     (require 'dap-cpptools))
-
-;;   ;; rust configuration
-;;   (with-eval-after-load 'dap-cpptools
-;;     ;; Add a template specific for debugging Rust programs.
-;;     ;; It is used for new projects, where I can M-x dap-edit-debug-template
-;;     (dap-register-debug-template "Rust::CppTools Run Configuration"
-;;                                  (list :type "cppdbg"
-;;                                        :request "launch"
-;;                                        :name "Rust::Run"
-;;                                        :MIMode "gdb"
-;;                                        :miDebuggerPath "rust-gdb"
-;;                                        :environment []
-;;                                        :program "${workspaceFolder}/target/debug/hello / replace with binary"
-;;                                        :cwd "${workspaceFolder}"
-;;                                        :console "external"
-;;                                        :dap-compilation "cargo build"
-;;                                        :dap-compilation-dir "${workspaceFolder}")))
-
-;;   (with-eval-after-load 'dap-mode
-;;     (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
-;;     (dap-auto-configure-mode +1)))
-
-(use-package dap-mode
+;; dape: eglot-native DAP client, no lsp-mode dependency
+(use-package dape
   :ensure t
   :defer t
   :config
-  ;; Enabling only some features
-  (setq dap-auto-configure-features '(sessions locals controls tooltip))
-  (require 'dap-gdb-lldb)
-  (require 'dap-python)
-  ;; configure debugger
-  (setq dap-python-debugger 'debugpy)
-  )
+  (setq dape-buffer-window-arrangement 'right)
+  (add-hook 'dape-start-hook
+            (defun dape--save-on-start ()
+              (save-some-buffers t t)))
+  ;; Rust: run gdb via rust-gdb wrapper so Rust types pretty-print
+  (add-to-list 'dape-configs
+               `(rust-gdb
+                 modes (rust-mode rust-ts-mode)
+                 command "rust-gdb"
+                 command-args ("--interpreter=dap")
+                 :request "launch"
+                 :program dape-buffer-default
+                 :stopAtBeginningOfMainSubprogram nil)))
 
 
 (provide 'init-debug)
