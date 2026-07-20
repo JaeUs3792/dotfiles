@@ -103,6 +103,24 @@
       ("h" "hide block" hs-hide-block :transient t)
       ("l" "hide level" hs-hide-level :transient t)]]))
 
+;; Spell checking: fast, enchant-based; modern replacement for flyspell.
+;; Requires system libenchant + a dictionary (e.g. Arch: `hunspell-en_us').
+;; In prog-mode it only checks comments/strings via syntax awareness.
+(use-package jinx
+  :ensure t
+  :hook ((text-mode prog-mode) . jinx-mode)
+  :custom
+  ;; Force English only; never use a Korean dict even if the locale is ko_KR.
+  (jinx-languages "en_US")
+  :general
+  ("M-$"   'jinx-correct
+   "C-M-$" 'jinx-languages)
+  (:states 'normal
+           "z=" 'jinx-correct)
+  :config
+  ;; Skip Hangul syllables so they aren't flagged as errors by the English dict.
+  (push "[가-힣]+" (alist-get t jinx-exclude-regexps)))
+
 ;; Hanlde minified code
 (use-package so-long
   :ensure nil

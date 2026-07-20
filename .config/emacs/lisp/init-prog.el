@@ -13,6 +13,20 @@
   (setq treesit-auto-langs (delq 'rust treesit-auto-langs))
   (global-treesit-auto-mode))
 
+;; Tree-sitter aware indentation guides
+(use-package indent-bars
+  :ensure (:host github :repo "jdtsmith/indent-bars")
+  :hook ((prog-mode yaml-mode) . indent-bars-mode)
+  :custom
+  ;; Use tree-sitter scopes for accurate guides (treesit-auto provides grammars)
+  (indent-bars-treesit-support t)
+  (indent-bars-no-descend-string t)
+  ;; Subtle appearance: thin, low-contrast bars, brighter on the current depth
+  (indent-bars-color '(highlight :face-bg t :blend 0.2))
+  (indent-bars-width-frac 0.15)
+  (indent-bars-pad-frac 0.1)
+  (indent-bars-highlight-current-depth '(:blend 0.6)))
+
 ;; Search tool
 (use-package grep
   :ensure nil ; built-in
