@@ -76,6 +76,11 @@ Otherwise the startup will be very slow. "
   ;; Enable use-package :ensure support for Elpaca.
   (elpaca-use-package-mode))
 
+;; transient/magit 0.13+ require compat 31.0 and cond-let.
+;; Queue them ahead of everything else so dependent packages
+;; (transient, magit, magit-section, ...) always see them built.
+(use-package compat   :ensure (:wait t) :demand t)
+(use-package cond-let :ensure (:wait t) :demand t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
