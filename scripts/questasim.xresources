@@ -1,0 +1,53 @@
+! Questa Sim (Tk 8.6) colour overrides.
+!
+! pywal merges a global "*background: <dark>" into the X resource database.
+! It is not terminal-only: that wildcard matches every X client, and Questa
+! reads it directly. From its startup Tcl (tcl.fs):
+!
+!     if {[option get . background Background] != ""} {
+!         set PrefDefault(default_bg) [option get . background Background]
+!     }
+!     set 3d_bg [Get3DColors $PrefDefault(default_bg)]
+!
+! so the whole 3D palette is derived from that one colour, and the derived
+! values get cached in ~/.modelsim.
+!
+! Class-prefixed resources are more specific than the wildcard, so these win
+! for Questa only and leave every other X client on the pywal palette.
+!
+! The class is confirmed, not guessed: with the GUI open,
+!     xprop WM_CLASS  ->  WM_CLASS(STRING) = "vsim", "Vsim"
+! i.e. instance "vsim", class "Vsim" — set by Tk even though the running
+! binary is linux_x86_64/vish. Both spellings are listed below; the class
+! form is the one that matches.
+
+#define QUESTA_BG        #d9d9d9
+#define QUESTA_FG        #000000
+#define QUESTA_FIELD_BG  #ffffff
+#define QUESTA_TROUGH    #c3c3c3
+#define QUESTA_SEL_BG    #4a6984
+#define QUESTA_SEL_FG    #ffffff
+
+! Class (this is the one that takes effect).
+Vsim*background:            QUESTA_BG
+Vsim*foreground:            QUESTA_FG
+Vsim*troughColor:           QUESTA_TROUGH
+Vsim*highlightBackground:   QUESTA_BG
+Vsim*insertBackground:      QUESTA_FG
+Vsim*selectBackground:      QUESTA_SEL_BG
+Vsim*selectForeground:      QUESTA_SEL_FG
+Vsim*Text.background:       QUESTA_FIELD_BG
+Vsim*Entry.background:      QUESTA_FIELD_BG
+Vsim*Listbox.background:    QUESTA_FIELD_BG
+
+! Instance name, in case a future build sets only that.
+vsim*background:            QUESTA_BG
+vsim*foreground:            QUESTA_FG
+vsim*troughColor:           QUESTA_TROUGH
+vsim*highlightBackground:   QUESTA_BG
+vsim*insertBackground:      QUESTA_FG
+vsim*selectBackground:      QUESTA_SEL_BG
+vsim*selectForeground:      QUESTA_SEL_FG
+vsim*Text.background:       QUESTA_FIELD_BG
+vsim*Entry.background:      QUESTA_FIELD_BG
+vsim*Listbox.background:    QUESTA_FIELD_BG

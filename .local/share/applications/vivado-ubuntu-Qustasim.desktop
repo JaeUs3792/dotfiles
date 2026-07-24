@@ -1,8 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Name=Questasim (on vivado-ubuntu)
 Comment=Questasim
 Icon=/home/jaeus/.local/share/icons/questasim.png
-Exec=/usr/bin/distrobox-enter -n vivado-ubuntu -- env LM_LICENSE_FILE=/tools/questasim/license.dat /tools/questasim/questasim/bin/vsim
+Exec=/home/jaeus/scripts/questasim-launch.sh
+Terminal=false
+Categories=Development;
 StartupWMClass=questasim
