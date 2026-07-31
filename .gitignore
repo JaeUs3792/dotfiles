@@ -17,6 +17,7 @@
 /.config/Code - OSS/
 /.config/Electron/
 /.config/yazi/plugins/
+/.config/yazi/bookmark
 *.wasm
 _ide/
 .config/fcitx5/conf/cached_layouts
