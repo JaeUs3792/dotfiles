@@ -22,7 +22,38 @@
   (add-to-list 'display-buffer-alist
                '("\\*claude" (display-buffer-reuse-window display-buffer-below-selected)
                  (inhibit-switch-frame . t)
-                 (reusable-frames . nil))))
+                 (reusable-frames . nil)))
+
+  ;; claude-code-ide sessions remember their tab-bar tab but not their frame,
+  ;; so an incoming MCP request (openDiff -> ediff, openFile, ...) is handled in
+  ;; whichever frame happens to be selected. With one daemon serving two frames
+  ;; on different projects, the diff lands in the wrong frame -- and openDiff
+  ;; deletes that frame's side windows on the way. Pin each session to the frame
+  ;; it was started in.
+  (defvar ju/claude-ide--session-frames (make-hash-table :test 'equal)
+    "Map of project directory -> frame the claude-code-ide session started in.")
+
+  (defun ju/claude-ide--record-frame (orig-fn &optional project-directory)
+    "Remember the current frame for this session before starting it."
+    (puthash (expand-file-name (or project-directory default-directory))
+             (selected-frame) ju/claude-ide--session-frames)
+    (funcall orig-fn project-directory))
+
+  (defun ju/claude-ide--forget-frame (orig-fn project-dir)
+    (remhash (expand-file-name project-dir) ju/claude-ide--session-frames)
+    (funcall orig-fn project-dir))
+
+  (defun ju/claude-ide--in-session-frame (orig-fn message &optional session)
+    "Handle MESSAGE inside the frame SESSION was started in, when it still lives."
+    (let* ((dir (and session (claude-code-ide-mcp-session-project-dir session)))
+           (frame (and dir (gethash dir ju/claude-ide--session-frames))))
+      (if (and (frame-live-p frame) (not (eq frame (selected-frame))))
+          (with-selected-frame frame (funcall orig-fn message session))
+        (funcall orig-fn message session))))
+
+  (advice-add 'claude-code-ide-mcp-start :around #'ju/claude-ide--record-frame)
+  (advice-add 'claude-code-ide-mcp-stop-session :around #'ju/claude-ide--forget-frame)
+  (advice-add 'claude-code-ide-mcp--handle-message :around #'ju/claude-ide--in-session-frame))
 
 (ju/leader-key-def
   "a" '(:ignore t :which-key "AI")
