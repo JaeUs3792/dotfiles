@@ -20,6 +20,10 @@
 
   ;; Show directory first
   (setq dired-listing-switches "-alh --group-directories-first")
+
+  ;; Reuse a single dired buffer while walking the tree instead of
+  ;; leaving one buffer behind per visited directory
+  (setq dired-kill-when-opening-new-dired-buffer t)
   (if (executable-find "fd")
       (evil-collection-define-key 'normal 'dired-mode-map
         "f" 'fd-dired)

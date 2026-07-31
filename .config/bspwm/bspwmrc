@@ -35,6 +35,11 @@ export KDE_FULL_SESSION=true
 export KDE_SESSION_VERSION=6
 dbus-update-activation-environment --systemd KDE_FULL_SESSION KDE_SESSION_VERSION 2>/dev/null
 kwalletd6 &
+# Own org.freedesktop.Notifications before anything tries to activate it. The
+# KDE apps pull in org.kde.plasma.Notifications.service, which D-Bus would
+# otherwise try (and fail) to start since plasma isn't running here.
+killall dunst
+dunst &
 /usr/lib/pam_kwallet_init &
 /usr/lib/polkit-kde-authentication-agent-1 &
 #killall conky

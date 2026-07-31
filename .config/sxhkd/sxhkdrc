@@ -46,6 +46,19 @@ super+shift+n
 alt+Tab
     rofi -show window
 
+# notifications
+# critical ones (Claude waiting for input) never expire on their own
+super+n
+	dunstctl close
+super+ctrl+n
+	dunstctl close-all
+super+alt+n
+	dunstctl history-pop
+# jump to whatever raised the urgency hint; focusing it is also the only way
+# bspwm clears the flag, so this doubles as the acknowledge action
+super+u
+	bspc node -f any.urgent
+
 ## Toggle picom
 super+p
 	if pgrep -c picom > /dev/null; killall picom; else; picom; end

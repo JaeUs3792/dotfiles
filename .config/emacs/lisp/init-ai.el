@@ -15,7 +15,19 @@
         gptel-model 'qwen3.5:9b))
 (use-package claude-code-ide
   :ensure (:type git :host github :repo "manzaltu/claude-code-ide.el")
-  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+  ;; :preface so the command is defined by the time :bind runs. Both callees are
+  ;; autoloaded, so pressing the key still loads the package on demand.
+  :preface
+  (defun ju/claude-code-ide-dwim ()
+    "Toggle the Claude window for this project, starting a session if none.
+`claude-code-ide-toggle' is a pure toggle and errors out when the project
+has no session yet, which makes for a poor single keybinding."
+    (interactive)
+    (condition-case nil
+        (claude-code-ide-toggle)
+      (user-error (claude-code-ide))))
+  :bind (("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+         ("<f8>" . ju/claude-code-ide-dwim))
   :config
   (setq claude-code-ide-terminal-backend 'ghostel)
   (claude-code-ide-emacs-tools-setup)
