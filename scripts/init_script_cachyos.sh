@@ -92,6 +92,9 @@ paru -S arc-gtk-theme papirus-icon-theme python-pywal
 paru -S network-manager-applet
 paru -S i3lock-color
 
+# notification daemon
+paru -S dunst --noconfirm
+
 # scratchpad (ghostty, xdo) & lock screen blur (imagemagick)
 paru -S ghostty xdo imagemagick --noconfirm
 
