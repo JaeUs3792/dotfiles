@@ -14,14 +14,39 @@ cwd=$(jq -r '.cwd // ""' <<<"$payload")
 message=$(jq -r '.message // ""' <<<"$payload")
 project=$(basename "${cwd:-$PWD}")
 
+# Division of labour between the two signals: the popup is the *transient* cue
+# for when you're at the screen, the urgency hint below is the *persistent* one
+# for when you're not. So no popup needs to outlive its moment except the one
+# that Claude is actually blocked on -- and letting the others expire keeps them
+# from piling up against dunst's notification_limit, past which new popups are
+# silently queued instead of shown.
+popup=yes
+timeout=30000
+
 case "$event" in
-    # Claude is blocked on the user: stays on screen until dismissed.
-    Notification) urgency=critical; body="${message:-Waiting for your input}" ;;
-    Stop)         urgency=low;      body="${message:-Finished}" ;;
-    *)            urgency=normal;   body="${message:-$event}" ;;
+    Notification)
+        body="${message:-Waiting for your input}"
+        case "$message" in
+            # Blocked on the user: no timeout, this one has to be acted on.
+            *permission*)
+                urgency=critical; timeout=0 ;;
+            # Fires only after Claude Code's internal 60s idle threshold, by
+            # which point the Stop popup has long since said the same thing.
+            # Suppressed as redundant; the urgency hint still gets set.
+            *"waiting for your input"*)
+                popup=no; urgency=low ;;
+            *)
+                urgency=critical; timeout=0 ;;
+        esac ;;
+    # Fires the instant the turn ends, so this -- not the idle Notification
+    # above -- is the timely "your turn" signal, and is pitched to be seen.
+    Stop) urgency=normal; body="${message:-Finished}" ;;
+    *)    urgency=normal; body="${message:-$event}" ;;
 esac
 
-notify-send -a "Claude Code" -u "$urgency" "Claude Code · $project" "$body" 2>/dev/null
+[ "$popup" = yes ] &&
+    notify-send -a "Claude Code" -u "$urgency" -t "$timeout" \
+        "Claude Code · $project" "$body" 2>/dev/null
 
 # Frame lookup table is populated by the advice in .config/emacs/lisp/init-ai.el.
 # Empty when the session isn't running under claude-code-ide, which is fine --
