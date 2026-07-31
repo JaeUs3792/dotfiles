@@ -5,6 +5,15 @@
   :ensure t
   :defer t)
 
+;; Lisp input methods (korean-hangul) commit by calling `self-insert-command'
+;; directly, bypassing ghostel's [remap self-insert-command] -> the syllable
+;; lands in the buffer but never reaches the PTY. ghostel-ime-mode wraps
+;; `input-method-function' to forward the commit instead.
+;; Ships inside the ghostel repo, so no separate :ensure.
+(use-package ghostel-ime
+  :ensure nil
+  :hook (ghostel-mode . ghostel-ime-mode))
+
 ;; popterm: pop-up terminal toggler (posframe/window/fullscreen) with
 ;; per-project instances
 (use-package popterm

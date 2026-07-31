@@ -99,7 +99,8 @@ alias cleanup='sudo pacman -Rns (pacman -Qtdq)'
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
 
 # emacs
-alias emd="emacs --daemon"
+# Detach from fcitx5 so the Hangul key reaches Emacs (see bspwmrc)
+alias emd="env XMODIFIERS=@im=none GTK_IM_MODULE= QT_IM_MODULE= emacs --daemon"
 alias emdk="emacsclient --eval '(kill-emacs)'"
 alias em="emacsclient -c -a 'emacs'"
 alias emt="emacsclient -c -a 'emacs -nw'"

@@ -40,7 +40,10 @@ kwalletd6 &
 #killall conky
 #sleep 3 && conky -c ~/.config/conky/conkyrc
 emacsclient --eval '(kill-emacs)'
-emacs --daemon
+# Detach Emacs from fcitx5: the XIM path makes fcitx5 swallow the Hangul key
+# (and C-M-h/j) before Emacs sees it. Use Emacs' own korean-hangul input method
+# instead, which evil turns off in normal state.
+env XMODIFIERS=@im=none GTK_IM_MODULE= QT_IM_MODULE= emacs --daemon
 xsettingsd --config="$HOME/.config/bspwm/xsettingsd" &
 
 ~/scripts/random_wallpaper.sh

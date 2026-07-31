@@ -2,6 +2,15 @@
       user-mail-address "cpu3792@gmail.com")
 (setq default-input-method "korean-hangul")
 
+;; The Hangul key reaches Emacs only when fcitx5 is detached (see bspwmrc).
+;; Toggle the built-in input method with it; X sends either keysym depending on
+;; the keyboard, so bind both.
+(dolist (key '("<Hangul>" "<kana>"))
+  (global-set-key (kbd key) #'toggle-input-method))
+;; Hanja key would otherwise start fcitx5-style conversion; keep it inert.
+(dolist (key '("<Hangul_Hanja>" "<hangul-hanja>"))
+  (global-set-key (kbd key) #'ignore))
+
 (defun custom-setup-fonts ()
   "setup fonts..."
     ;; default font
