@@ -3,7 +3,14 @@
 ;; native module is auto-downloaded on first use
 (use-package ghostel
   :ensure t
-  :defer t)
+  :defer t
+  :config
+  ;; ghostel grabs F1-F12 wholesale for the PTY, which swallows the global
+  ;; <f8> claude-code-ide toggle. setopt so the :set function rebuilds
+  ;; ghostel-semi-char-mode-map; note char mode still binds everything by
+  ;; design, exceptions only apply to semi-char mode.
+  (setopt ghostel-keymap-exceptions
+          (seq-uniq (cons "<f8>" ghostel-keymap-exceptions))))
 
 ;; Lisp input methods (korean-hangul) commit by calling `self-insert-command'
 ;; directly, bypassing ghostel's [remap self-insert-command] -> the syllable
