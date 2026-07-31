@@ -25,3 +25,4 @@ image/tiff=org.kde.gwenview.desktop
 image/svg+xml=org.kde.gwenview.desktop
 application/x-rar=org.kde.ark.desktop
 application/vnd.rar=org.kde.ark.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
