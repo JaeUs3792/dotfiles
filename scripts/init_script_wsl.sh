@@ -9,6 +9,7 @@ echo LANG=ko_KR.UTF-8 > /etc/locale.conf
 echo [network] > /etc/wsl.conf
 echo generateHosts = false >> /etc/wsl.conf
 # User addition
+pacman -S sudo --noconfirm
 EDITOR=vim visudo	# uncomment %wheel ALL=(ALL) ALL
 useradd -m -g users -G wheel -s /bin/bash jaeus
 passwd jaeus
@@ -22,6 +23,7 @@ git clone https://github.com/JaeYoo-Im/dotfiles ~/.dotfiles
 cd ~/.dotfiles
 stow .
 # AUR Manager
+sudo pacman -S fackeroot debugedit base-devel --noconfirm 
 git clone https://aur.archlinux.org/paru-bin.git
 cd paru-bin
 makepkg -si
