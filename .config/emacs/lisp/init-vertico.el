@@ -177,7 +177,17 @@
   (add-hook 'eshell-mode-hook
             (lambda () (setq-local corfu-quit-at-boundary t
                                    corfu-quit-no-match t
-                                   corfu-auto nil)
-              (corfu-mode))))
+                                   corfu-auto nil
+                                   ;; RET has to stay `eshell-send-input', so
+                                   ;; drop it from the popup map and confirm
+                                   ;; candidates with TAB instead.  `corfu-map'
+                                   ;; is read when the popup opens, so a
+                                   ;; buffer-local copy is enough.
+                                   corfu-map (let ((map (copy-keymap corfu-map)))
+                                               (keymap-unset map "RET")
+                                               map))
+              ;; `corfu-mode' with no argument toggles, which turned corfu
+              ;; *off* here since `global-corfu-mode' already enabled it.
+              (corfu-mode 1))))
 (provide 'init-vertico)
 ;;; init-vertico.el ends here
