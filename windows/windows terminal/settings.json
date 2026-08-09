@@ -1,0 +1,305 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+
+    // 기본 프로필: PowerShell 7 (설치되어 있음)
+    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+
+    // ── 전역 모양/동작 ──────────────────────────────────────────
+    // Windows가 라이트 모드여도 터미널은 항상 어둡게
+    "theme": "dark",
+    "alwaysShowTabs": true,
+    "showTabsInTitlebar": true,
+    "useAcrylicInTabRow": false,
+    "tabWidthMode": "equal",
+    "newTabPosition": "afterCurrentTab",
+    "windowingBehavior": "useNew",
+    "initialCols": 140,
+    "initialRows": 38,
+    "launchMode": "default",
+    "confirmCloseAllTabs": true,
+    "focusFollowMouse": false,
+    "startOnUserLogin": false,
+    "copyOnSelect": false,
+    "copyFormatting": "none",
+    "trimPaste": true,
+    "wordDelimiters": " /\\()\"'-:,.;<>~!@#$%^&*|+=[]{}~?",
+
+    // ── 모든 프로필 공통 설정 ───────────────────────────────────
+    "profiles":
+    {
+        "defaults":
+        {
+            "font":
+            {
+                // 영문/아이콘은 ComicShannsMono Nerd Font, 한글은 Sarasa Mono K로 폴백
+                // (Sarasa는 한글 폭이 영문의 정확히 2배 -> TUI 정렬 안 깨짐)
+                "face": "ComicShannsMono Nerd Font, Sarasa Mono K",
+                "size": 11,
+                "weight": "normal",
+                "features": { "calt": 1 },
+                "builtinGlyphs": true
+            },
+
+            // 다크 고정. OS 테마 따라 자동 전환하려면 아래 형태로 바꿀 것:
+            //   "colorScheme": { "dark": "Catppuccin Mocha", "light": "Catppuccin Latte" }
+            "colorScheme": "Catppuccin Mocha",
+
+            "cursorShape": "bar",
+            "antialiasingMode": "grayscale",
+            "intenseTextStyle": "bright",
+            "padding": "12,10,12,10",
+            "scrollbarState": "visible",
+            "historySize": 20000,
+            "snapOnInput": true,
+            "bellStyle": "none",
+            "useAcrylic": false,
+            "opacity": 100,
+            "closeOnExit": "automatic",
+
+            // 프롬프트 위치를 자동 표시 → 스크롤바에 마크가 찍히고 Ctrl+Alt+↑/↓ 로 점프
+            "autoMarkPrompts": true,
+            "showMarksOnScrollbar": true
+        },
+
+        "list":
+        [
+            {
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "name": "PowerShell 7",
+                "source": "Windows.Terminal.PowershellCore",
+                "commandline": "pwsh.exe -NoLogo",
+                "startingDirectory": "%USERPROFILE%\\works",
+                "colorScheme": "Catppuccin Mocha",
+                "tabColor": "#89B4FA",
+                "hidden": false
+            },
+            {
+                "guid": "{9f4d2b7e-6c31-4a58-b0e7-2d1f8a3c5e90}",
+                "name": "PowerShell 7 (관리자)",
+                "commandline": "pwsh.exe -NoLogo",
+                "startingDirectory": "%USERPROFILE%",
+                "icon": "ms-appx:///ProfileIcons/{574e775e-4f2a-5b96-ac1e-a2962a402336}.png",
+                "colorScheme": "Mocha Admin",
+                "tabColor": "#F38BA8",
+                "elevate": true,
+                "hidden": false
+            },
+            {
+                "guid": "{7f823dc6-2d5e-562e-925a-c8fbe57d225c}",
+                "name": "archlinux",
+                "source": "Microsoft.WSL",
+                "colorScheme": "Mocha Arch",
+                "tabColor": "#1793D1",
+                "hidden": false
+            },
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "name": "Windows PowerShell 5.1",
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NoLogo",
+                "colorScheme": "Legacy Blue",
+                "tabColor": "#3A6EA5",
+                "hidden": false
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "name": "명령 프롬프트",
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "colorScheme": "Campbell",
+                "tabColor": "#585B70",
+                "hidden": false
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure",
+                "hidden": true
+            }
+        ]
+    },
+
+    "newTabMenu":
+    [
+        { "type": "remainingProfiles" }
+    ],
+
+    // ── 액션 정의 ───────────────────────────────────────────────
+    "actions":
+    [
+        { "id": "User.splitRight",  "command": { "action": "splitPane", "split": "right", "splitMode": "duplicate" } },
+        { "id": "User.splitDown",   "command": { "action": "splitPane", "split": "down",  "splitMode": "duplicate" } },
+
+        { "id": "User.focusLeft",   "command": { "action": "moveFocus", "direction": "left" } },
+        { "id": "User.focusRight",  "command": { "action": "moveFocus", "direction": "right" } },
+        { "id": "User.focusUp",     "command": { "action": "moveFocus", "direction": "up" } },
+        { "id": "User.focusDown",   "command": { "action": "moveFocus", "direction": "down" } },
+
+        { "id": "User.resizeLeft",  "command": { "action": "resizePane", "direction": "left" } },
+        { "id": "User.resizeRight", "command": { "action": "resizePane", "direction": "right" } },
+        { "id": "User.resizeUp",    "command": { "action": "resizePane", "direction": "up" } },
+        { "id": "User.resizeDown",  "command": { "action": "resizePane", "direction": "down" } },
+
+        { "id": "User.zoomPane",    "command": { "action": "togglePaneZoom" } },
+        { "id": "User.closePane",   "command": { "action": "closePane" } },
+        { "id": "User.broadcast",   "command": { "action": "toggleBroadcastInput" } },
+        { "id": "User.clearBuffer", "command": { "action": "clearBuffer", "clear": "all" } },
+
+        { "id": "User.markPrev",    "command": { "action": "scrollToMark", "direction": "previous" } },
+        { "id": "User.markNext",    "command": { "action": "scrollToMark", "direction": "next" } }
+    ],
+
+    // ── 키 바인딩 ───────────────────────────────────────────────
+    "keybindings":
+    [
+        { "id": "Terminal.CopyToClipboard",   "keys": "ctrl+c" },
+        { "id": "Terminal.PasteFromClipboard","keys": "ctrl+v" },
+        { "id": "Terminal.FindText",          "keys": "ctrl+shift+f" },
+        { "id": "Terminal.DuplicatePaneAuto", "keys": "alt+shift+d" },
+
+        { "id": "User.splitRight",  "keys": "alt+\\" },
+        { "id": "User.splitDown",   "keys": "alt+-" },
+
+        { "id": "User.focusLeft",   "keys": "alt+left" },
+        { "id": "User.focusRight",  "keys": "alt+right" },
+        { "id": "User.focusUp",     "keys": "alt+up" },
+        { "id": "User.focusDown",   "keys": "alt+down" },
+
+        { "id": "User.resizeLeft",  "keys": "alt+shift+left" },
+        { "id": "User.resizeRight", "keys": "alt+shift+right" },
+        { "id": "User.resizeUp",    "keys": "alt+shift+up" },
+        { "id": "User.resizeDown",  "keys": "alt+shift+down" },
+
+        { "id": "User.zoomPane",    "keys": "alt+z" },
+        { "id": "User.closePane",   "keys": "ctrl+shift+w" },
+        { "id": "User.broadcast",   "keys": "ctrl+shift+b" },
+        { "id": "User.clearBuffer", "keys": "ctrl+shift+k" },
+
+        { "id": "User.markPrev",    "keys": "ctrl+alt+up" },
+        { "id": "User.markNext",    "keys": "ctrl+alt+down" }
+    ],
+
+    // ── 색 구성표 ───────────────────────────────────────────────
+    "schemes":
+    [
+        {
+            "name": "Catppuccin Mocha",
+            "background": "#1E1E2E",
+            "foreground": "#CDD6F4",
+            "cursorColor": "#F5E0DC",
+            "selectionBackground": "#585B70",
+            "black": "#45475A",
+            "red": "#F38BA8",
+            "green": "#A6E3A1",
+            "yellow": "#F9E2AF",
+            "blue": "#89B4FA",
+            "purple": "#F5C2E7",
+            "cyan": "#94E2D5",
+            "white": "#BAC2DE",
+            "brightBlack": "#585B70",
+            "brightRed": "#F38BA8",
+            "brightGreen": "#A6E3A1",
+            "brightYellow": "#F9E2AF",
+            "brightBlue": "#89B4FA",
+            "brightPurple": "#F5C2E7",
+            "brightCyan": "#94E2D5",
+            "brightWhite": "#A6ADC8"
+        },
+        {
+            // 관리자 창 — 배경에 붉은 기운. 실수 방지용
+            "name": "Mocha Admin",
+            "background": "#2A1B1F",
+            "foreground": "#CDD6F4",
+            "cursorColor": "#F38BA8",
+            "selectionBackground": "#6E4555",
+            "black": "#4E3A40",
+            "red": "#F38BA8",
+            "green": "#A6E3A1",
+            "yellow": "#F9E2AF",
+            "blue": "#89B4FA",
+            "purple": "#F5C2E7",
+            "cyan": "#94E2D5",
+            "white": "#BAC2DE",
+            "brightBlack": "#6E4555",
+            "brightRed": "#F38BA8",
+            "brightGreen": "#A6E3A1",
+            "brightYellow": "#F9E2AF",
+            "brightBlue": "#89B4FA",
+            "brightPurple": "#F5C2E7",
+            "brightCyan": "#94E2D5",
+            "brightWhite": "#A6ADC8"
+        },
+        {
+            // WSL(archlinux) — 배경에 푸른 기운
+            "name": "Mocha Arch",
+            "background": "#16222E",
+            "foreground": "#CDD6F4",
+            "cursorColor": "#89DCEB",
+            "selectionBackground": "#3E5A6E",
+            "black": "#3A4A5A",
+            "red": "#F38BA8",
+            "green": "#A6E3A1",
+            "yellow": "#F9E2AF",
+            "blue": "#89B4FA",
+            "purple": "#F5C2E7",
+            "cyan": "#94E2D5",
+            "white": "#BAC2DE",
+            "brightBlack": "#3E5A6E",
+            "brightRed": "#F38BA8",
+            "brightGreen": "#A6E3A1",
+            "brightYellow": "#F9E2AF",
+            "brightBlue": "#89DCEB",
+            "brightPurple": "#F5C2E7",
+            "brightCyan": "#94E2D5",
+            "brightWhite": "#A6ADC8"
+        },
+        {
+            // Windows PowerShell 5.1 — 전통의 남색
+            "name": "Legacy Blue",
+            "background": "#012456",
+            "foreground": "#EEEDF0",
+            "cursorColor": "#EEEDF0",
+            "selectionBackground": "#3A6EA5",
+            "black": "#0C0C0C",
+            "red": "#F38BA8",
+            "green": "#A6E3A1",
+            "yellow": "#F9E2AF",
+            "blue": "#89B4FA",
+            "purple": "#F5C2E7",
+            "cyan": "#94E2D5",
+            "white": "#CCCCCC",
+            "brightBlack": "#3A6EA5",
+            "brightRed": "#F38BA8",
+            "brightGreen": "#A6E3A1",
+            "brightYellow": "#F9E2AF",
+            "brightBlue": "#89B4FA",
+            "brightPurple": "#F5C2E7",
+            "brightCyan": "#94E2D5",
+            "brightWhite": "#F2F2F2"
+        },
+        {
+            "name": "Catppuccin Latte",
+            "background": "#EFF1F5",
+            "foreground": "#4C4F69",
+            "cursorColor": "#DC8A78",
+            "selectionBackground": "#ACB0BE",
+            "black": "#5C5F77",
+            "red": "#D20F39",
+            "green": "#40A02B",
+            "yellow": "#DF8E1D",
+            "blue": "#1E66F5",
+            "purple": "#EA76CB",
+            "cyan": "#179299",
+            "white": "#ACB0BE",
+            "brightBlack": "#6C6F85",
+            "brightRed": "#D20F39",
+            "brightGreen": "#40A02B",
+            "brightYellow": "#DF8E1D",
+            "brightBlue": "#1E66F5",
+            "brightPurple": "#EA76CB",
+            "brightCyan": "#179299",
+            "brightWhite": "#BCC0CC"
+        }
+    ],
+
+    "themes": []
+}
