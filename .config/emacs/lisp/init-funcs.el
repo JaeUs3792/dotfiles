@@ -25,15 +25,11 @@
 
 (defun toggle-transparency ()
   (interactive)
-  (let ((alpha (frame-parameter nil 'alpha)))
-    (set-frame-parameter
-     nil 'alpha
-     (if (eql (cond ((numberp alpha) alpha)
-                    ((numberp (cdr alpha)) (cdr alpha))
-                    ;; Also handle undocumented (<active> <inactive>) form.
-                    ((numberp (cadr alpha)) (cadr alpha)))
-              100)
-         '(85 . 85) '(100 . 100)))))
+  (let ((current-alpha (frame-parameter nil 'alpha-background)))
+    (let ((new-alpha (if (or (null current-alpha) (= current-alpha 100)) 85 100)))
+      (set-frame-parameter nil 'alpha-background new-alpha)
+      (message "Transparency set to: %d" new-alpha))))
+
 (defun my/transparency-round (val)
   "Round VAL to the nearest tenth of an integer."
   (/ (round (* 10 val)) 10.0))
@@ -60,7 +56,15 @@
   (my/update-dotfiles)
   (update-packages))
 
+(defun my/increase-global-font-size ()
+  (interactive)
+  (let ((new-height (+ (face-attribute 'default :height) 10)))
+    (set-face-attribute 'default nil :height new-height)))
 
+(defun my/decrease-global-font-size ()
+  (interactive)
+  (let ((new-height (- (face-attribute 'default :height) 10)))
+    (set-face-attribute 'default nil :height (max new-height 60)))) ;; 최소 크기 제한
 
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

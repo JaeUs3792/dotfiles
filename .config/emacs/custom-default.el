@@ -46,14 +46,13 @@
   (custom-setup-fonts))
 (add-hook 'window-setup-hook #'custom-setup-fonts)
 
+(add-to-list 'default-frame-alist '(alpha-background . 85))
+
 (if (daemonp)
     (add-hook 'after-make-frame-functions
               (lambda (frame)
-                ;; (setq doom-modeline-icon t)
                 (with-selected-frame frame
-                  (custom-setup-fonts)
-                  ;; default transparency (85 . 85) or (100 . 100)
-                  (set-frame-parameter (selected-frame) 'alpha '(85 . 85)))))
+                  (custom-setup-fonts))))
   (custom-setup-fonts))
 
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))

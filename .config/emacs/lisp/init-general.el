@@ -74,6 +74,8 @@
   "f r" '(consult-recent-file :which-key "Recent files")
   "f i" '((lambda () (interactive) (find-file "~/.config/emacs/init.el")) :which-key "open emacs init file")
   "f l" '((lambda () (interactive) (find-file "~/.config/emacs/lisp")) :which-key "open emacs lisp dir")
+  "f =" '(my/increase-global-font-size :which-key "global increase font")
+  "f -" '(my/decrease-global-font-size :which-key "global increase font")
   ;; Magit
   "g" '(:ignore t :which-key "magit")
   "g g" '(magit :which-key "magit")
