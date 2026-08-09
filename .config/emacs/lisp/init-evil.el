@@ -31,6 +31,14 @@
   (setq-default evil-symbol-word-search t))
 (use-package evil-collection
   :ensure t
+  :init
+  ;; In REPL buffers (eshell, shell, ...) evil-collection binds RET to
+  ;; `eshell-send-input' in normal state and to `newline' in insert state.
+  ;; Since eshell starts in insert state that means RET just breaks the line
+  ;; while typing.  Swap it: submit while typing, newline in normal state.
+  (setq evil-collection-binding-overrides
+        '((repl-submit  :state insert)
+          (repl-newline :state normal)))
   :config
   (evil-collection-init))
 
