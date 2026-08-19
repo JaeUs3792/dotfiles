@@ -18,6 +18,7 @@ $IgnoreList = @(
     '.git',
     '.gitignore',
     'scripts',
+    'windows',   # MSIX/앱 설정 사본 - $HOME 으로 링크하는 대상이 아님
     'README.md',
     '*.ps1'
 )
