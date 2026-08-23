@@ -30,19 +30,8 @@ makepkg -si
 ###############################################################################
 #                                    Shell                                     #
 ###############################################################################
-paru -S fish starship atuin --noconfirm
+paru -S fish starship eza zoxide --noconfirm
 
-# Nushell
-#paru -S nushell starship atuin --noconfirm
-#mkdir ~/.local/share/atuin/
-#atuin init nu | save ~/.local/share/atuin/init.nu
-#chsh -s /bin/nu   # change shell
-
-# TMUX (session maanger)
-paru -S tmux --noconfirm
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/scripts/install_plugins.sh
-TMUX_PLUGIN_MANAGER_PATH=~/.config/tmux/plugins/tpm ~/.tmux/plugins/tpm/bin/update_plugins all
 ##################################################
 # tldr
 ##################################################
