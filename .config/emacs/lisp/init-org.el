@@ -244,9 +244,12 @@ prepended to the element after the #+HEADER: tag."
 (use-package org-journal
   :ensure t
   :defer t
-  :config
-  (setq org-journal-dir (expand-file-name "journal/" org-directory))
-  (setq org-journal-file-type 'weekly))
+  :init
+  (setq org-journal-dir (expand-file-name "journal/" custom-org-directory))
+  (setq org-journal-file-type 'weekly)
+  (add-to-list 'auto-mode-alist
+               (cons (concat "\\`" (regexp-quote (expand-file-name org-journal-dir)))
+                     'org-journal-mode)))
 (use-package org-noter
   :ensure t
   :defer t
