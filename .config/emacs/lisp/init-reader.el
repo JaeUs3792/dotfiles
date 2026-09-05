@@ -22,9 +22,11 @@
 			   :magic ("%PDF" . pdf-view-mode)
 			   :bind (:map pdf-view-mode-map
 						   ("C-s" . isearch-forward))
-			   :init
-			   (pdf-tools-install)
 			   :config
+			   ;; epdfinfo 검증을 건너뛴다. :init에서 (pdf-tools-install)을 부르면
+			   ;; 시작할 때마다 바이너리를 확인하고 빌드 여부를 y-or-n-p로 물어서
+			   ;; Emacs 기동이 거기서 멈춘다. 실제 빌드가 필요하면 M-x pdf-tools-install.
+			   (pdf-tools-install-noverify)
 			   (setq-default pdf-view-display-size 'fit-page)
 			   (setq-default pdf-view-resize-factor 1.1) ;; zoom in/out setting
 			   (defun my/pdf-view-open-in-zathura ()
