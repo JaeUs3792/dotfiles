@@ -124,6 +124,7 @@
 (use-package emojify
   :ensure t
   :defer t
+  :custom (emojify-emoji-styles '(unicode))
   :init (global-emojify-mode 1))
 (provide 'init-ui)
 ;;; init-ui.el ends here.
