@@ -278,6 +278,20 @@ prepended to the element after the #+HEADER: tag."
           ("DONE" :background "#44475a" :foreground "#6272a4" :weight bold)  ; 흐린회색 — 완료
           ("KILL" :background "#ff5555" :foreground "#282a36" :weight bold)))) ; 다크그레이
 
+;; Board-style alternative renderer for the org agenda (month / day / week / someday).
+;; Reads org's own agenda output, so org-agenda-files 등 기존 설정은 그대로 쓰인다.
+;; Neither package is on MELPA; both recipes point at upstream directly.
+(use-package textui
+  :ensure (:host github :repo "yibie/textui")
+  :defer t)
+
+(use-package org-other-agenda
+  :ensure (:host github :repo "yibie/org-other-agenda")
+  :commands (org-other-agenda)
+  :config
+  (setq org-other-agenda-time-start-hour 8
+        org-other-agenda-time-end-hour 22))
+
 ;; Pixel-precise table alignment (CJK/변수폭 폰트/인라인 이미지 대응).
 ;; org-modern-table 은 위에서 nil 로 꺼둬서 구분선은 valign-fancy-bar 가 담당.
 (use-package valign

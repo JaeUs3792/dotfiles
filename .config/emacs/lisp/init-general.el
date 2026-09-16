@@ -121,6 +121,7 @@
   "o a a" '(org-agenda :which-key "open org agenda")
   "o a r" '(my/org-roam-refresh-agenda-list :which-key "Org agenda refresh list")
   "o a c" '((lambda () (interactive) (find-file (expand-file-name "agenda/agenda.org" org-directory))) :which-key "org agenda file")
+  "o a o" '(org-other-agenda :which-key "org other agenda (board view)")
   "o c" '(cfw:open-org-calendar :which-key "org calendar")
   "o t" '(org-insert-structure-template :which-key "org insert structure template")
   ;; Project-el
